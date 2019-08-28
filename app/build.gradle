@@ -26,12 +26,13 @@ static def getDateTime() {
 }
 
 android {
-    compileSdkVersion rootProject.ext.compileSdkVersion
-    buildToolsVersion rootProject.ext.buildToolsVersion
+    compileSdkVersion versions.compileSdk
+    buildToolsVersion versions.buildTools
+
     defaultConfig {
         applicationId "com.mdove.civilservantcommunity"
-        minSdkVersion rootProject.ext.minSdkVersion
-        targetSdkVersion rootProject.ext.targetSdkVersion
+        minSdkVersion versions.minSdk
+        targetSdkVersion versions.targetSdk
         versionCode getVersionCodeProperty()
         versionName getVersionNameProperty()
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -46,22 +47,23 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    testImplementation 'junit:junit:4.12'
-    Map<String, String> dependencies = rootProject.ext.dependencies
-    implementation dependencies.appCompat
-    implementation dependencies.constranintLayout
-    implementation dependencies.cardView
-    implementation dependencies.design
-    implementation dependencies.recyclerView
+    implementation deps.kotlin.core
+    implementation deps.kotlin.coroutines
+    implementation deps.kotlin.ktx
+    implementation deps.kotlin.coroutines_android
 
-    implementation dependencies.retrofit
-    implementation dependencies.retrofitConverterGson
-    implementation dependencies.retrofitAdapter2RxJava
+    implementation deps.androidx.appCompat
+    implementation deps.androidx.recyclerView
+    implementation deps.androidx.constraint_layout
+    implementation deps.androidx.material
 
-    implementation dependencies.kotlin.core
-    implementation dependencies.kotlin.coroutines
-    implementation dependencies.kotlin.coroutines_android
+    implementation 'org.jsoup:jsoup:1.9.2'
 
-    implementation "android.arch.lifecycle:extensions:1.1.1"
-    implementation "android.arch.lifecycle:common-java8:1.1.1"
+    implementation(deps.retrofit2.core) {
+        exclude module: 'okhttp'
+    }
+    implementation(deps.retrofit2.gson) {
+        exclude module: 'okhttp'
+    }
+    implementation deps.okhttp3
 }

@@ -1,0 +1,390 @@
+ext.kotlin_version = "1.3.21"
+ext.versions = [
+        'buildTools'     : "28.0.3",
+        'compileSdk'     : 28,
+        'minSdk'         : 15,
+        'fastBuildMinSdk': 21,
+        'targetSdk'      : 26,
+]
+
+ext.versions += [
+        'supportLib'              : "28.0.0",
+        'gmsVersion'              : "11.8.0",
+        "retrofit2"               : '2.1.0',
+        "epoxy"                   : '2.18.0',
+        "eventBus"                : "3.0.0",
+        'fresco'                  : "1.2.0",
+        'mopub'                   : "4.10.0@aar",
+        'dagger'                  : "2.16",
+        'kotlin'                  : kotlin_version,
+        'coroutines'              : "1.0.0",
+        'ktx'                     : "1.0.1",
+        'fantasyVersion'          : "0.4.4-rc19",
+        'googlePlayServiceVersion': '11.0.2',
+        'inmobiVersion'           : "7.1.0",
+        'imaVersion'              : "3.8.5",
+        'kakaoSdkVersion'         : "1.15.1",
+        'lifecycle'               : "2.0.0",
+        'symphonyVersion'         : "1.2.2.3",
+        "SevenZip"                : "1.2.15",
+        'glideVersion'            : '4.8.0',
+        "utility"                 : "1.3.8",
+        "ttnetSdk"                : "2.0.11.4",
+        "applog"                  : "2.5.6.2-remove_sensitive_info_and_http_request-2",
+        "deviceRegister"          : "2.1.5.9-remove_sensitive_info_and_http_request"
+]
+
+ext.versions += [
+        "daggerwrapper"      : "0.0.2",
+        "util"               : "0.0.9",
+        "coreModel"          : "0.0.9",
+        "translationService" : "0.0.3",
+        "translationView"    : "0.0.1",
+        "imageloaderBase"    : "0.0.4",
+        "uILib"              : "0.0.15",
+        "imageloaderBusiness": "0.0.7",
+        "antispamService"    : "0.0.4",
+        "antispamImpl"       : "0.0.5",
+        "iconfont"           : "0.0.6",
+        "youTubePlayer"      : "0.0.2",
+        "importBase"         : "0.0.2",
+        "lockscreen"         : "0.0.3",
+        "multiProcessSp"     : "0.0.4",
+        "shakeRangeService"  : "0.0.2",
+        "shakeRangeImpl"     : "0.0.2",
+        "event"              : "0.0.8",
+        "notification"       : "0.0.3",
+        "imageCore"          : "0.0.4",
+        "share"              : "0.0.3",
+        "detailAction"       : "0.0.6",
+        "kakaoShare"         : "0.0.2",
+        "subscribe"          : "0.0.3",
+        "ttnetBase"          : "0.0.2",
+        "ttnetService"       : "0.0.3",
+        "dynamicInstaller"   : "0.0.1",
+        "ttnetImpl"          : "0.0.2",
+        "network"            : "0.0.4",
+        "account"            : "0.0.4",
+        "blinkfeedService"   : "0.0.2",
+        "blinkfeedImpl"      : "0.0.3",
+        "phoneloginService"  : "0.0.2",
+        "phoneloginImpl"     : "0.0.2",
+        "foxagentService"    : "0.0.2",
+        "foxagentImpl"       : "0.0.2",
+        "qrcodescanService"  : "0.0.2",
+        "qrcodescanImpl"     : "0.0.2",
+        "billingService"     : "0.0.2",
+        "billingImpl"        : "0.0.2",
+        "lineloginService"   : "0.0.3",
+        "lineloginImpl"      : "0.0.2",
+        "kakaoLoginService"  : "0.0.2",
+        "kakaoLoginImpl"     : "0.0.2",
+        "giphyService"       : "0.0.3",
+        "giphyImpl"          : "0.0.4",
+        "local"              : "0.0.2",
+        "ijkplayerArm"       : "0.0.2",
+        "ijkplayerJava"      : "0.0.5",
+        "ttvideo"            : "0.0.4",
+        "video"              : "0.0.2",
+        "dailymotionService" : "0.0.2",
+        "dailymotionImpl"    : "0.0.2",
+        "antifraudService"   : "0.0.2",
+        "antifraudImpl"      : "0.0.2",
+        "nrService"          : "0.0.2",
+        "nrImpl"             : "0.0.2",
+        "apkinjector"        : "0.0.3"
+]
+
+ext.versions += [
+        "commonBusiness": "0.0.5"
+]
+
+ext.versions += [
+        "ugcService"   : "0.0.3",
+        "ugcBase"      : "0.0.1",
+        "ugcUpload"    : "0.0.3",
+        "mediachooser" : "0.0.2",
+        "ugcTopic"     : "0.0.1",
+        "ugcMusicStore": "0.0.1",
+        "ugcVideolink" : "0.0.1",
+        "ugcPostEdit"  : "0.0.2",
+        "ugcLocalmedia": "0.0.1",
+        "ugcMediaMaker": "0.0.1",
+        "ugcRepost"    : "0.0.1",
+        "ugcPoll"      : "0.0.1"
+]
+
+ext.versions += [
+        "buzzcommon" : "0.0.9",
+        "articleBase": "0.0.10"
+]
+
+ext.versions += [
+        "basead": "0.0.1",
+]
+
+
+ext.deps = [
+        'androidx'       : [
+                'annotations'      : 'androidx.annotation:annotation:1.0.1',
+                'legacy_v4'        : 'androidx.legacy:legacy-support-v4:1.0.0',
+                'appCompat'        : 'androidx.appcompat:appcompat:1.0.2',
+                'material'         : 'com.google.android.material:material:1.0.0',
+                'recyclerView'     : 'androidx.recyclerview:recyclerview:1.0.0',
+                'multidex'         : 'androidx.multidex:multidex:2.0.0',
+                'constraint_layout': 'androidx.constraintlayout:constraintlayout:1.1.3',
+                'exifinterface'    : 'androidx.exifinterface:exifinterface:1.0.0',
+                'cardview'         : 'androidx.cardview:cardview:1.0.0',
+                'animation'        : "androidx.dynamicanimation:dynamicanimation:1.0.0",
+                'media'            : "androidx.media:media:1.0.0",
+                'palette'            : "androidx.palette:palette:1.0.0"
+        ],
+        'google'         : [
+                'flexbox' : 'com.google.android:flexbox:1.0.0',
+                'playcore': 'com.google.android.play:core:1.4.0'
+        ],
+        'firebase'       : [
+                'core'         : "com.google.firebase:firebase-core:${versions.gmsVersion}",
+                'messaging'    : "com.google.firebase:firebase-messaging:${versions.gmsVersion}",
+                'invites'      : "com.google.firebase:firebase-invites:${versions.gmsVersion}",
+                'appIndexing'  : "com.google.firebase:firebase-appindexing:${versions.gmsVersion}",
+                'jobDispatcher': "com.firebase:firebase-jobdispatcher-with-gcm-dep:0.8.1"
+        ],
+        'gms'            : [
+                'ads'     : "com.google.android.gms:play-services-ads:${versions.gmsVersion}",
+                'location': "com.google.android.gms:play-services-location:${versions.gmsVersion}",
+                'auth'    : "com.google.android.gms:play-services-auth:${versions.gmsVersion}",
+        ],
+        'glide_v4'       : [
+                'glide'   : "com.github.bumptech.glide:glide:${versions.glideVersion}",
+                'compiler': "com.github.bumptech.glide:compiler:${versions.glideVersion}",
+                'okhttp3' : "com.github.bumptech.glide:okhttp3-integration:${versions.glideVersion}"
+        ],
+        'twitter'        : [
+                'core'    : 'com.twitter.sdk.android:twitter-core:3.1.1',
+                'composer': 'com.twitter.sdk.android:tweet-composer:3.1.1',
+        ],
+        'butterKnife'    : [
+                'runtime' : 'com.jakewharton:butterknife:9.0.0-rc1',
+                'compiler': 'com.jakewharton:butterknife-compiler:9.0.0-rc1'
+        ],
+        'leakCanary'     : [
+                'noop'   : 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.1',
+                'impl'   : 'com.squareup.leakcanary:leakcanary-android:1.6.1',
+                'support': 'com.squareup.leakcanary:leakcanary-support-fragment:1.6.1'
+        ],
+        'blockCanary'    : [
+                'noop': 'com.github.markzhai:blockcanary-no-op:1.5.0'
+        ],
+        'retrofit2'      : [
+                'core': "com.squareup.retrofit2:retrofit:${versions.retrofit2}",
+                'gson': "com.squareup.retrofit2:converter-gson:${versions.retrofit2}"
+        ],
+        'gson'           : 'com.google.code.gson:gson:2.7',
+        'epoxy'          : [
+                'core'    : "com.airbnb.android:epoxy:${versions.epoxy}",
+                'compiler': "com.airbnb.android:epoxy-processor:${versions.epoxy}"
+        ],
+        'badger'         : 'me.leolin:ShortcutBadger:1.1.18@aar',
+        'eventBus'       : [
+                'ssBus'   : 'com.ss.android.tools:eventbus:1.0.2',
+                'core'    : "org.greenrobot:eventbus:${versions.eventBus}",
+                'compiler': "org.greenrobot:eventbus-annotation-processor:${versions.eventBus}"
+        ],
+        'lottie'         : "com.airbnb.android:lottie:2.2.5",
+        'gif'            : "pl.droidsonroids.gif:android-gif-drawable:1.2.3",
+        'bytedance'      : [
+                'ttm'       : [
+                        'player'     : 'com.ss.ttm:player:2.9.1.8',
+                        'videoEngine': 'com.ss.ttm:ttvideoengine:1.9.5.1',
+                        'uploader'   : "com.ss.ttm:ttuploader:1.7.1.38",
+                        'medialoader': "com.ss.mediakit:medialoader:1.0.1.12",
+                ],
+                'baselib'   : [
+                        'ttnet'       : "com.bytedance.frameworks.baselib:ttnet:${versions.ttnetSdk}",
+                        'utility'     : "com.bytedance.frameworks.baselib:utility:${versions.utility}",
+                        'network'     : "com.bytedance.frameworks.baselib:network:${versions.ttnetSdk}",
+                        'common_utils': "com.bytedance.utils:common-utils:1.0.11"
+                ],
+                'core'      : [
+                        'encrypt'      : "com.bytedance.frameworks.core:encrypt:1.1.2",
+                        'commonMonitor': 'com.bytedance.frameworks.core.i18n:commonmonitor:4.6.3.3',
+                        'monitor'      : "com.bytedance.frameworks.core:monitor:4.1.3",
+                        'sdkmonitor'   : "com.bytedance.frameworks.core:sdkmonitor:1.0.4",
+                        'antispam'     : 'com.bytedance.ugc.framework.libs:antispam:0.5.0-v7a-vigo'
+                ],
+                'thirdparty': [
+                        'ssRetrofit2': "com.bytedance.thirdparty:ss-retrofit2:${versions.ttnetSdk}"
+                ],
+                'common'    : [
+                        'tfcc'           : 'com.bytedance.common_business:tfcc:1.0.3.1',
+                        'videocache'     : 'com.bytedance.common_business:videocache:2.3.3-rc5',
+                        'applog'         : "com.bytedance.common_business:applog-global:${versions.applog}",
+                        'device_register': "com.bytedance.common_business:device_register-global:${versions.deviceRegister}",
+                        'applog_toolkit' : 'com.bytedance.article.common:applog-toolkit:1.1.5',
+                        'richTextEditor' : 'com.bytedance.common_business:RichTextEditor:2.0.5',
+                        'npth'           : 'com.bytedance.frameworks.core:npth:2.0.3',
+                        'alog'           : "com.bytedance.common_business:alog:1.3.1.2",
+                        'impression'     : 'com.bytedance.article.common:impression:1.2.3',
+                        'account'        : 'com.bytedance.sdk.account:account_sdk:0.3.4.8'
+                ],
+                'ies'       : [
+                        'networkSpeedTest': 'com.bytedance.ies-util:networkspeedtest:0.0.3',
+                        'weboffline'      : 'com.bytedance.ies-util:weboffline:0.0.6',
+                        'gecko'           : 'com.bytedance.ies-util:geckoclient:1.0.2',
+                        'appdownloader'   : 'com.bytedance.ies.social.base:appdownloader:1.1.4.36.2',
+                        'vesdk'           : 'com.bytedance.ugc.framework.libs:vesdk:2.6.1.19'
+                ],
+                'ad'        : [
+                        'splashAd': 'com.ss.android.ad.splash:SplashAd:1.6.0'
+                ],
+                'ugc'       : [
+                        'mediaLibTb': 'com.bytedance.ugc.framework.libs:medialib_tb:1.5.0_dev13'
+                ],
+                'push'      : [
+                        'common'          : 'com.bytedance.common:push_common_lib_i18n:1.0.8',
+                        'daemon'          : 'com.bytedance.common:pushdaemon:1.1.1',
+                        'i18n'            : 'com.bytedance.common:push_i18n:2.0.26.2',
+                        'i18n_3rd'        : 'com.bytedance.common:push-3rd_i18n:2.1.21',
+                        'fcm'             : 'com.bytedance.common:push-fcm_i18n:2.1.22.1',
+                        'mi'              : 'com.bytedance.common:push-mi_i18n:2.1.21.1',
+                        'vivo'            : 'com.bytedance.common:push-vivo_i18n:2.1.17',
+                        'static_receivers': 'com.bytedance.common:push-static-receivers_i18n:2.1.17'
+                ],
+                'claymore'  : [
+                        'core': 'com.bytedance.i18n.claymore:claymore-core:0.1.1'
+                ],
+                'wschannel' : [
+                        'base'           : 'com.bytedance.common:wschannel:1.3.2.2',
+                        'wschannelplugin': 'com.bytedance.common:wschannelplugin:1.2.9.2'
+                ],
+
+        ],
+        'cronet'         : "org.chromium.net:cronet:${versions.ttnetSdk}",
+        'relinker'       : "com.getkeepsafe.relinker:relinker:1.2.2",
+        'fresco'         : [
+                'core'       : "com.facebook.fresco:fresco:${versions.fresco}",
+                'okhttp3'    : "com.facebook.fresco:imagepipeline-okhttp3:${versions.fresco}",
+                'gif'        : "com.facebook.fresco:animated-gif:${versions.fresco}",
+                'webpsupport': "com.facebook.fresco:webpsupport:${versions.fresco}"
+        ],
+        'crashlytics'    : 'com.crashlytics.sdk.android:crashlytics:2.6.5',
+        'rx'             : [
+                'core'    : 'io.reactivex:rxjava:1.2.2',
+                'android' : 'io.reactivex:rxandroid:1.1.0',
+                'proguard': 'com.artemzin.rxjava:proguard-rules:1.2.2.0'
+        ],
+        'okhttp3'        : 'com.squareup.okhttp3:okhttp:4.1.0',
+        'facebook'       : [
+                'audience': 'com.facebook.android:audience-network-sdk:5.1.0',
+                'android' : 'com.facebook.android:facebook-android-sdk:4.37.0'
+        ],
+        'mopub'          : [
+                'static': "com.mopub:mopub-sdk-native-static:${versions.mopub}",
+                'video' : "com.mopub:mopub-sdk-native-video:${versions.mopub}"
+        ],
+        'billingClient'  : 'com.android.billingclient:billing:1.0',
+        'blinkfeed'      : "com.htc.blinkfeed:blinkfeedsdk:1.0.261523",
+        'fox'            : 'co.jp.cyberz.fox:sdk-android:3.3.1',
+        'fantasy'        : [
+                'channelSo'  : 'com.ixigua.fantasy.common:fantasy-channel-so:1.0.2',
+                'channel'    : 'com.ixigua.fantasy.common:fantasy-channel:1.1.2',
+                'appSettings': "com.ixigua.storage.sp:appsettings:1.0.1",
+                'i18n'       : "com.ixigua.fantasy:fantasy-i18n:${versions.fantasyVersion}"
+        ],
+        'protobuf'       : "com.google.protobuf.nano:protobuf-nano:3.2.0",
+        'appsFlyer'      : 'com.appsflyer:af-android-sdk:4.8.17@aar',
+        'installreferrer': 'com.android.installreferrer:installreferrer:1.0',
+        'zxing'          : 'me.dm7.barcodescanner:zxing:1.9',
+        'image_viewer'   : 'com.ixigua.common:touchtileimageview:0.0.45',
+        'exoplayer'      : 'com.google.android.exoplayer:exoplayer:r2.4.4',
+        'dagger'         : [
+                'core'     : "com.google.dagger:dagger:${versions.dagger}",
+                'compiler' : "com.google.dagger:dagger-compiler:${versions.dagger}",
+                'android'  : "com.google.dagger:dagger-android:${versions.dagger}",
+                'support'  : "com.google.dagger:dagger-android-support:${versions.dagger}",
+                'processor': "com.google.dagger:dagger-android-processor:${versions.dagger}"
+        ],
+        'kotlin'         : [
+                'core'              : "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${versions.kotlin}",
+                'coroutines'        : "org.jetbrains.kotlinx:kotlinx-coroutines-core:${versions.coroutines}",
+                'ktx'               : "androidx.core:core-ktx:${versions.ktx}",
+                'coroutines_android': "org.jetbrains.kotlinx:kotlinx-coroutines-android:${versions.coroutines}"
+        ],
+        'multitype'      : 'me.drakeet.multitype:multitype:3.4.4',
+        'tbcache'        : 'com.ss.android.i18n:tbcache:1.4.0@aar',
+        'inmobi'         : [
+                'ad': "com.inmobi.monetization:inmobi-ads:${versions.inmobiVersion}"
+        ],
+        'room'           : [
+                'runtime' : "androidx.room:room-runtime:2.0.0-rc01",
+                'compiler': "androidx.room:room-compiler:2.0.0-rc01"
+        ],
+        'javax'          : [
+                'inject': "javax.inject:javax.inject:1"
+        ],
+        'kakaolink'      : "com.kakao.sdk:kakaolink-debug:${versions.kakaoSdkVersion}",
+        'kakaologin'     : "com.kakao.sdk:usermgmt-debug:${versions.kakaoSdkVersion}",
+        'luban'          : 'top.zibin:Luban:1.1.8',
+        'ssTools'        : [
+                'inject'           : 'com.ss.android.tools.plugins:code-inject-core:0.0.2',
+                "dynamic_installer": "com.ss.android.topbuzz.tools:dynamic_installer:0.0.9.4"],
+        'UETool'         : [
+                'op'   : 'me.ele:uetool:1.0.15',
+                'no_op': 'me.ele:uetool-no-op:1.0.15'
+        ],
+        'mmkv'           : [
+                'core': 'com.tencent:mmkv:1.0.11'
+        ],
+        "epic"           : [
+                "core": "me.weishu:epic:0.3.6"
+        ],
+        'symphony'       : [
+
+                'base'        : "com.ss.android.i18n:ad-symphony:${versions.symphonyVersion}",
+                'interstitial': [
+                        'fb'   : "com.ss.android.i18n:ad-symphony-interstitial-fb:${versions.symphonyVersion}",
+                        'admob': "com.ss.android.i18n:ad-symphony-interstitial-admob:${versions.symphonyVersion}",
+                ],
+                'native'      : [
+                        'fb'     : "com.ss.android.i18n:ad-symphony-nativead-fb:${versions.symphonyVersion}",
+                        'admob'  : "com.ss.android.i18n:ad-symphony-nativead-admob:${versions.symphonyVersion}",
+                        'fb_hb'  : "com.ss.android.i18n:ad-symphony-nativead-fb-headerbidding:${versions.symphonyVersion}",
+                        'inmobi' : "com.ss.android.i18n:ad-symphony-nativead-inmobi:${versions.symphonyVersion}",
+                        'imobile': "com.ss.android.i18n:ad-symphony-nativead-imobile:${versions.symphonyVersion}"
+
+                ],
+        ],
+        'imageloader'    : [
+                "local": [
+                        "base"   : ":common:imageloader:base",
+                        "glide"  : ":common:imageloader:glideloader",
+                        "picasso": ":common:imageloader:picassoloader"
+                ]
+        ],
+        'picasso'        : 'com.squareup.picasso:picasso:2.71828',
+        'ima'            : [
+                'support'          : "com.android.support:appcompat-v7:${versions.supportLib}",
+                'ad'               : "com.google.ads.interactivemedia.v3:interactivemedia:${versions.imaVersion}",
+                'googlePlayService': "com.google.android.gms:play-services-ads:${versions.gmsVersion}"
+        ],
+        'test'           : [
+                "junit": "junit:junit:4.12"
+        ],
+        "debugs"         : [
+                "tools": "com.ss.android.tools.common:debugtools:1.0.0"
+        ],
+        'instabug'       : 'com.instabug.library:instabug:8.0.9',
+        'arch'           : [
+                'lifecycle_runtime'   : "android.arch.lifecycle:runtime:${versions.lifecycle}",
+                'lifecycle_viewmodel' : "androidx.lifecycle:lifecycle-viewmodel:${versions.lifecycle}",
+                'lifecycle_extensions': "android.arch.lifecycle:extensions:${versions.lifecycle}",
+                'lifecycle_java8'     : "android.arch.lifecycle:common-java8:${versions.lifecycle}",
+                'paging'              : "android.arch.paging:runtime:1.0.1"
+        ],
+        'smartRouter'    : [
+                'apt' : 'com.bytedance.frameworks.core:smartrouter_apt:1.0.6',
+                'core': 'com.bytedance.frameworks.core:smartrouter:1.2.2'
+        ],
+
+]
