@@ -1,9 +1,9 @@
-package com.mdove.civilservantcommunity.base.threadpool;
+package com.mdove.civilservantcommunity.base.threadpool
 
 /**
  * Created by MDove on 2019/3/25.
  */
-public enum SSThreadPriority {
+enum class SSThreadPriority {
     LOW,
     NORMAL,
     HIGH,
