@@ -5,6 +5,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'herohalberd'
 
 def getVersionCodeProperty() {
     def versionPropsFile = file('version.properties')
@@ -60,11 +61,7 @@ dependencies {
 
     implementation 'org.jsoup:jsoup:1.9.2'
 
-    implementation(deps.retrofit2.core) {
-        exclude module: 'okhttp'
-    }
-    implementation(deps.retrofit2.gson) {
-        exclude module: 'okhttp'
-    }
-    implementation deps.okhttp3
+    implementation project(':api-service')
+    implementation project(':common')
+    implementation project(':herohalberd:core')
 }

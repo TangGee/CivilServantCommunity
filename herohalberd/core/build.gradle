@@ -1,0 +1,17 @@
+apply plugin: 'kotlin'
+apply plugin: 'maven'
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+}
+
+sourceCompatibility = "1.8"
+targetCompatibility = "1.8"
+
+task javaSourcesJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.java.source
+}
+artifacts {
+    archives javaSourcesJar
+}

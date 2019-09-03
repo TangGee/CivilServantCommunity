@@ -1,1 +1,1 @@
-include ':app', ':plugin'
+include ':app',':herohalberd:core',':api-service',':network-provider',':common'

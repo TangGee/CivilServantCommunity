@@ -4,7 +4,9 @@ import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Runnable
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.android.asCoroutineDispatcher
 import java.lang.reflect.Constructor
 import java.util.concurrent.ExecutorService
@@ -49,4 +51,9 @@ internal fun Looper.asHandler(async: Boolean): Handler {
         return Handler(this)
     }
     return constructor.newInstance(this, null, true)
+}
+
+fun FastMainScope() = SupervisorJob() + FastMain + CoroutineExceptionHandler { _, throwable ->
+    throw  throwable
+//    ClaymoreServiceLoader.loadFirst(IExceptionLogger::class.java).safeLogException(throwable)
 }

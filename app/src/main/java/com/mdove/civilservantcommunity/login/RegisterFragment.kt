@@ -4,16 +4,24 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProviders
+import com.mdove.dependent.apiservice.AppDependsProvider
 import com.mdove.civilservantcommunity.R
+import com.mdove.civilservantcommunity.base.BaseFragment
+import com.mdove.civilservantcommunity.base.threadpool.FastMain
+import com.mdove.civilservantcommunity.base.threadpool.MDoveApiPool
 import com.mdove.civilservantcommunity.view.MultiLineChooseLayout
+import com.mdove.dependent.common.toast.ToastUtil
 import kotlinx.android.synthetic.main.fragment_register.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /**
  * Created by MDove on 2019-09-02.
  */
-class RegisterFragment : Fragment() {
+class RegisterFragment : BaseFragment() {
     private lateinit var registerViewModel: RegisterViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,7 +47,13 @@ class RegisterFragment : Fragment() {
             }
         })
         tv_ok.setOnClickListener {
-
+            CoroutineScope(coroutineContext+ MDoveApiPool).launch {
+                val resp =
+                    AppDependsProvider.networkService.networkClient.get("https://www.baidu.com")
+                withContext(FastMain) {
+                    ToastUtil.toast(resp, Toast.LENGTH_SHORT)
+                }
+            }
         }
     }
 }

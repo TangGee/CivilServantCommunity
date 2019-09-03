@@ -1,0 +1,32 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+
+android {
+    compileSdkVersion versions.compileSdk
+    buildToolsVersion versions.buildTools
+
+    sourceSets {
+        main {
+            java.srcDirs += ["src/main/kotlin"]
+        }
+    }
+
+    defaultConfig {
+        minSdkVersion versions.minSdk
+        targetSdkVersion versions.targetSdk
+        versionCode 1
+        versionName "1.0"
+        vectorDrawables.useSupportLibrary = true
+        consumerProguardFiles 'proguard-rules.pro'
+    }
+
+    dependencies {
+        implementation deps.kotlin.core
+        implementation deps.kotlin.coroutines
+        implementation deps.kotlin.ktx
+        implementation deps.kotlin.coroutines_android
+
+        implementation project(':herohalberd:core')
+    }
+}
