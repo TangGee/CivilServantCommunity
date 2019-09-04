@@ -22,7 +22,7 @@ class ClaymoreTransform : Transform() {
     }
 
     override fun getScopes(): MutableSet<in QualifiedContent.Scope> {
-        return TransformManager.SCOPE_FULL_WITH_IR_FOR_DEXING
+        return TransformManager.SCOPE_FULL_PROJECT
     }
 
     override fun transform(transformInvocation: TransformInvocation?) {

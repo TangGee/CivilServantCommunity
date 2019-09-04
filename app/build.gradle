@@ -62,6 +62,7 @@ dependencies {
     implementation 'org.jsoup:jsoup:1.9.2'
 
     implementation project(':api-service')
+    implementation project(':network-provider')
     implementation project(':common')
     implementation project(':herohalberd:core')
 }

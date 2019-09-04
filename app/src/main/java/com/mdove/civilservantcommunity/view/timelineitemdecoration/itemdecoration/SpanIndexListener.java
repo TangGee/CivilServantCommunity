@@ -1,0 +1,19 @@
+package com.mdove.civilservantcommunity.view.timelineitemdecoration.itemdecoration;
+
+import android.view.View;
+
+/**
+ * *          _       _
+ * *   __   _(_)_   _(_) __ _ _ __
+ * *   \ \ / / \ \ / / |/ _` | '_ \
+ * *    \ V /| |\ V /| | (_| | | | |
+ * *     \_/ |_| \_/ |_|\__,_|_| |_|
+ * <p>
+ * Created by vivian on 2017/6/23.
+ *
+ * copy from https://github.com/vivian8725118/TimeLine
+ */
+
+public interface SpanIndexListener {
+    void onSpanIndexChange(View view, int spanIndex);
+}
