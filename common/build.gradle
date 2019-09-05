@@ -26,5 +26,6 @@ android {
         implementation deps.kotlin.coroutines
         implementation deps.kotlin.ktx
         implementation deps.kotlin.coroutines_android
+        implementation deps.arch.lifecycle_extensions
     }
 }
