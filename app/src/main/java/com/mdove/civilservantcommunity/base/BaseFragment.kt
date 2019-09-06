@@ -1,7 +1,7 @@
 package com.mdove.civilservantcommunity.base
 
 import androidx.fragment.app.Fragment
-import com.mdove.civilservantcommunity.base.threadpool.FastMainScope
+import com.mdove.dependent.common.threadpool.FastMainScope
 import kotlinx.coroutines.CoroutineScope
 import kotlin.coroutines.CoroutineContext
 

@@ -1,4 +1,4 @@
-package com.mdove.civilservantcommunity.base.threadpool
+package com.mdove.dependent.common.threadpool
 
 /**
  * Created by MDove on 2019/3/25.

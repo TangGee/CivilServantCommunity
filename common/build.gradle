@@ -27,5 +27,7 @@ android {
         implementation deps.kotlin.ktx
         implementation deps.kotlin.coroutines_android
         implementation deps.arch.lifecycle_extensions
+
+        implementation deps.retrofit2.gson
     }
 }

@@ -9,6 +9,8 @@ import com.mdove.dependent.networkprovider.base.FrameApiClient
  */
 @ClaymoreImpl(INetworkProvider::class)
 class NetworkProviderImpl : INetworkProvider {
+    override val host: String
+        get() = "http://120.27.4.196:8082/qzznnb"
 
     override val networkClient: INetworkProvider.NetworkClient
         get() = object : INetworkProvider.NetworkClient {

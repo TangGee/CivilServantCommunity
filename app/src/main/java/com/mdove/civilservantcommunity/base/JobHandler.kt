@@ -3,7 +3,7 @@ package com.mdove.civilservantcommunity.base
 import android.app.Activity
 import android.content.Context
 import androidx.fragment.app.Fragment
-import com.mdove.civilservantcommunity.base.threadpool.FastMainScope
+import com.mdove.dependent.common.threadpool.FastMainScope
 import kotlinx.coroutines.CoroutineScope
 import kotlin.coroutines.CoroutineContext
 

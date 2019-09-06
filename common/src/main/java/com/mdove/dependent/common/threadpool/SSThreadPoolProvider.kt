@@ -1,4 +1,4 @@
-package com.mdove.civilservantcommunity.base.threadpool
+package com.mdove.dependent.common.threadpool
 
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors

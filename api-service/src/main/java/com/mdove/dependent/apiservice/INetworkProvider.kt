@@ -8,6 +8,7 @@ import com.mdove.herohalberd.ClaymoreNoop
  */
 interface INetworkProvider {
     val networkClient: NetworkClient
+    val host:String
 
     interface NetworkClient {
         @Throws(Exception::class)
@@ -20,25 +21,27 @@ interface INetworkProvider {
         fun post(url: String, body: String, respHeaders: Map<String, String>): String
     }
 
-//    @ClaymoreNoop(INetworkProvider::class)
-//    class Stub : INetworkProvider {
-//        override val networkClient: NetworkClient
-//            get() = object : NetworkClient {
-//                override fun get(url: String): String {
-//                    return "ClaymoreNoop -> INetworkProvider"
-//                }
-//
-//                override fun post(url: String, body: String): String {
-//                    return "ClaymoreNoop -> INetworkProvider"
-//                }
-//
-//                override fun post(
-//                    url: String,
-//                    body: String,
-//                    respHeaders: Map<String, String>
-//                ): String {
-//                    return "ClaymoreNoop -> INetworkProvider"
-//                }
-//            }
-//    }
+    @ClaymoreNoop(INetworkProvider::class)
+    class Stub : INetworkProvider {
+        override val host: String
+            get() = ""
+        override val networkClient: NetworkClient
+            get() = object : NetworkClient {
+                override fun get(url: String): String {
+                    return "ClaymoreNoop -> INetworkProvider"
+                }
+
+                override fun post(url: String, body: String): String {
+                    return "ClaymoreNoop -> INetworkProvider"
+                }
+
+                override fun post(
+                    url: String,
+                    body: String,
+                    respHeaders: Map<String, String>
+                ): String {
+                    return "ClaymoreNoop -> INetworkProvider"
+                }
+            }
+    }
 }

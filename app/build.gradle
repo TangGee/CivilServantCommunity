@@ -46,6 +46,10 @@ android {
     }
 }
 
+androidExtensions {
+    experimental = true
+}
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation deps.kotlin.core
@@ -58,6 +62,7 @@ dependencies {
     implementation deps.androidx.constraint_layout
     implementation deps.androidx.material
     implementation deps.arch.lifecycle_extensions
+    implementation deps.retrofit2.gson
 
     implementation 'org.jsoup:jsoup:1.9.2'
 

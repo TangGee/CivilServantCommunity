@@ -2,7 +2,7 @@ package com.mdove.civilservantcommunity.base
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.mdove.civilservantcommunity.base.threadpool.FastMainScope
+import com.mdove.dependent.common.threadpool.FastMainScope
 import com.mdove.civilservantcommunity.view.utils.StatusBarUtil
 import kotlinx.coroutines.CoroutineScope
 import kotlin.coroutines.CoroutineContext

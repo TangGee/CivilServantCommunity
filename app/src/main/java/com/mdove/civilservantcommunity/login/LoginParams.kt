@@ -1,0 +1,15 @@
+package com.mdove.civilservantcommunity.login
+
+import android.os.Parcelable
+import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
+
+/**
+ * Created by MDove on 2019-09-06.
+ */
+@Parcelize
+data class RegisterInfoParams(
+    @SerializedName("phone") val phone: String,
+    @SerializedName("password") val password: String,
+    @SerializedName("userType") val userType: String
+) : Parcelable
