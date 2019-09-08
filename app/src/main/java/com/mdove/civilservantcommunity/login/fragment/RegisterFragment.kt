@@ -85,7 +85,7 @@ class RegisterFragment : BaseFragment(), ITransitionProvider {
         }
     }
 
-    override fun providerView(): View {
+    override fun providerView(): View? {
         return transition_account
     }
 }

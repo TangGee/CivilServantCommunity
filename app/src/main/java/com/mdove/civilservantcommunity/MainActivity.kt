@@ -52,8 +52,8 @@ class MainActivity : BaseActivity() {
     private fun gotoLogin() {
         val intent = Intent(this, AccountActivity::class.java)
         startActivity(intent)
+        finish()
     }
-
 
     private fun initTabLayout() {
         var titles = ArrayList<String>()

@@ -35,7 +35,7 @@ class AccountActivity : BaseActivity(), IAccountHandle {
     override fun onClickRegister() {
         val loginFragment =
             supportFragmentManager.findFragmentByTag(TAG_LOGIN_FRAGMENT) ?: LoginFragment()
-        val registerFragment = RegisterFragment()
+        val registerFragment =supportFragmentManager.findFragmentByTag(TAG_REGISTER_FRAGMENT) ?: RegisterFragment()
 
         val exitFade = Fade()
         exitFade.duration = FADE_DEFAULT_TIME
@@ -64,7 +64,7 @@ class AccountActivity : BaseActivity(), IAccountHandle {
     override fun onBackLogin() {
         val registerFragment =
             supportFragmentManager.findFragmentByTag(TAG_REGISTER_FRAGMENT) ?: RegisterFragment()
-        val loginFragment = LoginFragment()
+        val loginFragment =supportFragmentManager.findFragmentByTag(TAG_LOGIN_FRAGMENT) ?: LoginFragment()
 
         val exitFade = Fade()
         exitFade.duration = FADE_DEFAULT_TIME
@@ -85,7 +85,7 @@ class AccountActivity : BaseActivity(), IAccountHandle {
             (registerFragment as? ITransitionProvider)?.providerView()?.let{
                 addSharedElement(it, it.transitionName)
             }
-            replace(R.id.content, loginFragment, TAG_REGISTER_FRAGMENT)
+            replace(R.id.content, loginFragment, TAG_LOGIN_FRAGMENT)
             commitAllowingStateLoss()
         }
     }
