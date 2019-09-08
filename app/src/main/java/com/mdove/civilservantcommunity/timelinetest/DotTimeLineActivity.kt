@@ -16,15 +16,15 @@ import com.mdove.civilservantcommunity.view.timelineitemdecoration.itemdecoratio
 import java.util.ArrayList
 
 class DotTimeLineActivity : AppCompatActivity() {
-    internal var mRecyclerView: RecyclerView
+    lateinit var mRecyclerView: RecyclerView
 
-    internal var mList: MutableList<Event> = ArrayList()
-    internal var mAdapter: DotTimeLineAdapter
-    internal var mItemDecoration: DotItemDecoration
+    var mList: MutableList<Event> = ArrayList()
+    lateinit var mAdapter: DotTimeLineAdapter
+    lateinit var mItemDecoration: DotItemDecoration
 
     internal var times =
         longArrayOf(1497229200, 1497240000, 1497243600, 1497247200, 1497249000, 1497252600)
-    internal var events = arrayOf("去小北门拿快递", "跟同事一起聚餐", "写文档", "和产品开会", "整理开会内容", "提交代码到git上")
+    var events = arrayOf("去小北门拿快递", "跟同事一起聚餐", "写文档", "和产品开会", "整理开会内容", "提交代码到git上")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,10 +52,10 @@ class DotTimeLineActivity : AppCompatActivity() {
             .setDotPaddingText(2f)//dp.The distance between the last dot and the end text
             .setBottomDistance(40f)//you can add a distance to make bottom line longer
             .create()
-        mItemDecoration.setSpanIndexListener { view, spanIndex ->
-            Log.i("Info", "view:$view  span:$spanIndex")
-            view.setBackgroundResource(if (spanIndex == 0) R.drawable.bg_hot_article_top1_stub_ else R.drawable.bg_hot_article_top2_stub_)
-        }
+//        mItemDecoration.setSpanIndexListener { view, spanIndex ->
+//            Log.i("Info", "view:$view  span:$spanIndex")
+//            view.(if (spanIndex == 0) R.drawable.bg_hot_article_top1_stub_ else R.drawable.bg_hot_article_top2_stub_)
+//        }
         mRecyclerView.addItemDecoration(mItemDecoration)
 
         for (i in times.indices) {

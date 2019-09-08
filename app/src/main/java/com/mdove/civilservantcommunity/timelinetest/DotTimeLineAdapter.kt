@@ -23,9 +23,9 @@ import com.mdove.civilservantcommunity.view.timelineitemdecoration.util.Util
  */
 
 class DotTimeLineAdapter : RecyclerView.Adapter<DotTimeLineAdapter.ViewHolder> {
-    internal var mContext: Context
-    internal var mList: List<Event>
-    internal var colors =
+    lateinit var mContext: Context
+    lateinit var mList: List<Event>
+    var colors =
         intArrayOf(-0x5294, -0x9d0bcc, -0x212588, -0x812301, -0xa70216, -0x238a1)//颜色组
 
     fun setList(list: List<Event>) {
@@ -56,7 +56,7 @@ class DotTimeLineAdapter : RecyclerView.Adapter<DotTimeLineAdapter.ViewHolder> {
         return mList.size
     }
 
-    internal inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         var time: TextView
         var textView: TextView
 

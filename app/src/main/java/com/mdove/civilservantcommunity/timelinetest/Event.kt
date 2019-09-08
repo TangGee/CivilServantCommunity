@@ -13,5 +13,5 @@ package com.mdove.civilservantcommunity.timelinetest
 
 class Event {
     var time: Long = 0
-    var event: String
+    var event: String = ""
 }

@@ -330,7 +330,7 @@ class DotItemDecoration(private val mContext: Context, private val mConfig: Conf
         }
     }
 
-    internal class Config {
+    class Config {
         @ItemStyle
         var mStyle = STYLE_DRAW
         @Orientation
@@ -456,10 +456,10 @@ class DotItemDecoration(private val mContext: Context, private val mConfig: Conf
     }
 
     companion object {
-        val STYLE_DRAW = 0
-        val STYLE_RESOURCE = 1
+        const val STYLE_DRAW = 0
+        const val STYLE_RESOURCE = 1
 
-        val HORIZONTAL = 0
-        val VERTICAL = 1
+        const val HORIZONTAL = 0
+        const val VERTICAL = 1
     }
 }

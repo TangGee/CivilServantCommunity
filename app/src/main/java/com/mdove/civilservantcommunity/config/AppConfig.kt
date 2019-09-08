@@ -12,7 +12,7 @@ import com.mdove.dependent.common.utils.toJson
 /**
  * Created by MDove on 2019-09-08.
  */
-class AppConfig : IAppConfig {
+object AppConfig : IAppConfig {
     private val PREFS_FILE = "civil_servant_community"
 
     private var sPrefs: SharedPreferences? = null

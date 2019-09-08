@@ -13,9 +13,11 @@ import androidx.lifecycle.ViewModelProviders
 import com.mdove.civilservantcommunity.MainActivity
 import com.mdove.civilservantcommunity.R
 import com.mdove.civilservantcommunity.base.BaseFragment
+import com.mdove.civilservantcommunity.config.AppConfig
 import com.mdove.civilservantcommunity.login.IAccountHandle
 import com.mdove.civilservantcommunity.login.ITransitionProvider
 import com.mdove.civilservantcommunity.login.bean.LoginInfoParams
+import com.mdove.civilservantcommunity.login.bean.UserInfo
 import com.mdove.civilservantcommunity.login.viewmodel.AccountViewModel
 import com.mdove.dependent.common.networkenhance.valueobj.Status
 import com.mdove.dependent.common.toast.ToastUtil
@@ -55,9 +57,11 @@ class LoginFragment : BaseFragment(), ITransitionProvider {
         mAccountViewModel.loginResp.observe(this, Observer {
             when (it.status) {
                 Status.SUCCESS -> {
+                    AppConfig.setUserInfo(UserInfo(it.data?.data ?: ""))
                     ToastUtil.toast(it.data?.data ?: "", Toast.LENGTH_SHORT)
                     val intent = Intent(activity, MainActivity::class.java)
                     activity?.startActivity(intent)
+                    activity?.finish()
                 }
                 Status.ERROR -> {
                     ToastUtil.toast(it.data?.message ?: "登录失败 ", Toast.LENGTH_SHORT)

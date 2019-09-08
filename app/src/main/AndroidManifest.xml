@@ -11,7 +11,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".test.TestViewPagerActivity"
+            android:name=".MainActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/MyAppTheme">
@@ -22,9 +22,11 @@
             </intent-filter>
         </activity>
 
-<!--        <activity android:name=".MainActivity"-->
-<!--            android:launchMode="singleTop"-->
-<!--            android:screenOrientation="portrait"/>-->
+        <activity
+            android:name=".login.AccountActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/MyAppTheme" />
 
     </application>
 

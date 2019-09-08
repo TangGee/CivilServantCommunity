@@ -8,11 +8,14 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import android.animation.ArgbEvaluator
+import android.content.Intent
 import android.graphics.Color
 import androidx.viewpager.widget.ViewPager
 import com.mdove.civilservantcommunity.base.BaseActivity
+import com.mdove.civilservantcommunity.config.AppConfig
 import com.mdove.civilservantcommunity.feed.MainFeedFragment
 import com.mdove.civilservantcommunity.feed.MeFragment
+import com.mdove.civilservantcommunity.login.AccountActivity
 import com.mdove.dependent.common.view.tablayout.calculateGradualColor
 import com.mdove.dependent.common.view.tablayout.gradualColor
 import com.mdove.dependent.common.view.tablayout.scrollNextPosition
@@ -34,10 +37,23 @@ class MainActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        initLogin()
         setContentView(R.layout.activity_main)
         initViewPager()
         initTabLayout()
     }
+
+    private fun initLogin() {
+        AppConfig.getUserInfo() ?: also {
+            gotoLogin()
+        }
+    }
+
+    private fun gotoLogin() {
+        val intent = Intent(this, AccountActivity::class.java)
+        startActivity(intent)
+    }
+
 
     private fun initTabLayout() {
         var titles = ArrayList<String>()
