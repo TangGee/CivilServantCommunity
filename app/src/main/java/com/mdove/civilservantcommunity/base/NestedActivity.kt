@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.mdove.civilservantcommunity.R
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.fragment_main_feed.*
 
 /**
  * Created by MDove on 2019/8/31.
@@ -41,22 +41,22 @@ class NestedActivity :AppCompatActivity() {
             }
         }
 
-        rlv2.layoutManager=LinearLayoutManager(this)
-        rlv2.adapter=object :RecyclerView.Adapter<RecyclerView.ViewHolder>(){
-            override fun getItemCount(): Int {
-                return 20
-            }
-
-            override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-                holder.itemView.findViewById<TextView>(R.id.tv_name).text="~~~~~Nested~~~~~~~"
-            }
-
-            override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-                return object:RecyclerView.ViewHolder(LayoutInflater.from(this@NestedActivity).
-                        inflate(R.layout.item_text,parent,false)){
-                }
-            }
-
-        }
+//        rlv2.layoutManager=LinearLayoutManager(this)
+//        rlv2.adapter=object :RecyclerView.Adapter<RecyclerView.ViewHolder>(){
+//            override fun getItemCount(): Int {
+//                return 20
+//            }
+//
+//            override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+//                holder.itemView.findViewById<TextView>(R.id.tv_name).text="~~~~~Nested~~~~~~~"
+//            }
+//
+//            override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+//                return object:RecyclerView.ViewHolder(LayoutInflater.from(this@NestedActivity).
+//                        inflate(R.layout.item_text,parent,false)){
+//                }
+//            }
+//
+//        }
     }
 }

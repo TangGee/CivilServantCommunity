@@ -7,12 +7,13 @@ import java.io.Serializable
  * Created by MDove on 2019/9/3.
  */
 data class NormalResp<T>(
-        @SerializedName("msg") val message: String = "fail",
-        @SerializedName("data") var data: T? = null,
-        @Transient var exception: Exception? = null,
-        @SerializedName("status") val status: String? = null) : Serializable {
+    @SerializedName("msg") val message: String = "fail",
+    @SerializedName("data") var data: T? = null,
+    @Transient var exception: Exception? = null,
+    @SerializedName("status") val status: String? = null
+) : Serializable {
     val isSuccess: Boolean
-        get() = exception!=null && data != null
+        get() = exception == null && data != null
     val errorCode: String
         get() = when {
             isSuccess -> {
@@ -22,7 +23,7 @@ data class NormalResp<T>(
                 "no_data"
             }
             (exception != null) -> {
-                exception!!.message?:"error msg null"
+                exception!!.message ?: "error msg null"
             }
             else -> {
                 message

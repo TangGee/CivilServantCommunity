@@ -1,4 +1,4 @@
-package com.mdove.civilservantcommunity.login
+package com.mdove.civilservantcommunity.login.bean
 
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
@@ -12,4 +12,10 @@ data class RegisterInfoParams(
     @SerializedName("phone") val phone: String,
     @SerializedName("password") val password: String,
     @SerializedName("userType") val userType: String
+) : Parcelable
+
+@Parcelize
+data class LoginInfoParams(
+    @SerializedName("phone") val phone: String,
+    @SerializedName("password") val password: String
 ) : Parcelable

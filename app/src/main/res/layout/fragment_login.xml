@@ -21,13 +21,20 @@
             android:background="@drawable/bg_login_circle_120" />
     </FrameLayout>
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_top"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="60dp" />
+
     <TextView
         android:id="@+id/tv_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="24dp"
         android:layout_marginTop="-12dp"
-        android:text="账号注册"
+        android:text="登录"
         android:textColor="@color/grey_900"
         android:textSize="24sp"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -103,7 +110,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="left|center_vertical"
                     android:layout_marginLeft="12dp"
-                    android:text="设置密码"
+                    android:text="密码"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
 
@@ -122,39 +129,28 @@
 
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/password_tips"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:text="目前不支持短信验证码登录，请记住你的密码呦~"
-                android:textColor="@color/grey_500"
-                android:textSize="12sp"
-                app:layout_constraintRight_toRightOf="@+id/layout_password"
-                app:layout_constraintTop_toBottomOf="@+id/layout_password" />
-
             <View
                 android:id="@+id/transition_account"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
-                app:layout_constraintRight_toRightOf="@+id/tv_ok"
-                app:layout_constraintBottom_toBottomOf="@+id/tv_ok"
-                app:layout_constraintTop_toTopOf="@+id/tv_ok"
-                app:layout_constraintLeft_toLeftOf="@+id/tv_ok"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/layout_password"
+                android:layout_marginTop="12dp"
+                android:layout_marginRight="8dp"
                 android:transitionName="account_transition"
                 android:background="@drawable/bg_login_circle_80" />
 
             <TextView
-                android:id="@+id/tv_back"
+                android:id="@+id/btn_register"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="36dp"
-                android:layout_marginBottom="36dp"
-                android:text="返  回"
+                android:layout_marginTop="12dp"
+                android:text="没有账号，前往注册"
                 android:textColor="@color/grey_500"
-                android:textSize="20sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent" />
+                android:textSize="16sp"
+                app:layout_constraintRight_toRightOf="@+id/layout_password"
+                app:layout_constraintBottom_toBottomOf="@+id/transition_account"
+                app:layout_constraintTop_toTopOf="@+id/transition_account" />
 
             <TextView
                 android:id="@+id/tv_ok"
@@ -167,25 +163,7 @@
                 android:textSize="20sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintRight_toRightOf="parent" />
-
-            <com.mdove.civilservantcommunity.view.MultiLineChooseLayout
-                android:id="@+id/layout_identity"
-                android:layout_width="0dp"
-                android:layout_marginLeft="24dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginRight="24dp"
-                android:layout_height="wrap_content"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/password_tips" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline_top"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_begin="60dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
