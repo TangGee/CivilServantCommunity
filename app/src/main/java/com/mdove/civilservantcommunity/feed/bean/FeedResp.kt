@@ -11,7 +11,8 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 data class FeedDataResp(
     @SerializedName("aid") val aid: String? = "",
-    @SerializedName("user_info") val userInfo: NormalUserInfo? = null,
+//    @SerializedName("user_info") val userInfo: NormalUserInfo? = null,
+    @SerializedName("username") val userName: String? = "",
     @SerializedName("title") val title: String? = "",
     @SerializedName("content") val content: String? = "",
     @SerializedName("maketime") val maketime: String? = "",

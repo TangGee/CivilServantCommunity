@@ -43,6 +43,10 @@ class MainActivity : BaseActivity() {
         initTabLayout()
     }
 
+    override fun enableTranslucent(): Boolean {
+        return false
+    }
+
     private fun initLogin() {
         AppConfig.getUserInfo() ?: also {
             gotoLogin()
@@ -54,6 +58,7 @@ class MainActivity : BaseActivity() {
         startActivity(intent)
         finish()
     }
+
 
     private fun initTabLayout() {
         var titles = ArrayList<String>()

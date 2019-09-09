@@ -79,6 +79,7 @@ class MainFeedAdapter : ListAdapter<FeedDataResp, RecyclerView.ViewHolder>(objec
         fun bind(data: FeedDataResp) {
             itemView.findViewById<TextView>(R.id.tv_title).text = data.title
             itemView.findViewById<TextView>(R.id.tv_name).text = data.maketime
+            itemView.findViewById<TextView>(R.id.tv_content).text = data.content
         }
     }
 
@@ -86,6 +87,7 @@ class MainFeedAdapter : ListAdapter<FeedDataResp, RecyclerView.ViewHolder>(objec
         fun bind(data: FeedDataResp) {
             itemView.findViewById<TextView>(R.id.tv_title).text = data.title
             itemView.findViewById<TextView>(R.id.tv_name).text = data.maketime
+            itemView.findViewById<TextView>(R.id.tv_content).text = data.content
         }
     }
 
@@ -93,6 +95,7 @@ class MainFeedAdapter : ListAdapter<FeedDataResp, RecyclerView.ViewHolder>(objec
         fun bind(data: FeedDataResp) {
             itemView.findViewById<TextView>(R.id.tv_title).text = data.title
             itemView.findViewById<TextView>(R.id.tv_name).text = data.maketime
+            itemView.findViewById<TextView>(R.id.tv_content).text = data.content
         }
     }
 }

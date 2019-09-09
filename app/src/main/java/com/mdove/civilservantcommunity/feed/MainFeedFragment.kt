@@ -42,9 +42,18 @@ class MainFeedFragment : BaseFragment() {
         feedViewModel.data.observe(this, Observer {
             when (it.status) {
                 Status.SUCCESS -> {
-                    it.data?.data?.let {
-                        adapter.submitList(it)
+                    it.data?.data?.let { list ->
+                        adapter.submitList(list)
+                        sfl.isRefreshing = false
+                        rlv.updateEmptyUI()
                     }
+                }
+                Status.LOADING -> {
+                    sfl.isRefreshing = true
+                    rlv.updateEmptyUI()
+                }
+                Status.ERROR -> {
+                    sfl.isRefreshing = false
                 }
             }
         })

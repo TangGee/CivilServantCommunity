@@ -16,6 +16,12 @@ open class BaseActivity : AppCompatActivity(), CoroutineScope {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        StatusBarUtil.setTranslucent(this)
+        if(enableTranslucent()) {
+            StatusBarUtil.setTranslucent(this)
+        }
+    }
+
+    open fun enableTranslucent() :Boolean{
+        return true
     }
 }

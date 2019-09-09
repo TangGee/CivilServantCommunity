@@ -14,13 +14,14 @@ import com.mdove.dependent.common.networkenhance.valueobj.Resource
  */
 class MainFeedRepository {
     private val mainFeedModule = MainFeedModule()
+    private val mainFeedCacheModule = MainFeedCacheModule()
     fun reqFeed(): LiveData<Resource<NormalResp<List<FeedDataResp>>>> {
         return object :
             NetworkBoundResource<NormalResp<List<FeedDataResp>>, NormalResp<List<FeedDataResp>>>(
                 AppExecutorsImpl()
             ) {
             override fun saveCallResult(item: NormalResp<List<FeedDataResp>>) {
-                // 暂不需要
+                mainFeedCacheModule.cacheFeedResp = item
             }
 
             override fun shouldFetch(data: NormalResp<List<FeedDataResp>>?): Boolean {
@@ -30,7 +31,7 @@ class MainFeedRepository {
             override fun loadFromDb(): LiveData<NormalResp<List<FeedDataResp>>> {
                 // 暂不需要
                 return MutableLiveData<NormalResp<List<FeedDataResp>>>().apply {
-                    value = NormalResp<List<FeedDataResp>>()
+                    value = mainFeedCacheModule.cacheFeedResp ?: NormalResp<List<FeedDataResp>>()
                 }
             }
 
