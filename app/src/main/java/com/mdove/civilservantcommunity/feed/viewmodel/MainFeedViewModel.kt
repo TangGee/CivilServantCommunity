@@ -10,7 +10,7 @@ import com.mdove.dependent.common.network.NormalResp
 import com.mdove.dependent.common.networkenhance.valueobj.Resource
 
 /**
- * Created by zhaojing on 2019-09-06.
+ * Created by MDove on 2019-09-06.
  */
 class MainFeedViewModel : ViewModel() {
     private val loadType = MutableLiveData<LoadType>()

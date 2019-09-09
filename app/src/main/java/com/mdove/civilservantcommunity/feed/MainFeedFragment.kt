@@ -1,17 +1,25 @@
 package com.mdove.civilservantcommunity.feed
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mdove.civilservantcommunity.R
 import com.mdove.civilservantcommunity.base.BaseFragment
+import com.mdove.civilservantcommunity.detailfeed.DetailFeedActivity
+import com.mdove.civilservantcommunity.detailfeed.DetailFeedActivity.Companion.DETAIL_FEED_ACTIVITY_PARAMS
+import com.mdove.civilservantcommunity.detailfeed.bean.DetailFeedParams
 import com.mdove.civilservantcommunity.feed.adapter.MainFeedAdapter
+import com.mdove.civilservantcommunity.feed.adapter.OnMainFeedClickListener
+import com.mdove.civilservantcommunity.feed.bean.FeedDataResp
 import com.mdove.civilservantcommunity.feed.viewmodel.MainFeedViewModel
 import com.mdove.dependent.common.networkenhance.valueobj.Status
+import com.mdove.dependent.common.toast.ToastUtil
 import kotlinx.android.synthetic.main.fragment_main_feed.*
 
 /**
@@ -19,7 +27,16 @@ import kotlinx.android.synthetic.main.fragment_main_feed.*
  */
 class MainFeedFragment : BaseFragment() {
     private lateinit var feedViewModel: MainFeedViewModel
-    private val adapter = MainFeedAdapter()
+    private val adapter = MainFeedAdapter(object : OnMainFeedClickListener {
+        override fun onClick(resp: FeedDataResp) {
+            resp.aid?.let {
+                val intent = Intent(activity, DetailFeedActivity::class.java)
+                intent.putExtra(DETAIL_FEED_ACTIVITY_PARAMS, DetailFeedParams(it))
+                activity?.startActivity(intent)
+            }
+        }
+    })
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         activity?.let {
@@ -54,6 +71,7 @@ class MainFeedFragment : BaseFragment() {
                 }
                 Status.ERROR -> {
                     sfl.isRefreshing = false
+                    ToastUtil.toast("请求失败", Toast.LENGTH_SHORT)
                 }
             }
         })

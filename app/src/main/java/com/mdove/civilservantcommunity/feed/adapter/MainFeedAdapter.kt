@@ -13,7 +13,8 @@ import com.mdove.civilservantcommunity.feed.bean.FeedDataResp
 /**
  * Created by MDove on 2019-09-06.
  */
-class MainFeedAdapter : ListAdapter<FeedDataResp, RecyclerView.ViewHolder>(object :
+class MainFeedAdapter(val listener: OnMainFeedClickListener? = null) :
+    ListAdapter<FeedDataResp, RecyclerView.ViewHolder>(object :
     DiffUtil.ItemCallback<FeedDataResp>() {
     override fun areItemsTheSame(
         oldItem: FeedDataResp,
@@ -77,6 +78,11 @@ class MainFeedAdapter : ListAdapter<FeedDataResp, RecyclerView.ViewHolder>(objec
 
     inner class TopOneViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(data: FeedDataResp) {
+            listener?.let { listener ->
+                itemView.setOnClickListener {
+                    listener.onClick(data)
+                }
+            }
             itemView.findViewById<TextView>(R.id.tv_title).text = data.title
             itemView.findViewById<TextView>(R.id.tv_name).text = data.maketime
             itemView.findViewById<TextView>(R.id.tv_content).text = data.content
@@ -85,6 +91,11 @@ class MainFeedAdapter : ListAdapter<FeedDataResp, RecyclerView.ViewHolder>(objec
 
     inner class TopTwoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(data: FeedDataResp) {
+            listener?.let { listener ->
+                itemView.setOnClickListener {
+                    listener.onClick(data)
+                }
+            }
             itemView.findViewById<TextView>(R.id.tv_title).text = data.title
             itemView.findViewById<TextView>(R.id.tv_name).text = data.maketime
             itemView.findViewById<TextView>(R.id.tv_content).text = data.content
@@ -93,9 +104,18 @@ class MainFeedAdapter : ListAdapter<FeedDataResp, RecyclerView.ViewHolder>(objec
 
     inner class NormalViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(data: FeedDataResp) {
+            listener?.let { listener ->
+                itemView.setOnClickListener {
+                    listener.onClick(data)
+                }
+            }
             itemView.findViewById<TextView>(R.id.tv_title).text = data.title
             itemView.findViewById<TextView>(R.id.tv_name).text = data.maketime
             itemView.findViewById<TextView>(R.id.tv_content).text = data.content
         }
     }
+}
+
+interface OnMainFeedClickListener{
+    fun onClick(resp: FeedDataResp)
 }

@@ -45,15 +45,10 @@ class MainFeedPlaceHolderDrawable : Drawable() {
 
         var top = 0
         while (top < mScaledHeight) {
-            canvas.drawCircle(46.toFloat(), 42.toFloat(), 30.toFloat(), mRectPaint)
-            val trianglePath = Path()
-            trianglePath.moveTo(39.toFloat(), 33.toFloat())
-            trianglePath.lineTo(55.toFloat(), 42.toFloat())
-            trianglePath.lineTo(39.toFloat(), 51.toFloat())
-            trianglePath.close()
-            canvas.drawPath(trianglePath, mTrianglePaint)
             canvas.drawRect(RECT_1, mRectPaint)
             canvas.drawRect(RECT_2, mRectPaint)
+            canvas.drawRect(RECT_3, mRectPaint)
+            canvas.drawRect(RECT_4, mRectPaint)
 
             top += DESIGN_HEIGHT.toInt()
             canvas.translate(0f, DESIGN_HEIGHT)
@@ -91,7 +86,9 @@ class MainFeedPlaceHolderDrawable : Drawable() {
         private const val START_COLOR = -0xf0f10
         private const val END_COLOR = -0x272728
 
-        private val RECT_1 = Rect(88, 31, 322, 38)
-        private val RECT_2 = Rect(88, 48, 267, 54)
+        private val RECT_1 = Rect(12, 12, 280, 72)
+        private val RECT_2 = Rect(12, 84, 240, 96)
+        private val RECT_3 = Rect(12, 108, 240, 120)
+        private val RECT_4 = Rect(256, 12, 348, 120)
     }
 }
