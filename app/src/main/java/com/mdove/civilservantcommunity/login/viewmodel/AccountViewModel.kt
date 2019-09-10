@@ -4,9 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
-import com.mdove.civilservantcommunity.login.bean.LoginInfoParams
-import com.mdove.civilservantcommunity.login.bean.RegisterDataResp
-import com.mdove.civilservantcommunity.login.bean.RegisterInfoParams
+import com.mdove.civilservantcommunity.login.bean.*
 import com.mdove.civilservantcommunity.login.repository.AccountRepository
 import com.mdove.dependent.common.network.NormalResp
 import com.mdove.dependent.common.networkenhance.valueobj.Resource
@@ -30,7 +28,7 @@ class AccountViewModel : ViewModel() {
             repository.register(it)
         }
 
-    val loginResp: LiveData<Resource<NormalResp<String>>> = Transformations.switchMap(loginReq) {
+    val loginResp: LiveData<Resource<NormalResp<LoginDataResp>>> = Transformations.switchMap(loginReq) {
         repository.login(it)
     }
 

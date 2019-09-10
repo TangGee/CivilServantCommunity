@@ -8,4 +8,5 @@ import kotlinx.android.parcel.Parcelize
  * Created by MDove on 2019-09-08.
  */
 @Parcelize
-data class UserInfo(@SerializedName("uid") val uid: String) : Parcelable
+data class UserInfo(@SerializedName("uid") val uid: String,
+                    @SerializedName("username") val username: String) : Parcelable

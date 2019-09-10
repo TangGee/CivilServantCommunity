@@ -57,11 +57,10 @@ class LoginFragment : BaseFragment(), ITransitionProvider {
         mAccountViewModel.loginResp.observe(this, Observer {
             when (it.status) {
                 Status.SUCCESS -> {
-                    AppConfig.setUserInfo(UserInfo(it.data?.data ?: ""))
-                    ToastUtil.toast(it.data?.data ?: "", Toast.LENGTH_SHORT)
-                    val intent = Intent(activity, MainActivity::class.java)
-                    activity?.startActivity(intent)
-                    activity?.finish()
+                    AppConfig.setUserInfo(it.data?.data?.userInfo)
+                    context?.let {
+                        MainActivity.gotoMain(it)
+                    }
                 }
                 Status.ERROR -> {
                     ToastUtil.toast(it.data?.message ?: "登录失败 ", Toast.LENGTH_SHORT)

@@ -2,9 +2,7 @@ package com.mdove.civilservantcommunity.login.repository
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.mdove.civilservantcommunity.login.bean.LoginInfoParams
-import com.mdove.civilservantcommunity.login.bean.RegisterDataResp
-import com.mdove.civilservantcommunity.login.bean.RegisterInfoParams
+import com.mdove.civilservantcommunity.login.bean.*
 import com.mdove.dependent.common.network.AppExecutorsImpl
 import com.mdove.dependent.common.network.NormalResp
 import com.mdove.dependent.common.networkenhance.NetworkBoundResource
@@ -43,26 +41,26 @@ class AccountRepository {
         }.asLiveData()
     }
 
-    fun login(loginInfoParams: LoginInfoParams): LiveData<Resource<NormalResp<String>>> {
+    fun login(loginInfoParams: LoginInfoParams): LiveData<Resource<NormalResp<LoginDataResp>>> {
         return object :
-            NetworkBoundResource<NormalResp<String>, NormalResp<String>>(
+            NetworkBoundResource<NormalResp<LoginDataResp>, NormalResp<LoginDataResp>>(
                 AppExecutorsImpl()
             ) {
-            override fun saveCallResult(item: NormalResp<String>) {
+            override fun saveCallResult(item: NormalResp<LoginDataResp>) {
                 accountCache.cacheLoginResp = item
             }
 
-            override fun shouldFetch(data: NormalResp<String>?): Boolean {
+            override fun shouldFetch(data: NormalResp<LoginDataResp>?): Boolean {
                 return true
             }
 
-            override fun loadFromDb(): LiveData<NormalResp<String>> {
-                return MutableLiveData<NormalResp<String>>().apply {
-                    value = accountCache.cacheLoginResp ?: NormalResp<String>()
+            override fun loadFromDb(): LiveData<NormalResp<LoginDataResp>> {
+                return MutableLiveData<NormalResp<LoginDataResp>>().apply {
+                    value = accountCache.cacheLoginResp ?: NormalResp<LoginDataResp>()
                 }
             }
 
-            override fun createCall(): LiveData<ApiResponse<NormalResp<String>>> {
+            override fun createCall(): LiveData<ApiResponse<NormalResp<LoginDataResp>>> {
                 return registerModule.login(loginInfoParams)
             }
         }.asLiveData()

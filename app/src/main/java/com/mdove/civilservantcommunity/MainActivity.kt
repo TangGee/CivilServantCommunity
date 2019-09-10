@@ -8,6 +8,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import android.animation.ArgbEvaluator
+import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import androidx.viewpager.widget.ViewPager
@@ -25,6 +27,14 @@ class MainActivity : BaseActivity() {
     companion object {
         private const val TAG_FEED_FRAGMNET = "tag_feed_fragment"
         private const val TAG_ME_FRAGMNET = "tag_me_fragment"
+
+        fun gotoMain(context:Context){
+            val intent = Intent(context, MainActivity::class.java)
+            context.startActivity(intent)
+            (context as? Activity)?.let{
+                it.finish()
+            }
+        }
     }
 
     val evaluator = ArgbEvaluator()
@@ -58,7 +68,6 @@ class MainActivity : BaseActivity() {
         startActivity(intent)
         finish()
     }
-
 
     private fun initTabLayout() {
         var titles = ArrayList<String>()
