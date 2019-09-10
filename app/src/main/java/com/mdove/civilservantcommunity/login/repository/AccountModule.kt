@@ -7,6 +7,8 @@ import com.mdove.civilservantcommunity.login.bean.*
 import com.mdove.dependent.common.threadpool.MDoveApiPool
 import com.mdove.dependent.apiservice.AppDependsProvider
 import com.mdove.dependent.common.network.NormalResp
+import com.mdove.dependent.common.network.ServerRespException
+import com.mdove.dependent.common.network.toNormaResp
 import com.mdove.dependent.common.networkenhance.api.ApiErrorResponse
 import com.mdove.dependent.common.networkenhance.api.ApiResponse
 import com.mdove.dependent.common.networkenhance.api.ApiSuccessResponse
@@ -64,7 +66,9 @@ class AccountModule {
                 val data: NormalResp<LoginDataResp> = fromServerResp(json)
                 data
             } catch (e: Exception) {
-                NormalResp<LoginDataResp>(exception = e)
+                (e as? ServerRespException)?.let{
+                   it.toNormaResp<LoginDataResp>()
+                } ?:  NormalResp<LoginDataResp>(exception = e)
             }
             if (resp.exception == null) {
                 liveData.postValue(ApiSuccessResponse(resp))
