@@ -10,6 +10,8 @@ import androidx.fragment.app.FragmentPagerAdapter
 import android.animation.ArgbEvaluator
 import android.content.Intent
 import android.graphics.Color
+import android.os.Looper
+import android.util.Log
 import androidx.viewpager.widget.ViewPager
 import com.mdove.civilservantcommunity.base.BaseActivity
 import com.mdove.civilservantcommunity.config.AppConfig
@@ -27,24 +29,18 @@ class MainActivity : BaseActivity() {
         private const val TAG_ME_FRAGMNET = "tag_me_fragment"
     }
 
-    val evaluator = ArgbEvaluator()
-    var selectedColor: Int = 0
-    var unSelectedColor: Int = 0
-    private val indicatorColors = arrayListOf<Int>(
-        Color.parseColor("#FF5E00"),
-        Color.parseColor("#FF8000"), Color.parseColor("#FFA200"), Color.parseColor("#FFBC34")
-    )
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initLogin()
         setContentView(R.layout.activity_main)
         initViewPager()
         initTabLayout()
-    }
 
-    override fun enableTranslucent(): Boolean {
-        return false
+        Looper.getMainLooper().setMessageLogging {
+            Looper.getMainLooper().thread.stackTrace.forEach {
+                Log.d("mdove",it.methodName)
+            }
+        }
     }
 
     private fun initLogin() {
@@ -59,55 +55,15 @@ class MainActivity : BaseActivity() {
         finish()
     }
 
-
     private fun initTabLayout() {
-        var titles = ArrayList<String>()
-        val colors = mutableListOf<Int>()
-        vp?.adapter?.let { it_ ->
-            (0 until it_.count).forEach { index ->
-                titles.add(if (index == 0) "热门" else "我的")
-                colors.add(indicatorColors[index % indicatorColors.size])
-            }
-        }
+        val titles = ArrayList<String>()
+        titles.add("热门")
+        titles.add("我的")
         stl.setViewPager(vp, titles)
     }
 
     private fun initViewPager() {
-        selectedColor = ContextCompat.getColor(this, R.color.amber_500)
-        unSelectedColor = ContextCompat.getColor(this, R.color.amber_200)
         vp.adapter = ViewPagerAdapter(supportFragmentManager)
-        vp.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
-            var pageSelected = false
-
-            override fun onPageScrollStateChanged(state: Int) {
-                if (0 == state) pageSelected = false
-            }
-
-            override fun onPageScrolled(
-                position: Int,
-                positionOffset: Float,
-                positionOffsetPixels: Int
-            ) {
-                if (positionOffset > 0.0f && !pageSelected) {//略微复杂一点，并且0要排除，走tab select时机
-                    stl.gradualColor(
-                        vp.currentItem, vp.scrollNextPosition(position),
-                        evaluator.calculateGradualColor(
-                            positionOffset,
-                            selectedColor,
-                            unSelectedColor
-                        ),
-                        evaluator.calculateGradualColor(
-                            positionOffset,
-                            unSelectedColor,
-                            selectedColor
-                        )
-                    )
-                }
-            }
-
-            override fun onPageSelected(position: Int) {
-            }
-        })
     }
 
     inner class ViewPagerAdapter(val fm: FragmentManager) : FragmentPagerAdapter(fm) {

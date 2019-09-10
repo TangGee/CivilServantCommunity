@@ -11,7 +11,7 @@
         android:layout_height="match_parent"
         android:background="@color/grey_200">
 
-        <ScrollView
+        <androidx.core.widget.NestedScrollView
             android:id="@+id/layout_content"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -27,13 +27,11 @@
                 android:id="@+id/tv_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-
                 android:textColor="@color/grey_800"
                 android:textSize="16sp"
-
                 tools:text="啊哈哈哈啊哈哈哈啊哈哈哈啊哈哈哈啊哈哈哈啊哈哈哈啊哈哈哈啊哈哈哈啊哈哈哈啊哈哈哈啊哈哈哈" />
 
-        </ScrollView>
+        </androidx.core.widget.NestedScrollView>
 
         <TextView
             android:id="@+id/tv_title"
