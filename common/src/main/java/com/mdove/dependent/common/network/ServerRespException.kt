@@ -2,7 +2,6 @@ package com.mdove.dependent.common.network
 
 import com.google.gson.JsonElement
 import com.mdove.dependent.common.utils.fromJson
-import com.mdove.dependent.common.utils.fromServerResp
 
 class ServerRespException(
     val errorCode: String,
@@ -13,7 +12,7 @@ class ServerRespException(
 
 fun <T> ServerRespException.toNormaResp():NormalResp<T>{
     val errorResp = try {
-        fromJson<NormalErrorResp>(this.resp)
+        fromJson<NormalErrorResp>(this.resp.toString())
     } catch (e: Exception) {
         NormalErrorResp()
     }

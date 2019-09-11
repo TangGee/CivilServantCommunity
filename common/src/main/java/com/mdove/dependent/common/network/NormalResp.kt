@@ -2,8 +2,8 @@ package com.mdove.dependent.common.network
 
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
-import java.io.Serializable
 import kotlinx.android.parcel.Parcelize
+import java.io.Serializable
 
 /**
  * Created by MDove on 2019/9/3.
