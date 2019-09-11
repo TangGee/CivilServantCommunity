@@ -133,4 +133,11 @@
         <attr name="mv_isWidthHeightEqual" format="boolean" />
     </declare-styleable>
 
+    <declare-styleable name="RoundCornerView">
+        <attr name="allRadius" format="dimension|reference" />
+        <attr name="leftTopRadius" format="dimension|reference" />
+        <attr name="leftBottomRadius" format="dimension|reference" />
+        <attr name="rightTopRadius" format="dimension|reference" />
+        <attr name="rightBottomRadius" format="dimension|reference" />
+    </declare-styleable>
 </resources>
