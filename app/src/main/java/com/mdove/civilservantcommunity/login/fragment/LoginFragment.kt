@@ -1,6 +1,5 @@
 package com.mdove.civilservantcommunity.login.fragment
 
-import android.content.Intent
 import android.graphics.Paint
 import android.os.Bundle
 import android.text.TextUtils
@@ -17,7 +16,6 @@ import com.mdove.civilservantcommunity.config.AppConfig
 import com.mdove.civilservantcommunity.login.IAccountHandle
 import com.mdove.civilservantcommunity.login.ITransitionProvider
 import com.mdove.civilservantcommunity.login.bean.LoginInfoParams
-import com.mdove.civilservantcommunity.login.bean.UserInfo
 import com.mdove.civilservantcommunity.login.viewmodel.AccountViewModel
 import com.mdove.dependent.common.networkenhance.valueobj.Status
 import com.mdove.dependent.common.toast.ToastUtil

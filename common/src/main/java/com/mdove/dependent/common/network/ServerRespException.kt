@@ -10,11 +10,11 @@ class ServerRespException(
     val exception: Exception? = null
 ) : RuntimeException("resp: $resp\nmessage: $message\nerror_code: $errorCode", exception)
 
-fun <T> ServerRespException.toNormaResp():NormalResp<T>{
+fun <T> ServerRespException.toNormaResp(e: Exception): NormalResp<T> {
     val errorResp = try {
         fromJson<NormalErrorResp>(this.resp.toString())
     } catch (e: Exception) {
         NormalErrorResp()
     }
-    return NormalResp<T>(errorResp.message,status = errorResp.status)
+    return NormalResp<T>(errorResp.message,status = errorResp.status,exception = e)
 }

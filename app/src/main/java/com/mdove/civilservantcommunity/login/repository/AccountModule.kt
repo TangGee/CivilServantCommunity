@@ -67,7 +67,7 @@ class AccountModule {
                 data
             } catch (e: Exception) {
                 (e as? ServerRespException)?.let{
-                   it.toNormaResp<LoginDataResp>()
+                   it.toNormaResp<LoginDataResp>(e)
                 } ?:  NormalResp<LoginDataResp>(exception = e)
             }
             if (resp.exception == null) {

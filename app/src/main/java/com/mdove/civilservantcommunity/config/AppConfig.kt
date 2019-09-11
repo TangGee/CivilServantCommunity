@@ -4,8 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import com.mdove.civilservantcommunity.MyApplication
 import com.mdove.civilservantcommunity.config.IAppConfig.Companion.KEY_LOGIN_USER_INFO
-import com.mdove.civilservantcommunity.login.bean.LoginInfoParams
-import com.mdove.civilservantcommunity.login.bean.UserInfo
+import com.mdove.civilservantcommunity.base.bean.UserInfo
 import com.mdove.dependent.common.utils.fromJson
 import com.mdove.dependent.common.utils.toJson
 

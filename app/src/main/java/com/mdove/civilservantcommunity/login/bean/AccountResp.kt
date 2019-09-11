@@ -2,7 +2,7 @@ package com.mdove.civilservantcommunity.login.bean
 
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
-import com.mdove.dependent.common.network.NormalResp
+import com.mdove.civilservantcommunity.base.bean.UserInfo
 import kotlinx.android.parcel.Parcelize
 
 /**

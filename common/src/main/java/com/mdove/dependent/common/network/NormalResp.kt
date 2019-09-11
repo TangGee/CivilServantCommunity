@@ -12,7 +12,7 @@ data class NormalResp<T>(
         @SerializedName("msg") val message: String = "fail",
         @SerializedName("data") var data: T? = null,
         @Transient var exception: Exception? = null,
-        @SerializedName("status") val status: String? = null
+        @SerializedName("status") val status: Int? = null
 ) : Serializable {
     val isSuccess: Boolean
         get() = exception == null && data != null
@@ -35,4 +35,4 @@ data class NormalResp<T>(
 
 @Parcelize
 data class NormalErrorResp(@SerializedName("msg") val message: String = "fail",
-                           @SerializedName("status") val status: String? = null) : Parcelable
+                           @SerializedName("status") val status: Int? = null) : Parcelable
