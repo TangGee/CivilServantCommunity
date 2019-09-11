@@ -9,7 +9,7 @@ import kotlinx.android.parcel.Parcelize
  * Created by MDove on 2019-09-05.
  */
 @Parcelize
-data class RegisterDataResp(@SerializedName("uid") val uid: String? = "") : Parcelable
+data class RegisterDataResp(@SerializedName("user_info") val userInfo: UserInfo? = null) : Parcelable
 
 @Parcelize
-data class LoginDataResp(@SerializedName("uid") val uid: String? = "") : Parcelable
+data class LoginDataResp(@SerializedName("user_info") val userInfo: UserInfo? = null) : Parcelable

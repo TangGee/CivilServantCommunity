@@ -8,8 +8,10 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.mdove.civilservantcommunity.MainActivity
 import com.mdove.civilservantcommunity.R
 import com.mdove.civilservantcommunity.base.BaseFragment
+import com.mdove.civilservantcommunity.config.AppConfig
 import com.mdove.civilservantcommunity.login.IAccountHandle
 import com.mdove.civilservantcommunity.login.ITransitionProvider
 import com.mdove.civilservantcommunity.login.bean.RegisterInfoParams
@@ -52,7 +54,10 @@ class RegisterFragment : BaseFragment(), ITransitionProvider {
         mAccountViewModel.registerResp.observe(this, Observer {
             when (it.status) {
                 Status.SUCCESS -> {
-                    ToastUtil.toast(it.data?.data?.uid ?: "", Toast.LENGTH_SHORT)
+                    AppConfig.setUserInfo(it.data?.data?.userInfo)
+                    context?.let {
+                        MainActivity.gotoMain(it)
+                    }
                 }
                 Status.ERROR -> {
                     ToastUtil.toast(it.data?.message ?: "", Toast.LENGTH_SHORT)

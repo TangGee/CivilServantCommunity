@@ -26,8 +26,10 @@ object AppConfig : IAppConfig {
         }
     }
 
-    fun setUserInfo(userInfo: UserInfo) {
-        initSharedPreferences().edit().putString(KEY_LOGIN_USER_INFO, userInfo.toJson()).apply()
+    fun setUserInfo(userInfo: UserInfo?) {
+        userInfo?.let {
+            initSharedPreferences().edit().putString(KEY_LOGIN_USER_INFO, userInfo.toJson()).apply()
+        }
     }
 
     fun getUserInfo(): UserInfo? {

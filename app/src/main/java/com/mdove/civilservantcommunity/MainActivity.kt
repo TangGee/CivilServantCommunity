@@ -8,6 +8,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import android.animation.ArgbEvaluator
+import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Looper
@@ -27,6 +29,14 @@ class MainActivity : BaseActivity() {
     companion object {
         private const val TAG_FEED_FRAGMNET = "tag_feed_fragment"
         private const val TAG_ME_FRAGMNET = "tag_me_fragment"
+
+        fun gotoMain(context:Context){
+            val intent = Intent(context, MainActivity::class.java)
+            context.startActivity(intent)
+            (context as? Activity)?.let{
+                it.finish()
+            }
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

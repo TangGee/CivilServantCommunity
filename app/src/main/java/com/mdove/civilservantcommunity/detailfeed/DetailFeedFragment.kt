@@ -75,7 +75,7 @@ class DetailFeedFragment : BaseFragment() {
 
     private fun updateUI(data: DetailFeedResp?) {
         data?.let {
-            tv_name.text = if (TextUtils.isEmpty(it.userName)) "匿名用户" else it.userName
+            tv_name.text = if (TextUtils.isEmpty(it.userInfo?.username)) "匿名用户" else it.userInfo?.username
             tv_title.text = it.title
             tv_content.text = it.content
         }

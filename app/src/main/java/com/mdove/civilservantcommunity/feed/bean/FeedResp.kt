@@ -2,7 +2,7 @@ package com.mdove.civilservantcommunity.feed.bean
 
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
-import com.mdove.civilservantcommunity.base.NormalUserInfo
+import com.mdove.civilservantcommunity.login.bean.UserInfo
 import kotlinx.android.parcel.Parcelize
 
 /**
@@ -11,8 +11,7 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 data class FeedDataResp(
     @SerializedName("aid") val aid: String? = "",
-//    @SerializedName("user_info") val userInfo: NormalUserInfo? = null,
-    @SerializedName("username") val userName: String? = "",
+    @SerializedName("user_info") val userInfo: UserInfo? = null,
     @SerializedName("title") val title: String? = "",
     @SerializedName("content") val content: String? = "",
     @SerializedName("maketime") val maketime: String? = "",
