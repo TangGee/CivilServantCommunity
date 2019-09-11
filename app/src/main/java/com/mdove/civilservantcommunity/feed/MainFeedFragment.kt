@@ -76,6 +76,11 @@ class MainFeedFragment : BaseFragment() {
             }
         })
 
+        sfl.setOnRefreshListener {
+            feedViewModel.reqFeed()
+        }
+
         feedViewModel.reqFeed()
+
     }
 }

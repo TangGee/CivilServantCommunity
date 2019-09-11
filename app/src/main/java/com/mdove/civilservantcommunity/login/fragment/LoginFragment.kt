@@ -55,9 +55,13 @@ class LoginFragment : BaseFragment(), ITransitionProvider {
         mAccountViewModel.loginResp.observe(this, Observer {
             when (it.status) {
                 Status.SUCCESS -> {
-                    AppConfig.setUserInfo(it.data?.data?.userInfo)
-                    context?.let {
-                        MainActivity.gotoMain(it)
+                    if (it.data?.status == 0) {
+                        AppConfig.setUserInfo(it.data?.data?.userInfo)
+                        context?.let {
+                            MainActivity.gotoMain(it)
+                        }
+                    }else{
+                        ToastUtil.toast(it.data?.message ?: "登录失败 ", Toast.LENGTH_SHORT)
                     }
                 }
                 Status.ERROR -> {

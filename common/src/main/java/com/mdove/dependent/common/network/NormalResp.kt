@@ -13,25 +13,7 @@ data class NormalResp<T>(
         @SerializedName("data") var data: T? = null,
         @Transient var exception: Exception? = null,
         @SerializedName("status") val status: Int? = null
-) : Serializable {
-    val isSuccess: Boolean
-        get() = exception == null && data != null
-    val errorCode: String
-        get() = when {
-            isSuccess -> {
-                "success"
-            }
-            "success" == message && data == null -> {
-                "no_data"
-            }
-            (exception != null) -> {
-                exception!!.message ?: "error msg null"
-            }
-            else -> {
-                message
-            }
-        }
-}
+) : Serializable
 
 @Parcelize
 data class NormalErrorResp(@SerializedName("msg") val message: String = "fail",

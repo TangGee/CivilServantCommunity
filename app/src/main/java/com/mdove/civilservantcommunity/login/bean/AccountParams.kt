@@ -11,7 +11,7 @@ import kotlinx.android.parcel.Parcelize
 data class RegisterInfoParams(
     @SerializedName("phone") val phone: String,
     @SerializedName("password") val password: String,
-    @SerializedName("userType") val userType: String
+    @SerializedName("user_type") val userType: String
 ) : Parcelable
 
 @Parcelize

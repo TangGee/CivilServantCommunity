@@ -9,10 +9,6 @@ import android.graphics.drawable.Drawable
 class MainFeedPlaceHolderDrawable : Drawable() {
 
     private val mBgPaint = Paint(Paint.ANTI_ALIAS_FLAG)
-    private val mTrianglePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        strokeCap = Paint.Cap.ROUND
-        color = Color.WHITE
-    }
     private val mRectPaint = Paint(Paint.ANTI_ALIAS_FLAG)
 
     private val RECT_SHADER = LinearGradient(24f, 24f, 700f, 24f, START_COLOR, END_COLOR, Shader.TileMode.CLAMP)
@@ -79,16 +75,16 @@ class MainFeedPlaceHolderDrawable : Drawable() {
     companion object {
 
         private const val DESIGN_WIDTH = 360f
-        private const val DESIGN_HEIGHT = 88f
+        private const val DESIGN_HEIGHT = 132f
 
         private const val BG_COLOR = -0x1
 
         private const val START_COLOR = -0xf0f10
         private const val END_COLOR = -0x272728
 
-        private val RECT_1 = Rect(12, 12, 280, 72)
-        private val RECT_2 = Rect(12, 84, 240, 96)
-        private val RECT_3 = Rect(12, 108, 240, 120)
+        private val RECT_1 = Rect(12, 12, 240, 72)
+        private val RECT_2 = Rect(12, 84, 210, 96)
+        private val RECT_3 = Rect(12, 108, 210, 120)
         private val RECT_4 = Rect(256, 12, 348, 120)
     }
 }

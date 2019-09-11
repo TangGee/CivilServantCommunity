@@ -239,15 +239,19 @@ fun View.toggleKeyboard() {
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_NOT_ALWAYS)
     } else {
         viewTreeObserver.addOnGlobalLayoutListener(object :
-                ViewTreeObserver.OnGlobalLayoutListener {
+            ViewTreeObserver.OnGlobalLayoutListener {
             override fun onGlobalLayout() {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                     viewTreeObserver.removeOnGlobalLayoutListener(this)
                 } else {
                     viewTreeObserver.removeGlobalOnLayoutListener(this)
                 }
-                val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_NOT_ALWAYS)
+                val imm =
+                    context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.toggleSoftInput(
+                    InputMethodManager.SHOW_FORCED,
+                    InputMethodManager.HIDE_NOT_ALWAYS
+                )
             }
         })
     }
@@ -354,12 +358,11 @@ inline fun <reified T : Any> fromServerResp(json: String): NormalResp<T> {
 //    if (baseResp.permissionStatus == NormalResp.STATUS_CODE_PERMISSION_DENIED) {
 //        throw ForbiddenException(baseResp.permissionStatus)
 //    }
-    if (normalResp.isSuccess) {
-//        val dataJson = JsonParser().parse(json).asJsonObject.getAsJsonObject("data") // FIX BUG OF LONG TYPE PARSING
-        return normalResp
-    } else {
-        throw ServerRespException(errorCode = normalResp.errorCode, resp = JsonParser().parse(json))
-    }
+//    if(normalResp.data==null){
+//        normalResp.exception =
+//            ServerRespException(normalResp.status?.toString() ?: "nukonw", normalResp.message)
+//    }
+    return normalResp
 }
 
 
@@ -610,7 +613,7 @@ inline fun <reified T : Parcelable> Parcel.readTypedArrayList(): ArrayList<T>? {
  * 低版本的API没有isDestroyed
  */
 fun Activity.isDestroyedSafe(): Boolean {
-    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2){
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
         isDestroyed
     } else {
         false

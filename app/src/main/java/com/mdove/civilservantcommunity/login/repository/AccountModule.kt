@@ -27,7 +27,7 @@ class AccountModule {
         val builder = Uri.parse("${network.host}/user/create").buildUpon()
         builder.appendQueryParameter("phone", params.phone)
         builder.appendQueryParameter("password", params.password)
-        builder.appendQueryParameter("usertype", params.userType)
+        builder.appendQueryParameter("user_type", params.userType)
         val url = builder.toString()
 
         CoroutineScope(MDoveApiPool).launch {
@@ -66,9 +66,7 @@ class AccountModule {
                 val data: NormalResp<LoginDataResp> = fromServerResp(json)
                 data
             } catch (e: Exception) {
-                (e as? ServerRespException)?.let{
-                   it.toNormaResp<LoginDataResp>(e)
-                } ?:  NormalResp<LoginDataResp>(exception = e)
+                NormalResp<LoginDataResp>(exception = e)
             }
             if (resp.exception == null) {
                 liveData.postValue(ApiSuccessResponse(resp))

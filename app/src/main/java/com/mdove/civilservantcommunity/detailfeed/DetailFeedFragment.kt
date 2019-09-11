@@ -70,6 +70,10 @@ class DetailFeedFragment : BaseFragment() {
             }
         })
 
+        srl.setOnRefreshListener {
+            viewModel.reqDetailFeed(params.aid)
+        }
+
         viewModel.reqDetailFeed(params.aid)
     }
 
