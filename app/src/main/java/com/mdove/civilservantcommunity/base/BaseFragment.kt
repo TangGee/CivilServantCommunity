@@ -34,7 +34,7 @@ open class BaseFragment : Fragment(), CoroutineScope, View.OnAttachStateChangeLi
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
-        addOnVisibilityChangedListener(this, false)
+        addOnVisibilityChangedListener(this@, false)
     }
 
     override fun onDetach() {

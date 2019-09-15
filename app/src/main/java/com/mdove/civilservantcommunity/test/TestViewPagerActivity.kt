@@ -23,6 +23,7 @@ class TestViewPagerActivity : BaseActivity() {
         vp.adapter = adapter
 
         vp.postDelayed({
+            Log.d("mdove","notifyDataSetChanged")
             adapter.notifyDataSetChanged()
         }, 10000)
     }

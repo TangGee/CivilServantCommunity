@@ -19,3 +19,12 @@ data class ArticleResp(
     @SerializedName("type") val type: List<ArticleType>? = null,
     @SerializedName("list_style") val listStyle: Int? = 0
 ) : Parcelable
+
+data class FeedPunchResp(val name :String ="打卡"):BaseFeedResp()
+data class FeedUGCResp(val name :String ="打卡"):BaseFeedResp()
+
+@Parcelize
+data class FeedArticleResp(val article: ArticleResp):BaseFeedResp(),Parcelable
+
+sealed class BaseFeedResp
+

@@ -26,4 +26,14 @@ class TestFragment2 :BaseFragment() {
         Log.d("mdove","onCreateView -> TestFragment2")
         return inflater.inflate(R.layout.fragment_test2, container, false)
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        Log.d("mdove","onDestroyView -> TestFragment2")
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        Log.d("mdove","onDetach -> TestFragment2")
+    }
 }
