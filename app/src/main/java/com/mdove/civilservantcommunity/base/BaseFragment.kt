@@ -13,6 +13,7 @@ import kotlin.coroutines.CoroutineContext
  * Created by MDove on 2019-09-03.
  */
 open class BaseFragment : Fragment(), CoroutineScope, View.OnAttachStateChangeListener {
+
     private val mListenerList = ArrayList<OnFragmentVisibilityChangedListener>()
     /**
      * 是否可见（Activity处于前台、Tab被选中、Fragment被添加、Fragment没有隐藏、Fragment.View已经Attach）
@@ -30,11 +31,6 @@ open class BaseFragment : Fragment(), CoroutineScope, View.OnAttachStateChangeLi
     override fun onPause() {
         super.onPause()
         onActiveChanged(false)
-    }
-
-    override fun onAttach(context: Context?) {
-        super.onAttach(context)
-        addOnVisibilityChangedListener(this@, false)
     }
 
     override fun onDetach() {
