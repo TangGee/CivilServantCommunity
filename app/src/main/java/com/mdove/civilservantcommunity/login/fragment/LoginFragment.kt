@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import com.mdove.civilservantcommunity.MainActivity
+import com.mdove.civilservantcommunity.feed.MainFeedActivity
 import com.mdove.civilservantcommunity.R
 import com.mdove.civilservantcommunity.base.BaseFragment
 import com.mdove.civilservantcommunity.config.AppConfig
@@ -58,7 +58,7 @@ class LoginFragment : BaseFragment(), ITransitionProvider {
                     if (it.data?.status == 0) {
                         AppConfig.setUserInfo(it.data?.data?.userInfo)
                         context?.let {
-                            MainActivity.gotoMain(it)
+                            MainFeedActivity.gotoMain(it)
                         }
                     }else{
                         ToastUtil.toast(it.data?.message ?: "登录失败 ", Toast.LENGTH_SHORT)

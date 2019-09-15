@@ -2,6 +2,7 @@ package com.mdove.civilservantcommunity.feed
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +12,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mdove.civilservantcommunity.R
 import com.mdove.civilservantcommunity.base.BaseFragment
+import com.mdove.civilservantcommunity.config.AppConfig
 import com.mdove.civilservantcommunity.detailfeed.DetailFeedActivity
 import com.mdove.civilservantcommunity.detailfeed.DetailFeedActivity.Companion.DETAIL_FEED_ACTIVITY_PARAMS
 import com.mdove.civilservantcommunity.detailfeed.bean.DetailFeedParams
@@ -18,6 +20,9 @@ import com.mdove.civilservantcommunity.feed.adapter.MainFeedAdapter
 import com.mdove.civilservantcommunity.feed.adapter.OnMainFeedClickListener
 import com.mdove.civilservantcommunity.feed.bean.ArticleResp
 import com.mdove.civilservantcommunity.feed.viewmodel.MainFeedViewModel
+import com.mdove.civilservantcommunity.punch.bean.PunchParams
+import com.mdove.civilservantcommunity.punch.viewmodel.PunchViewModel
+import com.mdove.civilservantcommunity.ugc.MainUGCActivity
 import com.mdove.dependent.common.networkenhance.valueobj.Status
 import com.mdove.dependent.common.toast.ToastUtil
 import kotlinx.android.synthetic.main.fragment_main_feed.*
@@ -27,12 +32,27 @@ import kotlinx.android.synthetic.main.fragment_main_feed.*
  */
 class MainFeedFragment : BaseFragment() {
     private lateinit var feedViewModel: MainFeedViewModel
+    private lateinit var punchViewModel: PunchViewModel
     private val adapter = MainFeedAdapter(object : OnMainFeedClickListener {
-        override fun onClick(resp: ArticleResp) {
-            resp.aid?.let {
-                val intent = Intent(activity, DetailFeedActivity::class.java)
-                intent.putExtra(DETAIL_FEED_ACTIVITY_PARAMS, DetailFeedParams(it))
-                activity?.startActivity(intent)
+        override fun onClick(type: Int, resp: ArticleResp?) {
+            when (type) {
+                MainFeedAdapter.TYPE_FEED_PUNCH -> {
+                    AppConfig.getUserInfo()?.let{
+                        punchViewModel.punch(PunchParams(it.uid,System.currentTimeMillis()))
+                    }
+                }
+                MainFeedAdapter.TYPE_FEED_UGC -> {
+                    context?.let{
+                        MainUGCActivity.gotoMainUGC(it)
+                    }
+                }
+                else -> {
+                    resp?.aid?.let {
+                        val intent = Intent(activity, DetailFeedActivity::class.java)
+                        intent.putExtra(DETAIL_FEED_ACTIVITY_PARAMS, DetailFeedParams(it))
+                        activity?.startActivity(intent)
+                    }
+                }
             }
         }
     })
@@ -41,13 +61,14 @@ class MainFeedFragment : BaseFragment() {
         super.onCreate(savedInstanceState)
         activity?.let {
             feedViewModel = ViewModelProviders.of(it).get(MainFeedViewModel::class.java)
+            punchViewModel = ViewModelProviders.of(it).get(PunchViewModel::class.java)
         }
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_main_feed, container, false)
     }
@@ -72,6 +93,14 @@ class MainFeedFragment : BaseFragment() {
                 Status.ERROR -> {
                     sfl.isRefreshing = false
                     ToastUtil.toast("请求失败", Toast.LENGTH_SHORT)
+                }
+            }
+        })
+
+        punchViewModel.punchResp.observe(this, Observer {
+            when(it.status){
+                Status.SUCCESS -> {
+                    ToastUtil.toast("${it.data?.message}",Toast.LENGTH_SHORT)
                 }
             }
         })

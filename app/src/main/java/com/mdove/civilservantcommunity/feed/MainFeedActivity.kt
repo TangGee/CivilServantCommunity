@@ -1,4 +1,4 @@
-package com.mdove.civilservantcommunity
+package com.mdove.civilservantcommunity.feed
 
 import android.os.Bundle
 
@@ -10,20 +10,19 @@ import android.content.Context
 import android.content.Intent
 import android.os.Looper
 import android.util.Log
+import com.mdove.civilservantcommunity.R
 import com.mdove.civilservantcommunity.base.BaseActivity
 import com.mdove.civilservantcommunity.config.AppConfig
-import com.mdove.civilservantcommunity.feed.MainFeedFragment
-import com.mdove.civilservantcommunity.feed.MePageFragment
 import com.mdove.civilservantcommunity.login.AccountActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : BaseActivity() {
+class MainFeedActivity : BaseActivity() {
     companion object {
         private const val TAG_FEED_FRAGMNET = "tag_feed_fragment"
         private const val TAG_ME_FRAGMNET = "tag_me_fragment"
 
         fun gotoMain(context:Context){
-            val intent = Intent(context, MainActivity::class.java)
+            val intent = Intent(context, MainFeedActivity::class.java)
             context.startActivity(intent)
             (context as? Activity)?.let{
                 it.finish()

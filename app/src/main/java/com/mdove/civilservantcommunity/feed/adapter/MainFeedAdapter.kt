@@ -13,6 +13,8 @@ import com.mdove.civilservantcommunity.feed.bean.ArticleResp
 import com.mdove.civilservantcommunity.feed.bean.BaseFeedResp
 import com.mdove.civilservantcommunity.feed.bean.FeedArticleResp
 import com.mdove.civilservantcommunity.feed.bean.FeedPunchResp
+import android.text.Html
+
 
 /**
  * Created by MDove on 2019-09-06.
@@ -46,11 +48,14 @@ class MainFeedAdapter(val listener: OnMainFeedClickListener? = null) :
                 return true
             }
         }) {
-    private val TYPE_TOP_ONE = 1
-    private val TYPE_TOP_TWO = 2
-    private val TYPE_NORMAL = 3
-    private val TYPE_FEED_PUNCH = 0
-    private val TYPE_FEED_UGC = 4
+
+    companion object {
+        const val TYPE_TOP_ONE = 1
+        const val TYPE_TOP_TWO = 2
+        const val TYPE_NORMAL = 3
+        const val TYPE_FEED_PUNCH = 0
+        const val TYPE_FEED_UGC = 4
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
@@ -63,7 +68,7 @@ class MainFeedAdapter(val listener: OnMainFeedClickListener? = null) :
                         )
                 )
             TYPE_FEED_UGC ->
-                FeedPunchViewHolder(
+                FeedUGCViewHolder(
                         LayoutInflater.from(parent.context).inflate(
                                 R.layout.item_feed_ugc,
                                 parent,
@@ -106,20 +111,43 @@ class MainFeedAdapter(val listener: OnMainFeedClickListener? = null) :
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
+            is FeedPunchViewHolder -> holder.bind((getItem(position) as FeedPunchResp).count)
             is TopOneViewHolder -> holder.bind((getItem(position) as FeedArticleResp).article)
             is TopTwoViewHolder -> holder.bind((getItem(position) as FeedArticleResp).article)
             is NormalViewHolder -> holder.bind((getItem(position) as FeedArticleResp).article)
         }
     }
 
-    inner class FeedPunchViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
-    inner class FeedUGCViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+    inner class FeedPunchViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        init {
+            listener?.let { listener ->
+                itemView.setOnClickListener {
+                    listener.onClick(TYPE_FEED_PUNCH, null)
+                }
+            }
+        }
+
+        fun bind(count: Int) {
+            val content = itemView.context.getString(R.string.string_punch_title_sub, count)
+            itemView.findViewById<TextView>(R.id.tv_title_sub).text = Html.fromHtml(content)
+        }
+    }
+
+    inner class FeedUGCViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        init {
+            listener?.let { listener ->
+                itemView.setOnClickListener {
+                    listener.onClick(TYPE_FEED_UGC, null)
+                }
+            }
+        }
+    }
 
     inner class TopOneViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(data: ArticleResp) {
             listener?.let { listener ->
                 itemView.setOnClickListener {
-                    listener.onClick(data)
+                    listener.onClick(TYPE_TOP_ONE, data)
                 }
             }
             itemView.findViewById<TextView>(R.id.tv_title).text = data.title
@@ -132,7 +160,7 @@ class MainFeedAdapter(val listener: OnMainFeedClickListener? = null) :
         fun bind(data: ArticleResp) {
             listener?.let { listener ->
                 itemView.setOnClickListener {
-                    listener.onClick(data)
+                    listener.onClick(TYPE_TOP_TWO, data)
                 }
             }
             itemView.findViewById<TextView>(R.id.tv_title).text = data.title
@@ -145,7 +173,7 @@ class MainFeedAdapter(val listener: OnMainFeedClickListener? = null) :
         fun bind(data: ArticleResp) {
             listener?.let { listener ->
                 itemView.setOnClickListener {
-                    listener.onClick(data)
+                    listener.onClick(TYPE_NORMAL, data)
                 }
             }
             itemView.findViewById<TextView>(R.id.tv_title).text = data.title
@@ -156,5 +184,5 @@ class MainFeedAdapter(val listener: OnMainFeedClickListener? = null) :
 }
 
 interface OnMainFeedClickListener {
-    fun onClick(resp: ArticleResp)
+    fun onClick(type: Int, resp: ArticleResp?)
 }

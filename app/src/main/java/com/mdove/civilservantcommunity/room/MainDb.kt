@@ -11,7 +11,7 @@ abstract class MainDb: RoomDatabase() {
         val db = Room.databaseBuilder(
             MyApplication.getInst().applicationContext,
             MainDb::class.java,
-            "ugc_ve_db"
+            "civil_main_db"
             ).build()
     }
 

@@ -20,7 +20,7 @@ import kotlinx.android.synthetic.main.fragment_me.*
 /**
  * Created by MDove on 2019-09-07.
  */
-class MePageFragment : BaseFragment(), OnFragmentVisibilityChangedListener {
+class MePageFragment : BaseFragment() {
     private lateinit var viewModel: MePageViewModel
     private lateinit var adapter: MePageAdapter
 
@@ -64,9 +64,7 @@ class MePageFragment : BaseFragment(), OnFragmentVisibilityChangedListener {
                 viewModel.reqMePage(it.uid)
             }
         }
-    }
 
-    override fun onFragmentVisibilityChanged(visible: Boolean) {
         AppConfig.getUserInfo()?.let {
             viewModel.reqMePage(it.uid)
         }

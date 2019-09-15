@@ -11,7 +11,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
+            android:name=".feed.MainFeedActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/MyAppTheme">
