@@ -10,7 +10,7 @@ import kotlinx.android.parcel.Parcelize
  * Created by MDove on 2019-09-06.
  */
 @Parcelize
-data class FeedDataResp(
+data class ArticleResp(
     @SerializedName("aid") val aid: String? = "",
     @SerializedName("user_info") val userInfo: UserInfo? = null,
     @SerializedName("title") val title: String? = "",

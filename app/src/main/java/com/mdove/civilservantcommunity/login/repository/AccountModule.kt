@@ -3,6 +3,7 @@ package com.mdove.civilservantcommunity.login.repository
 import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.mdove.civilservantcommunity.feed.bean.ArticleResp
 import com.mdove.civilservantcommunity.login.bean.*
 import com.mdove.dependent.common.threadpool.MDoveApiPool
 import com.mdove.dependent.apiservice.AppDependsProvider
@@ -37,6 +38,35 @@ class AccountModule {
                 data
             } catch (e: Exception) {
                 NormalResp<RegisterDataResp>(exception = e)
+            }
+            if (resp.exception == null) {
+                liveData.postValue(ApiSuccessResponse(resp))
+            } else {
+                liveData.postValue(
+                    ApiErrorResponse(
+                        resp.exception ?: RuntimeException("unknown_error")
+                    )
+                )
+            }
+        }
+        return liveData
+    }
+
+    fun mePage(uid: String): LiveData<ApiResponse<NormalResp<MePageDataResp>>> {
+        val liveData = MutableLiveData<ApiResponse<NormalResp<MePageDataResp>>>()
+
+        val network = AppDependsProvider.networkService
+        val builder = Uri.parse("${network.host}/user/check_info").buildUpon()
+        builder.appendQueryParameter("uid", uid)
+        val url = builder.toString()
+
+        CoroutineScope(MDoveApiPool).launch {
+            val resp = try {
+                val json = network.networkClient.get(url)
+                val data: NormalResp<MePageDataResp> = fromServerResp(json)
+                data
+            } catch (e: Exception) {
+                NormalResp<MePageDataResp>(exception = e)
             }
             if (resp.exception == null) {
                 liveData.postValue(ApiSuccessResponse(resp))

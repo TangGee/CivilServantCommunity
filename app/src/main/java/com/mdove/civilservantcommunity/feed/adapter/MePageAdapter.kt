@@ -11,9 +11,9 @@ import com.mdove.civilservantcommunity.R
 import com.mdove.civilservantcommunity.feed.bean.ArticleResp
 
 /**
- * Created by MDove on 2019-09-06.
+ * Created by MDove on 2019-09-11.
  */
-class MainFeedAdapter(val listener: OnMainFeedClickListener? = null) :
+class MePageAdapter(val listener: OnMePageClickListener? = null) :
     ListAdapter<ArticleResp, RecyclerView.ViewHolder>(object :
     DiffUtil.ItemCallback<ArticleResp>() {
     override fun areItemsTheSame(
@@ -116,6 +116,6 @@ class MainFeedAdapter(val listener: OnMainFeedClickListener? = null) :
     }
 }
 
-interface OnMainFeedClickListener{
+interface OnMePageClickListener{
     fun onClick(resp: ArticleResp)
 }

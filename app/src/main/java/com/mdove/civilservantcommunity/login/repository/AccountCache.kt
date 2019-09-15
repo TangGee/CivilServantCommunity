@@ -1,6 +1,8 @@
 package com.mdove.civilservantcommunity.login.repository
 
+import com.mdove.civilservantcommunity.feed.bean.ArticleResp
 import com.mdove.civilservantcommunity.login.bean.LoginDataResp
+import com.mdove.civilservantcommunity.login.bean.MePageDataResp
 import com.mdove.civilservantcommunity.login.bean.RegisterDataResp
 import com.mdove.dependent.common.network.NormalResp
 
@@ -9,5 +11,6 @@ import com.mdove.dependent.common.network.NormalResp
  */
 class AccountCache {
     var cacheLoginResp: NormalResp<LoginDataResp>? = null
+    var cacheMePageResp: NormalResp<MePageDataResp>? = null
     var cacheRegisterResp: NormalResp<RegisterDataResp>? = null
 }

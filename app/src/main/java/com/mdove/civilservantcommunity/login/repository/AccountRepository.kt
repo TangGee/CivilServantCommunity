@@ -2,6 +2,7 @@ package com.mdove.civilservantcommunity.login.repository
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.mdove.civilservantcommunity.feed.bean.ArticleResp
 import com.mdove.civilservantcommunity.login.bean.*
 import com.mdove.dependent.common.network.AppExecutorsImpl
 import com.mdove.dependent.common.network.NormalResp
@@ -62,6 +63,31 @@ class AccountRepository {
 
             override fun createCall(): LiveData<ApiResponse<NormalResp<LoginDataResp>>> {
                 return registerModule.login(loginInfoParams)
+            }
+        }.asLiveData()
+    }
+
+    fun mePage(uid: String): LiveData<Resource<NormalResp<MePageDataResp>>> {
+        return object :
+            NetworkBoundResource<NormalResp<MePageDataResp>, NormalResp<MePageDataResp>>(
+                AppExecutorsImpl()
+            ) {
+            override fun saveCallResult(item: NormalResp<MePageDataResp>) {
+                accountCache.cacheMePageResp = item
+            }
+
+            override fun shouldFetch(data: NormalResp<MePageDataResp>?): Boolean {
+                return true
+            }
+
+            override fun loadFromDb(): LiveData<NormalResp<MePageDataResp>> {
+                return MutableLiveData<NormalResp<MePageDataResp>>().apply {
+                    value = accountCache.cacheMePageResp ?: NormalResp<MePageDataResp>()
+                }
+            }
+
+            override fun createCall(): LiveData<ApiResponse<NormalResp<MePageDataResp>>> {
+                return registerModule.mePage(uid)
             }
         }.asLiveData()
     }

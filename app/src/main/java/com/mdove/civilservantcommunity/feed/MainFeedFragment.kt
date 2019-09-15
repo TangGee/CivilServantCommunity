@@ -16,7 +16,7 @@ import com.mdove.civilservantcommunity.detailfeed.DetailFeedActivity.Companion.D
 import com.mdove.civilservantcommunity.detailfeed.bean.DetailFeedParams
 import com.mdove.civilservantcommunity.feed.adapter.MainFeedAdapter
 import com.mdove.civilservantcommunity.feed.adapter.OnMainFeedClickListener
-import com.mdove.civilservantcommunity.feed.bean.FeedDataResp
+import com.mdove.civilservantcommunity.feed.bean.ArticleResp
 import com.mdove.civilservantcommunity.feed.viewmodel.MainFeedViewModel
 import com.mdove.dependent.common.networkenhance.valueobj.Status
 import com.mdove.dependent.common.toast.ToastUtil
@@ -28,7 +28,7 @@ import kotlinx.android.synthetic.main.fragment_main_feed.*
 class MainFeedFragment : BaseFragment() {
     private lateinit var feedViewModel: MainFeedViewModel
     private val adapter = MainFeedAdapter(object : OnMainFeedClickListener {
-        override fun onClick(resp: FeedDataResp) {
+        override fun onClick(resp: ArticleResp) {
             resp.aid?.let {
                 val intent = Intent(activity, DetailFeedActivity::class.java)
                 intent.putExtra(DETAIL_FEED_ACTIVITY_PARAMS, DetailFeedParams(it))
@@ -56,7 +56,7 @@ class MainFeedFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         rlv.adapter = adapter
         rlv.layoutManager = LinearLayoutManager(context)
-        feedViewModel.data.observe(this, Observer {
+        feedViewModel.mData.observe(this, Observer {
             when (it.status) {
                 Status.SUCCESS -> {
                     it.data?.data?.let { list ->
