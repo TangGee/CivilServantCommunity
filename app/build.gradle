@@ -64,6 +64,9 @@ dependencies {
     implementation deps.arch.lifecycle_extensions
     implementation deps.retrofit2.gson
 
+    kapt deps.room.compiler
+    implementation deps.room.runtime
+
     implementation 'org.jsoup:jsoup:1.9.2'
 
     implementation project(':api-service')
