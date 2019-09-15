@@ -1,12 +1,14 @@
 package com.mdove.civilservantcommunity.ugc
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import com.mdove.civilservantcommunity.R
 import com.mdove.civilservantcommunity.base.BaseActivity
 
+/**
+ * Created by MDove on 2019-09-15.
+ */
 class MainUGCActivity : BaseActivity() {
     companion object {
         private const val TAG_UGC_FRAGMENT = "tag_ugc_fragment"

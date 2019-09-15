@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.mdove.civilservantcommunity.feed.bean.ArticleResp
 import com.mdove.civilservantcommunity.login.bean.*
+import com.mdove.civilservantcommunity.ugc.bean.UGCPostParams
 import com.mdove.dependent.common.network.AppExecutorsImpl
 import com.mdove.dependent.common.network.NormalResp
 import com.mdove.dependent.common.networkenhance.NetworkBoundResource
@@ -17,27 +18,27 @@ class UGCRepository {
     private val ugcModule = UGCModule()
     private val ugcCache = UGCCache()
 
-    fun post(loginInfoParams: RegisterInfoParams): LiveData<Resource<NormalResp<RegisterDataResp>>> {
+    fun post(params: UGCPostParams): LiveData<Resource<NormalResp<String>>> {
         return object :
-            NetworkBoundResource<NormalResp<RegisterDataResp>, NormalResp<RegisterDataResp>>(
+            NetworkBoundResource<NormalResp<String>, NormalResp<String>>(
                 AppExecutorsImpl()
             ) {
-            override fun saveCallResult(item: NormalResp<RegisterDataResp>) {
-                ugcCache.cacheRegisterResp = item
+            override fun saveCallResult(item: NormalResp<String>) {
+                ugcCache.cachePostResp = item
             }
 
-            override fun shouldFetch(data: NormalResp<RegisterDataResp>?): Boolean {
+            override fun shouldFetch(data: NormalResp<String>?): Boolean {
                 return true
             }
 
-            override fun loadFromDb(): LiveData<NormalResp<RegisterDataResp>> {
-                return MutableLiveData<NormalResp<RegisterDataResp>>().apply {
-                    value = ugcCache.cacheRegisterResp ?: NormalResp<RegisterDataResp>()
+            override fun loadFromDb(): LiveData<NormalResp<String>> {
+                return MutableLiveData<NormalResp<String>>().apply {
+                    value = ugcCache.cachePostResp ?: NormalResp<String>()
                 }
             }
 
-            override fun createCall(): LiveData<ApiResponse<NormalResp<RegisterDataResp>>> {
-                return ugcModule.register(loginInfoParams)
+            override fun createCall(): LiveData<ApiResponse<NormalResp<String>>> {
+                return ugcModule.post(params)
             }
         }.asLiveData()
     }
