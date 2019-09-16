@@ -26,8 +26,10 @@ class AccountActivity : BaseActivity(), IAccountHandle {
         setContentView(R.layout.activity_account)
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                .replace(R.id.content,
-                    LoginFragment(), TAG_LOGIN_FRAGMENT)
+                .replace(
+                    R.id.content,
+                    LoginFragment(), TAG_LOGIN_FRAGMENT
+                )
                 .commit()
         }
     }
@@ -35,7 +37,8 @@ class AccountActivity : BaseActivity(), IAccountHandle {
     override fun onClickRegister() {
         val loginFragment =
             supportFragmentManager.findFragmentByTag(TAG_LOGIN_FRAGMENT) ?: LoginFragment()
-        val registerFragment =supportFragmentManager.findFragmentByTag(TAG_REGISTER_FRAGMENT) ?: RegisterFragment()
+        val registerFragment =
+            supportFragmentManager.findFragmentByTag(TAG_REGISTER_FRAGMENT) ?: RegisterFragment()
 
         val exitFade = Fade()
         exitFade.duration = FADE_DEFAULT_TIME
@@ -53,7 +56,7 @@ class AccountActivity : BaseActivity(), IAccountHandle {
         registerFragment.enterTransition = enterFade
 
         supportFragmentManager.beginTransaction().apply {
-            (loginFragment as? ITransitionProvider)?.providerView()?.let{
+            (loginFragment as? ITransitionProvider)?.providerView()?.let {
                 addSharedElement(it, it.transitionName)
             }
             replace(R.id.content, registerFragment, TAG_REGISTER_FRAGMENT)
@@ -64,7 +67,8 @@ class AccountActivity : BaseActivity(), IAccountHandle {
     override fun onBackLogin() {
         val registerFragment =
             supportFragmentManager.findFragmentByTag(TAG_REGISTER_FRAGMENT) ?: RegisterFragment()
-        val loginFragment =supportFragmentManager.findFragmentByTag(TAG_LOGIN_FRAGMENT) ?: LoginFragment()
+        val loginFragment =
+            supportFragmentManager.findFragmentByTag(TAG_LOGIN_FRAGMENT) ?: LoginFragment()
 
         val exitFade = Fade()
         exitFade.duration = FADE_DEFAULT_TIME
@@ -82,7 +86,7 @@ class AccountActivity : BaseActivity(), IAccountHandle {
         loginFragment.enterTransition = enterFade
 
         supportFragmentManager.beginTransaction().apply {
-            (registerFragment as? ITransitionProvider)?.providerView()?.let{
+            (registerFragment as? ITransitionProvider)?.providerView()?.let {
                 addSharedElement(it, it.transitionName)
             }
             replace(R.id.content, loginFragment, TAG_LOGIN_FRAGMENT)

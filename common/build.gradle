@@ -21,18 +21,18 @@ android {
         vectorDrawables.useSupportLibrary = true
         consumerProguardFiles 'proguard-rules.pro'
     }
+}
 
-    dependencies {
-        implementation deps.kotlin.core
-        implementation deps.kotlin.coroutines
-        implementation deps.kotlin.ktx
-        implementation deps.kotlin.coroutines_android
-        implementation deps.arch.lifecycle_extensions
+dependencies {
+    implementation deps.kotlin.core
+    implementation deps.kotlin.coroutines
+    implementation deps.kotlin.ktx
+    implementation deps.kotlin.coroutines_android
+    implementation deps.arch.lifecycle_extensions
 
-        implementation deps.androidx.constraint_layout
+    implementation deps.androidx.constraint_layout
 
-        implementation deps.retrofit2.gson
-    }
+    implementation deps.retrofit2.gson
 }
 
 androidExtensions {

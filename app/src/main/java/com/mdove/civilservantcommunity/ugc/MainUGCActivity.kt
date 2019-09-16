@@ -23,7 +23,9 @@ class MainUGCActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main_ugc)
         if (savedInstanceState == null) {
-            supportFragmentManager.beginTransaction().add(MainUGCFragment(), TAG_UGC_FRAGMENT).commit()
+            supportFragmentManager.beginTransaction()
+                .add(R.id.content, MainUGCFragment(), TAG_UGC_FRAGMENT)
+                .commit()
         }
     }
 }

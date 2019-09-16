@@ -27,7 +27,7 @@ class UGCModule {
         val liveData = MutableLiveData<ApiResponse<NormalResp<String>>>()
 
         val network = AppDependsProvider.networkService
-        val url = Uri.parse("${network.host}/user/create").buildUpon().toString()
+        val url = Uri.parse("${network.host}/art/save").buildUpon().toString()
 
         CoroutineScope(MDoveApiPool).launch {
             val resp = try {
