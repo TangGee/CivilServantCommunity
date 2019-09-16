@@ -1,4 +1,4 @@
-package com.mdove.civilservantcommunity.login.fragment
+package com.mdove.civilservantcommunity.account.fragment
 
 import android.graphics.Paint
 import android.os.Bundle
@@ -13,10 +13,10 @@ import com.mdove.civilservantcommunity.feed.MainFeedActivity
 import com.mdove.civilservantcommunity.R
 import com.mdove.civilservantcommunity.base.BaseFragment
 import com.mdove.civilservantcommunity.config.AppConfig
-import com.mdove.civilservantcommunity.login.IAccountHandle
-import com.mdove.civilservantcommunity.login.ITransitionProvider
-import com.mdove.civilservantcommunity.login.bean.LoginInfoParams
-import com.mdove.civilservantcommunity.login.viewmodel.AccountViewModel
+import com.mdove.civilservantcommunity.account.IAccountHandle
+import com.mdove.civilservantcommunity.account.ITransitionProvider
+import com.mdove.civilservantcommunity.account.bean.LoginInfoParams
+import com.mdove.civilservantcommunity.account.viewmodel.AccountViewModel
 import com.mdove.dependent.common.networkenhance.valueobj.Status
 import com.mdove.dependent.common.toast.ToastUtil
 import kotlinx.android.synthetic.main.fragment_login.*

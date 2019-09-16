@@ -1,4 +1,4 @@
-package com.mdove.civilservantcommunity.login.utils
+package com.mdove.civilservantcommunity.account.utils
 
 /**
  * Created by MDove on 2019-09-11.

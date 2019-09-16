@@ -4,9 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
-import com.mdove.civilservantcommunity.login.bean.MePageDataResp
-import com.mdove.civilservantcommunity.login.repository.AccountModule
-import com.mdove.civilservantcommunity.login.repository.AccountRepository
+import com.mdove.civilservantcommunity.account.bean.MePageDataResp
+import com.mdove.civilservantcommunity.account.repository.AccountRepository
 import com.mdove.dependent.common.network.NormalResp
 import com.mdove.dependent.common.networkenhance.valueobj.Resource
 

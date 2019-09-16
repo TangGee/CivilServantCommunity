@@ -1,4 +1,4 @@
-package com.mdove.civilservantcommunity.login.bean
+package com.mdove.civilservantcommunity.account.bean
 
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
@@ -24,3 +24,4 @@ data class MePageDataResp(
     @SerializedName("article_list") val articleList: List<ArticleResp>? = null,
     @SerializedName("user_type") val userType: String
 ) : Parcelable
+

@@ -1,9 +1,8 @@
-package com.mdove.civilservantcommunity.login.repository
+package com.mdove.civilservantcommunity.account.repository
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.mdove.civilservantcommunity.feed.bean.ArticleResp
-import com.mdove.civilservantcommunity.login.bean.*
+import com.mdove.civilservantcommunity.account.bean.*
 import com.mdove.dependent.common.network.AppExecutorsImpl
 import com.mdove.dependent.common.network.NormalResp
 import com.mdove.dependent.common.networkenhance.NetworkBoundResource
@@ -88,6 +87,31 @@ class AccountRepository {
 
             override fun createCall(): LiveData<ApiResponse<NormalResp<MePageDataResp>>> {
                 return registerModule.mePage(uid)
+            }
+        }.asLiveData()
+    }
+
+    fun updateUserInfo(params:UpdateUserInfoParams): LiveData<Resource<NormalResp<String>>>{
+        return object :
+            NetworkBoundResource<NormalResp<String>, NormalResp<String>>(
+                AppExecutorsImpl()
+            ) {
+            override fun saveCallResult(item: NormalResp<String>) {
+                accountCache.cacheUpdateUserInfoResp = item
+            }
+
+            override fun shouldFetch(data: NormalResp<String>?): Boolean {
+                return true
+            }
+
+            override fun loadFromDb(): LiveData<NormalResp<String>> {
+                return MutableLiveData<NormalResp<String>>().apply {
+                    value = accountCache.cacheUpdateUserInfoResp ?: NormalResp<String>()
+                }
+            }
+
+            override fun createCall(): LiveData<ApiResponse<NormalResp<String>>> {
+                return registerModule.updateUserInfo(params)
             }
         }.asLiveData()
     }

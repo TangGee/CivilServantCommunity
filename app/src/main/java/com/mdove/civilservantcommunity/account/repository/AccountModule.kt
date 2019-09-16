@@ -1,15 +1,13 @@
-package com.mdove.civilservantcommunity.login.repository
+package com.mdove.civilservantcommunity.account.repository
 
 import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.mdove.civilservantcommunity.feed.bean.ArticleResp
-import com.mdove.civilservantcommunity.login.bean.*
+import com.mdove.civilservantcommunity.account.bean.*
 import com.mdove.dependent.common.threadpool.MDoveApiPool
 import com.mdove.dependent.apiservice.AppDependsProvider
+import com.mdove.dependent.common.gson.GsonProvider
 import com.mdove.dependent.common.network.NormalResp
-import com.mdove.dependent.common.network.ServerRespException
-import com.mdove.dependent.common.network.toNormaResp
 import com.mdove.dependent.common.networkenhance.api.ApiErrorResponse
 import com.mdove.dependent.common.networkenhance.api.ApiResponse
 import com.mdove.dependent.common.networkenhance.api.ApiSuccessResponse
@@ -97,6 +95,34 @@ class AccountModule {
                 data
             } catch (e: Exception) {
                 NormalResp<LoginDataResp>(exception = e)
+            }
+            if (resp.exception == null) {
+                liveData.postValue(ApiSuccessResponse(resp))
+            } else {
+                liveData.postValue(
+                    ApiErrorResponse(
+                        resp.exception ?: RuntimeException("unknown_error")
+                    )
+                )
+            }
+        }
+        return liveData
+    }
+
+    fun updateUserInfo(params: UpdateUserInfoParams): LiveData<ApiResponse<NormalResp<String>>> {
+        val liveData = MutableLiveData<ApiResponse<NormalResp<String>>>()
+
+        val network = AppDependsProvider.networkService
+        val url = Uri.parse("${network.host}/user/update_info").toString()
+
+        CoroutineScope(MDoveApiPool).launch {
+            val resp = try {
+                val json =
+                    network.networkClient.post(url, GsonProvider.getDefaultGson().toJson(params))
+                val data: NormalResp<String> = fromServerResp(json)
+                data
+            } catch (e: Exception) {
+                NormalResp<String>(exception = e)
             }
             if (resp.exception == null) {
                 liveData.postValue(ApiSuccessResponse(resp))

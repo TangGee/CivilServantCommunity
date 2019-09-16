@@ -13,7 +13,7 @@ import android.util.Log
 import com.mdove.civilservantcommunity.R
 import com.mdove.civilservantcommunity.base.BaseActivity
 import com.mdove.civilservantcommunity.config.AppConfig
-import com.mdove.civilservantcommunity.login.AccountActivity
+import com.mdove.civilservantcommunity.account.AccountActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainFeedActivity : BaseActivity() {

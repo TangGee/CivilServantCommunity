@@ -2,8 +2,6 @@ package com.mdove.civilservantcommunity.ugc.repository
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.mdove.civilservantcommunity.feed.bean.ArticleResp
-import com.mdove.civilservantcommunity.login.bean.*
 import com.mdove.civilservantcommunity.ugc.bean.UGCPostParams
 import com.mdove.dependent.common.network.AppExecutorsImpl
 import com.mdove.dependent.common.network.NormalResp

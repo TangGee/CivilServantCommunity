@@ -7,13 +7,14 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.mdove.civilservantcommunity.R
+import com.mdove.civilservantcommunity.account.UpdateUserInfoActivity
 import com.mdove.civilservantcommunity.base.BaseFragment
-import com.mdove.civilservantcommunity.base.fragment.OnFragmentVisibilityChangedListener
 import com.mdove.civilservantcommunity.config.AppConfig
 import com.mdove.civilservantcommunity.feed.adapter.MePageAdapter
 import com.mdove.civilservantcommunity.feed.viewmodel.MePageViewModel
-import com.mdove.civilservantcommunity.login.bean.MePageDataResp
-import com.mdove.civilservantcommunity.login.utils.IdentitysHelper
+import com.mdove.civilservantcommunity.account.bean.MePageDataResp
+import com.mdove.civilservantcommunity.account.utils.IdentitysHelper
+import com.mdove.civilservantcommunity.base.bean.UserInfo
 import com.mdove.dependent.common.networkenhance.valueobj.Status
 import kotlinx.android.synthetic.main.fragment_me.*
 
@@ -32,9 +33,9 @@ class MePageFragment : BaseFragment() {
     }
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_me, container, false)
     }
@@ -59,9 +60,16 @@ class MePageFragment : BaseFragment() {
             }
         })
 
+
         srf.setOnRefreshListener {
             AppConfig.getUserInfo()?.let {
                 viewModel.reqMePage(it.uid)
+            }
+        }
+
+        btn_update.setOnClickListener {
+            context?.let {
+                UpdateUserInfoActivity.gotoUpdateUserInfo(it)
             }
         }
 
@@ -71,6 +79,7 @@ class MePageFragment : BaseFragment() {
     }
 
     private fun refreshUI(resp: MePageDataResp) {
+        AppConfig.setUserInfo(UserInfo(resp.uid, resp.userName))
         tv_name.text = resp.userName
         tv_type.text = IdentitysHelper.getIdentity(resp.userType)
         resp.articleList?.let {

@@ -29,6 +29,9 @@ dependencies {
     implementation deps.kotlin.ktx
     implementation deps.kotlin.coroutines_android
     implementation deps.arch.lifecycle_extensions
+    implementation deps.androidx.material
+    implementation deps.androidx.appCompat
+    implementation deps.androidx.recyclerView
 
     implementation deps.androidx.constraint_layout
 

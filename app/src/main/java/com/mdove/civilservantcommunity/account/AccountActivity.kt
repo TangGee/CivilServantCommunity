@@ -1,4 +1,4 @@
-package com.mdove.civilservantcommunity.login
+package com.mdove.civilservantcommunity.account
 
 import android.os.Bundle
 import com.mdove.civilservantcommunity.R
@@ -6,8 +6,8 @@ import com.mdove.civilservantcommunity.base.BaseActivity
 import androidx.transition.Fade
 import androidx.transition.TransitionInflater
 import androidx.transition.TransitionSet
-import com.mdove.civilservantcommunity.login.fragment.LoginFragment
-import com.mdove.civilservantcommunity.login.fragment.RegisterFragment
+import com.mdove.civilservantcommunity.account.fragment.LoginFragment
+import com.mdove.civilservantcommunity.account.fragment.RegisterFragment
 
 /**
  * Created by MDove on 2019-09-02.

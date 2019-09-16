@@ -9,7 +9,6 @@ import androidx.lifecycle.ViewModelProviders
 import com.mdove.civilservantcommunity.R
 import com.mdove.civilservantcommunity.base.BaseFragment
 import com.mdove.civilservantcommunity.config.AppConfig
-import com.mdove.civilservantcommunity.ugc.bean.UGCPostParams
 import com.mdove.civilservantcommunity.ugc.viewmodel.MainUGCViewModel
 import com.mdove.civilservantcommunity.view.MultiLineChooseLayout
 import com.mdove.dependent.common.networkenhance.valueobj.Status
@@ -40,7 +39,7 @@ class MainUGCFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        view_toolbar.setTitle("分享")
         layout_identity.setList(viewModel.typeTitles)
         layout_identity.setOnItemClickListener(object : MultiLineChooseLayout.onItemClickListener {
             override fun onItemClick(position: Int, text: String) {
@@ -61,7 +60,7 @@ class MainUGCFragment : BaseFragment() {
                 Status.SUCCESS -> {
                     dismissLoading()
                 }
-                Status.LOADING->{
+                Status.LOADING -> {
                     showLoading()
                 }
                 Status.ERROR -> {

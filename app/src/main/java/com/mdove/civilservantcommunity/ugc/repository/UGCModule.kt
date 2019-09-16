@@ -3,15 +3,11 @@ package com.mdove.civilservantcommunity.ugc.repository
 import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.mdove.civilservantcommunity.feed.bean.ArticleResp
-import com.mdove.civilservantcommunity.login.bean.*
 import com.mdove.civilservantcommunity.ugc.bean.UGCPostParams
 import com.mdove.dependent.common.threadpool.MDoveApiPool
 import com.mdove.dependent.apiservice.AppDependsProvider
 import com.mdove.dependent.common.gson.GsonProvider
 import com.mdove.dependent.common.network.NormalResp
-import com.mdove.dependent.common.network.ServerRespException
-import com.mdove.dependent.common.network.toNormaResp
 import com.mdove.dependent.common.networkenhance.api.ApiErrorResponse
 import com.mdove.dependent.common.networkenhance.api.ApiResponse
 import com.mdove.dependent.common.networkenhance.api.ApiSuccessResponse

@@ -1,4 +1,4 @@
-package com.mdove.civilservantcommunity.login
+package com.mdove.civilservantcommunity.account
 
 import android.view.View
 
