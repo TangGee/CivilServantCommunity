@@ -12,7 +12,7 @@ import com.mdove.civilservantcommunity.account.viewmodel.AccountViewModel
 import com.mdove.civilservantcommunity.base.BaseFragment
 import com.mdove.civilservantcommunity.config.AppConfig
 import com.mdove.dependent.common.networkenhance.valueobj.Status
-import kotlinx.android.synthetic.main.fragment_me.*
+import kotlinx.android.synthetic.main.fragment_me_page.*
 import kotlinx.android.synthetic.main.fragment_update_user_info.*
 
 /**

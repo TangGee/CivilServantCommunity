@@ -9,7 +9,7 @@
         android:id="@+id/srl"
         app:layout_constraintTop_toBottomOf="@+id/view_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="0dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -41,10 +41,10 @@
                 android:layout_marginLeft="12dp"
                 android:layout_marginTop="6dp"
                 android:layout_marginRight="12dp"
-                android:background="@color/grey_400"
+                android:background="@drawable/bg_dotted_line"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_title" />
+                app:layout_constraintTop_toBottomOf="@+id/tv_name" />
 
             <androidx.core.widget.NestedScrollView
                 android:id="@+id/layout_content"

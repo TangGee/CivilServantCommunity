@@ -16,7 +16,7 @@ import com.mdove.civilservantcommunity.account.bean.MePageDataResp
 import com.mdove.civilservantcommunity.account.utils.IdentitysHelper
 import com.mdove.civilservantcommunity.base.bean.UserInfo
 import com.mdove.dependent.common.networkenhance.valueobj.Status
-import kotlinx.android.synthetic.main.fragment_me.*
+import kotlinx.android.synthetic.main.fragment_me_page.*
 
 /**
  * Created by MDove on 2019-09-07.
@@ -37,7 +37,7 @@ class MePageFragment : BaseFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_me, container, false)
+        return inflater.inflate(R.layout.fragment_me_page, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
