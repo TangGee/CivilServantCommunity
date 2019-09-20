@@ -9,8 +9,6 @@ import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.mdove.civilservantcommunity.R
-import com.mdove.civilservantcommunity.account.bean.UpdateUserInfoParams
-import com.mdove.civilservantcommunity.account.utils.IdentitysHelper
 import com.mdove.civilservantcommunity.account.viewmodel.AccountViewModel
 import com.mdove.civilservantcommunity.base.BaseFragment
 import com.mdove.civilservantcommunity.config.AppConfig
@@ -19,7 +17,6 @@ import com.mdove.dependent.common.networkenhance.valueobj.Status
 import com.mdove.dependent.common.toast.ToastUtil
 import com.mdove.dependent.common.utils.dismissLoading
 import com.mdove.dependent.common.utils.showLoading
-import kotlinx.android.synthetic.main.fragment_me_page.*
 import kotlinx.android.synthetic.main.fragment_update_user_info.*
 
 /**

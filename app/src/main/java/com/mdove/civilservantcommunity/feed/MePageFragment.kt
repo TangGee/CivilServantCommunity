@@ -1,5 +1,6 @@
 package com.mdove.civilservantcommunity.feed
 
+import android.graphics.Paint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -43,6 +44,7 @@ class MePageFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        btn_update.paint.flags = Paint.UNDERLINE_TEXT_FLAG
         mAdapter = MePageAdapter()
         rlv.layoutManager = LinearLayoutManager(context)
         rlv.adapter = mAdapter
