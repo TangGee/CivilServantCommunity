@@ -38,6 +38,19 @@ android {
         versionName getVersionNameProperty()
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+
+    signingConfigs {
+        mdove {
+            storeFile file("$rootProject.projectDir/tool/keystore/EasyCopy.jks")
+            storePassword "wjzj000"
+            keyAlias "easycopy"
+            keyPassword "wjzj000"
+        }
+        debug {
+            storeFile file("$rootProject.projectDir/tool/keystore/debug/debug.keystore")
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
