@@ -1,6 +1,7 @@
 package com.mdove.civilservantcommunity.account.fragment
 
 import android.os.Bundle
+import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,9 +10,11 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.mdove.civilservantcommunity.R
 import com.mdove.civilservantcommunity.account.bean.UpdateUserInfoParams
+import com.mdove.civilservantcommunity.account.utils.IdentitysHelper
 import com.mdove.civilservantcommunity.account.viewmodel.AccountViewModel
 import com.mdove.civilservantcommunity.base.BaseFragment
 import com.mdove.civilservantcommunity.config.AppConfig
+import com.mdove.civilservantcommunity.view.MultiLineChooseLayout
 import com.mdove.dependent.common.networkenhance.valueobj.Status
 import com.mdove.dependent.common.toast.ToastUtil
 import com.mdove.dependent.common.utils.dismissLoading
@@ -49,15 +52,19 @@ class UpdateUserInfoFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         initUI()
         btn_ok.setOnClickListener {
-            viewModel.updateUserInfo(
-                UpdateUserInfoParams(
-                    null,
-                    viewModel.userInfo.uid,
-                    et_user_name.text.toString(),
-                    null
-                )
-            )
+            val name = et_user_name.text.toString().trim()
+            if (!TextUtils.isEmpty(name)) {
+                viewModel.updateUserInfo(name)
+            }else{
+                ToastUtil.toast("信息更新不可为空",Toast.LENGTH_SHORT)
+            }
         }
+
+        layout_identity.setOnItemClickListener(object : MultiLineChooseLayout.onItemClickListener {
+            override fun onItemClick(position: Int, text: String) {
+                viewModel.onClickIdentity(position)
+            }
+        })
 
         viewModel.updateUserInfoResp.observe(this, Observer {
             when (it.status) {
@@ -78,6 +85,7 @@ class UpdateUserInfoFragment : BaseFragment() {
     }
 
     private fun initUI() {
+        layout_identity.setList(viewModel.identitys)
         et_user_name.hint = viewModel.userInfo.username
         view_toolbar.setTitle("更改信息")
     }

@@ -52,6 +52,7 @@
             android:layout_marginTop="5dp"
             android:ellipsize="end"
             android:maxLines="2"
+            android:gravity="left"
             android:text="公务员公务员公务员公务员公务员公务员公务员公务员公务员"
             android:textColor="@color/grey_700"
             android:textSize="12sp"

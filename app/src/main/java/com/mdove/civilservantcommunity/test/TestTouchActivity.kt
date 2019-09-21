@@ -10,12 +10,13 @@ import com.mdove.civilservantcommunity.R
 import com.mdove.civilservantcommunity.base.BaseActivity
 import kotlinx.android.synthetic.main.activity_test_touch.*
 
-class TestTouchActivity :BaseActivity(){
+class TestTouchActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_test_touch)
-        rlv.layoutManager=LinearLayoutManager(this)
-        rlv.adapter=object:RecyclerView.Adapter<RecyclerView.ViewHolder>(){
+        rlv.isNestedScrollingEnabled = false
+        rlv.layoutManager = LinearLayoutManager(this)
+        rlv.adapter = object : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             override fun getItemCount(): Int {
                 return 10
             }
@@ -24,16 +25,31 @@ class TestTouchActivity :BaseActivity(){
 
             }
 
-            override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-                if(viewType ==1){
-                    return   ViewHolder1(LayoutInflater.from(parent.context).inflate(R.layout.item_text_touch,parent,false))
-                }else{
-                    return   ViewHolder2(LayoutInflater.from(parent.context).inflate(R.layout.item_text,parent,false))
+            override fun onCreateViewHolder(
+                parent: ViewGroup,
+                viewType: Int
+            ): RecyclerView.ViewHolder {
+                if (viewType == 1) {
+                    return ViewHolder1(
+                        LayoutInflater.from(parent.context).inflate(
+                            R.layout.item_text_touch,
+                            parent,
+                            false
+                        )
+                    )
+                } else {
+                    return ViewHolder2(
+                        LayoutInflater.from(parent.context).inflate(
+                            R.layout.item_text,
+                            parent,
+                            false
+                        )
+                    )
                 }
             }
 
             override fun getItemViewType(position: Int): Int {
-                if(position==0){
+                if (position == 2) {
                     return 1
                 }
                 return 0
@@ -41,6 +57,6 @@ class TestTouchActivity :BaseActivity(){
         }
     }
 
-    inner class ViewHolder1(itemVIew:View):RecyclerView.ViewHolder(itemVIew){}
-    inner class ViewHolder2(itemVIew:View):RecyclerView.ViewHolder(itemVIew){}
+    inner class ViewHolder1(itemVIew: View) : RecyclerView.ViewHolder(itemVIew) {}
+    inner class ViewHolder2(itemVIew: View) : RecyclerView.ViewHolder(itemVIew) {}
 }

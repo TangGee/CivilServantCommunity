@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.mdove.civilservantcommunity.R
 import com.mdove.civilservantcommunity.account.UpdateUserInfoActivity
 import com.mdove.civilservantcommunity.base.BaseFragment
@@ -23,7 +24,7 @@ import kotlinx.android.synthetic.main.fragment_me_page.*
  */
 class MePageFragment : BaseFragment() {
     private lateinit var viewModel: MePageViewModel
-    private lateinit var adapter: MePageAdapter
+    private lateinit var mAdapter: MePageAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,7 +43,9 @@ class MePageFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        adapter = MePageAdapter()
+        mAdapter = MePageAdapter()
+        rlv.layoutManager = LinearLayoutManager(context)
+        rlv.adapter = mAdapter
         viewModel.data.observe(this, Observer { res ->
             when (res.status) {
                 Status.SUCCESS -> {
@@ -83,7 +86,7 @@ class MePageFragment : BaseFragment() {
         tv_name.text = resp.userName
         tv_type.text = IdentitysHelper.getIdentity(resp.userType)
         resp.articleList?.let {
-            adapter.submitList(it)
+            mAdapter.submitList(it)
         }
     }
 }
