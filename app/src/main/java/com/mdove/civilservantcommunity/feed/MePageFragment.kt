@@ -22,6 +22,7 @@ import com.mdove.civilservantcommunity.detailfeed.DetailFeedActivity
 import com.mdove.civilservantcommunity.detailfeed.bean.DetailFeedParams
 import com.mdove.civilservantcommunity.feed.adapter.OnMePageClickListener
 import com.mdove.civilservantcommunity.feed.bean.ArticleResp
+import com.mdove.civilservantcommunity.ugc.MainUGCActivity
 import com.mdove.dependent.common.networkenhance.valueobj.Status
 import kotlinx.android.synthetic.main.fragment_me_page.*
 
@@ -99,14 +100,31 @@ class MePageFragment : BaseFragment() {
         AppConfig.getUserInfo()?.let {
             viewModel.reqMePage(it.uid)
         }
+
+        layout_empty_add.setOnClickListener {
+            context?.let {
+                MainUGCActivity.gotoMainUGC(it)
+            }
+        }
+
+        layout_edit.setOnClickListener {
+            context?.let {
+                MainUGCActivity.gotoMainUGC(it)
+            }
+        }
     }
 
     private fun refreshUI(resp: MePageDataResp) {
         AppConfig.setUserInfo(UserInfo(resp.uid, resp.userName))
         tv_name.text = resp.userName
         tv_type.text = IdentitysHelper.getIdentity(resp.userType)
-        resp.articleList?.let {
-            mAdapter.submitList(it)
+        if (!resp.articleList.isNullOrEmpty()) {
+            layout_empty.visibility = View.GONE
+            layout_edit.visibility = View.VISIBLE
+            mAdapter.submitList(resp.articleList)
+        } else {
+            layout_edit.visibility = View.GONE
+            layout_empty.visibility = View.VISIBLE
         }
     }
 }
