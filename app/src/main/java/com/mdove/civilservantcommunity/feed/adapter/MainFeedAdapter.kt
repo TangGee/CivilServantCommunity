@@ -1,6 +1,5 @@
 package com.mdove.civilservantcommunity.feed.adapter
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,34 +19,34 @@ import android.text.Html
  * Created by MDove on 2019-09-06.
  */
 class MainFeedAdapter(val listener: OnMainFeedClickListener? = null) :
-        ListAdapter<BaseFeedResp, RecyclerView.ViewHolder>(object :
-                DiffUtil.ItemCallback<BaseFeedResp>() {
-            override fun areItemsTheSame(
-                    oldItem: BaseFeedResp,
-                    newItem: BaseFeedResp
-            ): Boolean {
-                if ((oldItem as? FeedArticleResp)?.article?.aid == (newItem as? FeedArticleResp)?.article?.aid) {
-                    return true
-                }
-                if ((oldItem is FeedPunchResp) && (newItem is FeedPunchResp)) {
-                    return true
-                }
-                return oldItem === newItem
-            }
-
-            override fun areContentsTheSame(
-                    oldItem: BaseFeedResp,
-                    newItem: BaseFeedResp
-            ): Boolean {
-                if ((oldItem as? FeedArticleResp)?.article?.title == (newItem as? FeedArticleResp)?.article?.title) {
-                    return true
-                }
-                if ((oldItem is FeedPunchResp) && (newItem is FeedPunchResp)) {
-                    return true
-                }
+    ListAdapter<BaseFeedResp, RecyclerView.ViewHolder>(object :
+        DiffUtil.ItemCallback<BaseFeedResp>() {
+        override fun areItemsTheSame(
+            oldItem: BaseFeedResp,
+            newItem: BaseFeedResp
+        ): Boolean {
+            if ((oldItem as? FeedArticleResp)?.article?.aid == (newItem as? FeedArticleResp)?.article?.aid) {
                 return true
             }
-        }) {
+            if ((oldItem is FeedPunchResp) && (newItem is FeedPunchResp)) {
+                return true
+            }
+            return oldItem === newItem
+        }
+
+        override fun areContentsTheSame(
+            oldItem: BaseFeedResp,
+            newItem: BaseFeedResp
+        ): Boolean {
+            if ((oldItem as? FeedArticleResp)?.article?.title == (newItem as? FeedArticleResp)?.article?.title) {
+                return true
+            }
+            if ((oldItem is FeedPunchResp) && (newItem is FeedPunchResp)) {
+                return true
+            }
+            return true
+        }
+    }) {
 
     companion object {
         const val TYPE_TOP_ONE = 1
@@ -75,27 +74,51 @@ class MainFeedAdapter(val listener: OnMainFeedClickListener? = null) :
                                 false
                         )
                 )
-            TYPE_TOP_ONE -> TopOneViewHolder(
+            TYPE_TOP_ONE ->
+//                TopOneViewHolder(
+//                    LayoutInflater.from(parent.context).inflate(
+//                            R.layout.item_feed_top1,
+//                            parent,
+//                            false
+//                    )
+//            )
+                NewStyleViewHolder(
                     LayoutInflater.from(parent.context).inflate(
-                            R.layout.item_feed_top1,
-                            parent,
-                            false
+                        R.layout.item_feed_normal_new,
+                        parent,
+                        false
                     )
-            )
-            TYPE_TOP_TWO -> TopTwoViewHolder(
+                )
+            TYPE_TOP_TWO ->
+//                TopTwoViewHolder(
+//                    LayoutInflater.from(parent.context).inflate(
+//                        R.layout.item_feed_top2,
+//                        parent,
+//                        false
+//                    )
+//                )
+                NewStyleViewHolder(
                     LayoutInflater.from(parent.context).inflate(
-                            R.layout.item_feed_top2,
-                            parent,
-                            false
+                        R.layout.item_feed_normal_new,
+                        parent,
+                        false
                     )
-            )
-            else -> NormalViewHolder(
+                )
+            else ->
+//                NormalViewHolder(
+//                    LayoutInflater.from(parent.context).inflate(
+//                        R.layout.item_feed_normal,
+//                        parent,
+//                        false
+//                    )
+//                )
+                NewStyleViewHolder(
                     LayoutInflater.from(parent.context).inflate(
-                            R.layout.item_feed_normal,
-                            parent,
-                            false
+                        R.layout.item_feed_normal_new,
+                        parent,
+                        false
                     )
-            )
+                )
         }
     }
 
@@ -115,6 +138,7 @@ class MainFeedAdapter(val listener: OnMainFeedClickListener? = null) :
             is TopOneViewHolder -> holder.bind((getItem(position) as FeedArticleResp).article)
             is TopTwoViewHolder -> holder.bind((getItem(position) as FeedArticleResp).article)
             is NormalViewHolder -> holder.bind((getItem(position) as FeedArticleResp).article)
+            is NewStyleViewHolder -> holder.bind((getItem(position) as FeedArticleResp).article)
         }
     }
 
@@ -140,6 +164,20 @@ class MainFeedAdapter(val listener: OnMainFeedClickListener? = null) :
                     listener.onClick(TYPE_FEED_UGC, null)
                 }
             }
+        }
+    }
+
+    inner class NewStyleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        fun bind(data: ArticleResp) {
+            listener?.let { listener ->
+                itemView.setOnClickListener {
+                    listener.onClick(TYPE_TOP_ONE, data)
+                }
+            }
+            itemView.findViewById<TextView>(R.id.tv_title).text = data.title
+            itemView.findViewById<TextView>(R.id.tv_name).text = data.maketime
+            itemView.findViewById<TextView>(R.id.tv_content).text = data.content
+            itemView.findViewById<TextView>(R.id.tv_content).text = data.content
         }
     }
 
