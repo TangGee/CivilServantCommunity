@@ -59,6 +59,7 @@ class LoginFragment : BaseFragment(), ITransitionProvider {
                         AppConfig.setUserInfo(it.data?.data?.userInfo)
                         context?.let {
                             MainFeedActivity.gotoMain(it)
+                            activity?.finish()
                         }
                     }else{
                         ToastUtil.toast(it.data?.message ?: "登录失败 ", Toast.LENGTH_SHORT)

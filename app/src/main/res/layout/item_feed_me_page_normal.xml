@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="12dp"
+    android:background="@color/white">
+
+    <TextView
+        android:id="@+id/tv_content"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="12dp"
+        android:ellipsize="end"
+        android:gravity="left"
+        android:maxLines="2"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:text="公务员公务员公务员公务员公务员公务员公务员公务员公务员"
+        android:textColor="@color/grey_700"
+        android:textSize="12sp"
+        app:layout_constrainedHeight="true"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/btn_go"
+        app:layout_constraintTop_toBottomOf="@+id/iv_stub"/>
+
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:gravity="left"
+        android:text="时间之类的：2019-8-31"
+        android:textColor="@color/grey_700"
+        android:textSize="12sp"
+        app:layout_constrainedHeight="true"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintBottom_toBottomOf="@+id/icon_tips"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/icon_tips"
+        app:layout_constraintVertical_chainStyle="spread_inside" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="我的分享"
+        android:textColor="@color/grey_800"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@+id/icon_tips"
+        app:layout_constraintLeft_toRightOf="@+id/icon_tips"
+        app:layout_constraintTop_toTopOf="@+id/icon_tips" />
+
+    <com.mdove.dependent.common.view.roundcorner.RoundCornerFrameLayout
+        android:id="@+id/iv_stub"
+        android:layout_width="50dp"
+        app:allRadius="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/icon_tips"
+        android:layout_marginStart="12dp"
+        android:background="#00A8FF"
+        android:layout_marginTop="12dp"
+        android:layout_height="50dp">
+        <TextView
+            android:id="@+id/tv_stub"
+            android:text="学"
+            android:textColor="@color/white"
+            android:textSize="22sp"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </com.mdove.dependent.common.view.roundcorner.RoundCornerFrameLayout>
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:text="公务员公务员公务员公务员公务员公务员公务员公务员公务员"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:layout_constrainedHeight="true"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintLeft_toRightOf="@+id/iv_stub"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_stub"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/iv_stub" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/icon_tips"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/bg_feed_tips_share"
+        app:srcCompat="@drawable/vector_me_page_feed"
+        android:padding="3dp"
+        android:layout_marginStart="12dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/btn_go"
+        android:layout_width="wrap_content"
+        app:layout_constraintRight_toRightOf="parent"
+        android:text="查看详情"
+        android:textSize="14sp"
+        android:layout_marginRight="12dp"
+        android:textColor="@color/black"
+        app:layout_constraintTop_toTopOf="@+id/tv_content"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_content"
+        android:layout_height="wrap_content"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

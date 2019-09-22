@@ -58,6 +58,7 @@ class RegisterFragment : BaseFragment(), ITransitionProvider {
                         AppConfig.setUserInfo(it.data?.data?.userInfo)
                         context?.let {
                             MainFeedActivity.gotoMain(it)
+                            activity?.finish()
                         }
                     }else{
                         ToastUtil.toast(it.data?.message ?: "", Toast.LENGTH_SHORT)

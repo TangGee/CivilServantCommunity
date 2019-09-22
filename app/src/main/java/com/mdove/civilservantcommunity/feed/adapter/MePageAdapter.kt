@@ -36,23 +36,23 @@ class MePageAdapter(val listener: OnMePageClickListener? = null) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
-            TYPE_TOP_ONE -> TopOneViewHolder(
+            TYPE_TOP_ONE -> FeedMeViewHolder(
                 LayoutInflater.from(parent.context).inflate(
-                    R.layout.item_feed_top1,
+                    R.layout.item_feed_me_page_normal,
                     parent,
                     false
                 )
             )
-            TYPE_TOP_TWO -> TopTwoViewHolder(
+            TYPE_TOP_TWO -> FeedMeViewHolder(
                 LayoutInflater.from(parent.context).inflate(
-                    R.layout.item_feed_top2,
+                    R.layout.item_feed_me_page_normal,
                     parent,
                     false
                 )
             )
-            else -> NormalViewHolder(
+            else -> FeedMeViewHolder(
                 LayoutInflater.from(parent.context).inflate(
-                    R.layout.item_feed_normal,
+                    R.layout.item_feed_me_page_normal,
                     parent,
                     false
                 )
@@ -73,10 +73,24 @@ class MePageAdapter(val listener: OnMePageClickListener? = null) :
             is TopOneViewHolder -> holder.bind(getItem(position))
             is TopTwoViewHolder -> holder.bind(getItem(position))
             is NormalViewHolder -> holder.bind(getItem(position))
+            is FeedMeViewHolder -> holder.bind(getItem(position))
         }
     }
 
     inner class TopOneViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        fun bind(data: ArticleResp) {
+            listener?.let { listener ->
+                itemView.setOnClickListener {
+                    listener.onClick(data)
+                }
+            }
+            itemView.findViewById<TextView>(R.id.tv_title).text = data.title
+            itemView.findViewById<TextView>(R.id.tv_name).text = data.maketime
+            itemView.findViewById<TextView>(R.id.tv_content).text = data.content
+        }
+    }
+
+    inner class FeedMeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(data: ArticleResp) {
             listener?.let { listener ->
                 itemView.setOnClickListener {

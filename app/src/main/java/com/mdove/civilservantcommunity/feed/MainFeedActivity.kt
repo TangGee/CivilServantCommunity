@@ -28,9 +28,6 @@ class MainFeedActivity : BaseActivity() {
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             }
             context.startActivity(intent)
-            (context as? Activity)?.let {
-                it.finish()
-            }
         }
     }
 
@@ -41,11 +38,11 @@ class MainFeedActivity : BaseActivity() {
         initViewPager()
         initTabLayout()
 
-        Looper.getMainLooper().setMessageLogging {
-            Looper.getMainLooper().thread.stackTrace.forEach {
-                Log.d("mdove", it.methodName)
-            }
-        }
+//        Looper.getMainLooper().setMessageLogging {
+//            Looper.getMainLooper().thread.stackTrace.forEach {
+//                Log.d("mdove", it.methodName)
+//            }
+//        }
     }
 
     private fun initLogin() {

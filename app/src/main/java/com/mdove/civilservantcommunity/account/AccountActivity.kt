@@ -30,9 +30,6 @@ class AccountActivity : BaseActivity(), IAccountHandle {
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             }
             context.startActivity(intent)
-            (context as? Activity)?.let{
-                it.finish()
-            }
         }
     }
 

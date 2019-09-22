@@ -9,6 +9,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mdove.civilservantcommunity.R
+import com.mdove.civilservantcommunity.account.AccountActivity
 import com.mdove.civilservantcommunity.account.UpdateUserInfoActivity
 import com.mdove.civilservantcommunity.base.BaseFragment
 import com.mdove.civilservantcommunity.config.AppConfig
@@ -17,6 +18,10 @@ import com.mdove.civilservantcommunity.feed.viewmodel.MePageViewModel
 import com.mdove.civilservantcommunity.account.bean.MePageDataResp
 import com.mdove.civilservantcommunity.account.utils.IdentitysHelper
 import com.mdove.civilservantcommunity.base.bean.UserInfo
+import com.mdove.civilservantcommunity.detailfeed.DetailFeedActivity
+import com.mdove.civilservantcommunity.detailfeed.bean.DetailFeedParams
+import com.mdove.civilservantcommunity.feed.adapter.OnMePageClickListener
+import com.mdove.civilservantcommunity.feed.bean.ArticleResp
 import com.mdove.dependent.common.networkenhance.valueobj.Status
 import kotlinx.android.synthetic.main.fragment_me_page.*
 
@@ -45,7 +50,13 @@ class MePageFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         btn_update.paint.flags = Paint.UNDERLINE_TEXT_FLAG
-        mAdapter = MePageAdapter()
+        mAdapter = MePageAdapter(object : OnMePageClickListener {
+            override fun onClick(resp: ArticleResp) {
+                if (context != null && resp.aid != null) {
+                    DetailFeedActivity.gotoFeedDetail(context!!, DetailFeedParams(resp.aid))
+                }
+            }
+        })
         rlv.layoutManager = LinearLayoutManager(context)
         rlv.adapter = mAdapter
         viewModel.data.observe(this, Observer { res ->
@@ -65,7 +76,6 @@ class MePageFragment : BaseFragment() {
             }
         })
 
-
         srf.setOnRefreshListener {
             AppConfig.getUserInfo()?.let {
                 viewModel.reqMePage(it.uid)
@@ -75,6 +85,14 @@ class MePageFragment : BaseFragment() {
         btn_update.setOnClickListener {
             context?.let {
                 UpdateUserInfoActivity.gotoUpdateUserInfo(it)
+            }
+        }
+
+        btn_logout.setOnClickListener {
+            AppConfig.setUserInfo(null)
+            context?.let {
+                AccountActivity.gotoAccount(it)
+                activity?.finish()
             }
         }
 
