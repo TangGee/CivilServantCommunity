@@ -21,10 +21,14 @@ class MainFeedActivity : BaseActivity() {
         private const val TAG_FEED_FRAGMNET = "tag_feed_fragment"
         private const val TAG_ME_FRAGMNET = "tag_me_fragment"
 
-        fun gotoMain(context:Context){
+        fun gotoMain(context: Context) {
             val intent = Intent(context, MainFeedActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            if (context !is Activity) {
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            }
             context.startActivity(intent)
-            (context as? Activity)?.let{
+            (context as? Activity)?.let {
                 it.finish()
             }
         }
@@ -39,7 +43,7 @@ class MainFeedActivity : BaseActivity() {
 
         Looper.getMainLooper().setMessageLogging {
             Looper.getMainLooper().thread.stackTrace.forEach {
-                Log.d("mdove",it.methodName)
+                Log.d("mdove", it.methodName)
             }
         }
     }
@@ -51,9 +55,7 @@ class MainFeedActivity : BaseActivity() {
     }
 
     private fun gotoLogin() {
-        val intent = Intent(this, AccountActivity::class.java)
-        startActivity(intent)
-        finish()
+        AccountActivity.gotoAccount(this)
     }
 
     private fun initTabLayout() {

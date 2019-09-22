@@ -1,5 +1,6 @@
 package com.mdove.civilservantcommunity.feed
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -37,20 +38,20 @@ class MainFeedFragment : BaseFragment() {
         override fun onClick(type: Int, resp: ArticleResp?) {
             when (type) {
                 MainFeedAdapter.TYPE_FEED_PUNCH -> {
-                    AppConfig.getUserInfo()?.let{
-                        punchViewModel.punch(PunchParams(it.uid,System.currentTimeMillis()))
+                    AppConfig.getUserInfo()?.let {
+                        punchViewModel.punch(PunchParams(it.uid, System.currentTimeMillis()))
                     }
                 }
                 MainFeedAdapter.TYPE_FEED_UGC -> {
-                    context?.let{
+                    context?.let {
                         MainUGCActivity.gotoMainUGC(it)
                     }
                 }
                 else -> {
-                    resp?.aid?.let {
-                        val intent = Intent(activity, DetailFeedActivity::class.java)
-                        intent.putExtra(DETAIL_FEED_ACTIVITY_PARAMS, DetailFeedParams(it))
-                        activity?.startActivity(intent)
+                    resp?.aid?.let { aid ->
+                        context?.let { context ->
+                            DetailFeedActivity.gotoFeedDetail(context, DetailFeedParams(aid))
+                        }
                     }
                 }
             }
@@ -66,9 +67,9 @@ class MainFeedFragment : BaseFragment() {
     }
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_main_feed, container, false)
     }
@@ -98,9 +99,9 @@ class MainFeedFragment : BaseFragment() {
         })
 
         punchViewModel.punchResp.observe(this, Observer {
-            when(it.status){
+            when (it.status) {
                 Status.SUCCESS -> {
-                    ToastUtil.toast("${it.data?.message}",Toast.LENGTH_SHORT)
+                    ToastUtil.toast("${it.data?.message}", Toast.LENGTH_SHORT)
                 }
             }
         })

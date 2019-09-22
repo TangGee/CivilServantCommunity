@@ -1,5 +1,8 @@
 package com.mdove.civilservantcommunity.account
 
+import android.app.Activity
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import com.mdove.civilservantcommunity.R
 import com.mdove.civilservantcommunity.base.BaseActivity
@@ -19,6 +22,18 @@ class AccountActivity : BaseActivity(), IAccountHandle {
         const val TAG_LOGIN_FRAGMENT = "tag_login_fragment"
         const val FADE_DEFAULT_TIME = 300L
         const val MOVE_DEFAULT_TIME = 300L
+
+        fun gotoAccount(context: Context){
+            val intent = Intent(context, AccountActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            if (context !is Activity) {
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            }
+            context.startActivity(intent)
+            (context as? Activity)?.let{
+                it.finish()
+            }
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
