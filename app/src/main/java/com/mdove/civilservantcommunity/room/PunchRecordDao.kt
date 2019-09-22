@@ -12,4 +12,10 @@ interface PunchRecordDao {
 
     @Query("SELECT * FROM punch_record WHERE id = :id")
     fun getState(id: Long): PunchRecordEntity?
+
+    @Query("SELECT count(*) FROM punch_record")
+    fun getPunchCounts(): Int
+
+    @Query("SELECT * FROM punch_record ORDER BY date DESC LIMIT 1")
+    fun getLastPunch(): PunchRecordEntity?
 }

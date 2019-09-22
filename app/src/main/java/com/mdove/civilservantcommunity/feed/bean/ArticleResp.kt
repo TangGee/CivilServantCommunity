@@ -20,7 +20,7 @@ data class ArticleResp(
     @SerializedName("list_style") val listStyle: Int? = 0
 ) : Parcelable
 
-data class FeedPunchResp(val count: Int = 0) : BaseFeedResp()
+data class FeedPunchResp(val count: Int = 0, var hasPunch: Boolean = false) : BaseFeedResp()
 data class FeedUGCResp(val name :String ="打卡"):BaseFeedResp()
 
 @Parcelize

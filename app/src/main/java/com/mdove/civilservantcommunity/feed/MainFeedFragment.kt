@@ -1,9 +1,6 @@
 package com.mdove.civilservantcommunity.feed
 
-import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,17 +12,18 @@ import com.mdove.civilservantcommunity.R
 import com.mdove.civilservantcommunity.base.BaseFragment
 import com.mdove.civilservantcommunity.config.AppConfig
 import com.mdove.civilservantcommunity.detailfeed.DetailFeedActivity
-import com.mdove.civilservantcommunity.detailfeed.DetailFeedActivity.Companion.DETAIL_FEED_ACTIVITY_PARAMS
 import com.mdove.civilservantcommunity.detailfeed.bean.DetailFeedParams
 import com.mdove.civilservantcommunity.feed.adapter.MainFeedAdapter
 import com.mdove.civilservantcommunity.feed.adapter.OnMainFeedClickListener
 import com.mdove.civilservantcommunity.feed.bean.ArticleResp
 import com.mdove.civilservantcommunity.feed.viewmodel.MainFeedViewModel
-import com.mdove.civilservantcommunity.punch.bean.PunchParams
+import com.mdove.civilservantcommunity.punch.bean.PunchReq
 import com.mdove.civilservantcommunity.punch.viewmodel.PunchViewModel
 import com.mdove.civilservantcommunity.ugc.MainUGCActivity
 import com.mdove.dependent.common.networkenhance.valueobj.Status
 import com.mdove.dependent.common.toast.ToastUtil
+import com.mdove.dependent.common.utils.dismissLoading
+import com.mdove.dependent.common.utils.showLoading
 import kotlinx.android.synthetic.main.fragment_main_feed.*
 
 /**
@@ -39,7 +37,8 @@ class MainFeedFragment : BaseFragment() {
             when (type) {
                 MainFeedAdapter.TYPE_FEED_PUNCH -> {
                     AppConfig.getUserInfo()?.let {
-                        punchViewModel.punch(PunchParams(it.uid, System.currentTimeMillis()))
+                        showLoading("打卡中...")
+                        punchViewModel.punch(PunchReq(it.uid, System.currentTimeMillis()))
                     }
                 }
                 MainFeedAdapter.TYPE_FEED_UGC -> {
@@ -101,7 +100,15 @@ class MainFeedFragment : BaseFragment() {
         punchViewModel.punchResp.observe(this, Observer {
             when (it.status) {
                 Status.SUCCESS -> {
+                    if (it.data?.status == 0) {
+                        feedViewModel.punchResp.value = true
+                    }
                     ToastUtil.toast("${it.data?.message}", Toast.LENGTH_SHORT)
+                    dismissLoading()
+                }
+                Status.ERROR->{
+                    feedViewModel.punchResp.value = false
+                    dismissLoading()
                 }
             }
         })

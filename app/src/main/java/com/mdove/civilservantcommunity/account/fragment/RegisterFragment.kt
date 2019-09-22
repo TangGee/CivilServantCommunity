@@ -85,6 +85,8 @@ class RegisterFragment : BaseFragment(), ITransitionProvider {
                         userType!!
                     )
                 )
+            } else {
+                ToastUtil.toast("请完善所有注册信息~", Toast.LENGTH_SHORT)
             }
         }
 

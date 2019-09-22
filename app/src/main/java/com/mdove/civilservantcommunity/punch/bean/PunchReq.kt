@@ -9,9 +9,9 @@ import kotlinx.android.parcel.Parcelize
  * Created by MDove on 2019-09-15.
  */
 @Parcelize
-data class PunchParams(@SerializedName("uid") val uid: String,
-                       @SerializedName("call_time") val callTime: Long) : Parcelable
+data class PunchReq(@SerializedName("uid") val uid: String,
+                    @SerializedName("call_time") val callTime: Long) : Parcelable
 
-fun PunchParams.toPunchRecordBean(): PunchRecordBean{
+fun PunchReq.toPunchRecordBean(): PunchRecordBean{
     return PunchRecordBean(this.callTime)
 }

@@ -53,6 +53,7 @@ class MainFeedActivity : BaseActivity() {
 
     private fun gotoLogin() {
         AccountActivity.gotoAccount(this)
+        finish()
     }
 
     private fun initTabLayout() {

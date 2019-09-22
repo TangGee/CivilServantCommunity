@@ -32,7 +32,7 @@ class MultiLineChooseLayout @JvmOverloads constructor(
     /**
      * 默认的文字颜色
      */
-    private val default_text_color = Color.rgb(0x49, 0xC1, 0x20)
+    private val default_text_color = Color.rgb(0x00, 0xA8, 0xFF)
 
     /**
      * 默认的背景颜色
@@ -47,7 +47,7 @@ class MultiLineChooseLayout @JvmOverloads constructor(
     /**
      * 默认的选中背景颜色
      */
-    private val default_checked_background_color = Color.rgb(0x49, 0xC1, 0x20)
+    private val default_checked_background_color = Color.rgb(0x00, 0xA8, 0xFF)
 
     /**
      * 默认的文字大小

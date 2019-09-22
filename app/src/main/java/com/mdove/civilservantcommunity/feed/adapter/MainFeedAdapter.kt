@@ -42,9 +42,15 @@ class MainFeedAdapter(val listener: OnMainFeedClickListener? = null) :
                 return true
             }
             if ((oldItem is FeedPunchResp) && (newItem is FeedPunchResp)) {
-                return true
+                return oldItem.count == newItem.count
             }
             return true
+        }
+
+        override fun getChangePayload(oldItem: BaseFeedResp, newItem: BaseFeedResp): Any? {
+            return if ((oldItem as? FeedPunchResp)?.count != (newItem as? FeedPunchResp)?.count) {
+                return PAYLOAD_PUNCH
+            } else null
         }
     }) {
 
@@ -54,25 +60,27 @@ class MainFeedAdapter(val listener: OnMainFeedClickListener? = null) :
         const val TYPE_NORMAL = 3
         const val TYPE_FEED_PUNCH = 0
         const val TYPE_FEED_UGC = 4
+
+        val PAYLOAD_PUNCH = Any()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
             TYPE_FEED_PUNCH ->
                 FeedPunchViewHolder(
-                        LayoutInflater.from(parent.context).inflate(
-                                R.layout.item_feed_punch,
-                                parent,
-                                false
-                        )
+                    LayoutInflater.from(parent.context).inflate(
+                        R.layout.item_feed_punch,
+                        parent,
+                        false
+                    )
                 )
             TYPE_FEED_UGC ->
                 FeedUGCViewHolder(
-                        LayoutInflater.from(parent.context).inflate(
-                                R.layout.item_feed_ugc,
-                                parent,
-                                false
-                        )
+                    LayoutInflater.from(parent.context).inflate(
+                        R.layout.item_feed_ugc,
+                        parent,
+                        false
+                    )
                 )
             TYPE_TOP_ONE ->
 //                TopOneViewHolder(
@@ -132,9 +140,23 @@ class MainFeedAdapter(val listener: OnMainFeedClickListener? = null) :
         }
     }
 
+    override fun onBindViewHolder(
+        holder: RecyclerView.ViewHolder,
+        position: Int,
+        payloads: MutableList<Any>
+    ) {
+        if (payloads.contains(PAYLOAD_PUNCH)) {
+            if (holder is FeedPunchViewHolder) {
+                holder.payloadBind(getItem(position) as FeedPunchResp)
+            }
+        } else {
+            super.onBindViewHolder(holder, position, payloads)
+        }
+    }
+
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
-            is FeedPunchViewHolder -> holder.bind((getItem(position) as FeedPunchResp).count)
+            is FeedPunchViewHolder -> holder.bind((getItem(position) as FeedPunchResp))
             is TopOneViewHolder -> holder.bind((getItem(position) as FeedArticleResp).article)
             is TopTwoViewHolder -> holder.bind((getItem(position) as FeedArticleResp).article)
             is NormalViewHolder -> holder.bind((getItem(position) as FeedArticleResp).article)
@@ -143,17 +165,25 @@ class MainFeedAdapter(val listener: OnMainFeedClickListener? = null) :
     }
 
     inner class FeedPunchViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        init {
+        fun bind(params: FeedPunchResp) {
             listener?.let { listener ->
                 itemView.setOnClickListener {
+                    //                    if (!params.hasPunch) {
                     listener.onClick(TYPE_FEED_PUNCH, null)
+//                    }
                 }
             }
+            val content = itemView.context.getString(R.string.string_punch_title_sub, params.count)
+            itemView.findViewById<TextView>(R.id.tv_title_sub).text = Html.fromHtml(content)
+            itemView.findViewById<TextView>(R.id.btn_punch).text =
+                if (params.hasPunch) "今天已打卡" else "打卡"
         }
 
-        fun bind(count: Int) {
-            val content = itemView.context.getString(R.string.string_punch_title_sub, count)
+        fun payloadBind(params: FeedPunchResp){
+            val content = itemView.context.getString(R.string.string_punch_title_sub, params.count)
             itemView.findViewById<TextView>(R.id.tv_title_sub).text = Html.fromHtml(content)
+            itemView.findViewById<TextView>(R.id.btn_punch).text =
+                if (params.hasPunch) "今天已打卡" else "打卡"
         }
     }
 

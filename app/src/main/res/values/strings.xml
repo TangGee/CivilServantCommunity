@@ -1,5 +1,4 @@
 <resources>
     <string name="app_name">CivilServantCommunity</string>
-
-    <string name="string_punch_title_sub"><Data><![CDATA[已打卡<font color="#ffffff"><b>%1$d</b></font>天~]]></Data></string>
+    <string name="string_punch_title_sub"><![CDATA[已打卡<font color="#000000"><b>%1$d</b></font>天~]]></string>
 </resources>
