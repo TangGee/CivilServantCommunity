@@ -2,6 +2,7 @@ package com.mdove.civilservantcommunity.account.bean
 
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import com.mdove.civilservantcommunity.account.UpdateInfoResult
 import kotlinx.android.parcel.Parcelize
 
 /**

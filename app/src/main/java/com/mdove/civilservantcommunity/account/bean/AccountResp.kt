@@ -25,3 +25,16 @@ data class MePageDataResp(
     @SerializedName("user_type") val userType: String
 ) : Parcelable
 
+@Parcelize
+data class UserInfoParams(
+    @SerializedName("uid") val uid: String,
+    @SerializedName("user_name") val userName: String,
+    @SerializedName("phone") val phone: String,
+    @SerializedName("article_list") val articleList: List<ArticleResp>? = null,
+    @SerializedName("user_type") val userType: String
+) : Parcelable
+
+fun MePageDataResp.toUserInfoParams(): UserInfoParams {
+    return UserInfoParams(this.uid, this.userName, this.phone, this.articleList, this.userType)
+}
+

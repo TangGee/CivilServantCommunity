@@ -16,15 +16,21 @@ import com.mdove.civilservantcommunity.config.AppConfig
 import com.mdove.civilservantcommunity.feed.adapter.MePageAdapter
 import com.mdove.civilservantcommunity.feed.viewmodel.MePageViewModel
 import com.mdove.civilservantcommunity.account.bean.MePageDataResp
+import com.mdove.civilservantcommunity.account.bean.UserInfoParams
+import com.mdove.civilservantcommunity.account.bean.toUserInfoParams
+import com.mdove.civilservantcommunity.account.gotoUpdateUserInfo
 import com.mdove.civilservantcommunity.account.utils.IdentitysHelper
 import com.mdove.civilservantcommunity.base.bean.UserInfo
+import com.mdove.civilservantcommunity.base.launcher.ActivityLauncher
 import com.mdove.civilservantcommunity.detailfeed.DetailFeedActivity
 import com.mdove.civilservantcommunity.detailfeed.bean.DetailFeedParams
 import com.mdove.civilservantcommunity.feed.adapter.OnMePageClickListener
 import com.mdove.civilservantcommunity.feed.bean.ArticleResp
 import com.mdove.civilservantcommunity.ugc.MainUGCActivity
 import com.mdove.dependent.common.networkenhance.valueobj.Status
+import com.mdove.dependent.common.threadpool.FastMain
 import kotlinx.android.synthetic.main.fragment_me_page.*
+import kotlinx.coroutines.launch
 
 /**
  * Created by MDove on 2019-09-07.
@@ -65,7 +71,7 @@ class MePageFragment : BaseFragment() {
                 Status.SUCCESS -> {
                     res.data?.data?.let {
                         srf.isRefreshing = false
-                        refreshUI(it)
+                        viewModel.paramsLiveData.value = it.toUserInfoParams()
                     }
                 }
                 Status.LOADING -> {
@@ -77,6 +83,10 @@ class MePageFragment : BaseFragment() {
             }
         })
 
+        viewModel.paramsLiveData.observe(this, Observer {
+            refreshUI(it)
+        })
+
         srf.setOnRefreshListener {
             AppConfig.getUserInfo()?.let {
                 viewModel.reqMePage(it.uid)
@@ -84,8 +94,16 @@ class MePageFragment : BaseFragment() {
         }
 
         btn_update.setOnClickListener {
-            context?.let {
-                UpdateUserInfoActivity.gotoUpdateUserInfo(it)
+            context?.let { context ->
+                (activity as? ActivityLauncher)?.let { launcher ->
+                    launch(FastMain) {
+                        viewModel.paramsLiveData.value?.let {
+                            launcher.gotoUpdateUserInfo(context, it).params?.let { resultParams ->
+                                viewModel.paramsLiveData.value = resultParams
+                            }
+                        }
+                    }
+                }
             }
         }
 
@@ -114,14 +132,14 @@ class MePageFragment : BaseFragment() {
         }
     }
 
-    private fun refreshUI(resp: MePageDataResp) {
-        AppConfig.setUserInfo(UserInfo(resp.uid, resp.userName))
-        tv_name.text = resp.userName
-        tv_type.text = IdentitysHelper.getIdentity(resp.userType)
-        if (!resp.articleList.isNullOrEmpty()) {
+    private fun refreshUI(params: UserInfoParams) {
+        AppConfig.setUserInfo(UserInfo(params.uid, params.userName))
+        tv_name.text = params.userName
+        tv_type.text = IdentitysHelper.getIdentity(params.userType)
+        if (!params.articleList.isNullOrEmpty()) {
             layout_empty.visibility = View.GONE
             layout_edit.visibility = View.VISIBLE
-            mAdapter.submitList(resp.articleList)
+            mAdapter.submitList(params.articleList)
         } else {
             layout_edit.visibility = View.GONE
             layout_empty.visibility = View.VISIBLE

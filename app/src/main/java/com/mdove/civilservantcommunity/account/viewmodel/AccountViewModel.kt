@@ -1,9 +1,7 @@
 package com.mdove.civilservantcommunity.account.viewmodel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
-import androidx.lifecycle.ViewModel
+import android.text.TextUtils
+import androidx.lifecycle.*
 import com.mdove.civilservantcommunity.account.bean.*
 import com.mdove.civilservantcommunity.account.repository.AccountRepository
 import com.mdove.civilservantcommunity.account.utils.IdentitysHelper
@@ -21,7 +19,7 @@ class AccountViewModel : ViewModel() {
     private val identityKeys = mutableListOf("u001", "u002", "u003", "u004", "u005")
     var selectIdentity: String? = null
     private val repository = AccountRepository()
-    lateinit var userInfo: UserInfo
+    lateinit var userInfoParamsFromMePage: UserInfoParams
 
     private var registerReq = MutableLiveData<RegisterInfoParams>()
     private var loginReq = MutableLiveData<LoginInfoParams>()
@@ -37,6 +35,20 @@ class AccountViewModel : ViewModel() {
             repository.updateUserInfo(it)
         }
 
+    val userInfoParamsLiveData = MediatorLiveData<UserInfoParams>().apply {
+        addSource(updateUserInfoResp) {
+            if (it.data?.status == 0) {
+                value = userInfoParamsFromMePage.copy(
+                    userName = updateUserInfoReq.value?.userName
+                        ?: userInfoParamsFromMePage.userName,
+                    userType = updateUserInfoReq.value?.userType
+                        ?: userInfoParamsFromMePage.userType
+                )
+
+            }
+        }
+    }
+
     val loginResp: LiveData<Resource<NormalResp<LoginDataResp>>> =
         Transformations.switchMap(loginReq) {
             repository.login(it)
@@ -50,10 +62,18 @@ class AccountViewModel : ViewModel() {
         registerReq.value = params
     }
 
-    fun updateUserInfo(name:String) {
+    fun updateUserInfo(name: String) {
         AppConfig.getUserInfo()?.let {
-            updateUserInfoReq.value = UpdateUserInfoParams(selectIdentity, it.uid, name)
+            updateUserInfoReq.value = UpdateUserInfoParams(
+                selectIdentity,
+                it.uid,
+                if (TextUtils.isEmpty(name)) userInfoParamsFromMePage.userName else name
+            )
         }
+    }
+
+    fun hasChange(name: String): Boolean {
+        return !(name == userInfoParamsFromMePage.userName && selectIdentity == userInfoParamsFromMePage.userType)
     }
 
     fun reqLogin(params: LoginInfoParams) {

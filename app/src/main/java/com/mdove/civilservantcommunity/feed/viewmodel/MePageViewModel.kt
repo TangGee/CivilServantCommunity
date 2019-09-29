@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import com.mdove.civilservantcommunity.account.bean.MePageDataResp
+import com.mdove.civilservantcommunity.account.bean.UserInfoParams
 import com.mdove.civilservantcommunity.account.repository.AccountRepository
 import com.mdove.dependent.common.network.NormalResp
 import com.mdove.dependent.common.networkenhance.valueobj.Resource
@@ -14,6 +15,7 @@ import com.mdove.dependent.common.networkenhance.valueobj.Resource
  */
 class MePageViewModel : ViewModel() {
     private val accountRepository = AccountRepository()
+    val paramsLiveData = MutableLiveData<UserInfoParams>()
 
     private val loadType = MutableLiveData<String>()
     val data: LiveData<Resource<NormalResp<MePageDataResp>>> = Transformations.switchMap(loadType) {
