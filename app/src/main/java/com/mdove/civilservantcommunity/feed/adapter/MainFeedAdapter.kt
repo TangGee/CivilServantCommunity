@@ -13,6 +13,7 @@ import com.mdove.civilservantcommunity.feed.bean.BaseFeedResp
 import com.mdove.civilservantcommunity.feed.bean.FeedArticleResp
 import com.mdove.civilservantcommunity.feed.bean.FeedPunchResp
 import android.text.Html
+import com.mdove.dependent.common.utils.TimeUtils
 
 
 /**
@@ -205,7 +206,9 @@ class MainFeedAdapter(val listener: OnMainFeedClickListener? = null) :
                 }
             }
             itemView.findViewById<TextView>(R.id.tv_title).text = data.title
-            itemView.findViewById<TextView>(R.id.tv_name).text = data.maketime
+            itemView.findViewById<TextView>(R.id.tv_name).text = data.maketime?.let {
+                TimeUtils.getDateChinese(java.lang.Long.getLong(it))
+            } ?: ""
             itemView.findViewById<TextView>(R.id.tv_content).text = data.content
             itemView.findViewById<TextView>(R.id.tv_content).text = data.content
         }

@@ -72,8 +72,8 @@ class LoginFragment : BaseFragment(), ITransitionProvider {
         })
 
         tv_ok.setOnClickListener {
-            val phone = et_phone.text.toString()
-            val password = et_password.text.toString()
+            val phone = et_phone.text.toString().trim()
+            val password = et_password.text.toString().trim()
             if (!TextUtils.isEmpty(phone) && !TextUtils.isEmpty(password)) {
                 mAccountViewModel.reqLogin(LoginInfoParams(phone, password))
             } else {
