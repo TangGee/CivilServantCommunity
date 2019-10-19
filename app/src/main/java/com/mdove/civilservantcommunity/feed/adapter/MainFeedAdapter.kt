@@ -60,6 +60,7 @@ class MainFeedAdapter(val listener: OnMainFeedClickListener? = null) :
         const val TYPE_TOP_TWO = 2
         const val TYPE_NORMAL = 3
         const val TYPE_FEED_PUNCH = 0
+        const val TYPE_FEED_PLAN = 5
         const val TYPE_FEED_UGC = 4
 
         val PAYLOAD_PUNCH = Any()
@@ -82,6 +83,14 @@ class MainFeedAdapter(val listener: OnMainFeedClickListener? = null) :
                         parent,
                         false
                     )
+                )
+            TYPE_FEED_PLAN ->
+                FeedPlanViewHolder(
+                        LayoutInflater.from(parent.context).inflate(
+                                R.layout.item_feed_day_plan,
+                                parent,
+                                false
+                        )
                 )
             TYPE_TOP_ONE ->
 //                TopOneViewHolder(
@@ -135,8 +144,9 @@ class MainFeedAdapter(val listener: OnMainFeedClickListener? = null) :
         return when (position) {
             0 -> TYPE_FEED_PUNCH
             1 -> TYPE_FEED_UGC
-            2 -> TYPE_TOP_ONE
-            3 -> TYPE_TOP_TWO
+            3 -> TYPE_TOP_ONE
+            4 -> TYPE_TOP_TWO
+            2 -> TYPE_FEED_PLAN
             else -> TYPE_NORMAL
         }
     }
@@ -193,6 +203,16 @@ class MainFeedAdapter(val listener: OnMainFeedClickListener? = null) :
             listener?.let { listener ->
                 itemView.setOnClickListener {
                     listener.onClick(TYPE_FEED_UGC, null)
+                }
+            }
+        }
+    }
+
+    inner class FeedPlanViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        init {
+            listener?.let { listener ->
+                itemView.setOnClickListener {
+                    listener.onClick(TYPE_FEED_PLAN, null)
                 }
             }
         }

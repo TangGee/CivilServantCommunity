@@ -42,6 +42,7 @@ class MainFeedViewModel : ViewModel() {
                         )
                     }
                     temp.add(FeedUGCResp())
+                    temp.add(FeedPlanResp())
                     temp.addAll(it.data?.data?.map { article ->
                         FeedArticleResp(article)
                     } ?: mutableListOf<BaseFeedResp>())

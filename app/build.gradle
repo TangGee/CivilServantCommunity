@@ -40,10 +40,10 @@ android {
     }
 
     signingConfigs {
-        mdove {
-            storeFile file("$rootProject.projectDir/tool/keystore/EasyCopy.jks")
+        sweetSignConfig {
+            storeFile file("$rootProject.projectDir/tool/keystore/PasswordGuard.jks")
             storePassword "wjzj000"
-            keyAlias "easycopy"
+            keyAlias "passwordguard"
             keyPassword "wjzj000"
         }
         debug {

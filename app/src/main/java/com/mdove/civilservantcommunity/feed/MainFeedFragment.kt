@@ -17,6 +17,7 @@ import com.mdove.civilservantcommunity.feed.adapter.MainFeedAdapter
 import com.mdove.civilservantcommunity.feed.adapter.OnMainFeedClickListener
 import com.mdove.civilservantcommunity.feed.bean.ArticleResp
 import com.mdove.civilservantcommunity.feed.viewmodel.MainFeedViewModel
+import com.mdove.civilservantcommunity.plan.PlanActivity
 import com.mdove.civilservantcommunity.punch.bean.PunchReq
 import com.mdove.civilservantcommunity.punch.viewmodel.PunchViewModel
 import com.mdove.civilservantcommunity.ugc.MainUGCActivity
@@ -44,6 +45,11 @@ class MainFeedFragment : BaseFragment() {
                 MainFeedAdapter.TYPE_FEED_UGC -> {
                     context?.let {
                         MainUGCActivity.gotoMainUGC(it)
+                    }
+                }
+                MainFeedAdapter.TYPE_FEED_PLAN -> {
+                    context?.let {
+                        PlanActivity.gotoPlan(it)
                     }
                 }
                 else -> {
