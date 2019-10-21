@@ -5,9 +5,6 @@ import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-data class PlanModuleModel(val data: List<PlanModuleBean>? = null):Parcelable
-
-@Parcelize
 data class PlanModuleBean(@SerializedName("uid") val uid: String? = null,
                           @SerializedName("module_id")val  moduleId: String? = null,
                           @SerializedName("module_name")val  moduleName: String? = null,

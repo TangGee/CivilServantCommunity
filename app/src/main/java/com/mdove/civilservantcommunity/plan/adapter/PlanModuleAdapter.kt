@@ -8,17 +8,17 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.mdove.civilservantcommunity.R
-import com.mdove.civilservantcommunity.plan.PlanModuleModel
+import com.mdove.civilservantcommunity.plan.PlanModuleBean
 
-class PlanModuleAdapter : ListAdapter<PlanModuleModel, RecyclerView.ViewHolder>(object :
-        DiffUtil.ItemCallback<PlanModuleModel>() {
-    override fun areContentsTheSame(oldItem: PlanModuleModel, newItem: PlanModuleModel): Boolean {
+class PlanModuleAdapter : ListAdapter<List<PlanModuleBean>, RecyclerView.ViewHolder>(object :
+        DiffUtil.ItemCallback<List<PlanModuleBean>>() {
+    override fun areContentsTheSame(oldItem: List<PlanModuleBean>, newItem: List<PlanModuleBean>): Boolean {
         return false
     }
 
     override fun areItemsTheSame(
-            oldItem: PlanModuleModel,
-            newItem: PlanModuleModel
+            oldItem: List<PlanModuleBean>,
+            newItem: List<PlanModuleBean>
     ): Boolean {
         return oldItem === newItem
     }
@@ -37,11 +37,11 @@ class PlanModuleAdapter : ListAdapter<PlanModuleModel, RecyclerView.ViewHolder>(
 
     inner class PlanModuleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        fun bind(data: PlanModuleModel) {
+        fun bind(data: List<PlanModuleBean>) {
             itemView.findViewById<RecyclerView>(R.id.rlv).apply {
                 this.layoutManager = LinearLayoutManager(itemView.context)
                 this.adapter = PlanModulePlanAdapter().apply {
-                    this.submitList(data.data)
+                    this.submitList(data)
                 }
             }
         }

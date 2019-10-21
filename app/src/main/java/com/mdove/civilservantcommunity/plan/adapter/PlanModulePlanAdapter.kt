@@ -5,12 +5,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.mdove.civilservantcommunity.R
 import com.mdove.civilservantcommunity.plan.PlanModuleBean
-import com.mdove.civilservantcommunity.plan.PlanModuleModel
 
 class PlanModulePlanAdapter : ListAdapter<PlanModuleBean, RecyclerView.ViewHolder>(object :
         DiffUtil.ItemCallback<PlanModuleBean>() {
