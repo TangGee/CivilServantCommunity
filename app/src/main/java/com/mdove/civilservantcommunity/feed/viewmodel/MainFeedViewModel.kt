@@ -33,6 +33,8 @@ class MainFeedViewModel : ViewModel() {
             addSource(feedData) {
                 val temp = mutableListOf<BaseFeedResp>()
                 CoroutineScope(FastMain).launch {
+                    temp.add(FeedPlanResp())
+                    temp.add(FeedUGCResp())
                     withContext(MDoveBackgroundPool) {
                         temp.add(
                             FeedPunchResp(
@@ -41,8 +43,6 @@ class MainFeedViewModel : ViewModel() {
                             )
                         )
                     }
-                    temp.add(FeedUGCResp())
-                    temp.add(FeedPlanResp())
                     temp.addAll(it.data?.data?.map { article ->
                         FeedArticleResp(article)
                     } ?: mutableListOf<BaseFeedResp>())

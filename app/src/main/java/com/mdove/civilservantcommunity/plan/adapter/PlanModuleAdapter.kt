@@ -39,7 +39,7 @@ class PlanModuleAdapter : ListAdapter<List<PlanModuleBean>, RecyclerView.ViewHol
 
         fun bind(data: List<PlanModuleBean>) {
             itemView.findViewById<RecyclerView>(R.id.rlv).apply {
-                this.layoutManager = LinearLayoutManager(itemView.context)
+                this.layoutManager = LinearLayoutManager(this.context)
                 this.adapter = PlanModulePlanAdapter().apply {
                     this.submitList(data)
                 }

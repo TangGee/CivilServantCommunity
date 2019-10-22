@@ -142,11 +142,11 @@ class MainFeedAdapter(val listener: OnMainFeedClickListener? = null) :
 
     override fun getItemViewType(position: Int): Int {
         return when (position) {
-            0 -> TYPE_FEED_PUNCH
+            2 -> TYPE_FEED_PUNCH
             1 -> TYPE_FEED_UGC
             3 -> TYPE_TOP_ONE
             4 -> TYPE_TOP_TWO
-            2 -> TYPE_FEED_PLAN
+            0 -> TYPE_FEED_PLAN
             else -> TYPE_NORMAL
         }
     }
