@@ -23,6 +23,7 @@ data class ArticleResp(
 data class FeedPunchResp(val count: Int = 0, var hasPunch: Boolean = false) : BaseFeedResp()
 data class FeedUGCResp(val name :String ="打卡"):BaseFeedResp()
 data class FeedPlanResp(val name :String ="今日计划"):BaseFeedResp()
+data class FeedTodayPlanResp(val name :String ="今日计划"):BaseFeedResp()
 
 @Parcelize
 data class FeedArticleResp(val article: ArticleResp):BaseFeedResp(),Parcelable

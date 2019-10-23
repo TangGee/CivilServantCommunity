@@ -34,6 +34,7 @@ class MainFeedViewModel : ViewModel() {
                 val temp = mutableListOf<BaseFeedResp>()
                 CoroutineScope(FastMain).launch {
                     temp.add(FeedPlanResp())
+                    temp.add(FeedTodayPlanResp())
                     temp.add(FeedUGCResp())
                     withContext(MDoveBackgroundPool) {
                         temp.add(

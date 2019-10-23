@@ -9,7 +9,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
 import com.mdove.civilservantcommunity.R
-import com.mdove.civilservantcommunity.view.timelineitemdecoration.util.Util
+import com.mdove.dependent.common.recyclerview.timelineitemdecoration.util.Util
 
 /**
  * *          _       _

@@ -1,4 +1,4 @@
-package com.mdove.civilservantcommunity.view.timelineitemdecoration.itemdecoration
+package com.mdove.dependent.common.recyclerview.timelineitemdecoration.itemdecoration
 
 import android.content.Context
 import android.graphics.Canvas
@@ -7,20 +7,19 @@ import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.drawable.Drawable
 import android.view.View
-import android.view.ViewGroup
 
 import androidx.annotation.IntDef
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 
-import com.mdove.civilservantcommunity.R
-import com.mdove.civilservantcommunity.view.timelineitemdecoration.util.Util
+import com.mdove.dependent.common.recyclerview.timelineitemdecoration.util.Util
 
 import java.lang.annotation.Retention
 import java.lang.annotation.RetentionPolicy
 
 import android.R.attr.drawableRight
+import com.mdove.dependent.common.R
 
 /**
  * *          _       _
@@ -127,15 +126,15 @@ class DotItemDecoration(private val mContext: Context, private val mConfig: Conf
         mDotPaint.color = mConfig.mDotColor
 
         if (mConfig.mOrientation == VERTICAL) {
-            drawCenterVerticalLine(c, parent)
+            drawVerticalLine(c, parent)
             drawVerticalItem(c, parent)
         } else {
-            drawCenterHorizontalLine(c, parent)
+            drawHorizontalLine(c, parent)
             drawHorizontalItem(c, parent)
         }
     }
 
-    fun drawCenterVerticalLine(c: Canvas, parent: RecyclerView) {
+    private fun drawVerticalLine(c: Canvas, parent: RecyclerView) {
         val top = parent.paddingTop
         val parentWidth = parent.measuredWidth
         val bottom: Int
@@ -150,17 +149,20 @@ class DotItemDecoration(private val mContext: Context, private val mConfig: Conf
         } else {
             bottom = mConfig.mBottomDistance + lastChild.bottom
         }
-
+        val lineX = if (mConfig.mOnlyLeft)
+            mConfig.mOnlyLeftMarginLeft - mConfig.mLineWidth / 2 +mConfig.mDotRadius/2
+        else
+            (parentWidth / 2).toFloat()
         c.drawLine(
-            (parentWidth / 2).toFloat(),
-            top.toFloat(),
-            (parentWidth / 2).toFloat(),
-            bottom.toFloat(),
-            mLinePaint
+                lineX,
+                top.toFloat(),
+                lineX,
+                bottom.toFloat(),
+                mLinePaint
         )
     }
 
-    fun drawVerticalItem(c: Canvas, parent: RecyclerView) {
+    private fun drawVerticalItem(c: Canvas, parent: RecyclerView) {
         val parentWidth = parent.measuredWidth
         val childCount = parent.childCount
         for (i in 0 until childCount) {
@@ -177,7 +179,7 @@ class DotItemDecoration(private val mContext: Context, private val mConfig: Conf
                 mDrawable!!.setBounds(drawableLeft, top, drawableRight, bottom)
                 mDrawable!!.draw(c)
             } else {
-                drawableLeft = parentWidth / 2
+                drawableLeft = if (mConfig.mOnlyLeft) mConfig.mOnlyLeftMarginLeft.toInt() else parentWidth / 2
 
                 if (mConfig.mDotInItemCenter) {
                     c.drawCircle(
@@ -222,9 +224,13 @@ class DotItemDecoration(private val mContext: Context, private val mConfig: Conf
 
                 mTextPaint.getTextBounds(mConfig.mEnd, 0, mConfig.mEnd.length, mTextRect)
                 mTextPaint.textSize = mConfig.mTextSize.toFloat()
+                val textX = if (mConfig.mOnlyLeft)
+                    mConfig.mOnlyLeftMarginLeft - mConfig.mLineWidth / 2 +mConfig.mDotRadius/2
+                else
+                    (parentWidth / 2).toFloat()
                 c.drawText(
                     mConfig.mEnd,
-                    (parentWidth / 2 - mTextRect.width() / 2).toFloat(),
+                    (textX - mTextRect.width() / 2).toFloat(),
                     (bottom + mConfig.mBottomDistance + mConfig.mDotPaddingText + mConfig.mTextSize).toFloat(),
                     mTextPaint
                 )
@@ -232,7 +238,7 @@ class DotItemDecoration(private val mContext: Context, private val mConfig: Conf
         }
     }
 
-    fun drawCenterHorizontalLine(c: Canvas, parent: RecyclerView) {
+    private fun drawHorizontalLine(c: Canvas, parent: RecyclerView) {
         val left = parent.paddingLeft
         val parentHeight = parent.measuredHeight
         val right: Int
@@ -257,13 +263,13 @@ class DotItemDecoration(private val mContext: Context, private val mConfig: Conf
         )
     }
 
-    fun drawHorizontalItem(c: Canvas, parent: RecyclerView) {
+    private fun drawHorizontalItem(c: Canvas, parent: RecyclerView) {
         val parentHeight = parent.measuredHeight
         val childCount = parent.childCount
 
         for (i in 0 until childCount) {
             val child = parent.getChildAt(i)
-            var left = child.left + mConfig.mDotPaddingTop
+            var left = if (mConfig.mOnlyLeft) 0 else child.left + mConfig.mDotPaddingTop
             var right: Int
             val drawableLeft: Int
 
@@ -275,7 +281,7 @@ class DotItemDecoration(private val mContext: Context, private val mConfig: Conf
                 mDrawable!!.setBounds(drawableLeft, left, drawableRight, right)
                 mDrawable!!.draw(c)
             } else {
-                drawableLeft = parentHeight / 2
+                drawableLeft = if(mConfig.mOnlyLeft) 20 else parentHeight / 2
 
                 if (mConfig.mDotInItemCenter) {
                     c.drawCircle(
@@ -351,14 +357,12 @@ class DotItemDecoration(private val mContext: Context, private val mConfig: Conf
         var mDotPaddingText = 10
         var mBottomDistance = 30
         var mDotInItemCenter = false
+        var mOnlyLeft = false
+        var mOnlyLeftMarginLeft = 20F
     }
 
     class Builder(private val mContext: Context) {
-        private val mConfig: Config
-
-        init {
-            mConfig = Config()
-        }
+        private val mConfig: Config = Config()
 
         fun setOrientation(@Orientation orientation: Int): Builder {
             mConfig.mOrientation = orientation
@@ -367,6 +371,16 @@ class DotItemDecoration(private val mContext: Context, private val mConfig: Conf
 
         fun setItemStyle(@ItemStyle itemStyle: Int): Builder {
             mConfig.mStyle = itemStyle
+            return this
+        }
+
+        fun setOnlyLeft(onlyLeft :Boolean): Builder{
+            mConfig.mOnlyLeft = onlyLeft
+            return this
+        }
+
+        fun setOnlyLeftMarginLeft(marginLeft :Float): Builder{
+            mConfig.mOnlyLeftMarginLeft = marginLeft
             return this
         }
 

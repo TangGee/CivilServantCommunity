@@ -1,4 +1,4 @@
-package com.mdove.civilservantcommunity.view.timelineitemdecoration.itemdecoration
+package com.mdove.dependent.common.recyclerview.timelineitemdecoration.itemdecoration
 
 import android.view.View
 
