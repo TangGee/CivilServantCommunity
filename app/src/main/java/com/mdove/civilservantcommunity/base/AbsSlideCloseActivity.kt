@@ -1,13 +1,11 @@
 package com.mdove.civilservantcommunity.base
 
-import android.app.LauncherActivity
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.core.content.ContextCompat
 import androidx.slidingpanelayout.widget.SlidingPaneLayout
-import com.mdove.civilservantcommunity.base.launcher.BaseLauncherActivity
 import com.mdove.dependent.common.view.sliding.MDovePanelSlideListener
 import com.mdove.dependent.common.view.sliding.PagerEnabledSlidingPaneLayout
 import com.ss.android.buzz.base.MDoveSlideableListener
@@ -15,7 +13,7 @@ import com.ss.android.buzz.base.MDoveSlideableListener
 /**
  * Created by MDove on 2019-10-26.
  */
-abstract class AbsSlideCloseActivity : BaseLauncherActivity(), MDovePanelSlideListener,
+abstract class AbsSlideCloseActivity : BaseActivity(), MDovePanelSlideListener,
     MDoveSlideableListener {
 
     protected lateinit var mSlidingPaneLayout: PagerEnabledSlidingPaneLayout

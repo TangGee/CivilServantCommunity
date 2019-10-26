@@ -5,13 +5,13 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import com.mdove.civilservantcommunity.R
-import com.mdove.civilservantcommunity.base.BaseActivity
+import com.mdove.civilservantcommunity.base.AbsSlideCloseActivity
 import com.mdove.civilservantcommunity.detailfeed.bean.DetailFeedParams
 
 /**
  * Created by MDove on 2019-09-09.
  */
-class DetailFeedActivity : BaseActivity() {
+class DetailFeedActivity : AbsSlideCloseActivity() {
     companion object {
         const val DETAIL_FEED_ACTIVITY_PARAMS = "detail_feed_activity_params"
 

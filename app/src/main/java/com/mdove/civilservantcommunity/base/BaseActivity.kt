@@ -11,7 +11,7 @@ import kotlin.coroutines.CoroutineContext
 /**
  * Created by MDove on 2019-09-02.
  */
-open class BaseActivity : AbsSlideCloseActivity(), CoroutineScope {
+open class BaseActivity : BaseLauncherActivity(), CoroutineScope {
 
     companion object {
         const val TYPE_ANIM_NORMAL = 0

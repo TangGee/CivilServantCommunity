@@ -4,9 +4,9 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import com.mdove.civilservantcommunity.R
-import com.mdove.civilservantcommunity.base.BaseActivity
+import com.mdove.civilservantcommunity.base.AbsSlideCloseActivity
 
-class PlanActivity :BaseActivity() {
+class PlanActivity : AbsSlideCloseActivity() {
     companion object {
         private const val TAG_PLAN_FRAGMENT = "tag_plan_fragment"
 
