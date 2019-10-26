@@ -12,7 +12,6 @@ import com.mdove.civilservantcommunity.base.BaseFragment
 import com.mdove.civilservantcommunity.plan.adapter.PlanModuleAdapter
 import com.mdove.civilservantcommunity.plan.viewmodel.PlanViewModel
 import com.mdove.dependent.common.networkenhance.valueobj.Status
-import com.mdove.dependent.common.recyclerview.ViewPagerLayoutManager
 import kotlinx.android.synthetic.main.fragment_plan.*
 
 class PlanFragment : BaseFragment() {
@@ -26,14 +25,18 @@ class PlanFragment : BaseFragment() {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.fragment_plan, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         view_toolbar.setTitle("我的计划")
-        rlv.layoutManager =  ViewPagerLayoutManager(context,LinearLayoutManager.VERTICAL)
+        rlv.layoutManager = LinearLayoutManager(context)
         rlv.adapter = adapter
         viewModel.data.observe(this, Observer {
             when (it.status) {

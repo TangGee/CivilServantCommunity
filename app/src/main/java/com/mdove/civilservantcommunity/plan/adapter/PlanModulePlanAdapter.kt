@@ -37,7 +37,6 @@ class PlanModulePlanAdapter : ListAdapter<PlanModuleBean, RecyclerView.ViewHolde
     inner class ModulePlanViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         fun bind(data: PlanModuleBean) {
-            itemView.findViewById<TextView>(R.id.tv_plan_name).text = data.moduleName
             itemView.findViewById<TextView>(R.id.tv_plan_content).text = data.content
         }
     }

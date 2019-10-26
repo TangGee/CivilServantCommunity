@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/view_toolbar"
+        android:layout_width="0dp"
+        android:layout_height="73dp"
+        android:background="@drawable/bg_normal_toolbar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <FrameLayout
+            android:id="@+id/layout_nick"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:layout_marginRight="12dp"
+            android:background="@drawable/bg_feed_detail_toolbar_name"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/stub">
+
+            <TextView
+                android:id="@+id/tv_toolbar_name"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:textColor="#00A8FF"
+                android:textSize="14sp"
+                tools:text="用户名字" />
+
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/tv_toolbar_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:ellipsize="end"
+            android:gravity="right"
+            android:maxLines="1"
+            android:textColor="@color/white_ae"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@+id/btn_back"
+            app:layout_constraintRight_toLeftOf="@+id/layout_nick"
+            app:layout_constraintTop_toBottomOf="@+id/stub"
+            tools:text="标题" />
+
+        <View
+            android:id="@+id/stub"
+            android:layout_width="0dp"
+            android:layout_height="25dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/btn_back"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="12dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/stub"
+            app:srcCompat="@drawable/vector_back" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</merge>

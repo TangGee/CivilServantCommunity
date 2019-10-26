@@ -8,15 +8,14 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.google.android.material.appbar.AppBarLayout
 import com.mdove.civilservantcommunity.R
 import com.mdove.civilservantcommunity.base.BaseFragment
 import com.mdove.civilservantcommunity.detailfeed.bean.DetailFeedParams
 import com.mdove.civilservantcommunity.detailfeed.bean.DetailFeedResp
 import com.mdove.civilservantcommunity.detailfeed.viewmodel.DetailFeedViewModel
 import com.mdove.dependent.common.networkenhance.valueobj.Status
-import com.mdove.dependent.common.utils.TimeUtils
-import kotlinx.android.synthetic.main.fragment_detail_feed.*
-import java.sql.Time
+import kotlinx.android.synthetic.main.fragment_detail_feed_new.*
 
 /**
  * Created by MDove on 2019-09-09.
@@ -52,7 +51,7 @@ class DetailFeedFragment : BaseFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_detail_feed, container, false)
+        return inflater.inflate(R.layout.fragment_detail_feed_new, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -77,18 +76,35 @@ class DetailFeedFragment : BaseFragment() {
         }
 
         viewModel.reqDetailFeed(params.aid)
+        app_bar_layout.addOnOffsetChangedListener(OnOffsetChangedListener())
     }
 
     private fun updateUI(data: DetailFeedResp?) {
         data?.let {
-            tv_toolbar_name.text =
+            head_view.updateUI(it)
+            tv_name.text =
                 if (TextUtils.isEmpty(it.userInfo?.username)) "匿名用户" else it.userInfo?.username
-            tv_name.text = it.title ?: ""
+            tv_type.text = "暂无字段"
             tv_title.text = it.title ?: ""
             tv_content.text = it.content
             it.maketime?.let {
                 tv_time.text = it
             }
+        }
+    }
+
+    inner class OnOffsetChangedListener : AppBarLayout.OnOffsetChangedListener {
+        override fun onOffsetChanged(appBarLayout: AppBarLayout, verticalOffset: Int) {
+            if (!srl.isRefreshing) {
+                srl.isEnabled = verticalOffset >= 0
+            }
+            val visibleHeaderHeight =
+                app_bar_layout.height - if (head_view.visibility == View.VISIBLE) {
+                    head_view.height
+                } else {
+                    0
+                } - head_view.height
+            head_view.updateHeaderVerticalOffset(verticalOffset, visibleHeaderHeight)
         }
     }
 }
