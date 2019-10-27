@@ -156,6 +156,13 @@
 
     </declare-styleable>
 
+    <declare-styleable name="StrokeCircle">
+        <attr name="sc_stroke_width" format="dimension" />
+        <attr name="sc_stroke_color" format="color" />
+        <attr name="sc_circle_width" format="dimension" />
+        <attr name="sc_circle_color" format="color" />
+    </declare-styleable>
+
     <declare-styleable name="RoundCornerView">
         <attr name="allRadius" format="dimension|reference" />
         <attr name="leftTopRadius" format="dimension|reference" />

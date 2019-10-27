@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import androidx.core.view.marginLeft
 import com.mdove.dependent.common.R
 import com.mdove.dependent.common.utils.UIUtils
 
@@ -38,12 +39,14 @@ class TimeLineView @JvmOverloads constructor(
 
     private var tlvTopMargin = 0F
     private var tlvEndMargin = 0F
+    private var hasEndPoint = true
+    private var hasTopPoint = true
 
     private var topPoint: StrokeCircle
     private var centerPoint: StrokeCircle
     private var endPoint: StrokeCircle
-    private var lineeTop: View
-    private var lineeBottom: View
+    private var lineTop: View
+    private var lineBottom: View
 
     init {
         inflate(context, R.layout.view_time_line, this)
@@ -100,6 +103,10 @@ class TimeLineView @JvmOverloads constructor(
                 R.styleable.TimeLineView_tlv_end_point_margin,
                 tlvEndMargin
             )
+            hasEndPoint =
+                a.getBoolean(R.styleable.TimeLineView_has_end_point, hasEndPoint)
+            hasTopPoint =
+                a.getBoolean(R.styleable.TimeLineView_has_top_point, hasTopPoint)
             it.recycle()
 
         }
@@ -122,8 +129,15 @@ class TimeLineView @JvmOverloads constructor(
                 tlvTopPointColor
             )
         )
+        if (!hasTopPoint) {
+            topPoint.visibility = View.GONE
+        }
 
         endPoint = findViewById(R.id.end_point)
+        if (!hasEndPoint) {
+            endPoint.visibility = View.GONE
+        }
+
         tlvEndMargin.takeIf {
             it > 0
         }?.let {
@@ -153,27 +167,21 @@ class TimeLineView @JvmOverloads constructor(
             )
         )
 
-        lineeBottom = findViewById(R.id.line_bottom)
-        lineeTop = findViewById(R.id.line_top)
+        lineBottom = findViewById(R.id.line_bottom)
+        lineTop = findViewById(R.id.line_top)
         tlvLineWidth.takeIf {
             it > 0
         }?.let {
-            lineeBottom.layoutParams = LayoutParams(
-                it.toInt(),
-                it.toInt()
-            ).apply {
+            lineBottom.layoutParams = lineBottom.layoutParams.apply {
                 width = it.toInt()
             }
-            lineeTop.layoutParams = LayoutParams(
-                it.toInt(),
-                it.toInt()
-            ).apply {
+            lineTop.layoutParams = lineTop.layoutParams.apply {
                 width = it.toInt()
             }
         }
         try {
-            lineeBottom.setBackgroundColor(tlvLineStrokeColor)
-            lineeTop.setBackgroundColor(tlvLineStrokeColor)
+            lineBottom.setBackgroundColor(tlvLineStrokeColor)
+            lineTop.setBackgroundColor(tlvLineStrokeColor)
         } catch (e: Exception) {
 
         }

@@ -10,18 +10,28 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.mdove.civilservantcommunity.R
 import android.text.Html
+import androidx.appcompat.widget.AppCompatCheckBox
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mdove.civilservantcommunity.feed.bean.*
+import com.mdove.civilservantcommunity.plan.FeedTodayPlanParams
+import com.mdove.civilservantcommunity.plan.PlanToFeedBean
+import com.mdove.civilservantcommunity.plan.PlanToFeedParams
 import com.mdove.dependent.common.recyclerview.timelineitemdecoration.itemdecoration.DotItemDecoration
 import com.mdove.dependent.common.utils.TimeUtils
+import android.graphics.Paint.ANTI_ALIAS_FLAG
+import android.graphics.Paint.STRIKE_THRU_TEXT_FLAG
+import android.graphics.Paint
 
 
 /**
  * Created by MDove on 2019-09-06.
  */
-class MainFeedAdapter(val listener: OnMainFeedClickListener? = null) :
+class MainFeedAdapter(
+    val listener: OnMainFeedClickListener? = null,
+    val checkListener: OnMainFeedTodayPlanCheckListener? = null
+) :
     ListAdapter<BaseFeedResp, RecyclerView.ViewHolder>(object :
         DiffUtil.ItemCallback<BaseFeedResp>() {
         override fun areItemsTheSame(
@@ -35,6 +45,12 @@ class MainFeedAdapter(val listener: OnMainFeedClickListener? = null) :
                 return true
             }
             if ((oldItem is FeedTodayPlanResp) && (newItem is FeedTodayPlanResp)) {
+                return true
+            }
+            if ((oldItem is FeedTodayPlanResp) && (newItem is FeedTodayPlanResp)) {
+                return true
+            }
+            if ((oldItem is FeedTimeLineFeedTodayPlansResp) && (newItem is FeedTimeLineFeedTodayPlansResp)) {
                 return true
             }
             return oldItem === newItem
@@ -52,6 +68,9 @@ class MainFeedAdapter(val listener: OnMainFeedClickListener? = null) :
             }
             if ((oldItem is FeedTodayPlanResp) && (newItem is FeedTodayPlanResp)) {
                 return oldItem.params == newItem.params
+            }
+            if ((oldItem is FeedTimeLineFeedTodayPlansResp) && (newItem is FeedTimeLineFeedTodayPlansResp)) {
+                return oldItem.params.select == newItem.params.select
             }
             return true
         }
@@ -73,12 +92,15 @@ class MainFeedAdapter(val listener: OnMainFeedClickListener? = null) :
         const val TYPE_FEED_TODAY_PLAN = 6
         const val TYPE_FEED_QUICK_BTNS = 7
         const val TYPE_FEED_DATE = 8
+        const val TYPE_FEED_TIME_LINE_FEED_TITLE = 9
+        const val TYPE_FEED_TIME_LINE_FEED_TODAY_PLAM = 10
+        const val TYPE_FEED_TIME_LINE_FEED_TODAY_PLAM_TITLE = 11
 
         const val CLICK_QUICK_BTN_PLAN = 101
         const val CLICK_QUICK_BTN_PUNCH = 102
         const val CLICK_QUICK_BTN_UGC = 103
         const val CLICK_QUICK_BTN_ME = 104
-
+        const val CLICK_FEED_TIME_LINE_PLAN = 105
 
         val PAYLOAD_PUNCH = Any()
     }
@@ -89,6 +111,30 @@ class MainFeedAdapter(val listener: OnMainFeedClickListener? = null) :
                 FeedPunchViewHolder(
                     LayoutInflater.from(parent.context).inflate(
                         R.layout.item_feed_punch,
+                        parent,
+                        false
+                    )
+                )
+            TYPE_FEED_TIME_LINE_FEED_TODAY_PLAM ->
+                FeedTimeLineFeedTodayPlansViewHolder(
+                    LayoutInflater.from(parent.context).inflate(
+                        R.layout.item_main_feed_today_plans,
+                        parent,
+                        false
+                    )
+                )
+            TYPE_FEED_TIME_LINE_FEED_TODAY_PLAM_TITLE ->
+                FeedTimeLineFeedTodayPlansViewHolder(
+                    LayoutInflater.from(parent.context).inflate(
+                        R.layout.item_main_feed_today_plans_title,
+                        parent,
+                        false
+                    )
+                )
+            TYPE_FEED_TIME_LINE_FEED_TITLE ->
+                FeedTimeLineFeedTitleViewHolder(
+                    LayoutInflater.from(parent.context).inflate(
+                        R.layout.item_feed_main_time_line_title,
                         parent,
                         false
                     )
@@ -168,6 +214,9 @@ class MainFeedAdapter(val listener: OnMainFeedClickListener? = null) :
             is FeedTodayPlanResp -> TYPE_FEED_TODAY_PLAN
             is FeedQuickBtnsResp -> TYPE_FEED_QUICK_BTNS
             is FeedDateResp -> TYPE_FEED_DATE
+            is FeedTimeLineFeedTitleResp -> TYPE_FEED_TIME_LINE_FEED_TITLE
+            is FeedTimeLineFeedTodayPlansResp -> TYPE_FEED_TIME_LINE_FEED_TODAY_PLAM
+            is FeedTimeLineFeedTodayPlansTitleResp -> TYPE_FEED_TIME_LINE_FEED_TODAY_PLAM_TITLE
             else -> TYPE_NORMAL
         }
     }
@@ -194,6 +243,7 @@ class MainFeedAdapter(val listener: OnMainFeedClickListener? = null) :
             is NormalViewHolder -> holder.bind((getItem(position) as FeedArticleResp).article)
             is NewStyleViewHolder -> holder.bind((getItem(position) as FeedArticleResp).article)
             is FeedTodayPlanViewHolder -> holder.bind((getItem(position) as FeedTodayPlanResp))
+            is FeedTimeLineFeedTodayPlansViewHolder -> holder.bind((getItem(position) as FeedTimeLineFeedTodayPlansResp))
         }
     }
 
@@ -270,6 +320,30 @@ class MainFeedAdapter(val listener: OnMainFeedClickListener? = null) :
     }
 
     inner class FeedDateViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+    inner class FeedTimeLineFeedTodayPlansViewHolder(itemView: View) :
+        RecyclerView.ViewHolder(itemView) {
+
+        fun bind(resp: FeedTimeLineFeedTodayPlansResp) {
+            val title = itemView.findViewById<TextView>(R.id.text)
+            title.text = resp.params.planTitle
+            if (resp.params.select) {
+                title.paint.flags = Paint.STRIKE_THRU_TEXT_FLAG or Paint.ANTI_ALIAS_FLAG
+            } else {
+                title.paint.flags = 0
+            }
+            itemView.findViewById<AppCompatCheckBox>(R.id.cb_today_plan)
+                .setOnCheckedChangeListener { _, isChecked ->
+                    checkListener?.onCheck(resp.apply {
+                        this.params.select = isChecked
+                    }, isChecked)
+                }
+        }
+    }
+
+    inner class FeedTimeLineFeedTodayPlansTitleViewHolder(itemView: View) :
+        RecyclerView.ViewHolder(itemView)
+
+    inner class FeedTimeLineFeedTitleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
     inner class FeedQuickBtnsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         init {
             listener?.let { listener ->
@@ -357,4 +431,8 @@ class MainFeedAdapter(val listener: OnMainFeedClickListener? = null) :
 
 interface OnMainFeedClickListener {
     fun onClick(type: Int, resp: ArticleResp?)
+}
+
+interface OnMainFeedTodayPlanCheckListener {
+    fun onCheck(resp: FeedTimeLineFeedTodayPlansResp, isCheck: Boolean)
 }

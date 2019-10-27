@@ -11,10 +11,18 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mdove.civilservantcommunity.R
 import com.mdove.civilservantcommunity.base.BaseFragment
+import com.mdove.civilservantcommunity.feed.bean.FeedTimeLineFeedTodayPlansResp
 import com.mdove.civilservantcommunity.plan.adapter.PlanModuleAdapter
+import com.mdove.civilservantcommunity.plan.dao.TodayPlansEntity
 import com.mdove.civilservantcommunity.plan.viewmodel.PlanViewModel
+import com.mdove.civilservantcommunity.room.MainDb
 import com.mdove.dependent.common.networkenhance.valueobj.Status
+import com.mdove.dependent.common.threadpool.MDoveBackgroundPool
+import com.mdove.dependent.common.utils.dismissLoading
+import com.mdove.dependent.common.utils.showLoading
 import kotlinx.android.synthetic.main.fragment_plan.*
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class PlanFragment : BaseFragment() {
     private lateinit var viewModel: PlanViewModel
@@ -22,10 +30,28 @@ class PlanFragment : BaseFragment() {
         override fun onClick(type: Int) {
             activity?.let {
                 if (!it.isFinishing) {
-                    val intent = Intent()
-                    intent.putExtra(PlanActivity.INTENT_PARAMS, PlanToFeedParams(viewModel.createFeedPlans()))
-                    it.setResult(Activity.RESULT_OK, intent)
-                    it.finish()
+                    launch {
+                        showLoading()
+                        val plans = viewModel.createFeedPlans()
+                        withContext(MDoveBackgroundPool) {
+                            plans.forEach {
+                                MainDb.db.todayPlansDao().insert(
+                                    TodayPlansEntity(
+                                        date = System.currentTimeMillis(),
+                                        resp = FeedTimeLineFeedTodayPlansResp(it)
+                                    )
+                                )
+                            }
+                        }
+                        dismissLoading()
+                        val intent = Intent()
+                        intent.putExtra(
+                            PlanActivity.INTENT_PARAMS,
+                            PlanToFeedParams(plans)
+                        )
+                        it.setResult(Activity.RESULT_OK, intent)
+                        it.finish()
+                    }
                 }
             }
         }

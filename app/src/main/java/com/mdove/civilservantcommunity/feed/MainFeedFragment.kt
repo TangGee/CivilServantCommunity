@@ -16,7 +16,9 @@ import com.mdove.civilservantcommunity.detailfeed.DetailFeedActivity
 import com.mdove.civilservantcommunity.detailfeed.bean.DetailFeedParams
 import com.mdove.civilservantcommunity.feed.adapter.MainFeedAdapter
 import com.mdove.civilservantcommunity.feed.adapter.OnMainFeedClickListener
+import com.mdove.civilservantcommunity.feed.adapter.OnMainFeedTodayPlanCheckListener
 import com.mdove.civilservantcommunity.feed.bean.ArticleResp
+import com.mdove.civilservantcommunity.feed.bean.FeedTimeLineFeedTodayPlansResp
 import com.mdove.civilservantcommunity.feed.viewmodel.MainFeedViewModel
 import com.mdove.civilservantcommunity.plan.gotoPlanActivity
 import com.mdove.civilservantcommunity.punch.bean.PunchReq
@@ -68,6 +70,10 @@ class MainFeedFragment : BaseFragment() {
                     }
                 }
             }
+        }
+    }, object : OnMainFeedTodayPlanCheckListener {
+        override fun onCheck(resp: FeedTimeLineFeedTodayPlansResp, isCheck: Boolean) {
+            feedViewModel.checkTodayPlanLiveData.value = resp
         }
     })
 

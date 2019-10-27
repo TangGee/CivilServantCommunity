@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.*
 import com.mdove.civilservantcommunity.feed.bean.*
 import com.mdove.civilservantcommunity.feed.repository.MainFeedRepository
+import com.mdove.civilservantcommunity.plan.PlanToFeedBean
 import com.mdove.civilservantcommunity.plan.PlanToFeedParams
 import com.mdove.civilservantcommunity.punch.PunchHelper
 import com.mdove.civilservantcommunity.punch.bean.PunchReq
@@ -30,6 +31,7 @@ class MainFeedViewModel : ViewModel() {
 
     val punchResp = MutableLiveData<Boolean>()
     val planParamsLiveData = MutableLiveData<PlanToFeedParams>()
+    val checkTodayPlanLiveData = MutableLiveData<FeedTimeLineFeedTodayPlansResp>()
 
     val mData: LiveData<Resource<List<BaseFeedResp>>> =
         MediatorLiveData<Resource<List<BaseFeedResp>>>().apply {
@@ -46,6 +48,7 @@ class MainFeedViewModel : ViewModel() {
 //                            )
 //                        )
 //                    }
+                    temp.add(FeedTimeLineFeedTitleResp())
                     temp.addAll(it.data?.data?.map { article ->
                         FeedArticleResp(article)
                     } ?: mutableListOf<BaseFeedResp>())
@@ -72,7 +75,21 @@ class MainFeedViewModel : ViewModel() {
                     Resource(it.status, it.data?.filter {
                         it !is FeedTodayPlanResp
                     }?.toMutableList()?.apply {
-                        add(0, FeedTodayPlanResp(params = params))
+                        addAll(params.data.map {
+                            FeedTimeLineFeedTodayPlansResp(params = it)
+                        })
+                    }, it.exception)
+                }
+            }
+
+            addSource(checkTodayPlanLiveData) { resp ->
+                value = value?.let {
+                    Resource(it.status, it.data?.map {
+                        if(it === resp){
+                            FeedTimeLineFeedTodayPlansResp(resp.params)
+                        }else{
+                            it
+                        }
                     }, it.exception)
                 }
             }

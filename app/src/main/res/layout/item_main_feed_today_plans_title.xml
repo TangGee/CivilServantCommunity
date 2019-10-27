@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="18dp"
+    android:background="@color/main_feed_end_color">
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/main_feed_item_margin"
+        android:gravity="left"
+        android:text="今日要执行的计划"
+        android:textColor="@color/grey_800"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/circle"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:layout_width="3dp"
+        android:layout_height="0dp"
+        android:background="@color/grey_200"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="@+id/circle"
+        app:layout_constraintRight_toRightOf="@+id/circle"
+        android:layout_marginTop="2dp"
+        app:layout_constraintTop_toTopOf="@+id/circle" />
+
+    <com.mdove.dependent.common.view.timeline.StrokeCircle
+        android:id="@+id/circle"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_marginLeft="@dimen/main_feed_item_margin"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/tv_title"
+        app:layout_constraintTop_toTopOf="parent"
+        app:sc_circle_color="@color/red_300"
+        app:sc_circle_width="16dp"
+        app:sc_stroke_color="@color/white"
+        app:sc_stroke_width="2dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
