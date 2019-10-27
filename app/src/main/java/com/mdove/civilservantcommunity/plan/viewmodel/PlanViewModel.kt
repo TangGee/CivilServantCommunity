@@ -3,6 +3,7 @@ package com.mdove.civilservantcommunity.plan.viewmodel
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import com.mdove.civilservantcommunity.plan.PlanModuleBean
+import com.mdove.civilservantcommunity.plan.PlanToFeedBean
 import com.mdove.civilservantcommunity.plan.repository.PlanRepository
 import com.mdove.dependent.common.networkenhance.valueobj.Resource
 
@@ -21,5 +22,15 @@ class PlanViewModel : ViewModel() {
         Resource(it.status, it.data?.apply {
             data = new
         }, it.exception)
+    }
+
+    fun createFeedPlans(): List<PlanToFeedBean> {
+        return data.value?.data?.data?.let { data ->
+            data.flatMap {
+                it.map {
+                    PlanToFeedBean(it.content ?: "!")
+                }
+            }
+        } ?: mutableListOf()
     }
 }

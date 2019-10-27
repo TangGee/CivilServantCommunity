@@ -133,6 +133,29 @@
         <attr name="mv_isWidthHeightEqual" format="boolean" />
     </declare-styleable>
 
+    <declare-styleable name="TimeLineView">
+        <attr name="tlv_center_point_stroke_width" format="dimension" />
+        <attr name="tlv_center_point_width" format="dimension" />
+        <attr name="tlv_center_point_stroke_color" format="color" />
+        <attr name="tlv_center_point_color" format="color" />
+        <attr name="has_top_point" format="boolean" />
+        <attr name="tlv_top_point_stroke_width" format="dimension" />
+        <attr name="tlv_top_point_width" format="dimension" />
+        <attr name="tlv_top_point_stroke_color" format="color" />
+        <attr name="tlv_top_point_color" format="color" />
+        <attr name="tlv_line_color" format="color" />
+        <attr name="tlv_line_width" format="dimension" />
+        <attr name="has_end_point" format="boolean" />
+        <attr name="tlv_end_point_stroke_width" format="dimension" />
+        <attr name="tlv_end_point_width" format="dimension" />
+        <attr name="tlv_end_point_stroke_color" format="color" />
+        <attr name="tlv_end_point_color" format="color" />
+
+        <attr name="tlv_end_point_margin" format="dimension" />
+        <attr name="tlv_top_point_margin" format="dimension" />
+
+    </declare-styleable>
+
     <declare-styleable name="RoundCornerView">
         <attr name="allRadius" format="dimension|reference" />
         <attr name="leftTopRadius" format="dimension|reference" />

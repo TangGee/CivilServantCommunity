@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mdove.civilservantcommunity.R
 import com.mdove.civilservantcommunity.base.BaseFragment
+import com.mdove.civilservantcommunity.base.launcher.ActivityLauncher
 import com.mdove.civilservantcommunity.config.AppConfig
 import com.mdove.civilservantcommunity.detailfeed.DetailFeedActivity
 import com.mdove.civilservantcommunity.detailfeed.bean.DetailFeedParams
@@ -17,15 +18,17 @@ import com.mdove.civilservantcommunity.feed.adapter.MainFeedAdapter
 import com.mdove.civilservantcommunity.feed.adapter.OnMainFeedClickListener
 import com.mdove.civilservantcommunity.feed.bean.ArticleResp
 import com.mdove.civilservantcommunity.feed.viewmodel.MainFeedViewModel
-import com.mdove.civilservantcommunity.plan.PlanActivity
+import com.mdove.civilservantcommunity.plan.gotoPlanActivity
 import com.mdove.civilservantcommunity.punch.bean.PunchReq
 import com.mdove.civilservantcommunity.punch.viewmodel.PunchViewModel
 import com.mdove.civilservantcommunity.ugc.MainUGCActivity
 import com.mdove.dependent.common.networkenhance.valueobj.Status
+import com.mdove.dependent.common.threadpool.FastMain
 import com.mdove.dependent.common.toast.ToastUtil
 import com.mdove.dependent.common.utils.dismissLoading
 import com.mdove.dependent.common.utils.showLoading
 import kotlinx.android.synthetic.main.fragment_main_feed.*
+import kotlinx.coroutines.launch
 
 /**
  * Created by MDove on 2019-09-06.
@@ -37,20 +40,25 @@ class MainFeedFragment : BaseFragment() {
         override fun onClick(type: Int, resp: ArticleResp?) {
             when (type) {
                 MainFeedAdapter.TYPE_FEED_PUNCH -> {
-                    AppConfig.getUserInfo()?.let {
-                        showLoading("打卡中...")
-                        punchViewModel.punch(PunchReq(it.uid, System.currentTimeMillis()))
-                    }
+                    clickPunch()
                 }
                 MainFeedAdapter.TYPE_FEED_UGC -> {
-                    context?.let {
-                        MainUGCActivity.gotoMainUGC(it)
-                    }
+                    clickUGC()
+                }
+                MainFeedAdapter.CLICK_QUICK_BTN_UGC -> {
+                    clickUGC()
+                }
+                MainFeedAdapter.CLICK_QUICK_BTN_PUNCH -> {
+                    clickPunch()
+                }
+                MainFeedAdapter.CLICK_QUICK_BTN_PLAN -> {
+                    clickPlan()
+                }
+                MainFeedAdapter.CLICK_QUICK_BTN_ME -> {
+                    clickMePage()
                 }
                 MainFeedAdapter.TYPE_FEED_PLAN -> {
-                    context?.let {
-                        PlanActivity.gotoPlan(it)
-                    }
+                    clickPlan()
                 }
                 else -> {
                     resp?.aid?.let { aid ->
@@ -62,6 +70,35 @@ class MainFeedFragment : BaseFragment() {
             }
         }
     })
+
+    private fun clickMePage() {
+        context?.let {
+            MePageActivity.gotoMePage(it)
+        }
+    }
+
+    private fun clickPunch() {
+        AppConfig.getUserInfo()?.let {
+            showLoading("打卡中...")
+            punchViewModel.punch(PunchReq(it.uid, System.currentTimeMillis()))
+        }
+    }
+
+    private fun clickUGC() {
+        context?.let {
+            MainUGCActivity.gotoMainUGC(it)
+        }
+    }
+
+    private fun clickPlan() {
+        launch(FastMain) {
+            (activity as? ActivityLauncher)?.let {
+                it.gotoPlanActivity(context!!).params?.let {
+                    feedViewModel.planParamsLiveData.value = it
+                }
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -112,7 +149,7 @@ class MainFeedFragment : BaseFragment() {
                     ToastUtil.toast("${it.data?.message}", Toast.LENGTH_SHORT)
                     dismissLoading()
                 }
-                Status.ERROR->{
+                Status.ERROR -> {
                     feedViewModel.punchResp.value = false
                     dismissLoading()
                 }

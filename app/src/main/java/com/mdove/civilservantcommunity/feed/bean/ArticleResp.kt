@@ -4,6 +4,7 @@ import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import com.mdove.civilservantcommunity.base.bean.ArticleType
 import com.mdove.civilservantcommunity.base.bean.UserInfo
+import com.mdove.civilservantcommunity.plan.PlanToFeedParams
 import kotlinx.android.parcel.Parcelize
 
 /**
@@ -21,12 +22,25 @@ data class ArticleResp(
 ) : Parcelable
 
 data class FeedPunchResp(val count: Int = 0, var hasPunch: Boolean = false) : BaseFeedResp()
-data class FeedUGCResp(val name :String ="打卡"):BaseFeedResp()
-data class FeedPlanResp(val name :String ="今日计划"):BaseFeedResp()
-data class FeedTodayPlanResp(val name :String ="今日计划"):BaseFeedResp()
+data class FeedUGCResp(val name: String = "打卡") : BaseFeedResp()
+
+data class FeedPlanResp(
+    val name: String = "今日计划"
+) : BaseFeedResp()
+
+data class FeedDateResp(
+    val name: String = "今日计划"
+) : BaseFeedResp()
+
+data class FeedQuickBtnsResp(
+    val name: String = "今日计划"
+) : BaseFeedResp()
+
+data class FeedTodayPlanResp(val name: String = "今日计划",
+                             val params: PlanToFeedParams? = null) : BaseFeedResp()
 
 @Parcelize
-data class FeedArticleResp(val article: ArticleResp):BaseFeedResp(),Parcelable
+data class FeedArticleResp(val article: ArticleResp) : BaseFeedResp(), Parcelable
 
 sealed class BaseFeedResp
 

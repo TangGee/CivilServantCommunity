@@ -8,8 +8,4 @@
     <color name="black">#000000</color>
     <color name="transparent">#00000000</color>
 
-    <color name="main_feed_start_color">#00000000</color>
-    <color name="main_feed_end_color">#CCFFFFFF</color>
-
-
 </resources>

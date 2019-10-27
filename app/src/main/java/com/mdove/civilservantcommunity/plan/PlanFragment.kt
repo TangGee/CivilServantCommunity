@@ -1,5 +1,7 @@
 package com.mdove.civilservantcommunity.plan
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -16,7 +18,18 @@ import kotlinx.android.synthetic.main.fragment_plan.*
 
 class PlanFragment : BaseFragment() {
     private lateinit var viewModel: PlanViewModel
-    private val adapter = PlanModuleAdapter()
+    private val adapter = PlanModuleAdapter(object : OnPlanClickListener {
+        override fun onClick(type: Int) {
+            activity?.let {
+                if (!it.isFinishing) {
+                    val intent = Intent()
+                    intent.putExtra(PlanActivity.INTENT_PARAMS, PlanToFeedParams(viewModel.createFeedPlans()))
+                    it.setResult(Activity.RESULT_OK, intent)
+                    it.finish()
+                }
+            }
+        }
+    })
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,4 +61,8 @@ class PlanFragment : BaseFragment() {
             }
         })
     }
+}
+
+interface OnPlanClickListener {
+    fun onClick(type: Int)
 }

@@ -37,6 +37,11 @@
             android:screenOrientation="portrait" />
 
         <activity
+            android:name=".feed.MePageActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+
+        <activity
             android:name=".account.UpdateUserInfoActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />

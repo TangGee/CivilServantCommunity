@@ -1,8 +1,10 @@
 package com.mdove.civilservantcommunity.feed.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.*
 import com.mdove.civilservantcommunity.feed.bean.*
 import com.mdove.civilservantcommunity.feed.repository.MainFeedRepository
+import com.mdove.civilservantcommunity.plan.PlanToFeedParams
 import com.mdove.civilservantcommunity.punch.PunchHelper
 import com.mdove.civilservantcommunity.punch.bean.PunchReq
 import com.mdove.civilservantcommunity.room.MainDb
@@ -27,23 +29,23 @@ class MainFeedViewModel : ViewModel() {
         }
 
     val punchResp = MutableLiveData<Boolean>()
+    val planParamsLiveData = MutableLiveData<PlanToFeedParams>()
 
     val mData: LiveData<Resource<List<BaseFeedResp>>> =
         MediatorLiveData<Resource<List<BaseFeedResp>>>().apply {
             addSource(feedData) {
                 val temp = mutableListOf<BaseFeedResp>()
                 CoroutineScope(FastMain).launch {
-                    temp.add(FeedPlanResp())
-                    temp.add(FeedTodayPlanResp())
-                    temp.add(FeedUGCResp())
-                    withContext(MDoveBackgroundPool) {
-                        temp.add(
-                            FeedPunchResp(
-                                count = MainDb.db.punchRecordDao().getPunchCounts(),
-                                hasPunch = PunchHelper.hasPunchToday()
-                            )
-                        )
-                    }
+                    temp.add(FeedDateResp())
+                    temp.add(FeedQuickBtnsResp())
+//                    withContext(MDoveBackgroundPool) {
+//                        temp.add(
+//                            FeedPunchResp(
+//                                count = MainDb.db.punchRecordDao().getPunchCounts(),
+//                                hasPunch = PunchHelper.hasPunchToday()
+//                            )
+//                        )
+//                    }
                     temp.addAll(it.data?.data?.map { article ->
                         FeedArticleResp(article)
                     } ?: mutableListOf<BaseFeedResp>())
@@ -51,8 +53,8 @@ class MainFeedViewModel : ViewModel() {
                 }
             }
 
-            addSource(punchResp){
-                if(it){
+            addSource(punchResp) {
+                if (it) {
                     value?.let { resource ->
                         value = Resource(resource.status, value?.data?.map { baseResp ->
                             if (baseResp is FeedPunchResp) {
@@ -62,6 +64,16 @@ class MainFeedViewModel : ViewModel() {
                             }
                         }, resource.exception)
                     }
+                }
+            }
+
+            addSource(planParamsLiveData) { params ->
+                value = value?.let {
+                    Resource(it.status, it.data?.filter {
+                        it !is FeedTodayPlanResp
+                    }?.toMutableList()?.apply {
+                        add(0, FeedTodayPlanResp(params = params))
+                    }, it.exception)
                 }
             }
         }

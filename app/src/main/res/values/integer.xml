@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <integer name="window_anim_duration">250</integer>
+
+    <dimen name="main_feed_item_margin">12dp</dimen>
 </resources>
