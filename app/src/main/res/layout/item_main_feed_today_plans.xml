@@ -42,6 +42,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintRight_toRightOf="parent"
+            android:theme="@style/MainFeedTodayPlanCheckBox"
             android:layout_marginRight="8dp"
             android:layout_height="wrap_content"/>
     </com.mdove.dependent.common.view.roundcorner.RoundCornerConstraintLayout>

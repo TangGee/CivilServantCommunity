@@ -186,4 +186,12 @@ class TimeLineView @JvmOverloads constructor(
 
         }
     }
+
+    fun hideBottomLine() {
+        lineBottom.visibility = View.GONE
+    }
+
+    fun showBottomLine() {
+        lineBottom.visibility = View.VISIBLE
+    }
 }

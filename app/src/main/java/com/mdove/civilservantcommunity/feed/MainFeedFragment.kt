@@ -19,18 +19,24 @@ import com.mdove.civilservantcommunity.feed.adapter.OnMainFeedClickListener
 import com.mdove.civilservantcommunity.feed.adapter.OnMainFeedTodayPlanCheckListener
 import com.mdove.civilservantcommunity.feed.bean.ArticleResp
 import com.mdove.civilservantcommunity.feed.bean.FeedTimeLineFeedTodayPlansResp
+import com.mdove.civilservantcommunity.feed.bean.FeedTimeLineFeedTodayPlansRespWrapper
+import com.mdove.civilservantcommunity.feed.bean.FeedTodayPlansCheckParams
 import com.mdove.civilservantcommunity.feed.viewmodel.MainFeedViewModel
+import com.mdove.civilservantcommunity.plan.dao.TodayPlansEntity
 import com.mdove.civilservantcommunity.plan.gotoPlanActivity
 import com.mdove.civilservantcommunity.punch.bean.PunchReq
 import com.mdove.civilservantcommunity.punch.viewmodel.PunchViewModel
+import com.mdove.civilservantcommunity.room.MainDb
 import com.mdove.civilservantcommunity.ugc.MainUGCActivity
 import com.mdove.dependent.common.networkenhance.valueobj.Status
 import com.mdove.dependent.common.threadpool.FastMain
+import com.mdove.dependent.common.threadpool.MDoveBackgroundPool
 import com.mdove.dependent.common.toast.ToastUtil
 import com.mdove.dependent.common.utils.dismissLoading
 import com.mdove.dependent.common.utils.showLoading
 import kotlinx.android.synthetic.main.fragment_main_feed.*
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /**
  * Created by MDove on 2019-09-06.
@@ -72,8 +78,25 @@ class MainFeedFragment : BaseFragment() {
             }
         }
     }, object : OnMainFeedTodayPlanCheckListener {
-        override fun onCheck(resp: FeedTimeLineFeedTodayPlansResp, isCheck: Boolean) {
-            feedViewModel.checkTodayPlanLiveData.value = resp
+        override fun onCheck(wrapper: FeedTimeLineFeedTodayPlansRespWrapper, isCheck: Boolean) {
+            launch {
+                showLoading()
+                withContext(MDoveBackgroundPool) {
+                    MainDb.db.todayPlansDao().update(
+                        TodayPlansEntity(
+                            wrapper.entityId,
+                            System.currentTimeMillis(),
+                            wrapper.resp.copy(
+                                params = wrapper.resp.params.copy(
+                                    select = isCheck
+                                )
+                            ))
+                    )
+                }
+                dismissLoading()
+                feedViewModel.checkTodayPlanLiveData.value =
+                    FeedTodayPlansCheckParams(wrapper, isCheck)
+            }
         }
     })
 

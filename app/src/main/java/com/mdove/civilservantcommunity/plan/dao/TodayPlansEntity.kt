@@ -14,7 +14,7 @@ import com.mdove.civilservantcommunity.feed.bean.FeedTimeLineFeedTodayPlansResp
 class TodayPlansEntity(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
-    val id: Int = 0,
+    val id: Long = 0,
     @ColumnInfo(name = "date")
     var date: Long,
     @ColumnInfo(name = "resp_json")

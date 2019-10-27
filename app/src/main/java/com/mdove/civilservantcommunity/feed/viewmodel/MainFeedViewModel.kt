@@ -31,7 +31,7 @@ class MainFeedViewModel : ViewModel() {
 
     val punchResp = MutableLiveData<Boolean>()
     val planParamsLiveData = MutableLiveData<PlanToFeedParams>()
-    val checkTodayPlanLiveData = MutableLiveData<FeedTimeLineFeedTodayPlansResp>()
+    val checkTodayPlanLiveData = MutableLiveData<FeedTodayPlansCheckParams>()
 
     val mData: LiveData<Resource<List<BaseFeedResp>>> =
         MediatorLiveData<Resource<List<BaseFeedResp>>>().apply {
@@ -40,18 +40,27 @@ class MainFeedViewModel : ViewModel() {
                 CoroutineScope(FastMain).launch {
                     temp.add(FeedDateResp())
                     temp.add(FeedQuickBtnsResp())
-//                    withContext(MDoveBackgroundPool) {
-//                        temp.add(
+                    withContext(MDoveBackgroundPool) {
+                        //                        temp.add(
 //                            FeedPunchResp(
 //                                count = MainDb.db.punchRecordDao().getPunchCounts(),
 //                                hasPunch = PunchHelper.hasPunchToday()
 //                            )
 //                        )
-//                    }
+                        MainDb.db.todayPlansDao().getFeedTodayPlans()?.let {
+                            temp.add(FeedTimeLineFeedTodayPlansTitleResp())
+                            it.forEach {
+                                temp.add(FeedTimeLineFeedTodayPlansRespWrapper(it.id, it.resp))
+                            }
+                        }
+                    }
                     temp.add(FeedTimeLineFeedTitleResp())
                     temp.addAll(it.data?.data?.map { article ->
                         FeedArticleResp(article)
+                    }.apply {
+                        (this?.last())?.hideEndLine = true
                     } ?: mutableListOf<BaseFeedResp>())
+                    temp.add(FeedPaddingStub())
                     value = Resource(it.status, temp, it.exception)
                 }
             }
@@ -82,12 +91,18 @@ class MainFeedViewModel : ViewModel() {
                 }
             }
 
-            addSource(checkTodayPlanLiveData) { resp ->
+            addSource(checkTodayPlanLiveData) { params ->
                 value = value?.let {
                     Resource(it.status, it.data?.map {
-                        if(it === resp){
-                            FeedTimeLineFeedTodayPlansResp(resp.params)
-                        }else{
+                        if (it === params.wrapper) {
+                            params.wrapper.copy(
+                                resp = params.wrapper.resp.copy(
+                                    params = params.wrapper.resp.params.copy(
+                                        select = params.select
+                                    )
+                                )
+                            )
+                        } else {
                             it
                         }
                     }, it.exception)

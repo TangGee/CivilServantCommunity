@@ -24,7 +24,7 @@ class MePageActivity : AbsSlideCloseActivity() {
         setContentView(R.layout.activity_me_page)
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                .add(R.id.container, MainFeedFragment(), TAG_ME_PAGE_FRAGMNET)
+                .add(R.id.container, MePageFragment(), TAG_ME_PAGE_FRAGMNET)
                 .commit()
         }
     }

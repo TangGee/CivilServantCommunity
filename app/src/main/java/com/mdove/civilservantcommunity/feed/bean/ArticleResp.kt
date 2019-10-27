@@ -42,21 +42,41 @@ data class FeedTimeLineFeedTitleResp(
     val name: String = "今日计划"
 ) : BaseFeedResp()
 
+data class FeedPaddingStub(
+    val name: String = "今日计划"
+) : BaseFeedResp()
+
+data class FeedTimeLineFeedTodayPlansRespWrapper(
+    val entityId: Long, // 数据库的id
+    val resp: FeedTimeLineFeedTodayPlansResp
+) : BaseFeedResp()
+
 @Parcelize
 data class FeedTimeLineFeedTodayPlansResp(
     @SerializedName("params")
     val params: PlanToFeedBean
-) : BaseFeedResp(),Parcelable
+) : BaseFeedResp(), Parcelable
 
 data class FeedTimeLineFeedTodayPlansTitleResp(
     val name: String = "今日计划"
 ) : BaseFeedResp()
 
-data class FeedTodayPlanResp(val name: String = "今日计划",
-                             val params: PlanToFeedParams? = null) : BaseFeedResp()
+data class FeedTodayPlanResp(
+    val name: String = "今日计划",
+    val params: PlanToFeedParams? = null
+) : BaseFeedResp()
+
+data class FeedTodayPlansCheckParams(
+    val wrapper: FeedTimeLineFeedTodayPlansRespWrapper,
+    val select: Boolean
+)
 
 @Parcelize
-data class FeedArticleResp(val article: ArticleResp) : BaseFeedResp(), Parcelable
+data class FeedArticleResp(
+    val article: ArticleResp,
+    var hideEndLine: Boolean = false
+) :
+    BaseFeedResp(), Parcelable
 
 sealed class BaseFeedResp
 

@@ -1,28 +1,25 @@
 package com.mdove.civilservantcommunity.feed.adapter
 
 import android.graphics.Color
+import android.graphics.Paint.ANTI_ALIAS_FLAG
+import android.graphics.Paint.STRIKE_THRU_TEXT_FLAG
+import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
-import androidx.recyclerview.widget.RecyclerView
-import com.mdove.civilservantcommunity.R
-import android.text.Html
 import androidx.appcompat.widget.AppCompatCheckBox
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView
+import com.mdove.civilservantcommunity.R
 import com.mdove.civilservantcommunity.feed.bean.*
-import com.mdove.civilservantcommunity.plan.FeedTodayPlanParams
-import com.mdove.civilservantcommunity.plan.PlanToFeedBean
-import com.mdove.civilservantcommunity.plan.PlanToFeedParams
 import com.mdove.dependent.common.recyclerview.timelineitemdecoration.itemdecoration.DotItemDecoration
 import com.mdove.dependent.common.utils.TimeUtils
-import android.graphics.Paint.ANTI_ALIAS_FLAG
-import android.graphics.Paint.STRIKE_THRU_TEXT_FLAG
-import android.graphics.Paint
+import com.mdove.dependent.common.view.timeline.TimeLineView
 
 
 /**
@@ -38,7 +35,13 @@ class MainFeedAdapter(
             oldItem: BaseFeedResp,
             newItem: BaseFeedResp
         ): Boolean {
-            if ((oldItem as? FeedArticleResp)?.article?.aid == (newItem as? FeedArticleResp)?.article?.aid) {
+            if ((oldItem is FeedArticleResp) && (newItem is FeedArticleResp)) {
+                return true
+            }
+            if ((oldItem is FeedTimeLineFeedTodayPlansTitleResp) && (newItem is FeedTimeLineFeedTodayPlansTitleResp)) {
+                return true
+            }
+            if ((oldItem is FeedQuickBtnsResp) && (newItem is FeedQuickBtnsResp)) {
                 return true
             }
             if ((oldItem is FeedPunchResp) && (newItem is FeedPunchResp)) {
@@ -47,10 +50,13 @@ class MainFeedAdapter(
             if ((oldItem is FeedTodayPlanResp) && (newItem is FeedTodayPlanResp)) {
                 return true
             }
+            if ((oldItem is FeedPaddingStub) && (newItem is FeedPaddingStub)) {
+                return true
+            }
             if ((oldItem is FeedTodayPlanResp) && (newItem is FeedTodayPlanResp)) {
                 return true
             }
-            if ((oldItem is FeedTimeLineFeedTodayPlansResp) && (newItem is FeedTimeLineFeedTodayPlansResp)) {
+            if ((oldItem is FeedTimeLineFeedTodayPlansRespWrapper) && (newItem is FeedTimeLineFeedTodayPlansRespWrapper)) {
                 return true
             }
             return oldItem === newItem
@@ -60,25 +66,25 @@ class MainFeedAdapter(
             oldItem: BaseFeedResp,
             newItem: BaseFeedResp
         ): Boolean {
-            if ((oldItem as? FeedArticleResp)?.article?.title == (newItem as? FeedArticleResp)?.article?.title) {
-                return true
+            return if ((oldItem is FeedArticleResp) && (newItem is FeedArticleResp)) {
+                oldItem.article.title == newItem.article.title
+            } else if ((oldItem is FeedPunchResp) && (newItem is FeedPunchResp)) {
+                oldItem.count == newItem.count
+            } else if ((oldItem is FeedTodayPlanResp) && (newItem is FeedTodayPlanResp)) {
+                oldItem.params == newItem.params
+            } else if ((oldItem is FeedTimeLineFeedTodayPlansRespWrapper) && (newItem is FeedTimeLineFeedTodayPlansRespWrapper)) {
+                oldItem.resp.params.select == newItem.resp.params.select
+            } else {
+                true
             }
-            if ((oldItem is FeedPunchResp) && (newItem is FeedPunchResp)) {
-                return oldItem.count == newItem.count
-            }
-            if ((oldItem is FeedTodayPlanResp) && (newItem is FeedTodayPlanResp)) {
-                return oldItem.params == newItem.params
-            }
-            if ((oldItem is FeedTimeLineFeedTodayPlansResp) && (newItem is FeedTimeLineFeedTodayPlansResp)) {
-                return oldItem.params.select == newItem.params.select
-            }
-            return true
         }
 
         override fun getChangePayload(oldItem: BaseFeedResp, newItem: BaseFeedResp): Any? {
-            return if ((oldItem as? FeedPunchResp)?.count != (newItem as? FeedPunchResp)?.count) {
-                return PAYLOAD_PUNCH
-            } else null
+            return when {
+                (oldItem as? FeedPunchResp)?.count != (newItem as? FeedPunchResp)?.count -> PAYLOAD_PUNCH
+                (oldItem as? FeedTimeLineFeedTodayPlansRespWrapper)?.resp?.params?.select != (newItem as? FeedTimeLineFeedTodayPlansRespWrapper)?.resp?.params?.select -> PAYLOAD_TODAY_PLANS
+                else -> null
+            }
         }
     }) {
 
@@ -95,6 +101,7 @@ class MainFeedAdapter(
         const val TYPE_FEED_TIME_LINE_FEED_TITLE = 9
         const val TYPE_FEED_TIME_LINE_FEED_TODAY_PLAM = 10
         const val TYPE_FEED_TIME_LINE_FEED_TODAY_PLAM_TITLE = 11
+        const val TYPE_FEED_PADDING = 12
 
         const val CLICK_QUICK_BTN_PLAN = 101
         const val CLICK_QUICK_BTN_PUNCH = 102
@@ -103,6 +110,7 @@ class MainFeedAdapter(
         const val CLICK_FEED_TIME_LINE_PLAN = 105
 
         val PAYLOAD_PUNCH = Any()
+        val PAYLOAD_TODAY_PLANS = Any()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -124,7 +132,7 @@ class MainFeedAdapter(
                     )
                 )
             TYPE_FEED_TIME_LINE_FEED_TODAY_PLAM_TITLE ->
-                FeedTimeLineFeedTodayPlansViewHolder(
+                FeedTimeLineFeedTodayPlansTitleViewHolder(
                     LayoutInflater.from(parent.context).inflate(
                         R.layout.item_main_feed_today_plans_title,
                         parent,
@@ -159,6 +167,14 @@ class MainFeedAdapter(
                 FeedUGCViewHolder(
                     LayoutInflater.from(parent.context).inflate(
                         R.layout.item_main_feed_date,
+                        parent,
+                        false
+                    )
+                )
+            TYPE_FEED_PADDING ->
+                FeedPaddingViewHolder(
+                    LayoutInflater.from(parent.context).inflate(
+                        R.layout.item_main_feed_padding,
                         parent,
                         false
                     )
@@ -214,8 +230,9 @@ class MainFeedAdapter(
             is FeedTodayPlanResp -> TYPE_FEED_TODAY_PLAN
             is FeedQuickBtnsResp -> TYPE_FEED_QUICK_BTNS
             is FeedDateResp -> TYPE_FEED_DATE
+            is FeedPaddingStub -> TYPE_FEED_PADDING
             is FeedTimeLineFeedTitleResp -> TYPE_FEED_TIME_LINE_FEED_TITLE
-            is FeedTimeLineFeedTodayPlansResp -> TYPE_FEED_TIME_LINE_FEED_TODAY_PLAM
+            is FeedTimeLineFeedTodayPlansRespWrapper -> TYPE_FEED_TIME_LINE_FEED_TODAY_PLAM
             is FeedTimeLineFeedTodayPlansTitleResp -> TYPE_FEED_TIME_LINE_FEED_TODAY_PLAM_TITLE
             else -> TYPE_NORMAL
         }
@@ -230,6 +247,10 @@ class MainFeedAdapter(
             if (holder is FeedPunchViewHolder) {
                 holder.payloadBind(getItem(position) as FeedPunchResp)
             }
+        } else if (payloads.contains(PAYLOAD_TODAY_PLANS)) {
+            if (holder is FeedTimeLineFeedTodayPlansViewHolder) {
+                holder.payloadBind(getItem(position) as FeedTimeLineFeedTodayPlansRespWrapper)
+            }
         } else {
             super.onBindViewHolder(holder, position, payloads)
         }
@@ -241,9 +262,13 @@ class MainFeedAdapter(
             is TopOneViewHolder -> holder.bind((getItem(position) as FeedArticleResp).article)
             is TopTwoViewHolder -> holder.bind((getItem(position) as FeedArticleResp).article)
             is NormalViewHolder -> holder.bind((getItem(position) as FeedArticleResp).article)
-            is NewStyleViewHolder -> holder.bind((getItem(position) as FeedArticleResp).article)
+            is NewStyleViewHolder -> {
+                (getItem(position) as? FeedArticleResp)?.let {
+                    holder.bind(it)
+                }
+            }
             is FeedTodayPlanViewHolder -> holder.bind((getItem(position) as FeedTodayPlanResp))
-            is FeedTimeLineFeedTodayPlansViewHolder -> holder.bind((getItem(position) as FeedTimeLineFeedTodayPlansResp))
+            is FeedTimeLineFeedTodayPlansViewHolder -> holder.bind((getItem(position) as FeedTimeLineFeedTodayPlansRespWrapper))
         }
     }
 
@@ -320,23 +345,44 @@ class MainFeedAdapter(
     }
 
     inner class FeedDateViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+    inner class FeedPaddingViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
     inner class FeedTimeLineFeedTodayPlansViewHolder(itemView: View) :
         RecyclerView.ViewHolder(itemView) {
+        private val title = itemView.findViewById<TextView>(R.id.text)
+        private val cb = itemView.findViewById<AppCompatCheckBox>(R.id.cb_today_plan)
 
-        fun bind(resp: FeedTimeLineFeedTodayPlansResp) {
-            val title = itemView.findViewById<TextView>(R.id.text)
-            title.text = resp.params.planTitle
-            if (resp.params.select) {
-                title.paint.flags = Paint.STRIKE_THRU_TEXT_FLAG or Paint.ANTI_ALIAS_FLAG
+        fun bind(wrapper: FeedTimeLineFeedTodayPlansRespWrapper) {
+            reset()
+            title.text = wrapper.resp.params.planTitle
+            if (wrapper.resp.params.select) {
+                title.paint.flags = STRIKE_THRU_TEXT_FLAG or ANTI_ALIAS_FLAG
+                title.setTextColor(ContextCompat.getColor(itemView.context, R.color.grey_500))
             } else {
+                title.setTextColor(ContextCompat.getColor(itemView.context, R.color.black))
                 title.paint.flags = 0
+                title.paint.flags = ANTI_ALIAS_FLAG
             }
-            itemView.findViewById<AppCompatCheckBox>(R.id.cb_today_plan)
-                .setOnCheckedChangeListener { _, isChecked ->
-                    checkListener?.onCheck(resp.apply {
-                        this.params.select = isChecked
-                    }, isChecked)
+            cb.isChecked = wrapper.resp.params.select
+            cb.setOnCheckedChangeListener { _, isChecked ->
+                if (wrapper.resp.params.select != isChecked) {
+                    checkListener?.onCheck(wrapper, isChecked)
                 }
+            }
+        }
+
+        private fun reset() {
+            cb.setOnCheckedChangeListener(null)
+        }
+
+        fun payloadBind(wrapper: FeedTimeLineFeedTodayPlansRespWrapper) {
+            if (wrapper.resp.params.select) {
+                title.paint.flags = STRIKE_THRU_TEXT_FLAG or ANTI_ALIAS_FLAG
+                title.setTextColor(ContextCompat.getColor(itemView.context, R.color.grey_500))
+            } else {
+                title.setTextColor(ContextCompat.getColor(itemView.context, R.color.black))
+                title.paint.flags = 0
+                title.paint.flags = ANTI_ALIAS_FLAG
+            }
         }
     }
 
@@ -374,18 +420,26 @@ class MainFeedAdapter(
     }
 
     inner class NewStyleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(data: ArticleResp) {
+        private val timeLine = itemView.findViewById<TimeLineView>(R.id.time_line)
+        fun bind(data: FeedArticleResp) {
+            reset()
             listener?.let { listener ->
                 itemView.setOnClickListener {
-                    listener.onClick(TYPE_TOP_ONE, data)
+                    listener.onClick(TYPE_TOP_ONE, data.article)
                 }
             }
-            itemView.findViewById<TextView>(R.id.tv_title).text = data.title
-            itemView.findViewById<TextView>(R.id.tv_name).text = data.maketime?.let {
+            itemView.findViewById<TextView>(R.id.tv_title).text = data.article.title
+            itemView.findViewById<TextView>(R.id.tv_name).text = data.article.maketime?.let {
                 TimeUtils.getDateChinese(java.lang.Long.getLong(it))
             } ?: ""
-            itemView.findViewById<TextView>(R.id.tv_content).text = data.content
-            itemView.findViewById<TextView>(R.id.tv_content).text = data.content
+            itemView.findViewById<TextView>(R.id.tv_content).text = data.article.content
+            if (data.hideEndLine) {
+                timeLine.hideBottomLine()
+            }
+        }
+
+        private fun reset() {
+            timeLine.showBottomLine()
         }
     }
 
@@ -434,5 +488,5 @@ interface OnMainFeedClickListener {
 }
 
 interface OnMainFeedTodayPlanCheckListener {
-    fun onCheck(resp: FeedTimeLineFeedTodayPlansResp, isCheck: Boolean)
+    fun onCheck(wrapper: FeedTimeLineFeedTodayPlansRespWrapper, isCheck: Boolean)
 }

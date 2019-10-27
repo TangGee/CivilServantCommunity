@@ -72,4 +72,8 @@
         <item name="item_multiChooseable">true</item>
     </style>
 
+    <style name="MainFeedTodayPlanCheckBox" parent="Theme.AppCompat.Light">
+        <item name="colorControlNormal">@color/grey_600</item>
+        <item name="colorControlActivated">@color/blue_500</item>
+    </style>
 </resources>
