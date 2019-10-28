@@ -37,6 +37,7 @@ import com.mdove.dependent.common.utils.showLoading
 import kotlinx.android.synthetic.main.fragment_main_feed.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.sql.Date
 
 /**
  * Created by MDove on 2019-09-06.
@@ -85,12 +86,12 @@ class MainFeedFragment : BaseFragment() {
                     MainDb.db.todayPlansDao().update(
                         TodayPlansEntity(
                             wrapper.entityId,
-                            System.currentTimeMillis(),
-                            wrapper.resp.copy(
-                                params = wrapper.resp.params.copy(
-                                    select = isCheck
-                                )
-                            ))
+                            date = wrapper.date,
+                            createDate = wrapper.createTime,
+                            resp = wrapper.resp.copy(
+                                select = isCheck
+                            )
+                        )
                     )
                 }
                 dismissLoading()
@@ -121,9 +122,20 @@ class MainFeedFragment : BaseFragment() {
 
     private fun clickPlan() {
         launch(FastMain) {
-            (activity as? ActivityLauncher)?.let {
-                it.gotoPlanActivity(context!!).params?.let {
-                    feedViewModel.planParamsLiveData.value = it
+            showLoading()
+            withContext(MDoveBackgroundPool) {
+                MainDb.db.todayPlansDao().getTodayPlansRecord()?.isNotEmpty() ?: false
+            }.takeIf {
+                it
+            }?.let {
+                dismissLoading()
+                ToastUtil.toast("今天的计划早已生成~", Toast.LENGTH_SHORT)
+            } ?: also {
+                (activity as? ActivityLauncher)?.let {
+                    dismissLoading()
+                    it.gotoPlanActivity(context!!).params?.let {
+                        feedViewModel.planParamsLiveData.value = it
+                    }
                 }
             }
         }

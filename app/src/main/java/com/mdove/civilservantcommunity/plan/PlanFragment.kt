@@ -18,6 +18,7 @@ import com.mdove.civilservantcommunity.plan.viewmodel.PlanViewModel
 import com.mdove.civilservantcommunity.room.MainDb
 import com.mdove.dependent.common.networkenhance.valueobj.Status
 import com.mdove.dependent.common.threadpool.MDoveBackgroundPool
+import com.mdove.dependent.common.utils.TimeUtils
 import com.mdove.dependent.common.utils.dismissLoading
 import com.mdove.dependent.common.utils.showLoading
 import kotlinx.android.synthetic.main.fragment_plan.*
@@ -38,6 +39,7 @@ class PlanFragment : BaseFragment() {
                                 MainDb.db.todayPlansDao().insert(
                                     TodayPlansEntity(
                                         date = System.currentTimeMillis(),
+                                        createDate = TimeUtils.getDateFromSQL(),
                                         resp = FeedTimeLineFeedTodayPlansResp(it)
                                     )
                                 )

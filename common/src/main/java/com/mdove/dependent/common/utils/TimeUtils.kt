@@ -227,6 +227,11 @@ object TimeUtils {
         return dayNames[c.get(Calendar.DAY_OF_WEEK) - 1]
     }
 
+    fun getDateFromSQL(): String {
+        val format = SimpleDateFormat("yyyy-MM-dd")
+        return format.format(Date())
+    }
+
     //HH为24小时进制
     fun getDateChinese(time: Date): String {
         val format = SimpleDateFormat("yyyy年MM月dd日")

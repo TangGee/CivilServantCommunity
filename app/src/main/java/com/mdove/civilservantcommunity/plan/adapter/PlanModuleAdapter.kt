@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.mdove.civilservantcommunity.R
 import com.mdove.civilservantcommunity.plan.OnPlanClickListener
 import com.mdove.civilservantcommunity.plan.PlanModuleBean
-import com.mdove.civilservantcommunity.plan.PlanToFeedBean
 
 class PlanModuleAdapter(private val listener: OnPlanClickListener) :
     ListAdapter<List<PlanModuleBean>, RecyclerView.ViewHolder>(object :

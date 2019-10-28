@@ -28,7 +28,7 @@ class FeedPlanTodayItemsAdapter constructor(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.textView.text = mParams.data[position].planTitle
+        holder.textView.text = mParams.data[position].content
     }
 
     override fun getItemCount(): Int {

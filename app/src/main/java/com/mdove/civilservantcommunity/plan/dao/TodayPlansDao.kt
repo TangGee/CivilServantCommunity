@@ -13,6 +13,9 @@ interface TodayPlansDao {
     @Query("SELECT * FROM today_plans")
     fun getFeedTodayPlans(): List<TodayPlansEntity>?
 
+    @Query("SELECT * FROM today_plans WHERE strftime('%Y-%m-%d','now') = strftime('%Y-%m-%d',create_date)")
+    fun getTodayPlansRecord(): List<TodayPlansEntity>?
+
     @Update
     fun update(bean: TodayPlansEntity)
 

@@ -23,6 +23,23 @@
         app:allRadius="8dp">
 
         <TextView
+            android:id="@+id/tv_module"
+            android:layout_width="wrap_content"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:textSize="14sp"
+            android:textColor="@color/white"
+            android:text="模块"
+            android:layout_marginLeft="@dimen/main_feed_item_margin"
+            android:paddingTop="3dp"
+            android:paddingBottom="3dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:background="@drawable/bg_round_blue"
+            android:layout_height="wrap_content"/>
+
+        <TextView
             android:id="@+id/text"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -32,7 +49,7 @@
             android:gravity="center"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintLeft_toRightOf="@+id/tv_module"
             app:layout_constraintRight_toLeftOf="@+id/cb_today_plan"
             app:layout_constraintTop_toTopOf="parent" />
 

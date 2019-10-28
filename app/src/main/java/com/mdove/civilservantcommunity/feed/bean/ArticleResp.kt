@@ -4,8 +4,7 @@ import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import com.mdove.civilservantcommunity.base.bean.ArticleType
 import com.mdove.civilservantcommunity.base.bean.UserInfo
-import com.mdove.civilservantcommunity.plan.FeedTodayPlanParams
-import com.mdove.civilservantcommunity.plan.PlanToFeedBean
+import com.mdove.civilservantcommunity.plan.PlanModuleBean
 import com.mdove.civilservantcommunity.plan.PlanToFeedParams
 import kotlinx.android.parcel.Parcelize
 
@@ -48,13 +47,16 @@ data class FeedPaddingStub(
 
 data class FeedTimeLineFeedTodayPlansRespWrapper(
     val entityId: Long, // 数据库的id
+    val date: Long, // 数据库的date
+    val createTime: String, // 数据库的create_date
     val resp: FeedTimeLineFeedTodayPlansResp
 ) : BaseFeedResp()
 
 @Parcelize
 data class FeedTimeLineFeedTodayPlansResp(
     @SerializedName("params")
-    val params: PlanToFeedBean
+    val params: PlanModuleBean,
+    val select: Boolean = false
 ) : BaseFeedResp(), Parcelable
 
 data class FeedTimeLineFeedTodayPlansTitleResp(

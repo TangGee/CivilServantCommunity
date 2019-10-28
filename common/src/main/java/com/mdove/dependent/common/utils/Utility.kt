@@ -365,7 +365,6 @@ inline fun <reified T : Any> fromServerResp(json: String): NormalResp<T> {
     return normalResp
 }
 
-
 inline fun <reified T : Any> Fragment.getFromStack(): T? {
     if (this is T) {
         return this

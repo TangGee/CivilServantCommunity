@@ -24,14 +24,7 @@ data class PlanFactorModel(
 ) : Parcelable
 
 @Parcelize
-data class PlanToFeedBean(
-    @SerializedName("title") val planTitle: String,
-    @SerializedName("select") var select: Boolean = false
-) :
-    Parcelable
-
-@Parcelize
-data class PlanToFeedParams(val data: List<PlanToFeedBean>) : Parcelable
+data class PlanToFeedParams(val data: List<PlanModuleBean>) : Parcelable
 
 @Parcelize
 data class FeedTodayPlanParams(val title: String) : Parcelable

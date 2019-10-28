@@ -73,7 +73,7 @@ class MainFeedAdapter(
             } else if ((oldItem is FeedTodayPlanResp) && (newItem is FeedTodayPlanResp)) {
                 oldItem.params == newItem.params
             } else if ((oldItem is FeedTimeLineFeedTodayPlansRespWrapper) && (newItem is FeedTimeLineFeedTodayPlansRespWrapper)) {
-                oldItem.resp.params.select == newItem.resp.params.select
+                oldItem.resp.select == newItem.resp.select
             } else {
                 true
             }
@@ -82,7 +82,7 @@ class MainFeedAdapter(
         override fun getChangePayload(oldItem: BaseFeedResp, newItem: BaseFeedResp): Any? {
             return when {
                 (oldItem as? FeedPunchResp)?.count != (newItem as? FeedPunchResp)?.count -> PAYLOAD_PUNCH
-                (oldItem as? FeedTimeLineFeedTodayPlansRespWrapper)?.resp?.params?.select != (newItem as? FeedTimeLineFeedTodayPlansRespWrapper)?.resp?.params?.select -> PAYLOAD_TODAY_PLANS
+                (oldItem as? FeedTimeLineFeedTodayPlansRespWrapper)?.resp?.select != (newItem as? FeedTimeLineFeedTodayPlansRespWrapper)?.resp?.select -> PAYLOAD_TODAY_PLANS
                 else -> null
             }
         }
@@ -349,12 +349,15 @@ class MainFeedAdapter(
     inner class FeedTimeLineFeedTodayPlansViewHolder(itemView: View) :
         RecyclerView.ViewHolder(itemView) {
         private val title = itemView.findViewById<TextView>(R.id.text)
+        private val tvModule = itemView.findViewById<TextView>(R.id.tv_module)
         private val cb = itemView.findViewById<AppCompatCheckBox>(R.id.cb_today_plan)
 
         fun bind(wrapper: FeedTimeLineFeedTodayPlansRespWrapper) {
             reset()
-            title.text = wrapper.resp.params.planTitle
-            if (wrapper.resp.params.select) {
+            title.text = wrapper.resp.params.content
+            tvModule.text = wrapper.resp.params.moduleName
+
+            if (wrapper.resp.select) {
                 title.paint.flags = STRIKE_THRU_TEXT_FLAG or ANTI_ALIAS_FLAG
                 title.setTextColor(ContextCompat.getColor(itemView.context, R.color.grey_500))
             } else {
@@ -362,9 +365,9 @@ class MainFeedAdapter(
                 title.paint.flags = 0
                 title.paint.flags = ANTI_ALIAS_FLAG
             }
-            cb.isChecked = wrapper.resp.params.select
+            cb.isChecked = wrapper.resp.select
             cb.setOnCheckedChangeListener { _, isChecked ->
-                if (wrapper.resp.params.select != isChecked) {
+                if (wrapper.resp.select != isChecked) {
                     checkListener?.onCheck(wrapper, isChecked)
                 }
             }
@@ -375,7 +378,7 @@ class MainFeedAdapter(
         }
 
         fun payloadBind(wrapper: FeedTimeLineFeedTodayPlansRespWrapper) {
-            if (wrapper.resp.params.select) {
+            if (wrapper.resp.select) {
                 title.paint.flags = STRIKE_THRU_TEXT_FLAG or ANTI_ALIAS_FLAG
                 title.setTextColor(ContextCompat.getColor(itemView.context, R.color.grey_500))
             } else {

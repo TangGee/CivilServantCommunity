@@ -1,18 +1,15 @@
 package com.mdove.civilservantcommunity.feed.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.*
 import com.mdove.civilservantcommunity.feed.bean.*
 import com.mdove.civilservantcommunity.feed.repository.MainFeedRepository
-import com.mdove.civilservantcommunity.plan.PlanToFeedBean
 import com.mdove.civilservantcommunity.plan.PlanToFeedParams
-import com.mdove.civilservantcommunity.punch.PunchHelper
-import com.mdove.civilservantcommunity.punch.bean.PunchReq
 import com.mdove.civilservantcommunity.room.MainDb
 import com.mdove.dependent.common.network.NormalResp
 import com.mdove.dependent.common.networkenhance.valueobj.Resource
 import com.mdove.dependent.common.threadpool.FastMain
 import com.mdove.dependent.common.threadpool.MDoveBackgroundPool
+import com.mdove.dependent.common.utils.TimeUtils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -41,16 +38,19 @@ class MainFeedViewModel : ViewModel() {
                     temp.add(FeedDateResp())
                     temp.add(FeedQuickBtnsResp())
                     withContext(MDoveBackgroundPool) {
-                        //                        temp.add(
-//                            FeedPunchResp(
-//                                count = MainDb.db.punchRecordDao().getPunchCounts(),
-//                                hasPunch = PunchHelper.hasPunchToday()
-//                            )
-//                        )
-                        MainDb.db.todayPlansDao().getFeedTodayPlans()?.let {
+                        MainDb.db.todayPlansDao().getTodayPlansRecord()?.takeIf {
+                            it.isNotEmpty()
+                        }?.let {
                             temp.add(FeedTimeLineFeedTodayPlansTitleResp())
                             it.forEach {
-                                temp.add(FeedTimeLineFeedTodayPlansRespWrapper(it.id, it.resp))
+                                temp.add(
+                                    FeedTimeLineFeedTodayPlansRespWrapper(
+                                        it.id,
+                                        it.date,
+                                        it.createDate ?: TimeUtils.getDateFromSQL(),
+                                        it.resp
+                                    )
+                                )
                             }
                         }
                     }
@@ -97,9 +97,7 @@ class MainFeedViewModel : ViewModel() {
                         if (it === params.wrapper) {
                             params.wrapper.copy(
                                 resp = params.wrapper.resp.copy(
-                                    params = params.wrapper.resp.params.copy(
-                                        select = params.select
-                                    )
+                                    select = params.select
                                 )
                             )
                         } else {
