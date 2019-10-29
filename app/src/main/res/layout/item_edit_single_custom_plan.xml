@@ -9,7 +9,7 @@
     app:allRadius="8dp">
 
     <EditText
-        android:id="@+id/tv_plan_content"
+        android:id="@+id/et_custom_content"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="12dp"

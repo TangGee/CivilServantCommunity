@@ -3,7 +3,9 @@ package com.mdove.civilservantcommunity.plan.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.TextView
+import androidx.appcompat.widget.AppCompatImageView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -12,22 +14,23 @@ import com.mdove.civilservantcommunity.plan.SinglePlanBean
 import com.mdove.civilservantcommunity.plan.SinglePlanBeanWrapper
 import com.mdove.civilservantcommunity.plan.SinglePlanType
 
-class EditSinglePlanAdapter : ListAdapter<SinglePlanBeanWrapper, RecyclerView.ViewHolder>(object :
-    DiffUtil.ItemCallback<SinglePlanBeanWrapper>() {
-    override fun areContentsTheSame(
-        oldItem: SinglePlanBeanWrapper,
-        newItem: SinglePlanBeanWrapper
-    ): Boolean {
-        return false
-    }
+class EditSinglePlanAdapter(private val listener: OnSinglePlanClickListener? = null) :
+    ListAdapter<SinglePlanBeanWrapper, RecyclerView.ViewHolder>(object :
+        DiffUtil.ItemCallback<SinglePlanBeanWrapper>() {
+        override fun areContentsTheSame(
+            oldItem: SinglePlanBeanWrapper,
+            newItem: SinglePlanBeanWrapper
+        ): Boolean {
+            return oldItem.beanSingle.content == oldItem.beanSingle.content
+        }
 
-    override fun areItemsTheSame(
-        oldItem: SinglePlanBeanWrapper,
-        newItem: SinglePlanBeanWrapper
-    ): Boolean {
-        return oldItem === newItem
-    }
-}) {
+        override fun areItemsTheSame(
+            oldItem: SinglePlanBeanWrapper,
+            newItem: SinglePlanBeanWrapper
+        ): Boolean {
+            return oldItem.beanSingle.moduleId == newItem.beanSingle.moduleId
+        }
+    }) {
 
     override fun getItemViewType(position: Int): Int {
         return if (getItem(position).typeSingle == SinglePlanType.CUSTOM_PLAN) {
@@ -41,7 +44,7 @@ class EditSinglePlanAdapter : ListAdapter<SinglePlanBeanWrapper, RecyclerView.Vi
         if (viewType == 0) {
             return ModulePlanViewHolder(
                 LayoutInflater.from(parent.context).inflate(
-                    R.layout.item_plan_module_plan,
+                    R.layout.item_edit_single_plan,
                     parent,
                     false
                 )
@@ -49,7 +52,7 @@ class EditSinglePlanAdapter : ListAdapter<SinglePlanBeanWrapper, RecyclerView.Vi
         } else {
             return ModulePlanCustomViewHolder(
                 LayoutInflater.from(parent.context).inflate(
-                    R.layout.item_plan_module_custom_plan,
+                    R.layout.item_edit_single_custom_plan,
                     parent,
                     false
                 )
@@ -58,15 +61,26 @@ class EditSinglePlanAdapter : ListAdapter<SinglePlanBeanWrapper, RecyclerView.Vi
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        (holder as? ModulePlanViewHolder)?.let {
-            it.bind(data = getItem(position).beanSingle)
+        when (holder) {
+            is ModulePlanViewHolder -> {
+                holder.bind(data = getItem(position).beanSingle)
+            }
+            is ModulePlanCustomViewHolder -> {
+                holder.bind(data = getItem(position).beanSingle)
+            }
         }
     }
 
     inner class ModulePlanCustomViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private val et = itemView.findViewById<EditText>(R.id.et_custom_content)
 
         fun bind(data: SinglePlanBean) {
-            itemView.findViewById<TextView>(R.id.tv_plan_content).text = data.content
+            val custom = et.text.toString()
+            itemView.findViewById<AppCompatImageView>(R.id.btn_send).setOnClickListener {
+                if (!custom.isBlank()) {
+                    listener?.onCustomClick(data.copy(content = custom))
+                }
+            }
         }
     }
 
@@ -74,6 +88,14 @@ class EditSinglePlanAdapter : ListAdapter<SinglePlanBeanWrapper, RecyclerView.Vi
 
         fun bind(data: SinglePlanBean) {
             itemView.findViewById<TextView>(R.id.tv_plan_content).text = data.content
+            itemView.findViewById<AppCompatImageView>(R.id.btn_close).setOnClickListener {
+                listener?.onDeleteSinglePlanClick(data)
+            }
         }
     }
+}
+
+interface OnSinglePlanClickListener {
+    fun onDeleteSinglePlanClick(data: SinglePlanBean)
+    fun onCustomClick(data: SinglePlanBean)
 }

@@ -13,6 +13,8 @@ import com.mdove.civilservantcommunity.R
 import com.mdove.civilservantcommunity.base.BaseFragment
 import com.mdove.civilservantcommunity.feed.bean.FeedTimeLineFeedTodayPlansResp
 import com.mdove.civilservantcommunity.plan.adapter.EditPlanModuleAdapter
+import com.mdove.civilservantcommunity.plan.adapter.OnPlanModuleClickListener
+import com.mdove.civilservantcommunity.plan.adapter.OnSinglePlanClickListener
 import com.mdove.civilservantcommunity.plan.dao.TodayPlansEntity
 import com.mdove.civilservantcommunity.plan.viewmodel.EditPlanViewModel
 import com.mdove.civilservantcommunity.room.MainDb
@@ -27,36 +29,50 @@ import kotlinx.coroutines.withContext
 
 class PlanFragment : BaseFragment() {
     private lateinit var mViewModelEdit: EditPlanViewModel
-    private val adapter = EditPlanModuleAdapter(object : OnPlanClickListener {
-        override fun onClick(type: Int) {
+    private val adapter = EditPlanModuleAdapter(object : OnPlanModuleClickListener {
+        override fun onDeletePlanModuleClick(data: PlanModuleBean) {
+            mViewModelEdit.deletePlanModuleLiveData.value = data
+        }
+
+        override fun onClickCreatePlans() {
             activity?.let {
-                if (!it.isFinishing) {
-                    launch {
-                        showLoading()
-                        val plans = mViewModelEdit.createFeedPlans()
-                        withContext(MDoveBackgroundPool) {
-                            plans.forEach {
-                                MainDb.db.todayPlansDao().insert(
-                                    TodayPlansEntity(
-                                        date = System.currentTimeMillis(),
-                                        sucDate = null,
-                                        createDate = TimeUtils.getDateFromSQL(),
-                                        resp = FeedTimeLineFeedTodayPlansResp(it)
-                                    )
+                if (it.isFinishing) {
+                    return@let
+                }
+                launch {
+                    showLoading()
+                    val plans = mViewModelEdit.createFeedPlans()
+                    withContext(MDoveBackgroundPool) {
+                        plans.filter {
+                            !it.moduleName.isNullOrBlank()
+                        }.forEach {
+                            MainDb.db.todayPlansDao().insert(
+                                TodayPlansEntity(
+                                    date = System.currentTimeMillis(),
+                                    sucDate = null,
+                                    createDate = TimeUtils.getDateFromSQL(),
+                                    resp = FeedTimeLineFeedTodayPlansResp(it)
                                 )
-                            }
+                            )
                         }
-                        dismissLoading()
-                        val intent = Intent()
-                        intent.putExtra(
-                            PlanActivity.INTENT_PARAMS,
-                            PlanToFeedParams(plans)
-                        )
-                        it.setResult(Activity.RESULT_OK, intent)
-                        it.finish()
                     }
+                    dismissLoading()
+                    val intent = Intent()
+                    intent.putExtra(
+                        PlanActivity.INTENT_PARAMS,
+                        PlanToFeedParams(plans)
+                    )
+                    it.setResult(Activity.RESULT_OK, intent)
+                    it.finish()
                 }
             }
+        }
+    }, object : OnSinglePlanClickListener {
+        override fun onDeleteSinglePlanClick(data: SinglePlanBean) {
+            mViewModelEdit.deleteSinglePlanLiveData.value = data
+        }
+
+        override fun onCustomClick(data: SinglePlanBean) {
         }
     })
 

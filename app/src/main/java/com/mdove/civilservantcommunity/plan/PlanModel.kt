@@ -28,6 +28,7 @@ enum class SinglePlanType{
 
 @Parcelize
 data class PlanModuleBean(
+    val moduleId: String,
     val beanSingles: List<SinglePlanBeanWrapper>,
     val moduleType: PlanModuleType
 ) : Parcelable
