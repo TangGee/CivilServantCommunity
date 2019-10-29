@@ -12,9 +12,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.mdove.civilservantcommunity.R
 import com.mdove.civilservantcommunity.base.BaseFragment
 import com.mdove.civilservantcommunity.feed.bean.FeedTimeLineFeedTodayPlansResp
-import com.mdove.civilservantcommunity.plan.adapter.PlanModuleAdapter
+import com.mdove.civilservantcommunity.plan.adapter.EditPlanModuleAdapter
 import com.mdove.civilservantcommunity.plan.dao.TodayPlansEntity
-import com.mdove.civilservantcommunity.plan.viewmodel.PlanViewModel
+import com.mdove.civilservantcommunity.plan.viewmodel.EditPlanViewModel
 import com.mdove.civilservantcommunity.room.MainDb
 import com.mdove.dependent.common.networkenhance.valueobj.Status
 import com.mdove.dependent.common.threadpool.MDoveBackgroundPool
@@ -26,19 +26,20 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class PlanFragment : BaseFragment() {
-    private lateinit var viewModel: PlanViewModel
-    private val adapter = PlanModuleAdapter(object : OnPlanClickListener {
+    private lateinit var mViewModelEdit: EditPlanViewModel
+    private val adapter = EditPlanModuleAdapter(object : OnPlanClickListener {
         override fun onClick(type: Int) {
             activity?.let {
                 if (!it.isFinishing) {
                     launch {
                         showLoading()
-                        val plans = viewModel.createFeedPlans()
+                        val plans = mViewModelEdit.createFeedPlans()
                         withContext(MDoveBackgroundPool) {
                             plans.forEach {
                                 MainDb.db.todayPlansDao().insert(
                                     TodayPlansEntity(
                                         date = System.currentTimeMillis(),
+                                        sucDate = null,
                                         createDate = TimeUtils.getDateFromSQL(),
                                         resp = FeedTimeLineFeedTodayPlansResp(it)
                                     )
@@ -62,7 +63,7 @@ class PlanFragment : BaseFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         activity?.let {
-            viewModel = ViewModelProviders.of(it).get(PlanViewModel::class.java)
+            mViewModelEdit = ViewModelProviders.of(it).get(EditPlanViewModel::class.java)
         }
     }
 
@@ -79,7 +80,7 @@ class PlanFragment : BaseFragment() {
         view_toolbar.setTitle("我的计划")
         rlv.layoutManager = LinearLayoutManager(context)
         rlv.adapter = adapter
-        viewModel.data.observe(this, Observer {
+        mViewModelEdit.data.observe(this, Observer {
             when (it.status) {
                 Status.SUCCESS -> {
                     it.data?.data?.let {

@@ -16,6 +16,17 @@ data class PlanModuleBean(
 ) : Parcelable
 
 @Parcelize
+data class PlanModuleBeanWrapper(
+    val bean: PlanModuleBean,
+    val type: PlanModuleType
+) : Parcelable
+
+enum class PlanModuleType{
+    SYS_PALN,
+    CUSTOM_PLAN
+}
+
+@Parcelize
 data class PlanFactorModel(
     @SerializedName("factor_time") val factorTime: String? = null,
     @SerializedName("factor_count") val factorCount: String? = null,

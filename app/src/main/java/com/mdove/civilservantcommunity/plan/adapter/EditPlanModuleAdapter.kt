@@ -10,21 +10,21 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.mdove.civilservantcommunity.R
 import com.mdove.civilservantcommunity.plan.OnPlanClickListener
-import com.mdove.civilservantcommunity.plan.PlanModuleBean
+import com.mdove.civilservantcommunity.plan.PlanModuleBeanWrapper
 
-class PlanModuleAdapter(private val listener: OnPlanClickListener) :
-    ListAdapter<List<PlanModuleBean>, RecyclerView.ViewHolder>(object :
-        DiffUtil.ItemCallback<List<PlanModuleBean>>() {
+class EditPlanModuleAdapter(private val listener: OnPlanClickListener) :
+    ListAdapter<List<PlanModuleBeanWrapper>, RecyclerView.ViewHolder>(object :
+        DiffUtil.ItemCallback<List<PlanModuleBeanWrapper>>() {
         override fun areContentsTheSame(
-            oldItem: List<PlanModuleBean>,
-            newItem: List<PlanModuleBean>
+            oldItem: List<PlanModuleBeanWrapper>,
+            newItem: List<PlanModuleBeanWrapper>
         ): Boolean {
             return false
         }
 
         override fun areItemsTheSame(
-            oldItem: List<PlanModuleBean>,
-            newItem: List<PlanModuleBean>
+            oldItem: List<PlanModuleBeanWrapper>,
+            newItem: List<PlanModuleBeanWrapper>
         ): Boolean {
             return oldItem === newItem
         }
@@ -85,11 +85,11 @@ class PlanModuleAdapter(private val listener: OnPlanClickListener) :
 
     inner class PlanModuleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        fun bind(data: List<PlanModuleBean>) {
-            itemView.findViewById<TextView>(R.id.tv_module_name).text = data[0].moduleName
+        fun bind(data: List<PlanModuleBeanWrapper>) {
+            itemView.findViewById<TextView>(R.id.tv_module_name).text = data[0].bean.moduleName
             itemView.findViewById<RecyclerView>(R.id.rlv).apply {
                 this.layoutManager = LinearLayoutManager(this.context)
-                this.adapter = PlanModulePlanAdapter().apply {
+                this.adapter = EditPlanSinglePlanAdapter().apply {
                     this.submitList(data)
                 }
             }
