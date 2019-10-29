@@ -11,7 +11,7 @@ import kotlinx.android.parcel.Parcelize
  */
 @Parcelize
 data class UGCPostParams(@SerializedName("user_info") val userInfo: UserInfo,
-                         @SerializedName("type") val types: List<ArticleType>,
+                         @SerializedName("typeSingle") val types: List<ArticleType>,
                          @SerializedName("title") val title: String,
                          @SerializedName("content") val content: String,
                          @SerializedName("list_style") val listStyle: String) : Parcelable

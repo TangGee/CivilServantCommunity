@@ -2,7 +2,7 @@ package com.mdove.civilservantcommunity.plan.repository
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.mdove.civilservantcommunity.plan.PlanModuleBean
+import com.mdove.civilservantcommunity.plan.SinglePlanBean
 import com.mdove.dependent.common.network.AppExecutorsImpl
 import com.mdove.dependent.common.network.NormalResp
 import com.mdove.dependent.common.networkenhance.NetworkBoundResource
@@ -13,26 +13,26 @@ class PlanRepository {
     private val module = PlanModule()
     private val planCache = PlanCache()
 
-    fun getPlans(): LiveData<Resource<NormalResp<List<List<PlanModuleBean>>>>> {
+    fun getPlans(): LiveData<Resource<NormalResp<List<List<SinglePlanBean>>>>> {
         return object :
-                NetworkBoundResource<NormalResp<List<List<PlanModuleBean>>>, NormalResp<List<List<PlanModuleBean>>>>(
+                NetworkBoundResource<NormalResp<List<List<SinglePlanBean>>>, NormalResp<List<List<SinglePlanBean>>>>(
                         AppExecutorsImpl()
                 ) {
-            override fun saveCallResult(item: NormalResp<List<List<PlanModuleBean>>>) {
-                planCache.cachePostResp = item
+            override fun saveCallResult(item: NormalResp<List<List<SinglePlanBean>>>) {
+                planCache.mCachePostResp = item
             }
 
-            override fun shouldFetch(data: NormalResp<List<List<PlanModuleBean>>>?): Boolean {
+            override fun shouldFetch(data: NormalResp<List<List<SinglePlanBean>>>?): Boolean {
                 return true
             }
 
-            override fun loadFromDb(): LiveData<NormalResp<List<List<PlanModuleBean>>>> {
-                return MutableLiveData<NormalResp<List<List<PlanModuleBean>>>>().apply {
-                    value = planCache.cachePostResp ?: NormalResp<List<List<PlanModuleBean>>>()
+            override fun loadFromDb(): LiveData<NormalResp<List<List<SinglePlanBean>>>> {
+                return MutableLiveData<NormalResp<List<List<SinglePlanBean>>>>().apply {
+                    value = planCache.mCachePostResp ?: NormalResp<List<List<SinglePlanBean>>>()
                 }
             }
 
-            override fun createCall(): LiveData<ApiResponse<NormalResp<List<List<PlanModuleBean>>>>> {
+            override fun createCall(): LiveData<ApiResponse<NormalResp<List<List<SinglePlanBean>>>>> {
                 return module.getPlans()
             }
         }.asLiveData()

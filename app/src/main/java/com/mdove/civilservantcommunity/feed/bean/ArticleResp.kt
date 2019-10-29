@@ -4,7 +4,7 @@ import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import com.mdove.civilservantcommunity.base.bean.ArticleType
 import com.mdove.civilservantcommunity.base.bean.UserInfo
-import com.mdove.civilservantcommunity.plan.PlanModuleBean
+import com.mdove.civilservantcommunity.plan.SinglePlanBean
 import com.mdove.civilservantcommunity.plan.PlanToFeedParams
 import kotlinx.android.parcel.Parcelize
 
@@ -18,7 +18,7 @@ data class ArticleResp(
     @SerializedName("title") val title: String? = "",
     @SerializedName("content") val content: String? = "",
     @SerializedName("make_time") val maketime: String? = "",
-    @SerializedName("type") val type: List<ArticleType>? = null,
+    @SerializedName("typeSingle") val type: List<ArticleType>? = null,
     @SerializedName("list_style") val listStyle: Int? = 0
 ) : Parcelable
 
@@ -56,7 +56,7 @@ data class FeedTimeLineFeedTodayPlansRespWrapper(
 @Parcelize
 data class FeedTimeLineFeedTodayPlansResp(
     @SerializedName("params")
-    val params: PlanModuleBean,
+    val params: SinglePlanBean,
     val select: Boolean = false
 ) : BaseFeedResp(), Parcelable
 

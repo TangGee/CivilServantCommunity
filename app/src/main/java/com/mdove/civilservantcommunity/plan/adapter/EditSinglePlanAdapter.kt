@@ -8,29 +8,29 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.mdove.civilservantcommunity.R
-import com.mdove.civilservantcommunity.plan.PlanModuleBean
-import com.mdove.civilservantcommunity.plan.PlanModuleBeanWrapper
-import com.mdove.civilservantcommunity.plan.PlanModuleType
+import com.mdove.civilservantcommunity.plan.SinglePlanBean
+import com.mdove.civilservantcommunity.plan.SinglePlanBeanWrapper
+import com.mdove.civilservantcommunity.plan.SinglePlanType
 
-class EditPlanSinglePlanAdapter : ListAdapter<PlanModuleBeanWrapper, RecyclerView.ViewHolder>(object :
-    DiffUtil.ItemCallback<PlanModuleBeanWrapper>() {
+class EditSinglePlanAdapter : ListAdapter<SinglePlanBeanWrapper, RecyclerView.ViewHolder>(object :
+    DiffUtil.ItemCallback<SinglePlanBeanWrapper>() {
     override fun areContentsTheSame(
-        oldItem: PlanModuleBeanWrapper,
-        newItem: PlanModuleBeanWrapper
+        oldItem: SinglePlanBeanWrapper,
+        newItem: SinglePlanBeanWrapper
     ): Boolean {
         return false
     }
 
     override fun areItemsTheSame(
-        oldItem: PlanModuleBeanWrapper,
-        newItem: PlanModuleBeanWrapper
+        oldItem: SinglePlanBeanWrapper,
+        newItem: SinglePlanBeanWrapper
     ): Boolean {
         return oldItem === newItem
     }
 }) {
 
     override fun getItemViewType(position: Int): Int {
-        return if (getItem(position).type == PlanModuleType.CUSTOM_PLAN) {
+        return if (getItem(position).typeSingle == SinglePlanType.CUSTOM_PLAN) {
             1
         } else {
             0
@@ -59,20 +59,20 @@ class EditPlanSinglePlanAdapter : ListAdapter<PlanModuleBeanWrapper, RecyclerVie
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         (holder as? ModulePlanViewHolder)?.let {
-            it.bind(data = getItem(position).bean)
+            it.bind(data = getItem(position).beanSingle)
         }
     }
 
     inner class ModulePlanCustomViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        fun bind(data: PlanModuleBean) {
+        fun bind(data: SinglePlanBean) {
             itemView.findViewById<TextView>(R.id.tv_plan_content).text = data.content
         }
     }
 
     inner class ModulePlanViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        fun bind(data: PlanModuleBean) {
+        fun bind(data: SinglePlanBean) {
             itemView.findViewById<TextView>(R.id.tv_plan_content).text = data.content
         }
     }

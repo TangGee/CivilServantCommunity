@@ -2,9 +2,7 @@ package com.mdove.civilservantcommunity.plan.viewmodel
 
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
-import com.mdove.civilservantcommunity.plan.PlanModuleBean
-import com.mdove.civilservantcommunity.plan.PlanModuleBeanWrapper
-import com.mdove.civilservantcommunity.plan.PlanModuleType
+import com.mdove.civilservantcommunity.plan.*
 import com.mdove.civilservantcommunity.plan.repository.PlanRepository
 import com.mdove.dependent.common.network.NormalResp
 import com.mdove.dependent.common.networkenhance.valueobj.Resource
@@ -13,23 +11,23 @@ class EditPlanViewModel : ViewModel() {
     private val repository = PlanRepository()
 
     val data = Transformations.map(repository.getPlans()) {
-        val new = mutableListOf<List<PlanModuleBeanWrapper>>()
+        val new = mutableListOf<PlanModuleBean>()
         // 首个ViewHolder占位
-        new.add(mutableListOf())
-        it.data?.data?.let {
-            new.addAll(it.map {
-                it.map {
-                    PlanModuleBeanWrapper(it, PlanModuleType.SYS_PALN)
+        new.add(PlanModuleBean(mutableListOf(), PlanModuleType.PADDING))
+        it.data?.data?.let { rawList ->
+            rawList.forEach {
+                new.add(PlanModuleBean(it.map {
+                    SinglePlanBeanWrapper(it, SinglePlanType.SYS_PLAN)
                 }.toMutableList().apply {
-                    add(PlanModuleBeanWrapper(PlanModuleBean(), PlanModuleType.CUSTOM_PLAN))
-                }
-            })
+                    add(SinglePlanBeanWrapper(SinglePlanBean(), SinglePlanType.CUSTOM_PLAN))
+                }, PlanModuleType.NORMAL))
+            }
         }
         // 用空表示最后一个ok按钮的bean
-        new.add(mutableListOf())
+        new.add(PlanModuleBean(mutableListOf(), PlanModuleType.BTN_OK))
         Resource(
             it.status,
-            NormalResp<List<List<PlanModuleBeanWrapper>>>(
+            NormalResp<List<PlanModuleBean>>(
                 it.data?.message ?: "",
                 new,
                 it.data?.exception
@@ -38,11 +36,11 @@ class EditPlanViewModel : ViewModel() {
         )
     }
 
-    fun createFeedPlans(): List<PlanModuleBean> {
+    fun createFeedPlans(): List<SinglePlanBean> {
         return data.value?.data?.data?.let { data ->
             data.flatMap {
-                it.map {
-                    it.bean
+                it.beanSingles.map {
+                    it.beanSingle
                 }
             }
         } ?: mutableListOf()

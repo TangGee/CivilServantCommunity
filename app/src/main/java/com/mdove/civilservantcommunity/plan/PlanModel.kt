@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-data class PlanModuleBean(
+data class SinglePlanBean(
     @SerializedName("uid") val uid: String? = null,
     @SerializedName("module_id") val moduleId: String? = null,
     @SerializedName("module_name") val moduleName: String? = null,
@@ -16,15 +16,28 @@ data class PlanModuleBean(
 ) : Parcelable
 
 @Parcelize
-data class PlanModuleBeanWrapper(
-    val bean: PlanModuleBean,
-    val type: PlanModuleType
+data class SinglePlanBeanWrapper(
+    val beanSingle: SinglePlanBean,
+    val typeSingle: SinglePlanType
+) : Parcelable
+
+enum class SinglePlanType{
+    SYS_PLAN,
+    CUSTOM_PLAN
+}
+
+@Parcelize
+data class PlanModuleBean(
+    val beanSingles: List<SinglePlanBeanWrapper>,
+    val moduleType: PlanModuleType
 ) : Parcelable
 
 enum class PlanModuleType{
-    SYS_PALN,
-    CUSTOM_PLAN
+    PADDING,
+    NORMAL,
+    BTN_OK
 }
+
 
 @Parcelize
 data class PlanFactorModel(
@@ -35,7 +48,7 @@ data class PlanFactorModel(
 ) : Parcelable
 
 @Parcelize
-data class PlanToFeedParams(val data: List<PlanModuleBean>) : Parcelable
+data class PlanToFeedParams(val data: List<SinglePlanBean>) : Parcelable
 
 @Parcelize
 data class FeedTodayPlanParams(val title: String) : Parcelable

@@ -16,6 +16,6 @@ data class DetailFeedResp(
     @SerializedName("title") val title: String? = "",
     @SerializedName("content") val content: String? = "",
     @SerializedName("make_time") val maketime: String? = "",
-    @SerializedName("type") val type: List<ArticleType>? = null,
+    @SerializedName("typeSingle") val type: List<ArticleType>? = null,
     @SerializedName("list_style") val listStyle: Int? = 0
 ) : Parcelable
