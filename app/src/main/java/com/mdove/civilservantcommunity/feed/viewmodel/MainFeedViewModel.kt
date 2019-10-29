@@ -47,6 +47,7 @@ class MainFeedViewModel : ViewModel() {
                                     FeedTimeLineFeedTodayPlansRespWrapper(
                                         it.id,
                                         it.date,
+                                        it.sucDate,
                                         it.createDate ?: TimeUtils.getDateFromSQL(),
                                         it.resp
                                     )

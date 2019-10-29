@@ -48,6 +48,7 @@ data class FeedPaddingStub(
 data class FeedTimeLineFeedTodayPlansRespWrapper(
     val entityId: Long, // 数据库的id
     val date: Long, // 数据库的date
+    val sucTime: Long?, // 数据库的date
     val createTime: String, // 数据库的create_date
     val resp: FeedTimeLineFeedTodayPlansResp
 ) : BaseFeedResp()

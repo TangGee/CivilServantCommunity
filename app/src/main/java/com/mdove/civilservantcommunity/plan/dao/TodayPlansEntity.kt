@@ -19,6 +19,8 @@ class TodayPlansEntity(
     var date: Long,
     @ColumnInfo(name = "create_date")
     var createDate: String?,
+    @ColumnInfo(name = "suc_date")
+    var sucDate: Long?,
     @ColumnInfo(name = "resp_json")
     val resp: FeedTimeLineFeedTodayPlansResp
 )

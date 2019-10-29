@@ -26,8 +26,8 @@
             android:id="@+id/tv_module"
             android:layout_width="wrap_content"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="8dp"
             android:textSize="14sp"
             android:textColor="@color/white"
             android:text="模块"
@@ -48,7 +48,7 @@
             android:textColor="@color/black"
             android:gravity="center"
             android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginTop="8dp"
             app:layout_constraintLeft_toRightOf="@+id/tv_module"
             app:layout_constraintRight_toLeftOf="@+id/cb_today_plan"
             app:layout_constraintTop_toTopOf="parent" />
@@ -56,11 +56,24 @@
         <androidx.appcompat.widget.AppCompatCheckBox
             android:id="@+id/cb_today_plan"
             android:layout_width="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="8dp"
             app:layout_constraintRight_toRightOf="parent"
             android:theme="@style/MainFeedTodayPlanCheckBox"
             android:layout_marginRight="8dp"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:id="@+id/tv_suc_time"
+            android:layout_width="wrap_content"
+            app:layout_constraintRight_toRightOf="@+id/cb_today_plan"
+            app:layout_constraintTop_toBottomOf="@+id/cb_today_plan"
+            android:text="完成时间"
+            android:textColor="@color/grey_500"
+            android:textSize="12sp"
+            android:layout_marginTop="4dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="8dp"
             android:layout_height="wrap_content"/>
     </com.mdove.dependent.common.view.roundcorner.RoundCornerConstraintLayout>
 

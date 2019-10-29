@@ -349,6 +349,7 @@ class MainFeedAdapter(
     inner class FeedTimeLineFeedTodayPlansViewHolder(itemView: View) :
         RecyclerView.ViewHolder(itemView) {
         private val title = itemView.findViewById<TextView>(R.id.text)
+        private val tvSucTime = itemView.findViewById<TextView>(R.id.tv_suc_time)
         private val tvModule = itemView.findViewById<TextView>(R.id.tv_module)
         private val cb = itemView.findViewById<AppCompatCheckBox>(R.id.cb_today_plan)
 
@@ -356,15 +357,14 @@ class MainFeedAdapter(
             reset()
             title.text = wrapper.resp.params.content
             tvModule.text = wrapper.resp.params.moduleName
-
-            if (wrapper.resp.select) {
-                title.paint.flags = STRIKE_THRU_TEXT_FLAG or ANTI_ALIAS_FLAG
-                title.setTextColor(ContextCompat.getColor(itemView.context, R.color.grey_500))
-            } else {
-                title.setTextColor(ContextCompat.getColor(itemView.context, R.color.black))
-                title.paint.flags = 0
-                title.paint.flags = ANTI_ALIAS_FLAG
+            wrapper.sucTime?.let {
+                tvSucTime.visibility = View.VISIBLE
+                tvSucTime.text = TimeUtils.getDateChinese(it)
+            } ?: also {
+                tvSucTime.visibility = View.GONE
             }
+
+            bindSelect(wrapper.resp.select)
             cb.isChecked = wrapper.resp.select
             cb.setOnCheckedChangeListener { _, isChecked ->
                 if (wrapper.resp.select != isChecked) {
@@ -373,18 +373,28 @@ class MainFeedAdapter(
             }
         }
 
+        fun payloadBind(wrapper: FeedTimeLineFeedTodayPlansRespWrapper) {
+            bindSelect(wrapper.resp.select)
+        }
+
         private fun reset() {
             cb.setOnCheckedChangeListener(null)
         }
 
-        fun payloadBind(wrapper: FeedTimeLineFeedTodayPlansRespWrapper) {
-            if (wrapper.resp.select) {
+        private fun bindSelect(select: Boolean) {
+            if (select) {
                 title.paint.flags = STRIKE_THRU_TEXT_FLAG or ANTI_ALIAS_FLAG
                 title.setTextColor(ContextCompat.getColor(itemView.context, R.color.grey_500))
+                tvModule.setBackgroundResource(R.drawable.bg_round_grey)
+                tvModule.paint.flags = STRIKE_THRU_TEXT_FLAG or ANTI_ALIAS_FLAG
+                tvModule.setBackgroundResource(R.drawable.bg_round_grey)
             } else {
                 title.setTextColor(ContextCompat.getColor(itemView.context, R.color.black))
                 title.paint.flags = 0
                 title.paint.flags = ANTI_ALIAS_FLAG
+                tvModule.setBackgroundResource(R.drawable.bg_round_blue)
+                tvModule.paint.flags = 0
+                tvModule.paint.flags = ANTI_ALIAS_FLAG
             }
         }
     }

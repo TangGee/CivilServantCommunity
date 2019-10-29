@@ -88,6 +88,7 @@ class MainFeedFragment : BaseFragment() {
                             wrapper.entityId,
                             date = wrapper.date,
                             createDate = wrapper.createTime,
+                            sucDate = System.currentTimeMillis(),
                             resp = wrapper.resp.copy(
                                 select = isCheck
                             )
