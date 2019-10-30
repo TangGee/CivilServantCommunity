@@ -94,7 +94,7 @@ class AccountModule {
                 val data: NormalResp<LoginDataResp> = fromServerResp(json)
                 data
             } catch (e: Exception) {
-                NormalResp<LoginDataResp>(exception = e)
+                NormalResp<LoginDataResp>(status = 0, exception = e)
             }
             if (resp.exception == null) {
                 liveData.postValue(ApiSuccessResponse(resp))

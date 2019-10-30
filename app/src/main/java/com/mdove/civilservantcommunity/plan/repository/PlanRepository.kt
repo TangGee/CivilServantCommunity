@@ -1,6 +1,5 @@
 package com.mdove.civilservantcommunity.plan.repository
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.mdove.civilservantcommunity.plan.SinglePlanBean

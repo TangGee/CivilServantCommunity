@@ -101,7 +101,11 @@ class PlanFragment : BaseFragment() {
                 Status.SUCCESS -> {
                     it.data?.data?.let {
                         adapter.submitList(it)
+                        rlv.updateEmptyUI()
                     }
+                }
+                Status.LOADING -> {
+                    rlv.updateEmptyUI()
                 }
             }
         })
