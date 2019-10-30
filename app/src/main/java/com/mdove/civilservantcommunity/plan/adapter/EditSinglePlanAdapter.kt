@@ -28,7 +28,7 @@ class EditSinglePlanAdapter(private val listener: OnSinglePlanClickListener? = n
             oldItem: SinglePlanBeanWrapper,
             newItem: SinglePlanBeanWrapper
         ): Boolean {
-            return oldItem.beanSingle.moduleId == newItem.beanSingle.moduleId
+            return oldItem.beanSingle.content == newItem.beanSingle.content
         }
     }) {
 

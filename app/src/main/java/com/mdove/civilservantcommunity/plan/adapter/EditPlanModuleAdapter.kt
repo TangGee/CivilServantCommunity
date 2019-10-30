@@ -127,11 +127,7 @@ class EditPlanModuleAdapter(
         }
 
         fun payload(data: PlanModuleBean) {
-            rlv.layoutManager = LinearLayoutManager(rlv.context)
-            val adapter =
-                (rlv.adapter as? EditSinglePlanAdapter) ?: EditSinglePlanAdapter(singlePlanListener)
-            rlv.adapter = adapter
-            adapter.submitList(data.beanSingles)
+            (rlv.adapter as? EditSinglePlanAdapter)?.submitList(data.beanSingles)
         }
     }
 }
