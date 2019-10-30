@@ -4,6 +4,7 @@ import androidx.lifecycle.*
 import com.mdove.civilservantcommunity.feed.bean.*
 import com.mdove.civilservantcommunity.feed.repository.MainFeedRepository
 import com.mdove.civilservantcommunity.plan.PlanToFeedParams
+import com.mdove.civilservantcommunity.plan.SinglePlanStatus
 import com.mdove.civilservantcommunity.room.MainDb
 import com.mdove.dependent.common.network.NormalResp
 import com.mdove.dependent.common.networkenhance.valueobj.Resource
@@ -27,6 +28,7 @@ class MainFeedViewModel : ViewModel() {
         }
 
     val punchResp = MutableLiveData<Boolean>()
+    // 从编辑计划页面跳转过来
     val planParamsLiveData = MutableLiveData<PlanToFeedParams>()
     val checkTodayPlanLiveData = MutableLiveData<FeedTodayPlansCheckParams>()
 
@@ -38,21 +40,19 @@ class MainFeedViewModel : ViewModel() {
                     temp.add(FeedDateResp())
                     temp.add(FeedQuickBtnsResp())
                     withContext(MDoveBackgroundPool) {
-                        MainDb.db.todayPlansDao().getTodayPlansRecord()?.takeIf {
-                            it.isNotEmpty()
-                        }?.let {
+                        MainDb.db.todayPlansDao().getTodayPlansRecord()?.let {entity->
                             temp.add(FeedTimeLineFeedTodayPlansTitleResp())
-                            it.forEach {
-                                temp.add(
-                                    FeedTimeLineFeedTodayPlansRespWrapper(
-                                        it.id,
-                                        it.date,
-                                        it.sucDate,
-                                        it.createDate ?: TimeUtils.getDateFromSQL(),
-                                        it.resp
-                                    )
-                                )
-                            }
+                            temp.addAll(entity.resp.params.flatMap {planModule->
+                                planModule.beanSingles.map {
+                                        FeedTimeLineFeedTodayPlansResp(
+                                            entity.id,
+                                            entity.date,
+                                            entity.sucDate,
+                                            entity.createDate ?: TimeUtils.getDateFromSQL(),
+                                            it
+                                        )
+                                    }
+                            })
                         }
                     }
                     temp.add(FeedTimeLineFeedTitleResp())
@@ -81,24 +81,28 @@ class MainFeedViewModel : ViewModel() {
             }
 
             addSource(planParamsLiveData) { params ->
-                value = value?.let {
-                    Resource(it.status, it.data?.filter {
-                        it !is FeedTodayPlanResp
-                    }?.toMutableList()?.apply {
-                        addAll(params.data.map {
-                            FeedTimeLineFeedTodayPlansResp(params = it)
-                        })
-                    }, it.exception)
-                }
+                // TODO
+//                value = value?.let {
+//                    Resource(it.status, it.data?.filter {
+//                        it !is FeedTodayPlanResp
+//                    }?.toMutableList()?.apply {
+//                        addAll(params.data.map {
+//                            FeedTimeLineFeedTodayPlansResp(params = it)
+//                        })
+//                    }, it.exception)
+//                }
             }
 
             addSource(checkTodayPlanLiveData) { params ->
                 value = value?.let {
                     Resource(it.status, it.data?.map {
-                        if (it === params.wrapper) {
-                            params.wrapper.copy(
-                                resp = params.wrapper.resp.copy(
-                                    select = params.select
+                        if (it === params.resp) {
+                            params.resp.copy(
+                                params = params.resp.params.copy(
+                                    statusSingle = if (params.select)
+                                        SinglePlanStatus.SELECT
+                                    else
+                                        SinglePlanStatus.NORMAL
                                 )
                             )
                         } else {

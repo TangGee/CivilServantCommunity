@@ -1,10 +1,13 @@
 package com.mdove.civilservantcommunity.plan.dao
 
+import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
-import com.mdove.civilservantcommunity.feed.bean.FeedTimeLineFeedTodayPlansResp
+import com.google.gson.annotations.SerializedName
+import com.mdove.civilservantcommunity.plan.PlanModuleBean
+import kotlinx.android.parcel.Parcelize
 
 /**
  * Created by MDove on 2019-10-27.
@@ -22,5 +25,11 @@ class TodayPlansEntity(
     @ColumnInfo(name = "suc_date")
     var sucDate: Long?,
     @ColumnInfo(name = "resp_json")
-    val resp: FeedTimeLineFeedTodayPlansResp
+    var resp: TodayPlansDbBean
 )
+
+@Parcelize
+data class TodayPlansDbBean(
+    @SerializedName("data")
+    val params: List<PlanModuleBean>
+) : Parcelable

@@ -1,7 +1,6 @@
 package com.mdove.civilservantcommunity.plan.dao
 
 import androidx.room.TypeConverter
-import com.mdove.civilservantcommunity.feed.bean.FeedTimeLineFeedTodayPlansResp
 import com.mdove.dependent.common.gson.GsonProvider
 
 /**
@@ -9,12 +8,12 @@ import com.mdove.dependent.common.gson.GsonProvider
  */
 class TodayPlansConverter {
     @TypeConverter
-    fun toTodayPlans(value: String): FeedTimeLineFeedTodayPlansResp {
-        return GsonProvider.getDefaultGson().fromJson(value, FeedTimeLineFeedTodayPlansResp::class.java)
+    fun toTodayPlans(value: String): TodayPlansDbBean {
+        return GsonProvider.getDefaultGson().fromJson(value, TodayPlansDbBean::class.java)
     }
 
     @TypeConverter
-    fun fromTodayPlans(resp: FeedTimeLineFeedTodayPlansResp): String {
+    fun fromTodayPlans(resp: TodayPlansDbBean): String {
         return GsonProvider.getDefaultGson().toJson(resp)
     }
 }

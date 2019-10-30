@@ -17,23 +17,36 @@ data class SinglePlanBean(
 
 @Parcelize
 data class SinglePlanBeanWrapper(
+    @SerializedName("single_plan")
     val beanSingle: SinglePlanBean,
-    val typeSingle: SinglePlanType
+    @SerializedName("single_plan_type")
+    val typeSingle: SinglePlanType,
+    @SerializedName("single_plan_status")
+    val statusSingle: SinglePlanStatus = SinglePlanStatus.NORMAL
 ) : Parcelable
 
-enum class SinglePlanType{
+@Parcelize
+enum class SinglePlanStatus : Parcelable {
+    SELECT,
+    NORMAL,
+}
+
+@Parcelize
+enum class SinglePlanType : Parcelable {
     SYS_PLAN,
-    CUSTOM_PLAN
+    CUSTOM_PLAN,
+    CUSTOM_PLAN_BTN
 }
 
 @Parcelize
 data class PlanModuleBean(
     val moduleId: String,
+    val moduleName: String,
     val beanSingles: List<SinglePlanBeanWrapper>,
     val moduleType: PlanModuleType
 ) : Parcelable
 
-enum class PlanModuleType{
+enum class PlanModuleType {
     PADDING,
     NORMAL,
     BTN_OK
@@ -49,10 +62,7 @@ data class PlanFactorModel(
 ) : Parcelable
 
 @Parcelize
-data class PlanToFeedParams(val data: List<SinglePlanBean>) : Parcelable
-
-@Parcelize
-data class FeedTodayPlanParams(val title: String) : Parcelable
+data class PlanToFeedParams(val data: List<PlanModuleBean>) : Parcelable
 
 @Parcelize
 data class PlanToFeedResult(val params: PlanToFeedParams?, val status: Status) : Parcelable

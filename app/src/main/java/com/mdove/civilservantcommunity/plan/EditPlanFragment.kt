@@ -11,11 +11,11 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mdove.civilservantcommunity.R
 import com.mdove.civilservantcommunity.base.BaseFragment
-import com.mdove.civilservantcommunity.feed.bean.FeedTimeLineFeedTodayPlansResp
 import com.mdove.civilservantcommunity.plan.adapter.EditPlanModuleAdapter
 import com.mdove.civilservantcommunity.plan.adapter.OnPlanModuleClickListener
 import com.mdove.civilservantcommunity.plan.adapter.OnSinglePlanClickListener
 import com.mdove.civilservantcommunity.plan.dao.TodayPlansEntity
+import com.mdove.civilservantcommunity.plan.dao.TodayPlansDbBean
 import com.mdove.civilservantcommunity.plan.viewmodel.EditPlanViewModel
 import com.mdove.civilservantcommunity.room.MainDb
 import com.mdove.dependent.common.networkenhance.valueobj.Status
@@ -43,18 +43,18 @@ class PlanFragment : BaseFragment() {
                     showLoading()
                     val plans = mViewModelEdit.createFeedPlans()
                     withContext(MDoveBackgroundPool) {
-                        plans.filter {
-                            !it.moduleName.isNullOrBlank()
-                        }.forEach {
-                            MainDb.db.todayPlansDao().insert(
-                                TodayPlansEntity(
-                                    date = System.currentTimeMillis(),
-                                    sucDate = null,
-                                    createDate = TimeUtils.getDateFromSQL(),
-                                    resp = FeedTimeLineFeedTodayPlansResp(it)
-                                )
+                        MainDb.db.todayPlansDao().insert(
+                            TodayPlansEntity(
+                                date = System.currentTimeMillis(),
+                                sucDate = null,
+                                createDate = TimeUtils.getDateFromSQL(),
+                                resp = TodayPlansDbBean(plans.map {
+                                    it.copy(beanSingles = it.beanSingles.filterNot {
+                                        it.typeSingle == SinglePlanType.CUSTOM_PLAN_BTN
+                                    })
+                                })
                             )
-                        }
+                        )
                     }
                     dismissLoading()
                     val intent = Intent()
@@ -106,8 +106,4 @@ class PlanFragment : BaseFragment() {
             }
         })
     }
-}
-
-interface OnPlanClickListener {
-    fun onClick(type: Int)
 }

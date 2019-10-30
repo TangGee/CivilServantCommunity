@@ -19,10 +19,10 @@ import com.mdove.civilservantcommunity.feed.adapter.OnMainFeedClickListener
 import com.mdove.civilservantcommunity.feed.adapter.OnMainFeedTodayPlanCheckListener
 import com.mdove.civilservantcommunity.feed.bean.ArticleResp
 import com.mdove.civilservantcommunity.feed.bean.FeedTimeLineFeedTodayPlansResp
-import com.mdove.civilservantcommunity.feed.bean.FeedTimeLineFeedTodayPlansRespWrapper
 import com.mdove.civilservantcommunity.feed.bean.FeedTodayPlansCheckParams
 import com.mdove.civilservantcommunity.feed.viewmodel.MainFeedViewModel
-import com.mdove.civilservantcommunity.plan.dao.TodayPlansEntity
+import com.mdove.civilservantcommunity.plan.SinglePlanStatus
+import com.mdove.civilservantcommunity.plan.dao.TodayPlansDbBean
 import com.mdove.civilservantcommunity.plan.gotoPlanActivity
 import com.mdove.civilservantcommunity.punch.bean.PunchReq
 import com.mdove.civilservantcommunity.punch.viewmodel.PunchViewModel
@@ -37,7 +37,6 @@ import com.mdove.dependent.common.utils.showLoading
 import kotlinx.android.synthetic.main.fragment_main_feed.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.sql.Date
 
 /**
  * Created by MDove on 2019-09-06.
@@ -79,25 +78,32 @@ class MainFeedFragment : BaseFragment() {
             }
         }
     }, object : OnMainFeedTodayPlanCheckListener {
-        override fun onCheck(wrapper: FeedTimeLineFeedTodayPlansRespWrapper, isCheck: Boolean) {
+        override fun onCheck(resp: FeedTimeLineFeedTodayPlansResp, isCheck: Boolean) {
             launch {
                 showLoading()
                 withContext(MDoveBackgroundPool) {
-                    MainDb.db.todayPlansDao().update(
-                        TodayPlansEntity(
-                            wrapper.entityId,
-                            date = wrapper.date,
-                            createDate = wrapper.createTime,
-                            sucDate = System.currentTimeMillis(),
-                            resp = wrapper.resp.copy(
-                                select = isCheck
-                            )
+                    val selectSinglePlan = resp.params.beanSingle
+                    MainDb.db.todayPlansDao().getFeedTodayPlan(resp.entityId)?.let {
+                        // TODO 先查再更新
+                        MainDb.db.todayPlansDao().update(
+                            it.apply {
+                                sucDate = System.currentTimeMillis()
+                                this.resp = TodayPlansDbBean(params = this.resp.params.map {
+                                    it.copy(beanSingles = it.beanSingles.map {
+                                        if (it.beanSingle.moduleId == selectSinglePlan.moduleId && selectSinglePlan.content == it.beanSingle.content) {
+                                            it.copy(statusSingle = if (isCheck) SinglePlanStatus.SELECT else SinglePlanStatus.NORMAL)
+                                        } else {
+                                            it
+                                        }
+                                    })
+                                })
+                            }
                         )
-                    )
+                    }
                 }
                 dismissLoading()
                 feedViewModel.checkTodayPlanLiveData.value =
-                    FeedTodayPlansCheckParams(wrapper, isCheck)
+                    FeedTodayPlansCheckParams(resp, isCheck)
             }
         }
     })
@@ -122,21 +128,10 @@ class MainFeedFragment : BaseFragment() {
     }
 
     private fun clickPlan() {
-        launch(FastMain) {
-            showLoading()
-            withContext(MDoveBackgroundPool) {
-                MainDb.db.todayPlansDao().getTodayPlansRecord()?.isNotEmpty() ?: false
-            }.takeIf {
-                it
-            }?.let {
-                dismissLoading()
-                ToastUtil.toast("今天的计划早已生成~", Toast.LENGTH_SHORT)
-            } ?: also {
-                (activity as? ActivityLauncher)?.let {
-                    dismissLoading()
-                    it.gotoPlanActivity(context!!).params?.let {
-                        feedViewModel.planParamsLiveData.value = it
-                    }
+        (activity as? ActivityLauncher)?.let {
+            launch(FastMain) {
+                it.gotoPlanActivity(context!!).params?.let {
+                    feedViewModel.planParamsLiveData.value = it
                 }
             }
         }

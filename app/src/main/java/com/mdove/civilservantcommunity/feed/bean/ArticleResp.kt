@@ -6,6 +6,7 @@ import com.mdove.civilservantcommunity.base.bean.ArticleType
 import com.mdove.civilservantcommunity.base.bean.UserInfo
 import com.mdove.civilservantcommunity.plan.SinglePlanBean
 import com.mdove.civilservantcommunity.plan.PlanToFeedParams
+import com.mdove.civilservantcommunity.plan.SinglePlanBeanWrapper
 import kotlinx.android.parcel.Parcelize
 
 /**
@@ -45,19 +46,14 @@ data class FeedPaddingStub(
     val name: String = "今日计划"
 ) : BaseFeedResp()
 
-data class FeedTimeLineFeedTodayPlansRespWrapper(
+
+@Parcelize
+data class FeedTimeLineFeedTodayPlansResp(
     val entityId: Long, // 数据库的id
     val date: Long, // 数据库的date
     val sucTime: Long?, // 数据库的date
     val createTime: String, // 数据库的create_date
-    val resp: FeedTimeLineFeedTodayPlansResp
-) : BaseFeedResp()
-
-@Parcelize
-data class FeedTimeLineFeedTodayPlansResp(
-    @SerializedName("params")
-    val params: SinglePlanBean,
-    val select: Boolean = false
+    val params: SinglePlanBeanWrapper
 ) : BaseFeedResp(), Parcelable
 
 data class FeedTimeLineFeedTodayPlansTitleResp(
@@ -70,7 +66,7 @@ data class FeedTodayPlanResp(
 ) : BaseFeedResp()
 
 data class FeedTodayPlansCheckParams(
-    val wrapper: FeedTimeLineFeedTodayPlansRespWrapper,
+    val resp: FeedTimeLineFeedTodayPlansResp,
     val select: Boolean
 )
 

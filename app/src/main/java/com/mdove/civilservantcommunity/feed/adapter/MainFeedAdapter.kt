@@ -1,6 +1,5 @@
 package com.mdove.civilservantcommunity.feed.adapter
 
-import android.graphics.Color
 import android.graphics.Paint.ANTI_ALIAS_FLAG
 import android.graphics.Paint.STRIKE_THRU_TEXT_FLAG
 import android.text.Html
@@ -12,12 +11,11 @@ import androidx.appcompat.widget.AppCompatCheckBox
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.mdove.civilservantcommunity.R
 import com.mdove.civilservantcommunity.feed.bean.*
-import com.mdove.dependent.common.recyclerview.timelineitemdecoration.itemdecoration.DotItemDecoration
+import com.mdove.civilservantcommunity.plan.SinglePlanStatus
 import com.mdove.dependent.common.utils.TimeUtils
 import com.mdove.dependent.common.view.timeline.TimeLineView
 
@@ -56,7 +54,7 @@ class MainFeedAdapter(
             if ((oldItem is FeedTodayPlanResp) && (newItem is FeedTodayPlanResp)) {
                 return true
             }
-            if ((oldItem is FeedTimeLineFeedTodayPlansRespWrapper) && (newItem is FeedTimeLineFeedTodayPlansRespWrapper)) {
+            if ((oldItem is FeedTimeLineFeedTodayPlansResp) && (newItem is FeedTimeLineFeedTodayPlansResp)) {
                 return true
             }
             return oldItem === newItem
@@ -72,8 +70,8 @@ class MainFeedAdapter(
                 oldItem.count == newItem.count
             } else if ((oldItem is FeedTodayPlanResp) && (newItem is FeedTodayPlanResp)) {
                 oldItem.params == newItem.params
-            } else if ((oldItem is FeedTimeLineFeedTodayPlansRespWrapper) && (newItem is FeedTimeLineFeedTodayPlansRespWrapper)) {
-                oldItem.resp.select == newItem.resp.select
+            } else if ((oldItem is FeedTimeLineFeedTodayPlansResp) && (newItem is FeedTimeLineFeedTodayPlansResp)) {
+                oldItem.params.typeSingle == newItem.params.typeSingle
             } else {
                 true
             }
@@ -82,7 +80,7 @@ class MainFeedAdapter(
         override fun getChangePayload(oldItem: BaseFeedResp, newItem: BaseFeedResp): Any? {
             return when {
                 (oldItem as? FeedPunchResp)?.count != (newItem as? FeedPunchResp)?.count -> PAYLOAD_PUNCH
-                (oldItem as? FeedTimeLineFeedTodayPlansRespWrapper)?.resp?.select != (newItem as? FeedTimeLineFeedTodayPlansRespWrapper)?.resp?.select -> PAYLOAD_TODAY_PLANS
+                (oldItem as? FeedTimeLineFeedTodayPlansResp)?.params?.typeSingle != (newItem as? FeedTimeLineFeedTodayPlansResp)?.params?.typeSingle -> PAYLOAD_TODAY_PLANS
                 else -> null
             }
         }
@@ -143,14 +141,6 @@ class MainFeedAdapter(
                 FeedTimeLineFeedTitleViewHolder(
                     LayoutInflater.from(parent.context).inflate(
                         R.layout.item_feed_main_time_line_title,
-                        parent,
-                        false
-                    )
-                )
-            TYPE_FEED_TODAY_PLAN ->
-                FeedTodayPlanViewHolder(
-                    LayoutInflater.from(parent.context).inflate(
-                        R.layout.item_feed_today_plan,
                         parent,
                         false
                     )
@@ -232,7 +222,7 @@ class MainFeedAdapter(
             is FeedDateResp -> TYPE_FEED_DATE
             is FeedPaddingStub -> TYPE_FEED_PADDING
             is FeedTimeLineFeedTitleResp -> TYPE_FEED_TIME_LINE_FEED_TITLE
-            is FeedTimeLineFeedTodayPlansRespWrapper -> TYPE_FEED_TIME_LINE_FEED_TODAY_PLAM
+            is FeedTimeLineFeedTodayPlansResp -> TYPE_FEED_TIME_LINE_FEED_TODAY_PLAM
             is FeedTimeLineFeedTodayPlansTitleResp -> TYPE_FEED_TIME_LINE_FEED_TODAY_PLAM_TITLE
             else -> TYPE_NORMAL
         }
@@ -249,7 +239,7 @@ class MainFeedAdapter(
             }
         } else if (payloads.contains(PAYLOAD_TODAY_PLANS)) {
             if (holder is FeedTimeLineFeedTodayPlansViewHolder) {
-                holder.payloadBind(getItem(position) as FeedTimeLineFeedTodayPlansRespWrapper)
+                holder.payloadBind(getItem(position) as FeedTimeLineFeedTodayPlansResp)
             }
         } else {
             super.onBindViewHolder(holder, position, payloads)
@@ -267,8 +257,7 @@ class MainFeedAdapter(
                     holder.bind(it)
                 }
             }
-            is FeedTodayPlanViewHolder -> holder.bind((getItem(position) as FeedTodayPlanResp))
-            is FeedTimeLineFeedTodayPlansViewHolder -> holder.bind((getItem(position) as FeedTimeLineFeedTodayPlansRespWrapper))
+            is FeedTimeLineFeedTodayPlansViewHolder -> holder.bind((getItem(position) as FeedTimeLineFeedTodayPlansResp))
         }
     }
 
@@ -295,45 +284,6 @@ class MainFeedAdapter(
         }
     }
 
-    inner class FeedTodayPlanViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val rlv = itemView.findViewById<RecyclerView>(R.id.rlv_today)
-
-        init {
-            rlv.layoutManager = LinearLayoutManager(itemView.context)
-            val mItemDecoration = DotItemDecoration.Builder(itemView.context)
-                .setOrientation(DotItemDecoration.VERTICAL)
-                .setItemStyle(DotItemDecoration.STYLE_DRAW)
-                .setTopDistance(20f)//dp
-                .setItemInterVal(10f)//dp
-                .setItemPaddingLeft(30f)//default value equals to item interval value
-                .setItemPaddingRight(20f)//default value equals to item interval value
-                .setDotColor(ContextCompat.getColor(itemView.context, R.color.grey_500))
-                .setDotRadius(5)//dp
-                .setDotPaddingTop(0)
-                .setDotInItemOrientationCenter(false)//set true if you want the dot align center
-                .setLineColor(ContextCompat.getColor(itemView.context, R.color.grey_200))
-                .setLineWidth(3f)//dp
-                .setOnlyLeftMarginLeft(40F)
-                .setEndText("END")
-                .setOnlyLeft(true)
-                .setTextColor(Color.WHITE)
-                .setTextSize(16f)//sp
-                .setDotPaddingText(2f)//dp.The distance between the last dot and the end text
-                .setBottomDistance(40f)//you can add a distance to make bottom line longer
-                .create()
-            rlv.addItemDecoration(mItemDecoration)
-        }
-
-        fun bind(resp: FeedTodayPlanResp) {
-            resp.params?.let {
-                rlv.adapter = FeedPlanTodayItemsAdapter(
-                    itemView.context,
-                    it
-                )
-            }
-        }
-    }
-
     inner class FeedUGCViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         init {
             listener?.let { listener ->
@@ -353,28 +303,28 @@ class MainFeedAdapter(
         private val tvModule = itemView.findViewById<TextView>(R.id.tv_module)
         private val cb = itemView.findViewById<AppCompatCheckBox>(R.id.cb_today_plan)
 
-        fun bind(wrapper: FeedTimeLineFeedTodayPlansRespWrapper) {
+        fun bind(resp: FeedTimeLineFeedTodayPlansResp) {
             reset()
-            title.text = wrapper.resp.params.content
-            tvModule.text = wrapper.resp.params.moduleName
-            wrapper.sucTime?.let {
+            title.text = resp.params.beanSingle.content
+            tvModule.text = resp.params.beanSingle.moduleName
+            resp.sucTime?.let {
                 tvSucTime.visibility = View.VISIBLE
                 tvSucTime.text = TimeUtils.getDateChinese(it)
             } ?: also {
                 tvSucTime.visibility = View.GONE
             }
 
-            bindSelect(wrapper.resp.select)
-            cb.isChecked = wrapper.resp.select
+            bindSelect(resp.params.statusSingle == SinglePlanStatus.SELECT)
+            cb.isChecked = resp.params.statusSingle == SinglePlanStatus.SELECT
             cb.setOnCheckedChangeListener { _, isChecked ->
-                if (wrapper.resp.select != isChecked) {
-                    checkListener?.onCheck(wrapper, isChecked)
+                if (resp.params.statusSingle != SinglePlanStatus.SELECT) {
+                    checkListener?.onCheck(resp, isChecked)
                 }
             }
         }
 
-        fun payloadBind(wrapper: FeedTimeLineFeedTodayPlansRespWrapper) {
-            bindSelect(wrapper.resp.select)
+        fun payloadBind(resp: FeedTimeLineFeedTodayPlansResp) {
+            bindSelect(resp.params.statusSingle == SinglePlanStatus.SELECT)
         }
 
         private fun reset() {
@@ -501,5 +451,5 @@ interface OnMainFeedClickListener {
 }
 
 interface OnMainFeedTodayPlanCheckListener {
-    fun onCheck(wrapper: FeedTimeLineFeedTodayPlansRespWrapper, isCheck: Boolean)
+    fun onCheck(resp: FeedTimeLineFeedTodayPlansResp, isCheck: Boolean)
 }

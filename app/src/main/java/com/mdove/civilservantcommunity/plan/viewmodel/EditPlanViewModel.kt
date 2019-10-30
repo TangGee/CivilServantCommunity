@@ -18,14 +18,15 @@ class EditPlanViewModel : ViewModel() {
         addSource(repository.getPlans()) {
             val new = mutableListOf<PlanModuleBean>()
             // 首个ViewHolder占位
-            new.add(PlanModuleBean("padding", mutableListOf(), PlanModuleType.PADDING))
+            new.add(PlanModuleBean("padding", "padding", mutableListOf(), PlanModuleType.PADDING))
             it.data?.data?.let { rawList ->
                 rawList.forEach {
                     val moduleId = it.firstOrNull()?.moduleId
-                    if (moduleId.isNullOrBlank()) {
+                    val moduleName = it.firstOrNull()?.moduleName
+                    if (moduleId.isNullOrBlank() || moduleName.isNullOrBlank()) {
                         return@forEach
                     }
-                    new.add(PlanModuleBean(moduleId,
+                    new.add(PlanModuleBean(moduleId, moduleName,
                         it.map { SinglePlanBeanWrapper(it, SinglePlanType.SYS_PLAN) }
                             .toMutableList()
                             .apply {
@@ -41,7 +42,7 @@ class EditPlanViewModel : ViewModel() {
                 }
             }
             // 用空表示最后一个ok按钮的bean
-            new.add(PlanModuleBean("btn_ok", mutableListOf(), PlanModuleType.BTN_OK))
+            new.add(PlanModuleBean("btn_ok", "btn_ok", mutableListOf(), PlanModuleType.BTN_OK))
             value = Resource(
                 it.status,
                 NormalResp<List<PlanModuleBean>>(
@@ -74,13 +75,9 @@ class EditPlanViewModel : ViewModel() {
         }
     }
 
-    fun createFeedPlans(): List<SinglePlanBean> {
-        return data.value?.data?.data?.let { data ->
-            data.flatMap {
-                it.beanSingles.map {
-                    it.beanSingle
-                }
-            }
+    fun createFeedPlans(): List<PlanModuleBean> {
+        return data.value?.data?.data?.filter {
+            it.moduleType == PlanModuleType.NORMAL
         } ?: mutableListOf()
     }
 }
