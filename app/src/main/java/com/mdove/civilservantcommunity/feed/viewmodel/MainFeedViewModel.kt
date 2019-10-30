@@ -40,18 +40,18 @@ class MainFeedViewModel : ViewModel() {
                     temp.add(FeedDateResp())
                     temp.add(FeedQuickBtnsResp())
                     withContext(MDoveBackgroundPool) {
-                        MainDb.db.todayPlansDao().getTodayPlansRecord()?.let {entity->
+                        MainDb.db.todayPlansDao().getTodayPlansRecord()?.let { entity ->
                             temp.add(FeedTimeLineFeedTodayPlansTitleResp())
-                            temp.addAll(entity.resp.params.flatMap {planModule->
+                            temp.addAll(entity.resp.params.flatMap { planModule ->
                                 planModule.beanSingles.map {
-                                        FeedTimeLineFeedTodayPlansResp(
-                                            entity.id,
-                                            entity.date,
-                                            entity.sucDate,
-                                            entity.createDate ?: TimeUtils.getDateFromSQL(),
-                                            it
-                                        )
-                                    }
+                                    FeedTimeLineFeedTodayPlansResp(
+                                        entity.id,
+                                        entity.date,
+                                        entity.sucDate,
+                                        entity.createDate ?: TimeUtils.getDateFromSQL(),
+                                        it
+                                    )
+                                }
                             })
                         }
                     }
@@ -96,7 +96,7 @@ class MainFeedViewModel : ViewModel() {
             addSource(checkTodayPlanLiveData) { params ->
                 value = value?.let {
                     Resource(it.status, it.data?.map {
-                        if (it === params.resp) {
+                        if ((it as? FeedTimeLineFeedTodayPlansResp)?.entityId == params.resp.entityId) {
                             params.resp.copy(
                                 params = params.resp.params.copy(
                                     statusSingle = if (params.select)

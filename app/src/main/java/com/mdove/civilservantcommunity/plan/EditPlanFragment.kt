@@ -48,9 +48,9 @@ class PlanFragment : BaseFragment() {
                                 date = System.currentTimeMillis(),
                                 sucDate = null,
                                 createDate = TimeUtils.getDateFromSQL(),
-                                resp = TodayPlansDbBean(plans.map {
-                                    it.copy(beanSingles = it.beanSingles.filterNot {
-                                        it.typeSingle == SinglePlanType.CUSTOM_PLAN_BTN
+                                resp = TodayPlansDbBean(plans.map { module ->
+                                    module.copy(beanSingles = module.beanSingles.filterNot { single ->
+                                        single.typeSingle == SinglePlanType.CUSTOM_PLAN_BTN
                                     })
                                 })
                             )

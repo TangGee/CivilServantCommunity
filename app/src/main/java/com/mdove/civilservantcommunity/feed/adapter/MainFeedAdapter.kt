@@ -71,7 +71,9 @@ class MainFeedAdapter(
             } else if ((oldItem is FeedTodayPlanResp) && (newItem is FeedTodayPlanResp)) {
                 oldItem.params == newItem.params
             } else if ((oldItem is FeedTimeLineFeedTodayPlansResp) && (newItem is FeedTimeLineFeedTodayPlansResp)) {
-                oldItem.params.typeSingle == newItem.params.typeSingle
+                oldItem.params.statusSingle == newItem.params.statusSingle
+            } else if ((oldItem is FeedTimeLineFeedTodayPlansTitleResp) && (newItem is FeedTimeLineFeedTodayPlansTitleResp)) {
+                return true
             } else {
                 true
             }
@@ -80,7 +82,7 @@ class MainFeedAdapter(
         override fun getChangePayload(oldItem: BaseFeedResp, newItem: BaseFeedResp): Any? {
             return when {
                 (oldItem as? FeedPunchResp)?.count != (newItem as? FeedPunchResp)?.count -> PAYLOAD_PUNCH
-                (oldItem as? FeedTimeLineFeedTodayPlansResp)?.params?.typeSingle != (newItem as? FeedTimeLineFeedTodayPlansResp)?.params?.typeSingle -> PAYLOAD_TODAY_PLANS
+                (oldItem as? FeedTimeLineFeedTodayPlansResp)?.params?.statusSingle != (newItem as? FeedTimeLineFeedTodayPlansResp)?.params?.statusSingle -> PAYLOAD_TODAY_PLANS
                 else -> null
             }
         }
@@ -317,9 +319,7 @@ class MainFeedAdapter(
             bindSelect(resp.params.statusSingle == SinglePlanStatus.SELECT)
             cb.isChecked = resp.params.statusSingle == SinglePlanStatus.SELECT
             cb.setOnCheckedChangeListener { _, isChecked ->
-                if (resp.params.statusSingle != SinglePlanStatus.SELECT) {
-                    checkListener?.onCheck(resp, isChecked)
-                }
+                checkListener?.onCheck(resp, isChecked)
             }
         }
 

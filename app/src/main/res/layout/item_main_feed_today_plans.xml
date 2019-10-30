@@ -42,16 +42,20 @@
         <TextView
             android:id="@+id/text"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/main_feed_item_margin"
-            android:text="哈哈哈哈哈哈哈哈"
+            android:layout_height="0dp"
+            android:layout_marginLeft="@dimen/main_feed_item_margin"
+            android:layout_marginRight="@dimen/main_feed_item_margin"
+            android:gravity="center|top"
+            android:text="哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈"
             android:textColor="@color/black"
-            android:gravity="center"
             android:textSize="16sp"
-            android:layout_marginTop="8dp"
+            app:layout_constrainedHeight="true"
+            android:layout_marginBottom="8dp"
             app:layout_constraintLeft_toRightOf="@+id/tv_module"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintRight_toLeftOf="@+id/cb_today_plan"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="@+id/tv_module"
+            />
 
         <androidx.appcompat.widget.AppCompatCheckBox
             android:id="@+id/cb_today_plan"
