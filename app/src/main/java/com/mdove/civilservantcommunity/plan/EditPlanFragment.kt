@@ -73,6 +73,7 @@ class PlanFragment : BaseFragment() {
         }
 
         override fun onCustomClick(data: SinglePlanBean) {
+            mViewModelEdit.customSinglePlanLiveData.value = data
         }
     })
 

@@ -43,6 +43,10 @@ public class ToastUtil {
         toast(0, null, text, null, duration);
     }
 
+    public static void toast(String text) {
+        toast(0, null, 0, text, Toast.LENGTH_SHORT);
+    }
+
     public static void toast(String text, @Duration int duration) {
         toast(0, null, 0, text, duration);
     }
