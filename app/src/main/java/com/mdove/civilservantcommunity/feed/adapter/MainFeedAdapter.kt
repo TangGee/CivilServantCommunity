@@ -1,5 +1,6 @@
 package com.mdove.civilservantcommunity.feed.adapter
 
+import android.annotation.SuppressLint
 import android.graphics.Paint.ANTI_ALIAS_FLAG
 import android.graphics.Paint.STRIKE_THRU_TEXT_FLAG
 import android.text.Html
@@ -16,8 +17,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.mdove.civilservantcommunity.R
 import com.mdove.civilservantcommunity.feed.bean.*
 import com.mdove.civilservantcommunity.plan.SinglePlanStatus
+import com.mdove.dependent.common.threadpool.FastMain
 import com.mdove.dependent.common.utils.TimeUtils
 import com.mdove.dependent.common.view.timeline.TimeLineView
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
 /**
@@ -156,7 +162,7 @@ class MainFeedAdapter(
                     )
                 )
             TYPE_FEED_DATE ->
-                FeedUGCViewHolder(
+                FeedDateViewHolder(
                     LayoutInflater.from(parent.context).inflate(
                         R.layout.item_main_feed_date,
                         parent,
@@ -254,6 +260,7 @@ class MainFeedAdapter(
             is TopOneViewHolder -> holder.bind((getItem(position) as FeedArticleResp).article)
             is TopTwoViewHolder -> holder.bind((getItem(position) as FeedArticleResp).article)
             is NormalViewHolder -> holder.bind((getItem(position) as FeedArticleResp).article)
+            is FeedDateViewHolder -> holder.bind()
             is NewStyleViewHolder -> {
                 (getItem(position) as? FeedArticleResp)?.let {
                     holder.bind(it)
@@ -296,7 +303,19 @@ class MainFeedAdapter(
         }
     }
 
-    inner class FeedDateViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+    inner class FeedDateViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private val tvDay = itemView.findViewById<TextView>(R.id.tv_day)
+        private val tvMonth = itemView.findViewById<TextView>(R.id.tv_month)
+        private val tvWeek = itemView.findViewById<TextView>(R.id.tv_week)
+
+        fun bind() {
+            val time = System.currentTimeMillis()
+            tvMonth.text = "${TimeUtils.getMonth(time)}月"
+            tvDay.text = "${TimeUtils.getDay(time)}日"
+            tvWeek.text = TimeUtils.getDayOfWeek(time)
+        }
+    }
+
     inner class FeedPaddingViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
     inner class FeedTimeLineFeedTodayPlansViewHolder(itemView: View) :
         RecyclerView.ViewHolder(itemView) {

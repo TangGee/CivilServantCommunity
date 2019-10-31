@@ -221,7 +221,7 @@ object TimeUtils {
     }
 
     fun getDayOfWeek(time: Long): String {
-        val dayNames = arrayOf("周日", "周一", "周二", "周三", "周四", "周五", "周六")
+        val dayNames = arrayOf("星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六")
         val c = Calendar.getInstance()
         c.time = Date(time)
         return dayNames[c.get(Calendar.DAY_OF_WEEK) - 1]
