@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.mdove.civilservantcommunity.R
 import com.mdove.civilservantcommunity.feed.bean.*
 import com.mdove.civilservantcommunity.plan.SinglePlanStatus
+import com.mdove.civilservantcommunity.plan.SinglePlanType
 import com.mdove.dependent.common.utils.TimeUtils
 import com.mdove.dependent.common.view.timeline.TimeLineView
 
@@ -319,6 +320,7 @@ class MainFeedAdapter(
         RecyclerView.ViewHolder(itemView) {
         private val title = itemView.findViewById<TextView>(R.id.text)
         private val tvSucTime = itemView.findViewById<TextView>(R.id.tv_suc_time)
+        private val timeLine = itemView.findViewById<TimeLineView>(R.id.time_line)
         private val tvModule = itemView.findViewById<TextView>(R.id.tv_module)
         private val cb = itemView.findViewById<AppCompatCheckBox>(R.id.cb_today_plan)
 
@@ -337,6 +339,9 @@ class MainFeedAdapter(
             cb.isChecked = resp.params.statusSingle == SinglePlanStatus.SELECT
             cb.setOnCheckedChangeListener { _, isChecked ->
                 checkListener?.onCheck(resp, isChecked)
+            }
+            if (resp.params.typeSingle == SinglePlanType.LAST_PLAN) {
+                timeLine.hideBottomLine()
             }
         }
 

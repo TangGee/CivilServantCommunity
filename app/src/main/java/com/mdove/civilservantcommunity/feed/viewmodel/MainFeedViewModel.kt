@@ -5,6 +5,7 @@ import com.mdove.civilservantcommunity.feed.bean.*
 import com.mdove.civilservantcommunity.feed.repository.MainFeedRepository
 import com.mdove.civilservantcommunity.plan.PlanToFeedParams
 import com.mdove.civilservantcommunity.plan.SinglePlanStatus
+import com.mdove.civilservantcommunity.plan.SinglePlanType
 import com.mdove.civilservantcommunity.room.MainDb
 import com.mdove.dependent.common.network.NormalResp
 import com.mdove.dependent.common.networkenhance.valueobj.Resource
@@ -52,6 +53,8 @@ class MainFeedViewModel : ViewModel() {
                                         it
                                     )
                                 }
+                            }.apply {
+                                (this.last()).params.typeSingle = SinglePlanType.LAST_PLAN
                             })
                         }
                     }
@@ -96,7 +99,7 @@ class MainFeedViewModel : ViewModel() {
             addSource(checkTodayPlanLiveData) { params ->
                 value = value?.let {
                     Resource(it.status, it.data?.map {
-                        if ((it as? FeedTimeLineFeedTodayPlansResp)?.entityId == params.resp.entityId) {
+                        if ((it as? FeedTimeLineFeedTodayPlansResp)?.params?.beanSingle?.content == params.resp.params.beanSingle.content) {
                             params.resp.copy(
                                 params = params.resp.params.copy(
                                     statusSingle = if (params.select)

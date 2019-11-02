@@ -44,9 +44,7 @@ class MainUGCFragment : BaseFragment() {
 
     private val adapter = UgcRlvTopicAdapter(object : OnTopicSelectListener {
         override fun onSelect(bean: UGCRlvTopicBean, select: Boolean) {
-            viewModel.clickTopicLiveData.value = bean.copy(selectStatus = select).apply {
-                Log.d("mdove", "${this.id} -${this.selectStatus}")
-            }
+            viewModel.clickTopicLiveData.value = bean.copy(selectStatus = select)
         }
     })
 

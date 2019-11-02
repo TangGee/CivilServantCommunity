@@ -20,7 +20,7 @@ data class SinglePlanBeanWrapper(
     @SerializedName("single_plan")
     val beanSingle: SinglePlanBean,
     @SerializedName("single_plan_type")
-    val typeSingle: SinglePlanType,
+    var typeSingle: SinglePlanType,
     @SerializedName("single_plan_status")
     val statusSingle: SinglePlanStatus = SinglePlanStatus.NORMAL
 ) : Parcelable
@@ -34,6 +34,7 @@ enum class SinglePlanStatus : Parcelable {
 @Parcelize
 enum class SinglePlanType : Parcelable {
     SYS_PLAN,
+    LAST_PLAN,
     CUSTOM_PLAN,
     CUSTOM_PLAN_BTN
 }
