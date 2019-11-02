@@ -1,5 +1,6 @@
 package com.mdove.civilservantcommunity.ugc.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -44,7 +45,7 @@ class UgcRlvTopicAdapter(private val listener: OnTopicSelectListener) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
-            0 -> parent.createWidthPadding(8F)
+            0 -> parent.createWidthPadding(12F)
             else -> TopicViewHolder(
                 LayoutInflater.from(parent.context).inflate(
                     R.layout.item_ugc_rlv_topic,
@@ -92,6 +93,9 @@ class UgcRlvTopicAdapter(private val listener: OnTopicSelectListener) :
 
         fun payload(data: UGCRlvTopicBean) {
             selectStatus(data.selectStatus)
+            layout.setOnClickListener {
+                listener.onSelect(data, !data.selectStatus)
+            }
         }
 
         private fun selectStatus(select: Boolean) {

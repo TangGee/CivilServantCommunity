@@ -1,6 +1,7 @@
 package com.mdove.civilservantcommunity.ugc
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -43,7 +44,9 @@ class MainUGCFragment : BaseFragment() {
 
     private val adapter = UgcRlvTopicAdapter(object : OnTopicSelectListener {
         override fun onSelect(bean: UGCRlvTopicBean, select: Boolean) {
-            viewModel.clickTopicLiveData.value = bean.copy(selectStatus = select)
+            viewModel.clickTopicLiveData.value = bean.copy(selectStatus = select).apply {
+                Log.d("mdove", "${this.id} -${this.selectStatus}")
+            }
         }
     })
 

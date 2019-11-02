@@ -18,7 +18,8 @@ fun ViewGroup.createHeightPadding(width: Float): RecyclerView.ViewHolder {
     val view =
         LayoutInflater.from(this.context).inflate(R.layout.item_rlv_padding_heght, this, false)
     view.layoutParams = view.layoutParams.apply {
-        this.height = UIUtils.px2dip(this@createHeightPadding.context, width)
+        this.width = UIUtils.dip2Px(this@createHeightPadding.context, width).toInt()
+        this.height = UIUtils.dip2Px(this@createHeightPadding.context, width).toInt()
     }
     return HeightPaddingViewHolder(view)
 }
@@ -27,7 +28,8 @@ fun ViewGroup.createWidthPadding(width: Float): RecyclerView.ViewHolder {
     val view =
         LayoutInflater.from(this.context).inflate(R.layout.item_rlv_padding_width, this, false)
     view.layoutParams = view.layoutParams.apply {
-        this.width = UIUtils.px2dip(this@createWidthPadding.context, width)
+        this.width = UIUtils.dip2Px(this@createWidthPadding.context, width).toInt()
+        this.height = UIUtils.dip2Px(this@createWidthPadding.context, width).toInt()
     }
     return WidthPaddingViewHolder(view)
 }

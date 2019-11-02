@@ -1,5 +1,6 @@
 package com.mdove.civilservantcommunity.ugc.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.*
 import com.mdove.civilservantcommunity.base.bean.ArticleType
 import com.mdove.civilservantcommunity.base.bean.UserInfo
@@ -27,8 +28,9 @@ class MainUGCViewModel : ViewModel() {
             value = value?.map {
                 if (it.id == click.id) {
                     click
-                } else
+                } else {
                     it.copy(selectStatus = false)
+                }
             }
         }
 
