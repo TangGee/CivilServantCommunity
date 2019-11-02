@@ -45,7 +45,7 @@
             android:layout_height="0dp"
             android:layout_marginLeft="@dimen/main_feed_item_margin"
             android:layout_marginRight="@dimen/main_feed_item_margin"
-            android:gravity="center|top"
+            android:gravity="left|top"
             android:text="哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈"
             android:textColor="@color/black"
             android:textSize="16sp"

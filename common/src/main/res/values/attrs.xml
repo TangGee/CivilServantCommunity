@@ -170,4 +170,9 @@
         <attr name="rightTopRadius" format="dimension|reference" />
         <attr name="rightBottomRadius" format="dimension|reference" />
     </declare-styleable>
+
+    <declare-styleable name="EditTextForUGC">
+        <attr name="highlightColor" format="color" />
+        <attr name="useUnderline" format="boolean" />
+    </declare-styleable>
 </resources>

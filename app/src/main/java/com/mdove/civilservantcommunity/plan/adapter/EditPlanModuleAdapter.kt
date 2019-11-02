@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.*
 import com.mdove.civilservantcommunity.R
 import com.mdove.civilservantcommunity.plan.PlanModuleBean
 import com.mdove.civilservantcommunity.plan.PlanModuleType
-import com.mdove.civilservantcommunity.plan.SinglePlanBeanWrapper
 
 class EditPlanModuleAdapter(
     private val listener: OnPlanModuleClickListener,
@@ -64,7 +63,7 @@ class EditPlanModuleAdapter(
             )
             2 -> PaddingViewHolder(
                 LayoutInflater.from(parent.context).inflate(
-                    R.layout.item_rlv_padding,
+                    R.layout.item_rlv_padding_heght,
                     parent,
                     false
                 )

@@ -1,6 +1,5 @@
 package com.mdove.civilservantcommunity.feed.adapter
 
-import android.annotation.SuppressLint
 import android.graphics.Paint.ANTI_ALIAS_FLAG
 import android.graphics.Paint.STRIKE_THRU_TEXT_FLAG
 import android.text.Html
@@ -17,14 +16,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.mdove.civilservantcommunity.R
 import com.mdove.civilservantcommunity.feed.bean.*
 import com.mdove.civilservantcommunity.plan.SinglePlanStatus
-import com.mdove.dependent.common.threadpool.FastMain
 import com.mdove.dependent.common.utils.TimeUtils
 import com.mdove.dependent.common.view.timeline.TimeLineView
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-
 
 /**
  * Created by MDove on 2019-09-06.
@@ -63,6 +56,9 @@ class MainFeedAdapter(
             if ((oldItem is FeedTimeLineFeedTodayPlansResp) && (newItem is FeedTimeLineFeedTodayPlansResp)) {
                 return true
             }
+            if ((oldItem is FeedTimeLineFeedTitleResp) && (newItem is FeedTimeLineFeedTitleResp)) {
+                return true
+            }
             return oldItem === newItem
         }
 
@@ -79,6 +75,8 @@ class MainFeedAdapter(
             } else if ((oldItem is FeedTimeLineFeedTodayPlansResp) && (newItem is FeedTimeLineFeedTodayPlansResp)) {
                 oldItem.params.statusSingle == newItem.params.statusSingle
             } else if ((oldItem is FeedTimeLineFeedTodayPlansTitleResp) && (newItem is FeedTimeLineFeedTodayPlansTitleResp)) {
+                return true
+            } else if ((oldItem is FeedTimeLineFeedTitleResp) && (newItem is FeedTimeLineFeedTitleResp)) {
                 return true
             } else {
                 true

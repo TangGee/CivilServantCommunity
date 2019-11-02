@@ -1,12 +1,10 @@
 package com.mdove.civilservantcommunity.ugc.viewmodel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import com.mdove.civilservantcommunity.base.bean.ArticleType
 import com.mdove.civilservantcommunity.base.bean.UserInfo
 import com.mdove.civilservantcommunity.ugc.bean.UGCPostParams
+import com.mdove.civilservantcommunity.ugc.bean.UGCRlvTopicBean
 import com.mdove.civilservantcommunity.ugc.repository.UGCRepository
 import com.mdove.civilservantcommunity.ugc.utils.ArticleTypeHelper
 import com.mdove.dependent.common.network.NormalResp
@@ -21,6 +19,26 @@ class MainUGCViewModel : ViewModel() {
     private val repository = UGCRepository()
 
     private val postType = MutableLiveData<UGCPostParams>()
+
+    val clickTopicLiveData = MutableLiveData<UGCRlvTopicBean>()
+
+    val topics = MediatorLiveData<List<UGCRlvTopicBean>>().apply {
+        addSource(clickTopicLiveData) { click ->
+            value = value?.map {
+                if (it.id == click.id) {
+                    click
+                } else
+                    it.copy(selectStatus = false)
+            }
+        }
+
+        value = mutableListOf(
+            UGCRlvTopicBean("padding", "0", 0, false),
+            UGCRlvTopicBean("求公务员计划表", "1", 1, true),
+            UGCRlvTopicBean("求公务员攻略", "2", 1, false),
+            UGCRlvTopicBean("求四六级攻略", "3", 1, false)
+        )
+    }
 
     val postResp: LiveData<Resource<NormalResp<String>>> = Transformations.switchMap(postType) {
         repository.post(it)
