@@ -28,7 +28,8 @@
         app:layout_constraintTop_toTopOf="parent"
         android:layout_width="24dp"
         android:layout_marginRight="12dp"
-        app:srcCompat="@drawable/vector_btn_close"
+        android:tint="@color/black"
+        app:srcCompat="@drawable/vector_bg_delete"
         android:layout_height="24dp"/>
 
 </com.mdove.dependent.common.view.roundcorner.RoundCornerConstraintLayout>

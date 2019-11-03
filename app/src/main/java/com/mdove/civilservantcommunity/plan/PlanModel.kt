@@ -28,6 +28,7 @@ data class SinglePlanBeanWrapper(
 @Parcelize
 enum class SinglePlanStatus : Parcelable {
     SELECT,
+    DELETE,
     NORMAL,
 }
 
@@ -44,7 +45,8 @@ data class PlanModuleBean(
     val moduleId: String,
     val moduleName: String,
     val beanSingles: List<SinglePlanBeanWrapper>,
-    val moduleType: PlanModuleType
+    val moduleType: PlanModuleType,
+    val changeVersion: Int = 0 // 对于module来说，它的子item发生变化 version++。这个Diff时就有变化了
 ) : Parcelable
 
 enum class PlanModuleType {

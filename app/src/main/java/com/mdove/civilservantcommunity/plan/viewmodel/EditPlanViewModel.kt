@@ -11,7 +11,7 @@ import com.mdove.dependent.common.networkenhance.valueobj.Resource
 class EditPlanViewModel : ViewModel() {
     private val repository = PlanRepository()
 
-    val deleteSinglePlanLiveData = MutableLiveData<SinglePlanBean>()
+    val deleteSinglePlanLiveData = MutableLiveData<Pair<SinglePlanBean, Boolean>>()
     val customSinglePlanLiveData = MutableLiveData<SinglePlanBean>()
     val deletePlanModuleLiveData = MutableLiveData<PlanModuleBean>()
 
@@ -60,12 +60,19 @@ class EditPlanViewModel : ViewModel() {
         }
 
         // 删除某个具体计划
-        addSource(deleteSinglePlanLiveData) { delete ->
+        addSource(deleteSinglePlanLiveData) { deletePair ->
             value = value?.let {
                 Resource(it.status, data = it.data?.copy(data = it.data?.data?.map {
-                    it.copy(beanSingles = it.beanSingles.filterNot {
-                        delete.moduleId == it.beanSingle.moduleId && delete.content == it.beanSingle.content
-                    })
+                    var changeVersion = it.changeVersion
+                    val plans = it.beanSingles.map {
+                        if (deletePair.first.moduleId == it.beanSingle.moduleId && deletePair.first.content == it.beanSingle.content) {
+                            changeVersion++
+                            it.copy(statusSingle = if (deletePair.second) SinglePlanStatus.DELETE else SinglePlanStatus.NORMAL)
+                        } else {
+                            it
+                        }
+                    }
+                    it.copy(beanSingles = plans, changeVersion = changeVersion)
                 }), exception = it.exception)
             }
         }

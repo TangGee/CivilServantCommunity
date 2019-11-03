@@ -22,6 +22,7 @@ class EditPlanModuleAdapter(
         ): Boolean {
             return oldItem.moduleId == newItem.moduleId
                     && oldItem.beanSingles.size == newItem.beanSingles.size
+                    && oldItem.changeVersion == newItem.changeVersion
         }
 
         override fun areItemsTheSame(
@@ -32,7 +33,7 @@ class EditPlanModuleAdapter(
         }
 
         override fun getChangePayload(oldItem: PlanModuleBean, newItem: PlanModuleBean): Any? {
-            return if (oldItem.beanSingles.size != newItem.beanSingles.size) {
+            return if (oldItem.beanSingles.size != newItem.beanSingles.size||oldItem.changeVersion != newItem.changeVersion) {
                 PAYLOAD_SINGLE_PLANS
             } else {
                 null

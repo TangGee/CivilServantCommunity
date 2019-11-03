@@ -2,6 +2,7 @@ package com.mdove.civilservantcommunity.plan.adapter
 
 import android.content.res.ColorStateList
 import android.graphics.Color
+import android.graphics.Paint
 import android.graphics.PorterDuff
 import android.os.Build
 import android.text.Editable
@@ -18,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.mdove.civilservantcommunity.R
 import com.mdove.civilservantcommunity.plan.SinglePlanBean
 import com.mdove.civilservantcommunity.plan.SinglePlanBeanWrapper
+import com.mdove.civilservantcommunity.plan.SinglePlanStatus
 import com.mdove.civilservantcommunity.plan.SinglePlanType
 import com.mdove.dependent.common.toast.ToastUtil
 
@@ -28,7 +30,7 @@ class EditSinglePlanAdapter(private val listener: OnSinglePlanClickListener? = n
             oldItem: SinglePlanBeanWrapper,
             newItem: SinglePlanBeanWrapper
         ): Boolean {
-            return oldItem.beanSingle.content == oldItem.beanSingle.content
+            return oldItem.statusSingle == newItem.statusSingle
         }
 
         override fun areItemsTheSame(
@@ -37,7 +39,31 @@ class EditSinglePlanAdapter(private val listener: OnSinglePlanClickListener? = n
         ): Boolean {
             return oldItem.beanSingle.content == newItem.beanSingle.content
         }
+
+        override fun getChangePayload(
+            oldItem: SinglePlanBeanWrapper,
+            newItem: SinglePlanBeanWrapper
+        ): Any? {
+            return if (oldItem.statusSingle != newItem.statusSingle
+                && oldItem.typeSingle == SinglePlanType.SYS_PLAN
+                && newItem.typeSingle == SinglePlanType.SYS_PLAN
+            ) {
+                PAYLOAD_SINGLE_PLAN
+            } else if (oldItem.statusSingle != newItem.statusSingle
+                && oldItem.typeSingle == SinglePlanType.CUSTOM_PLAN
+                && newItem.typeSingle == SinglePlanType.CUSTOM_PLAN
+            ) {
+                PAYLOAD_CUSTOM_PLAN
+            } else {
+                null
+            }
+        }
     }) {
+
+    companion object {
+        val PAYLOAD_SINGLE_PLAN = Any()
+        val PAYLOAD_CUSTOM_PLAN = Any()
+    }
 
     override fun getItemViewType(position: Int): Int {
         return when {
@@ -76,14 +102,26 @@ class EditSinglePlanAdapter(private val listener: OnSinglePlanClickListener? = n
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
             is SinglePlanViewHolder -> {
-                holder.bind(data = getItem(position).beanSingle)
+                holder.bind(wrapper = getItem(position))
             }
             is CustomSinglePlanViewHolder -> {
-                holder.bind(data = getItem(position).beanSingle)
+                holder.bind(wrapper = getItem(position))
             }
             is SinglePlanCustomBtnViewHolder -> {
                 holder.bind(data = getItem(position).beanSingle)
             }
+        }
+    }
+
+    override fun onBindViewHolder(
+        holder: RecyclerView.ViewHolder,
+        position: Int,
+        payloads: MutableList<Any>
+    ) {
+        when {
+            payloads.contains(PAYLOAD_SINGLE_PLAN) -> (holder as? SinglePlanViewHolder)?.payload(getItem(position))
+            payloads.contains(PAYLOAD_CUSTOM_PLAN) -> (holder as? CustomSinglePlanViewHolder)?.payload(getItem(position))
+            else -> super.onBindViewHolder(holder, position, payloads)
         }
     }
 
@@ -136,25 +174,73 @@ class EditSinglePlanAdapter(private val listener: OnSinglePlanClickListener? = n
     }
 
     inner class CustomSinglePlanViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(data: SinglePlanBean) {
-            itemView.findViewById<TextView>(R.id.tv_plan_content).text = data.content
-            itemView.findViewById<AppCompatImageView>(R.id.btn_close).setOnClickListener {
-                listener?.onDeleteSinglePlanClick(data)
+        private val tvContent = itemView.findViewById<TextView>(R.id.tv_plan_content)
+        private val btnDelete = itemView.findViewById<AppCompatImageView>(R.id.btn_close)
+
+        fun bind(wrapper: SinglePlanBeanWrapper) {
+            tvContent.text = wrapper.beanSingle.content
+            updateStatus(wrapper)
+        }
+
+        fun payload(wrapper: SinglePlanBeanWrapper) {
+            updateStatus(wrapper)
+        }
+
+        private fun updateStatus(wrapper: SinglePlanBeanWrapper) {
+            if (wrapper.statusSingle == SinglePlanStatus.DELETE) {
+                btnDelete.setImageResource(R.drawable.vector_bg_delete_restore)
+                tvContent.paint.flags = Paint.STRIKE_THRU_TEXT_FLAG or Paint.ANTI_ALIAS_FLAG
+            } else {
+                btnDelete.setImageResource(R.drawable.vector_bg_delete)
+                tvContent.paint.flags = 0
+                tvContent.paint.flags = Paint.ANTI_ALIAS_FLAG
+            }
+
+            btnDelete.setOnClickListener {
+                listener?.onDeleteSinglePlanClick(
+                    wrapper.beanSingle,
+                    wrapper.statusSingle != SinglePlanStatus.DELETE
+                )
             }
         }
     }
 
     inner class SinglePlanViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(data: SinglePlanBean) {
-            itemView.findViewById<TextView>(R.id.tv_plan_content).text = data.content
-            itemView.findViewById<AppCompatImageView>(R.id.btn_close).setOnClickListener {
-                listener?.onDeleteSinglePlanClick(data)
+        private val btnDelete = itemView.findViewById<AppCompatImageView>(R.id.btn_close)
+        private val tvContent = itemView.findViewById<TextView>(R.id.tv_plan_content)
+
+        fun bind(wrapper: SinglePlanBeanWrapper) {
+            tvContent.text = wrapper.beanSingle.content
+            updateStatus(wrapper)
+        }
+
+        fun payload(wrapper: SinglePlanBeanWrapper) {
+            updateStatus(wrapper)
+        }
+
+        private fun updateStatus(wrapper: SinglePlanBeanWrapper) {
+            if (wrapper.statusSingle == SinglePlanStatus.DELETE) {
+                btnDelete.setImageResource(R.drawable.vector_bg_delete_restore)
+                tvContent.paint.flags = Paint.STRIKE_THRU_TEXT_FLAG or Paint.ANTI_ALIAS_FLAG
+            } else {
+                btnDelete.setImageResource(R.drawable.vector_bg_delete)
+                tvContent.paint.flags = 0
+                tvContent.paint.flags = Paint.ANTI_ALIAS_FLAG
+            }
+
+            btnDelete.setOnClickListener {
+                listener?.onDeleteSinglePlanClick(
+                    wrapper.beanSingle,
+                    wrapper.statusSingle != SinglePlanStatus.DELETE
+                )
             }
         }
     }
 }
 
 interface OnSinglePlanClickListener {
-    fun onDeleteSinglePlanClick(data: SinglePlanBean)
+    // true表示删除，false表示恢复
+    fun onDeleteSinglePlanClick(data: SinglePlanBean, delete: Boolean)
+
     fun onCustomClick(data: SinglePlanBean)
 }

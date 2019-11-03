@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.room.Delete
 import com.mdove.civilservantcommunity.R
 import com.mdove.civilservantcommunity.base.BaseFragment
 import com.mdove.civilservantcommunity.plan.adapter.EditPlanModuleAdapter
@@ -19,6 +20,7 @@ import com.mdove.civilservantcommunity.plan.dao.TodayPlansDbBean
 import com.mdove.civilservantcommunity.plan.viewmodel.EditPlanViewModel
 import com.mdove.civilservantcommunity.room.MainDb
 import com.mdove.dependent.common.networkenhance.valueobj.Status
+import com.mdove.dependent.common.recyclerview.PaddingDecoration
 import com.mdove.dependent.common.threadpool.MDoveBackgroundPool
 import com.mdove.dependent.common.utils.TimeUtils
 import com.mdove.dependent.common.utils.dismissLoading
@@ -73,8 +75,8 @@ class PlanFragment : BaseFragment() {
             }
         }
     }, object : OnSinglePlanClickListener {
-        override fun onDeleteSinglePlanClick(data: SinglePlanBean) {
-            mViewModelEdit.deleteSinglePlanLiveData.value = data
+        override fun onDeleteSinglePlanClick(data: SinglePlanBean, delete: Boolean) {
+            mViewModelEdit.deleteSinglePlanLiveData.value = Pair(data, delete)
         }
 
         override fun onCustomClick(data: SinglePlanBean) {
@@ -102,6 +104,7 @@ class PlanFragment : BaseFragment() {
         view_toolbar.setTitle("我的计划")
         rlv.layoutManager = LinearLayoutManager(context)
         rlv.adapter = adapter
+        rlv.addItemDecoration(PaddingDecoration(12))
         mViewModelEdit.data.observe(this, Observer {
             when (it.status) {
                 Status.SUCCESS -> {
