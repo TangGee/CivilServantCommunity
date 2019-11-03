@@ -50,7 +50,7 @@ class MainUGCFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        view_toolbar.setTitle("日常吐槽")
+        view_toolbar.setTitle("求助大神")
         view_toolbar.setRightBtnTitle("发送")
         layout_identity.setList(viewModel.typeTitles)
         rlv_topic.layoutManager =

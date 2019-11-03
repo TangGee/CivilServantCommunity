@@ -42,25 +42,30 @@ class PlanFragment : BaseFragment() {
                 launch {
                     showLoading()
                     val plans = mViewModelEdit.createFeedPlans()
+                    val insertData = System.currentTimeMillis()
+                    val createData = TimeUtils.getDateFromSQL()
+                    var dbId = 0L
                     withContext(MDoveBackgroundPool) {
                         MainDb.db.todayPlansDao().insert(
                             TodayPlansEntity(
-                                date = System.currentTimeMillis(),
+                                date = insertData,
                                 sucDate = null,
-                                createDate = TimeUtils.getDateFromSQL(),
+                                createDate = createData,
                                 resp = TodayPlansDbBean(plans.map { module ->
                                     module.copy(beanSingles = module.beanSingles.filterNot { single ->
                                         single.typeSingle == SinglePlanType.CUSTOM_PLAN_BTN
                                     })
                                 })
                             )
-                        )
+                        )?.let {
+                            dbId = it
+                        }
                     }
                     dismissLoading()
                     val intent = Intent()
                     intent.putExtra(
                         PlanActivity.INTENT_PARAMS,
-                        PlanToFeedParams(plans)
+                        PlanToFeedParams(dbId, insertData, createData, null, plans)
                     )
                     it.setResult(Activity.RESULT_OK, intent)
                     it.finish()

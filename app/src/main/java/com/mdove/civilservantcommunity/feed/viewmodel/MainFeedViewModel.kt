@@ -69,6 +69,35 @@ class MainFeedViewModel : ViewModel() {
                 }
             }
 
+            addSource(planParamsLiveData) { toFeedParams ->
+                value = value?.let {
+                    val newData = mutableListOf<BaseFeedResp>()
+                    it.data?.forEachIndexed { index, baseFeedResp ->
+                        // 找到QuickBtns，然后在其下边增加我的今日计划
+                        if (baseFeedResp is FeedQuickBtnsResp) {
+                            newData.add(baseFeedResp)
+                            newData.add(FeedTimeLineFeedTodayPlansTitleResp())
+                            newData.addAll(toFeedParams.data.flatMap { planModule ->
+                                planModule.beanSingles.map {
+                                    FeedTimeLineFeedTodayPlansResp(
+                                        toFeedParams.entityId,
+                                        toFeedParams.insertDate,
+                                        toFeedParams.sucDate,
+                                        toFeedParams.createDate,
+                                        it
+                                    )
+                                }
+                            }.apply {
+                                (this.last()).params.typeSingle = SinglePlanType.LAST_PLAN
+                            })
+                        }else{
+                            newData.add(baseFeedResp)
+                        }
+                    }
+                    Resource(it.status, newData, it.exception)
+                }
+            }
+
             addSource(punchResp) {
                 if (it) {
                     value?.let { resource ->
@@ -81,19 +110,6 @@ class MainFeedViewModel : ViewModel() {
                         }, resource.exception)
                     }
                 }
-            }
-
-            addSource(planParamsLiveData) { params ->
-                // TODO
-//                value = value?.let {
-//                    Resource(it.status, it.data?.filter {
-//                        it !is FeedTodayPlanResp
-//                    }?.toMutableList()?.apply {
-//                        addAll(params.data.map {
-//                            FeedTimeLineFeedTodayPlansResp(params = it)
-//                        })
-//                    }, it.exception)
-//                }
             }
 
             addSource(checkTodayPlanLiveData) { params ->

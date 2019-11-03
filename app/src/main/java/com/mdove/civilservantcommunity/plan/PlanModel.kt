@@ -63,7 +63,13 @@ data class PlanFactorModel(
 ) : Parcelable
 
 @Parcelize
-data class PlanToFeedParams(val data: List<PlanModuleBean>) : Parcelable
+data class PlanToFeedParams(
+    val entityId: Long,
+    val insertDate: Long,
+    val createDate: String,
+    val sucDate: Long? = null,
+    val data: List<PlanModuleBean>
+) : Parcelable
 
 @Parcelize
 data class PlanToFeedResult(val params: PlanToFeedParams?, val status: Status) : Parcelable
