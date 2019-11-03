@@ -55,6 +55,7 @@ class MePageFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         btn_update.paint.flags = Paint.UNDERLINE_TEXT_FLAG
+        view_toolbar.setTitle("我的主页")
         mAdapter = MePageAdapter(object : OnMePageClickListener {
             override fun onClick(resp: ArticleResp) {
                 if (context != null && resp.aid != null) {
