@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatImageView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -222,10 +223,12 @@ class EditSinglePlanAdapter(private val listener: OnSinglePlanClickListener? = n
             if (wrapper.statusSingle == SinglePlanStatus.DELETE) {
                 btnDelete.setImageResource(R.drawable.vector_bg_delete_restore)
                 tvContent.paint.flags = Paint.STRIKE_THRU_TEXT_FLAG or Paint.ANTI_ALIAS_FLAG
+                tvContent.setTextColor(ContextCompat.getColor(itemView.context, R.color.grey_500))
             } else {
                 btnDelete.setImageResource(R.drawable.vector_bg_delete)
                 tvContent.paint.flags = 0
                 tvContent.paint.flags = Paint.ANTI_ALIAS_FLAG
+                tvContent.setTextColor(ContextCompat.getColor(itemView.context, R.color.black))
             }
 
             btnDelete.setOnClickListener {
