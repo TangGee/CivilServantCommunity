@@ -46,6 +46,7 @@ data class PlanModuleBean(
     val moduleName: String,
     val beanSingles: List<SinglePlanBeanWrapper>,
     val moduleType: PlanModuleType,
+    val moduleStatus: PlanModuleStatus,
     val changeVersion: Int = 0 // 对于module来说，它的子item发生变化 version++。这个Diff时就有变化了
 ) : Parcelable
 
@@ -55,6 +56,10 @@ enum class PlanModuleType {
     BTN_OK
 }
 
+enum class PlanModuleStatus {
+    NORMAL,
+    DELETE
+}
 
 @Parcelize
 data class PlanFactorModel(

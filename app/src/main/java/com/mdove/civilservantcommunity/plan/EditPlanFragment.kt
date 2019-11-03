@@ -32,8 +32,8 @@ import kotlinx.coroutines.withContext
 class PlanFragment : BaseFragment() {
     private lateinit var mViewModelEdit: EditPlanViewModel
     private val adapter = EditPlanModuleAdapter(object : OnPlanModuleClickListener {
-        override fun onDeletePlanModuleClick(data: PlanModuleBean) {
-            mViewModelEdit.deletePlanModuleLiveData.value = data
+        override fun onDeletePlanModuleClick(data: PlanModuleBean, delete: Boolean) {
+            mViewModelEdit.deletePlanModuleLiveData.value = Pair(data, delete)
         }
 
         override fun onClickCreatePlans() {

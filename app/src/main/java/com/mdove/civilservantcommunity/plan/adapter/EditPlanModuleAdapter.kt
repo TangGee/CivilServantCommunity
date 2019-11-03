@@ -8,6 +8,7 @@ import androidx.appcompat.widget.AppCompatImageView
 import androidx.recyclerview.widget.*
 import com.mdove.civilservantcommunity.R
 import com.mdove.civilservantcommunity.plan.PlanModuleBean
+import com.mdove.civilservantcommunity.plan.PlanModuleStatus
 import com.mdove.civilservantcommunity.plan.PlanModuleType
 
 class EditPlanModuleAdapter(
@@ -22,6 +23,7 @@ class EditPlanModuleAdapter(
         ): Boolean {
             return oldItem.moduleId == newItem.moduleId
                     && oldItem.beanSingles.size == newItem.beanSingles.size
+                    && oldItem.moduleStatus == newItem.moduleStatus
                     && oldItem.changeVersion == newItem.changeVersion
         }
 
@@ -33,7 +35,10 @@ class EditPlanModuleAdapter(
         }
 
         override fun getChangePayload(oldItem: PlanModuleBean, newItem: PlanModuleBean): Any? {
-            return if (oldItem.beanSingles.size != newItem.beanSingles.size||oldItem.changeVersion != newItem.changeVersion) {
+            return if (oldItem.beanSingles.size != newItem.beanSingles.size
+                || oldItem.moduleStatus != newItem.moduleStatus
+                || oldItem.changeVersion != newItem.changeVersion
+            ) {
                 PAYLOAD_SINGLE_PLANS
             } else {
                 null
@@ -113,12 +118,12 @@ class EditPlanModuleAdapter(
 
     inner class PlanModuleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val rlv = itemView.findViewById<RecyclerView>(R.id.rlv)
+        private val btnClose = itemView.findViewById<AppCompatImageView>(R.id.btn_close)
+
         fun bind(data: PlanModuleBean) {
             itemView.findViewById<TextView>(R.id.tv_module_name).text =
                 data.beanSingles[0].beanSingle.moduleName
-            itemView.findViewById<AppCompatImageView>(R.id.btn_close).setOnClickListener {
-                listener.onDeletePlanModuleClick(data)
-            }
+            updateStatus(data)
 
             rlv.layoutManager = LinearLayoutManager(rlv.context)
             rlv.adapter = EditSinglePlanAdapter(singlePlanListener).apply {
@@ -127,12 +132,26 @@ class EditPlanModuleAdapter(
         }
 
         fun payload(data: PlanModuleBean) {
-            (rlv.adapter as? EditSinglePlanAdapter)?.submitList(data.beanSingles)
+            updateStatus(data)
+        }
+
+        private fun updateStatus(data: PlanModuleBean) {
+            if (data.moduleStatus == PlanModuleStatus.DELETE) {
+                btnClose.setImageResource(R.drawable.vector_bg_delete_restore)
+                rlv.visibility = View.GONE
+            } else {
+                btnClose.setImageResource(R.drawable.vector_bg_delete)
+                rlv.visibility = View.VISIBLE
+                (rlv.adapter as? EditSinglePlanAdapter)?.submitList(data.beanSingles)
+            }
+            btnClose.setOnClickListener {
+                listener.onDeletePlanModuleClick(data, data.moduleStatus != PlanModuleStatus.DELETE)
+            }
         }
     }
 }
 
 interface OnPlanModuleClickListener {
-    fun onDeletePlanModuleClick(data: PlanModuleBean)
+    fun onDeletePlanModuleClick(data: PlanModuleBean, delete: Boolean)
     fun onClickCreatePlans()
 }

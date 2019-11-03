@@ -13,13 +13,21 @@ class EditPlanViewModel : ViewModel() {
 
     val deleteSinglePlanLiveData = MutableLiveData<Pair<SinglePlanBean, Boolean>>()
     val customSinglePlanLiveData = MutableLiveData<SinglePlanBean>()
-    val deletePlanModuleLiveData = MutableLiveData<PlanModuleBean>()
+    val deletePlanModuleLiveData = MutableLiveData<Pair<PlanModuleBean, Boolean>>()
 
     val data = MediatorLiveData<Resource<NormalResp<List<PlanModuleBean>>>>().apply {
         addSource(repository.getPlans()) {
             val new = mutableListOf<PlanModuleBean>()
             // 首个ViewHolder占位
-            new.add(PlanModuleBean("padding", "padding", mutableListOf(), PlanModuleType.PADDING))
+            new.add(
+                PlanModuleBean(
+                    "padding",
+                    "padding",
+                    mutableListOf(),
+                    PlanModuleType.PADDING,
+                    PlanModuleStatus.NORMAL
+                )
+            )
             it.data?.data?.let { rawList ->
                 rawList.forEach {
                     val firstSinglePlan = it.firstOrNull()
@@ -42,12 +50,21 @@ class EditPlanViewModel : ViewModel() {
                                         )
                                     )
                                 }, PlanModuleType.NORMAL
+                            , PlanModuleStatus.NORMAL
                         )
                     )
                 }
             }
             // 用空表示最后一个ok按钮的bean
-            new.add(PlanModuleBean("btn_ok", "btn_ok", mutableListOf(), PlanModuleType.BTN_OK))
+            new.add(
+                PlanModuleBean(
+                    "btn_ok",
+                    "btn_ok",
+                    mutableListOf(),
+                    PlanModuleType.BTN_OK,
+                    PlanModuleStatus.NORMAL
+                )
+            )
             value = Resource(
                 it.status,
                 NormalResp<List<PlanModuleBean>>(
@@ -80,8 +97,12 @@ class EditPlanViewModel : ViewModel() {
         // 删除整个模块计划
         addSource(deletePlanModuleLiveData) { deleteModule ->
             value = value?.let {
-                Resource(it.status, data = it.data?.copy(data = it.data?.data?.filterNot {
-                    it.moduleId == deleteModule.moduleId
+                Resource(it.status, data = it.data?.copy(data = it.data?.data?.map {
+                    if(it.moduleId == deleteModule.first.moduleId){
+                        it.copy(moduleStatus = if (deleteModule.second) PlanModuleStatus.DELETE else PlanModuleStatus.NORMAL)
+                    }else{
+                        it
+                    }
                 }), exception = it.exception)
             }
         }
@@ -122,10 +143,11 @@ class EditPlanViewModel : ViewModel() {
     fun createFeedPlans(): List<PlanModuleBean> {
         val plans = mutableListOf<PlanModuleBean>()
         data.value?.data?.data?.filter {
-            it.moduleType == PlanModuleType.NORMAL
+            it.moduleType == PlanModuleType.NORMAL && it.moduleStatus != PlanModuleStatus.DELETE
         }?.forEach {
             plans.add(it.copy(beanSingles = it.beanSingles.filter {
-                it.typeSingle == SinglePlanType.CUSTOM_PLAN || it.typeSingle == SinglePlanType.SYS_PLAN
+                (it.typeSingle == SinglePlanType.CUSTOM_PLAN || it.typeSingle == SinglePlanType.SYS_PLAN)
+                        && it.statusSingle != SinglePlanStatus.DELETE
             }))
         }
         return plans

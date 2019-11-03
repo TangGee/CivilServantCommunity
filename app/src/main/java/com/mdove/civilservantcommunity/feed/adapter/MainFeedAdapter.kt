@@ -319,7 +319,7 @@ class MainFeedAdapter(
     inner class FeedTimeLineFeedTodayPlansViewHolder(itemView: View) :
         RecyclerView.ViewHolder(itemView) {
         private val title = itemView.findViewById<TextView>(R.id.text)
-        private val tvSucTime = itemView.findViewById<TextView>(R.id.tv_suc_time)
+        private val tvSucTime = itemView.findViewById<TextView>(R.id.tv_create_time)
         private val timeLine = itemView.findViewById<TimeLineView>(R.id.time_line)
         private val tvModule = itemView.findViewById<TextView>(R.id.tv_module)
         private val cb = itemView.findViewById<AppCompatCheckBox>(R.id.cb_today_plan)
