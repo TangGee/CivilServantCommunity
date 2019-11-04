@@ -3,6 +3,7 @@ package com.mdove.civilservantcommunity.feed.viewmodel
 import androidx.lifecycle.*
 import com.mdove.civilservantcommunity.feed.bean.*
 import com.mdove.civilservantcommunity.feed.repository.MainFeedRepository
+import com.mdove.civilservantcommunity.plan.PlanModuleStatus
 import com.mdove.civilservantcommunity.plan.PlanToFeedParams
 import com.mdove.civilservantcommunity.plan.SinglePlanStatus
 import com.mdove.civilservantcommunity.plan.SinglePlanType
@@ -77,8 +78,12 @@ class MainFeedViewModel : ViewModel() {
                         if (baseFeedResp is FeedQuickBtnsResp) {
                             newData.add(baseFeedResp)
                             newData.add(FeedTimeLineFeedTodayPlansTitleResp())
-                            newData.addAll(toFeedParams.data.flatMap { planModule ->
-                                planModule.beanSingles.map {
+                            newData.addAll(toFeedParams.data.filter {
+                                it.moduleStatus != PlanModuleStatus.DELETE
+                            }.flatMap { planModule ->
+                                planModule.beanSingles.filter {
+                                    it.statusSingle != SinglePlanStatus.DELETE
+                                }.map {
                                     FeedTimeLineFeedTodayPlansResp(
                                         toFeedParams.entityId,
                                         toFeedParams.insertDate,
@@ -90,7 +95,7 @@ class MainFeedViewModel : ViewModel() {
                             }.apply {
                                 (this.last()).params.typeSingle = SinglePlanType.LAST_PLAN
                             })
-                        }else{
+                        } else {
                             newData.add(baseFeedResp)
                         }
                     }

@@ -13,6 +13,7 @@
         <activity
             android:name=".feed.MainFeedActivity"
             android:launchMode="singleTop"
+            android:theme="@style/MyAppTheme"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,6 +21,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".feedback.FeedBackActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"/>
 
         <activity
             android:name=".account.AccountActivity"
