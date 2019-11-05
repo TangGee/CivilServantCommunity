@@ -74,7 +74,7 @@ class MainFeedAdapter(
             } else if ((oldItem is FeedTodayPlanResp) && (newItem is FeedTodayPlanResp)) {
                 oldItem.params == newItem.params
             } else if ((oldItem is FeedTimeLineFeedTodayPlansResp) && (newItem is FeedTimeLineFeedTodayPlansResp)) {
-                oldItem.params.statusSingle == newItem.params.statusSingle
+                oldItem.params.statusSingle == newItem.params.statusSingle && oldItem.params.beanSingle.content == newItem.params.beanSingle.content
             } else if ((oldItem is FeedTimeLineFeedTodayPlansTitleResp) && (newItem is FeedTimeLineFeedTodayPlansTitleResp)) {
                 return true
             } else if ((oldItem is FeedTimeLineFeedTitleResp) && (newItem is FeedTimeLineFeedTitleResp)) {
@@ -87,7 +87,9 @@ class MainFeedAdapter(
         override fun getChangePayload(oldItem: BaseFeedResp, newItem: BaseFeedResp): Any? {
             return when {
                 (oldItem as? FeedPunchResp)?.count != (newItem as? FeedPunchResp)?.count -> PAYLOAD_PUNCH
-                (oldItem as? FeedTimeLineFeedTodayPlansResp)?.params?.statusSingle != (newItem as? FeedTimeLineFeedTodayPlansResp)?.params?.statusSingle -> PAYLOAD_TODAY_PLANS
+                (oldItem as? FeedTimeLineFeedTodayPlansResp)?.params?.statusSingle != (newItem as? FeedTimeLineFeedTodayPlansResp)?.params?.statusSingle -> PAYLOAD_TODAY_PLANS_STATUS
+                (oldItem as? FeedTimeLineFeedTodayPlansResp)?.params?.beanSingle?.content != (newItem as? FeedTimeLineFeedTodayPlansResp)?.params?.beanSingle?.content -> PAYLOAD_TODAY_PLANS_EDIT
+
                 else -> null
             }
         }
@@ -115,7 +117,8 @@ class MainFeedAdapter(
         const val CLICK_FEED_TIME_LINE_PLAN = 105
 
         val PAYLOAD_PUNCH = Any()
-        val PAYLOAD_TODAY_PLANS = Any()
+        val PAYLOAD_TODAY_PLANS_STATUS = Any()
+        val PAYLOAD_TODAY_PLANS_EDIT = Any()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -244,9 +247,13 @@ class MainFeedAdapter(
             if (holder is FeedPunchViewHolder) {
                 holder.payloadBind(getItem(position) as FeedPunchResp)
             }
-        } else if (payloads.contains(PAYLOAD_TODAY_PLANS)) {
+        } else if (payloads.contains(PAYLOAD_TODAY_PLANS_STATUS)) {
             if (holder is FeedTimeLineFeedTodayPlansViewHolder) {
                 holder.payloadBind(getItem(position) as FeedTimeLineFeedTodayPlansResp)
+            }
+        } else if (payloads.contains(PAYLOAD_TODAY_PLANS_EDIT)) {
+            if (holder is FeedTimeLineFeedTodayPlansViewHolder) {
+                holder.payloadBindContent(getItem(position) as FeedTimeLineFeedTodayPlansResp)
             }
         } else {
             super.onBindViewHolder(holder, position, payloads)
@@ -343,6 +350,11 @@ class MainFeedAdapter(
             if (resp.params.typeSingle == SinglePlanType.LAST_PLAN) {
                 timeLine.hideBottomLine()
             }
+        }
+
+        fun payloadBindContent(resp: FeedTimeLineFeedTodayPlansResp) {
+            title.text = resp.params.beanSingle.content
+            bindSelect(resp.params.statusSingle == SinglePlanStatus.SELECT)
         }
 
         fun payloadBind(resp: FeedTimeLineFeedTodayPlansResp) {
