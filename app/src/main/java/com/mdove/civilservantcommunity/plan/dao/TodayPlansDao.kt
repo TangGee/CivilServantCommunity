@@ -16,6 +16,9 @@ interface TodayPlansDao {
     @Query("SELECT * FROM today_plans WHERE strftime('%Y-%m-%d','now') = strftime('%Y-%m-%d',create_date)")
     fun getTodayPlansRecord(): TodayPlansEntity?
 
+    @Delete
+    fun deleteTodayPlanRecord(entity: TodayPlansEntity)
+
     @Update
     fun update(bean: TodayPlansEntity)
 

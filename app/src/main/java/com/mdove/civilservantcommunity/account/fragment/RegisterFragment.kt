@@ -19,6 +19,8 @@ import com.mdove.civilservantcommunity.account.viewmodel.AccountViewModel
 import com.mdove.civilservantcommunity.view.MultiLineChooseLayout
 import com.mdove.dependent.common.networkenhance.valueobj.Status
 import com.mdove.dependent.common.toast.ToastUtil
+import com.mdove.dependent.common.utils.dismissLoading
+import com.mdove.dependent.common.utils.showLoading
 import kotlinx.android.synthetic.main.fragment_register.*
 
 /**
@@ -54,6 +56,7 @@ class RegisterFragment : BaseFragment(), ITransitionProvider {
         mAccountViewModel.registerResp.observe(this, Observer {
             when (it.status) {
                 Status.SUCCESS -> {
+                    dismissLoading()
                     if (it.data?.status == 0) {
                         AppConfig.setUserInfo(it.data?.data?.userInfo)
                         context?.let {
@@ -64,7 +67,11 @@ class RegisterFragment : BaseFragment(), ITransitionProvider {
                         ToastUtil.toast(it.data?.message ?: "", Toast.LENGTH_SHORT)
                     }
                 }
+                Status.LOADING->{
+                    showLoading()
+                }
                 Status.ERROR -> {
+                    dismissLoading()
                     ToastUtil.toast(it.data?.message ?: "", Toast.LENGTH_SHORT)
                 }
             }

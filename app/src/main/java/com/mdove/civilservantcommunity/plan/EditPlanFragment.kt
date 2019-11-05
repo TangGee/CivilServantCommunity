@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.room.Delete
 import com.mdove.civilservantcommunity.R
 import com.mdove.civilservantcommunity.base.BaseFragment
 import com.mdove.civilservantcommunity.plan.adapter.EditPlanModuleAdapter
@@ -48,6 +47,10 @@ class PlanFragment : BaseFragment() {
                     val createData = TimeUtils.getDateFromSQL()
                     var dbId = 0L
                     withContext(MDoveBackgroundPool) {
+                        // 修计划时，先删了之前当天的计划
+                        MainDb.db.todayPlansDao().getTodayPlansRecord()?.let {
+                            MainDb.db.todayPlansDao().deleteTodayPlanRecord(it)
+                        }
                         MainDb.db.todayPlansDao().insert(
                             TodayPlansEntity(
                                 date = insertData,
@@ -75,6 +78,10 @@ class PlanFragment : BaseFragment() {
             }
         }
     }, object : OnSinglePlanClickListener {
+        override fun onEditSinglePlan(data: SinglePlanBean, editStr: String) {
+            mViewModelEdit.editSinglePlanLiveData.value = Pair(data, editStr)
+        }
+
         override fun onDeleteSinglePlanClick(data: SinglePlanBean, delete: Boolean) {
             mViewModelEdit.deleteSinglePlanLiveData.value = Pair(data, delete)
         }

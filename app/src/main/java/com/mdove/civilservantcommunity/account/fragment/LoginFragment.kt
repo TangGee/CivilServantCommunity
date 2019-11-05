@@ -19,6 +19,8 @@ import com.mdove.civilservantcommunity.account.bean.LoginInfoParams
 import com.mdove.civilservantcommunity.account.viewmodel.AccountViewModel
 import com.mdove.dependent.common.networkenhance.valueobj.Status
 import com.mdove.dependent.common.toast.ToastUtil
+import com.mdove.dependent.common.utils.dismissLoading
+import com.mdove.dependent.common.utils.showLoading
 import kotlinx.android.synthetic.main.fragment_login.*
 
 /**
@@ -55,6 +57,7 @@ class LoginFragment : BaseFragment(), ITransitionProvider {
         mAccountViewModel.loginResp.observe(this, Observer {
             when (it.status) {
                 Status.SUCCESS -> {
+                    dismissLoading()
                     if (it.data?.status == 0) {
                         AppConfig.setUserInfo(it.data?.data?.userInfo)
                         context?.let {
@@ -65,7 +68,11 @@ class LoginFragment : BaseFragment(), ITransitionProvider {
                         ToastUtil.toast(it.data?.message ?: "登录失败 ", Toast.LENGTH_SHORT)
                     }
                 }
+                Status.LOADING -> {
+                    showLoading()
+                }
                 Status.ERROR -> {
+                    dismissLoading()
                     ToastUtil.toast(it.data?.message ?: "登录失败 ", Toast.LENGTH_SHORT)
                 }
             }

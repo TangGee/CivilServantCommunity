@@ -73,7 +73,9 @@ class MainFeedViewModel : ViewModel() {
             addSource(planParamsLiveData) { toFeedParams ->
                 value = value?.let {
                     val newData = mutableListOf<BaseFeedResp>()
-                    it.data?.forEachIndexed { index, baseFeedResp ->
+                    it.data?.filter {
+                        it !is FeedTimeLineFeedTodayPlansTitleResp && it !is FeedTimeLineFeedTodayPlansResp
+                    }?.forEachIndexed { index, baseFeedResp ->
                         // 找到QuickBtns，然后在其下边增加我的今日计划
                         if (baseFeedResp is FeedQuickBtnsResp) {
                             newData.add(baseFeedResp)

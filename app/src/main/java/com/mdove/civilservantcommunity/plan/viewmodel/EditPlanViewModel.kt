@@ -14,6 +14,7 @@ class EditPlanViewModel : ViewModel() {
     val deleteSinglePlanLiveData = MutableLiveData<Pair<SinglePlanBean, Boolean>>()
     val customSinglePlanLiveData = MutableLiveData<SinglePlanBean>()
     val deletePlanModuleLiveData = MutableLiveData<Pair<PlanModuleBean, Boolean>>()
+    val editSinglePlanLiveData = MutableLiveData<Pair<SinglePlanBean, String>>()
 
     val data = MediatorLiveData<Resource<NormalResp<List<PlanModuleBean>>>>().apply {
         addSource(repository.getPlans()) {
@@ -98,9 +99,30 @@ class EditPlanViewModel : ViewModel() {
         addSource(deletePlanModuleLiveData) { deleteModule ->
             value = value?.let {
                 Resource(it.status, data = it.data?.copy(data = it.data?.data?.map {
-                    if(it.moduleId == deleteModule.first.moduleId){
+                    if (it.moduleId == deleteModule.first.moduleId) {
                         it.copy(moduleStatus = if (deleteModule.second) PlanModuleStatus.DELETE else PlanModuleStatus.NORMAL)
-                    }else{
+                    } else {
+                        it
+                    }
+                }), exception = it.exception)
+            }
+        }
+
+        // 修改一个系统计划
+        addSource(editSinglePlanLiveData) { edit ->
+            value = value?.let {
+                Resource(it.status, data = it.data?.copy(data = it.data?.data?.map {
+                    var changeVersion = it.changeVersion
+                    if (it.moduleId == edit.first.moduleId) {
+                        it.copy(beanSingles = it.beanSingles.map { single ->
+                            if (single.beanSingle.content == edit.first.content) {
+                                changeVersion++
+                                single.copy(beanSingle = single.beanSingle.copy(content = edit.second))
+                            } else {
+                                single
+                            }
+                        }, changeVersion = changeVersion)
+                    } else {
                         it
                     }
                 }), exception = it.exception)

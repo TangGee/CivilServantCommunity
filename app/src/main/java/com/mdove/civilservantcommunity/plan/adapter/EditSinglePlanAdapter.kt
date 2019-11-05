@@ -32,13 +32,14 @@ class EditSinglePlanAdapter(private val listener: OnSinglePlanClickListener? = n
             newItem: SinglePlanBeanWrapper
         ): Boolean {
             return oldItem.statusSingle == newItem.statusSingle
+                    && oldItem.beanSingle.content == newItem.beanSingle.content
         }
 
         override fun areItemsTheSame(
             oldItem: SinglePlanBeanWrapper,
             newItem: SinglePlanBeanWrapper
         ): Boolean {
-            return oldItem.beanSingle.content == newItem.beanSingle.content
+            return oldItem.beanSingle.part == newItem.beanSingle.part
         }
 
         override fun getChangePayload(
@@ -49,7 +50,9 @@ class EditSinglePlanAdapter(private val listener: OnSinglePlanClickListener? = n
                 && oldItem.typeSingle == SinglePlanType.SYS_PLAN
                 && newItem.typeSingle == SinglePlanType.SYS_PLAN
             ) {
-                PAYLOAD_SINGLE_PLAN
+                PAYLOAD_SINGLE_PLAN_DELETE
+            } else if (oldItem.beanSingle.content != newItem.beanSingle.content) {
+                PAYLOAD_SINGLE_PLAN_EDIT
             } else if (oldItem.statusSingle != newItem.statusSingle
                 && oldItem.typeSingle == SinglePlanType.CUSTOM_PLAN
                 && newItem.typeSingle == SinglePlanType.CUSTOM_PLAN
@@ -62,7 +65,8 @@ class EditSinglePlanAdapter(private val listener: OnSinglePlanClickListener? = n
     }) {
 
     companion object {
-        val PAYLOAD_SINGLE_PLAN = Any()
+        val PAYLOAD_SINGLE_PLAN_DELETE = Any()
+        val PAYLOAD_SINGLE_PLAN_EDIT = Any()
         val PAYLOAD_CUSTOM_PLAN = Any()
     }
 
@@ -120,8 +124,15 @@ class EditSinglePlanAdapter(private val listener: OnSinglePlanClickListener? = n
         payloads: MutableList<Any>
     ) {
         when {
-            payloads.contains(PAYLOAD_SINGLE_PLAN) -> (holder as? SinglePlanViewHolder)?.payload(getItem(position))
-            payloads.contains(PAYLOAD_CUSTOM_PLAN) -> (holder as? CustomSinglePlanViewHolder)?.payload(getItem(position))
+            payloads.contains(PAYLOAD_SINGLE_PLAN_DELETE) -> (holder as? SinglePlanViewHolder)?.payload(
+                getItem(position)
+            )
+            payloads.contains(PAYLOAD_SINGLE_PLAN_EDIT) -> (holder as? SinglePlanViewHolder)?.payloadContent(
+                getItem(position)
+            )
+            payloads.contains(PAYLOAD_CUSTOM_PLAN) -> (holder as? CustomSinglePlanViewHolder)?.payload(
+                getItem(position)
+            )
             else -> super.onBindViewHolder(holder, position, payloads)
         }
     }
@@ -208,34 +219,88 @@ class EditSinglePlanAdapter(private val listener: OnSinglePlanClickListener? = n
 
     inner class SinglePlanViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val btnDelete = itemView.findViewById<AppCompatImageView>(R.id.btn_close)
-        private val tvContent = itemView.findViewById<TextView>(R.id.tv_plan_content)
+        private val btnEdit = itemView.findViewById<AppCompatImageView>(R.id.btn_edit)
+        private val etContent = itemView.findViewById<EditText>(R.id.tv_plan_content)
 
         fun bind(wrapper: SinglePlanBeanWrapper) {
-            tvContent.text = wrapper.beanSingle.content
+            etContent.setText(wrapper.beanSingle.content)
             updateStatus(wrapper)
+            setListener(wrapper)
         }
 
         fun payload(wrapper: SinglePlanBeanWrapper) {
             updateStatus(wrapper)
+            setListener(wrapper)
+        }
+
+        fun payloadContent(wrapper: SinglePlanBeanWrapper) {
+            etContent.setText(wrapper.beanSingle.content)
+            enableSend("#000000")
+            etContent.clearFocus()
+            setListener(wrapper)
         }
 
         private fun updateStatus(wrapper: SinglePlanBeanWrapper) {
             if (wrapper.statusSingle == SinglePlanStatus.DELETE) {
                 btnDelete.setImageResource(R.drawable.vector_bg_delete_restore)
-                tvContent.paint.flags = Paint.STRIKE_THRU_TEXT_FLAG or Paint.ANTI_ALIAS_FLAG
-                tvContent.setTextColor(ContextCompat.getColor(itemView.context, R.color.grey_500))
+                etContent.paint.flags = Paint.STRIKE_THRU_TEXT_FLAG or Paint.ANTI_ALIAS_FLAG
+                etContent.setTextColor(ContextCompat.getColor(itemView.context, R.color.grey_500))
             } else {
                 btnDelete.setImageResource(R.drawable.vector_bg_delete)
-                tvContent.paint.flags = 0
-                tvContent.paint.flags = Paint.ANTI_ALIAS_FLAG
-                tvContent.setTextColor(ContextCompat.getColor(itemView.context, R.color.black))
+                etContent.paint.flags = 0
+                etContent.paint.flags = Paint.ANTI_ALIAS_FLAG
+                etContent.setTextColor(ContextCompat.getColor(itemView.context, R.color.black))
             }
+        }
 
+        private fun setListener(wrapper: SinglePlanBeanWrapper) {
             btnDelete.setOnClickListener {
                 listener?.onDeleteSinglePlanClick(
                     wrapper.beanSingle,
                     wrapper.statusSingle != SinglePlanStatus.DELETE
                 )
+            }
+
+            btnEdit.setOnClickListener {
+                etContent.requestFocus()
+                val editStr = etContent.text.toString()
+                if (!editStr.isBlank() && editStr != wrapper.beanSingle.content) {
+                    listener?.onEditSinglePlan(wrapper.beanSingle, editStr)
+                } else {
+                    ToastUtil.toast("执行空计划不大好吧~")
+                }
+            }
+
+            etContent.addTextChangedListener(object : TextWatcher {
+                override fun afterTextChanged(s: Editable?) {
+                    if (s?.toString() != wrapper.beanSingle.content) {
+                        enableSend("#2196f3")
+                    } else {
+                        enableSend("#9e9e9e")
+                    }
+                }
+
+                override fun beforeTextChanged(
+                    s: CharSequence?,
+                    start: Int,
+                    count: Int,
+                    after: Int
+                ) {
+                }
+
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                }
+
+            })
+        }
+
+        private fun enableSend(colorRs: String) {
+            val tintColor = Color.parseColor(colorRs)
+            val sl = ColorStateList.valueOf(tintColor)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                btnEdit.imageTintList = sl
+            } else {
+                btnEdit.drawable.setColorFilter(tintColor, PorterDuff.Mode.SRC_IN)
             }
         }
     }
@@ -246,4 +311,6 @@ interface OnSinglePlanClickListener {
     fun onDeleteSinglePlanClick(data: SinglePlanBean, delete: Boolean)
 
     fun onCustomClick(data: SinglePlanBean)
+
+    fun onEditSinglePlan(data: SinglePlanBean, editStr: String)
 }
