@@ -3,6 +3,7 @@ package com.mdove.civilservantcommunity.plan.view
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.content.Context
+import android.graphics.Color
 import android.util.AttributeSet
 import android.view.Gravity
 import android.view.MotionEvent
@@ -210,6 +211,7 @@ class TimeScheduleLayout @JvmOverloads constructor(context: Context, attrs: Attr
                 UIUtils.dip2Px(4).toInt()
             )
             gravity = Gravity.CENTER
+            setTextColor(Color.WHITE)
             layoutParams =
                 LinearLayout.LayoutParams(timeRectWidth, ViewGroup.LayoutParams.WRAP_CONTENT)
                     .apply {

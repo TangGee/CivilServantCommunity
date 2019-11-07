@@ -13,6 +13,7 @@ import com.mdove.civilservantcommunity.plan.TimeScheduleActivity.Companion.TAG_T
 import com.mdove.civilservantcommunity.plan.model.TimeScheduleParams
 import com.mdove.civilservantcommunity.plan.viewmodel.TimeScheduleViewModel
 import kotlinx.android.synthetic.main.fragment_time_schedule.*
+import kotlinx.android.synthetic.main.layout_time_schedule.*
 
 /**
  * Created by MDove on 2019-11-07.
@@ -55,5 +56,6 @@ class TimeScheduleFragment : BaseFragment() {
         viewModel.plansLiveData.observe(this, Observer {
             time_schedule_layout.updatePlans(it)
         })
+        view_toolbar.setTitle("时间管理")
     }
 }
