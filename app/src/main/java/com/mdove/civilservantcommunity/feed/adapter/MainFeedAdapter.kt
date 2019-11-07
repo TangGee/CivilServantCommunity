@@ -114,6 +114,7 @@ class MainFeedAdapter(
         const val CLICK_QUICK_BTN_PUNCH = 102
         const val CLICK_QUICK_BTN_UGC = 103
         const val CLICK_QUICK_BTN_ME = 104
+        const val CLICK_QUICK_BTN_TIME_SCHEDULE = 106
         const val CLICK_FEED_TIME_LINE_PLAN = 105
 
         val PAYLOAD_PUNCH = Any()
@@ -401,6 +402,9 @@ class MainFeedAdapter(
                 }
                 itemView.findViewById<ConstraintLayout>(R.id.layout_btn_me).setOnClickListener {
                     listener.onClick(CLICK_QUICK_BTN_ME, null)
+                }
+                itemView.findViewById<ConstraintLayout>(R.id.layout_btn_time_schedule).setOnClickListener {
+                    listener.onClick(CLICK_QUICK_BTN_TIME_SCHEDULE, null)
                 }
             }
         }

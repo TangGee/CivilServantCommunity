@@ -22,6 +22,7 @@ import com.mdove.civilservantcommunity.feed.bean.FeedTimeLineFeedTodayPlansResp
 import com.mdove.civilservantcommunity.feed.bean.FeedTodayPlansCheckParams
 import com.mdove.civilservantcommunity.feed.viewmodel.MainFeedViewModel
 import com.mdove.civilservantcommunity.plan.SinglePlanStatus
+import com.mdove.civilservantcommunity.plan.TimeScheduleActivity
 import com.mdove.civilservantcommunity.plan.dao.TodayPlansDbBean
 import com.mdove.civilservantcommunity.plan.gotoPlanActivity
 import com.mdove.civilservantcommunity.punch.bean.PunchReq
@@ -64,6 +65,9 @@ class MainFeedFragment : BaseFragment() {
                 }
                 MainFeedAdapter.CLICK_QUICK_BTN_ME -> {
                     clickMePage()
+                }
+                MainFeedAdapter.CLICK_QUICK_BTN_TIME_SCHEDULE -> {
+                    clickTimeSchdule()
                 }
                 MainFeedAdapter.TYPE_FEED_PLAN -> {
                     clickPlan()
@@ -124,6 +128,12 @@ class MainFeedFragment : BaseFragment() {
     private fun clickUGC() {
         context?.let {
             MainUGCActivity.gotoMainUGC(it)
+        }
+    }
+
+    private fun clickTimeSchdule() {
+        activity?.let {
+            TimeScheduleActivity.goto(it, feedViewModel.createTimeScheduleParams())
         }
     }
 

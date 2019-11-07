@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.mdove.civilservantcommunity">
 
     <application
@@ -9,7 +10,8 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:theme="@style/TransparentTheme"
-        android:supportsRtl="true">
+        android:supportsRtl="true"
+        tools:ignore="GoogleAppIndexingWarning">
         <activity
             android:name=".feed.MainFeedActivity"
             android:launchMode="singleTop"
@@ -24,6 +26,11 @@
 
         <activity android:name=".feedback.FeedBackActivity"
             android:launchMode="singleTop"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".plan.TimeScheduleActivity"
+            android:launchMode="singleTop"
+            android:theme="@style/MyAppTheme"
             android:screenOrientation="portrait"/>
 
         <activity
