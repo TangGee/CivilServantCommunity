@@ -89,9 +89,9 @@ class TimeScheduleAdapter(val listener: OnTimeScheduleAdapterListener) :
 
         fun payloadStatus(params: TimeSchedulePlansParams) {
             if (params.status == TimeSchedulePlansStatus.GONE) {
-                itemView.visibility = View.INVISIBLE
+                itemView.alpha = 0.5F
             } else {
-                itemView.visibility = View.VISIBLE
+                itemView.alpha = 1F
             }
         }
     }

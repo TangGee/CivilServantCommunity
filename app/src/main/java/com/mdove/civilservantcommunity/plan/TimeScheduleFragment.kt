@@ -59,6 +59,10 @@ class TimeScheduleFragment : BaseFragment() {
             time_schedule_layout.updatePlans(it)
         })
         time_schedule_layout.setListener(object : OnTimeScheduleLayoutListener {
+            override fun onPlansRelease(data: SinglePlanBean) {
+                viewModel.releasSinglePlanBean.value = data
+            }
+
             override fun onTouchViewStatusChange(
                 data: SinglePlanBean,
                 status: TimeSchedulePlansStatus

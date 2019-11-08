@@ -11,8 +11,10 @@ import com.mdove.civilservantcommunity.plan.model.TimeSchedulePlansStatus
  */
 class TimeScheduleViewModel : ViewModel() {
     val paramsLiveData = MutableLiveData<TimeScheduleParams>()
-    // 被添加Plan，需要从Rlv中移除
+    // 添加到Time块中Plan，需要从Rlv中移除
     val removeSinglePlanBean = MutableLiveData<SinglePlanBean>()
+    // 从Time块中释放到Rlv中
+    val releasSinglePlanBean = MutableLiveData<SinglePlanBean>()
     // Rlv被touch的View的显示与否
     val changeSinglePlanBean =
         MutableLiveData<Pair<SinglePlanBean, TimeSchedulePlansStatus>>()
@@ -27,6 +29,15 @@ class TimeScheduleViewModel : ViewModel() {
             }
         }
 
+        addSource(releasSinglePlanBean) { release ->
+            value = value?.let {
+                val newData = mutableListOf<TimeSchedulePlansParams>()
+                newData.add(TimeSchedulePlansParams(release, TimeSchedulePlansStatus.SHOW))
+                newData.addAll(it)
+                newData
+            }
+        }
+
         addSource(removeSinglePlanBean) { remove ->
             value = value?.filterNot {
                 it.data.moduleId == remove.moduleId &&
@@ -37,7 +48,8 @@ class TimeScheduleViewModel : ViewModel() {
         addSource(changeSinglePlanBean) { change ->
             value = value?.map {
                 if (it.data.moduleId == change.first.moduleId
-                    && it.data.content == change.first.content) {
+                    && it.data.content == change.first.content
+                ) {
                     it.copy(status = change.second)
                 } else {
                     it

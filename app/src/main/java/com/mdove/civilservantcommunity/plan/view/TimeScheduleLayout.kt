@@ -8,6 +8,7 @@ import android.util.AttributeSet
 import android.view.Gravity
 import android.view.MotionEvent
 import android.view.View
+import android.view.View.OnLongClickListener
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.ScrollView
@@ -17,12 +18,13 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.customview.widget.ViewDragHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mdove.civilservantcommunity.R
-import com.mdove.civilservantcommunity.feed.bean.FeedTimeLineFeedTodayPlansResp
 import com.mdove.civilservantcommunity.plan.SinglePlanBean
 import com.mdove.civilservantcommunity.plan.adapter.TimeScheduleAdapter
 import com.mdove.civilservantcommunity.plan.model.TimeSchedulePlansParams
 import com.mdove.civilservantcommunity.plan.model.TimeSchedulePlansStatus
+import com.mdove.dependent.common.recyclerview.PaddingDecoration
 import com.mdove.dependent.common.utils.UIUtils
+import com.mdove.dependent.common.view.removeSelf
 import kotlinx.android.synthetic.main.layout_time_schedule.view.*
 
 /**
@@ -35,8 +37,10 @@ class TimeScheduleLayout @JvmOverloads constructor(context: Context, attrs: Attr
     private val timeRectWidth = UIUtils.getScreenWidth(context) / 6
     private var timeRectHeight = timeRectWidth
     private var listener: OnTimeScheduleLayoutListener? = null
-    // key是View的toString()
-    private val curTouchMap = mutableMapOf<View, SinglePlanBean>()
+    // key永远是fake_view，滑动过程中永远是这个View
+    private val touchViewMap = mutableMapOf<View, SinglePlanBeanToView>()
+    // 记录当前从Time块中移出的View
+    private var curTouchViewFromTime: View? = null
 
     private val mViewDragHelper = ViewDragHelper.create(this, object : ViewDragHelper.Callback() {
         override fun tryCaptureView(child: View, pointerId: Int): Boolean {
@@ -45,18 +49,37 @@ class TimeScheduleLayout @JvmOverloads constructor(context: Context, attrs: Attr
 
         override fun onViewReleased(releasedChild: View, xvel: Float, yvel: Float) {
             super.onViewReleased(releasedChild, xvel, yvel)
-            (hitTimeInnerScope(releasedChild.left, releasedChild.top) as? LinearLayout)?.let {
+            (hitTimeInnerScope(
+                releasedChild,
+                releasedChild.left,
+                releasedChild.top
+            ) as? LinearLayout)?.let {
                 it.addView(createTextView(releasedChild).let { addView ->
-                    releasedChild.visibility = View.GONE
-                    curTouchMap[releasedChild]?.let {
-                        listener?.onPlansHasAdded(it)
+                    fake_title_view.visibility = View.GONE
+                    touchViewMap[fake_title_view]?.let {
+                        // 为添加上的View，put坐标信息
+                        touchViewMap[addView] = SinglePlanBeanToView(
+                            fake_title_view.top,
+                            fake_title_view.left,
+                            false,
+                            it.data
+                        )
+                        // 通知Rlv移出Plan
+                        listener?.onPlansHasAdded(it.data)
                     }
+                    handleAddTimePlans(addView)
                     addView
                 })
             } ?: also {
                 fake_title_view.visibility = View.GONE
-                curTouchMap[releasedChild]?.let {
-                    listener?.onTouchViewStatusChange(it, TimeSchedulePlansStatus.SHOW)
+                touchViewMap[fake_title_view]?.let {
+                    if (it.isFromRlv) {
+                        listener?.onTouchViewStatusChange(it.data, TimeSchedulePlansStatus.SHOW)
+                    } else {
+                        // 重新释放到Rlv中，并移出Time块中的Plan
+                        curTouchViewFromTime?.removeSelf()
+                        listener?.onPlansRelease(it.data)
+                    }
                 }
             }
         }
@@ -69,7 +92,7 @@ class TimeScheduleLayout @JvmOverloads constructor(context: Context, attrs: Attr
             dy: Int
         ) {
             super.onViewPositionChanged(changedView, left, top, dx, dy)
-            hitTimeOuterScope(left, top)?.let {
+            hitTimeOuterScope(changedView, left, top)?.let {
                 val animatorX = ObjectAnimator.ofFloat(it, "scaleX", 1f, 0.8f, 1f)
                 val animatorY = ObjectAnimator.ofFloat(it, "scaleY", 1f, 0.8f, 1f)
                 AnimatorSet().apply {
@@ -102,6 +125,7 @@ class TimeScheduleLayout @JvmOverloads constructor(context: Context, attrs: Attr
         initScopes()
         rlv_plans.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        rlv_plans.addItemDecoration(PaddingDecoration(8, false))
         rlv_plans.adapter = TimeScheduleAdapter(object : OnTimeScheduleAdapterListener {
             override fun onLongClick(data: SinglePlanBean, view: View) {
                 fake_title_view.layoutParams =
@@ -113,12 +137,12 @@ class TimeScheduleLayout @JvmOverloads constructor(context: Context, attrs: Attr
                             it.leftMargin = view.left
                         }
                     }
-                curTouchMap[fake_title_view] = data
+                curTouchViewFromTime = null
+                touchViewMap[fake_title_view] =
+                    SinglePlanBeanToView(rlv_plans.top, view.left, true, data)
+                listener?.onTouchViewStatusChange(data, TimeSchedulePlansStatus.GONE)
                 fake_title_view.text = data.content
                 fake_title_view.visibility = View.VISIBLE
-                curTouchMap[fake_title_view]?.let {
-                    listener?.onTouchViewStatusChange(it, TimeSchedulePlansStatus.GONE)
-                }
             }
         })
     }
@@ -137,21 +161,50 @@ class TimeScheduleLayout @JvmOverloads constructor(context: Context, attrs: Attr
         return true
     }
 
-    private fun hitTimeInnerScope(left: Int, top: Int): View? {
+    private fun hitTimeInnerScope(releasedChild: View, left: Int, top: Int): View? {
+        val centerX = left + releasedChild.width / 2
+        val centerY = top + releasedChild.height / 2
         val row = left / timeRectWidth
         val column = top / timeRectHeight
-        var index = column * 4 + row
-        if (index >= 24) {
-            index = 23
-        }
-        return if (index >= 0) {
+        val index = column * 4 + row
+        return if (index in 0..23) {
             timeViewInnerScopes[index]
         } else {
             null
         }
     }
 
-    private fun hitTimeOuterScope(left: Int, top: Int): ScrollView? {
+    // 处理添加到Time块中的操作
+    private fun handleAddTimePlans(addView: TextView) {
+        val params = touchViewMap[addView] ?: return
+        val listener = OnLongClickListener { view ->
+            view.alpha = 0.5F
+            fake_title_view.layoutParams =
+                fake_title_view.layoutParams.apply {
+                    this.width = view.width
+                    this.height = view.height
+                    (this as? ConstraintLayout.LayoutParams)?.let { lp ->
+                        lp.topMargin = params.top
+                        lp.leftMargin = params.left
+                    }
+                }
+            fake_title_view.text = params.data.content
+            touchViewMap[fake_title_view]?.let {
+                it.isFromRlv = false
+            }
+            curTouchViewFromTime = view
+            fake_title_view.visibility = View.VISIBLE
+            true
+        }
+        addView.setOnLongClickListener(listener)
+        // 添加到其他的Time格子中，此时需要将自己从父View中移除
+        curTouchViewFromTime?.removeSelf()
+        curTouchViewFromTime = null
+    }
+
+    private fun hitTimeOuterScope(touchView: View, left: Int, top: Int): ScrollView? {
+        val centerX = left + touchView.width / 2
+        val centerY = top + touchView.height / 2
         val row = left / timeRectWidth
         val column = top / timeRectHeight
         val index = column * 4 + row
@@ -230,7 +283,10 @@ class TimeScheduleLayout @JvmOverloads constructor(context: Context, attrs: Attr
             gravity = Gravity.CENTER
             setTextColor(Color.WHITE)
             layoutParams =
-                LinearLayout.LayoutParams(timeRectWidth, ViewGroup.LayoutParams.WRAP_CONTENT)
+                LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+                )
                     .apply {
                         topMargin = UIUtils.dip2Px(4).toInt()
                         leftMargin = UIUtils.dip2Px(4).toInt()
@@ -250,6 +306,18 @@ interface OnTimeScheduleAdapterListener {
 }
 
 interface OnTimeScheduleLayoutListener {
+    // 添加到Time块中
     fun onPlansHasAdded(data: SinglePlanBean)
+
+    // 重新释放到Rlv中
+    fun onPlansRelease(data: SinglePlanBean)
+
     fun onTouchViewStatusChange(data: SinglePlanBean, status: TimeSchedulePlansStatus)
 }
+
+data class SinglePlanBeanToView(
+    var top: Int,
+    var left: Int,
+    var isFromRlv: Boolean,// 标示这个Bean是来自Time块，还是Rlv
+    var data: SinglePlanBean
+)

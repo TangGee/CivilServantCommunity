@@ -7,7 +7,7 @@ import android.view.ViewGroup
  * Created by MDove on 2019-11-07.
  */
 
-fun View.removeParent(){
+fun View.removeSelf(){
     (this.parent as? ViewGroup)?.let { parent ->
         parent.removeView(this)
     }
