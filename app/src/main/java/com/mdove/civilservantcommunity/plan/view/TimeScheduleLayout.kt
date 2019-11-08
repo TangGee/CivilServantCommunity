@@ -21,6 +21,7 @@ import com.mdove.civilservantcommunity.feed.bean.FeedTimeLineFeedTodayPlansResp
 import com.mdove.civilservantcommunity.plan.SinglePlanBean
 import com.mdove.civilservantcommunity.plan.adapter.TimeScheduleAdapter
 import com.mdove.civilservantcommunity.plan.model.TimeSchedulePlansParams
+import com.mdove.civilservantcommunity.plan.model.TimeSchedulePlansStatus
 import com.mdove.dependent.common.utils.UIUtils
 import kotlinx.android.synthetic.main.layout_time_schedule.view.*
 
@@ -33,6 +34,9 @@ class TimeScheduleLayout @JvmOverloads constructor(context: Context, attrs: Attr
     private val timeViewOuterScopes = mutableListOf<ScrollView>()
     private val timeRectWidth = UIUtils.getScreenWidth(context) / 6
     private var timeRectHeight = timeRectWidth
+    private var listener: OnTimeScheduleLayoutListener? = null
+    // key是View的toString()
+    private val curTouchMap = mutableMapOf<View, SinglePlanBean>()
 
     private val mViewDragHelper = ViewDragHelper.create(this, object : ViewDragHelper.Callback() {
         override fun tryCaptureView(child: View, pointerId: Int): Boolean {
@@ -42,7 +46,18 @@ class TimeScheduleLayout @JvmOverloads constructor(context: Context, attrs: Attr
         override fun onViewReleased(releasedChild: View, xvel: Float, yvel: Float) {
             super.onViewReleased(releasedChild, xvel, yvel)
             (hitTimeInnerScope(releasedChild.left, releasedChild.top) as? LinearLayout)?.let {
-                it.addView(createTextView(releasedChild))
+                it.addView(createTextView(releasedChild).let { addView ->
+                    releasedChild.visibility = View.GONE
+                    curTouchMap[releasedChild]?.let {
+                        listener?.onPlansHasAdded(it)
+                    }
+                    addView
+                })
+            } ?: also {
+                fake_title_view.visibility = View.GONE
+                curTouchMap[releasedChild]?.let {
+                    listener?.onTouchViewStatusChange(it, TimeSchedulePlansStatus.SHOW)
+                }
             }
         }
 
@@ -95,10 +110,15 @@ class TimeScheduleLayout @JvmOverloads constructor(context: Context, attrs: Attr
                         this.height = view.height
                         (this as? ConstraintLayout.LayoutParams)?.let {
                             it.topMargin = rlv_plans.top
+                            it.leftMargin = view.left
                         }
                     }
+                curTouchMap[fake_title_view] = data
                 fake_title_view.text = data.content
                 fake_title_view.visibility = View.VISIBLE
+                curTouchMap[fake_title_view]?.let {
+                    listener?.onTouchViewStatusChange(it, TimeSchedulePlansStatus.GONE)
+                }
             }
         })
     }
@@ -134,11 +154,8 @@ class TimeScheduleLayout @JvmOverloads constructor(context: Context, attrs: Attr
     private fun hitTimeOuterScope(left: Int, top: Int): ScrollView? {
         val row = left / timeRectWidth
         val column = top / timeRectHeight
-        var index = column * 4 + row
-        if (index >= 24) {
-            index = 23
-        }
-        return if (index >= 0) {
+        val index = column * 4 + row
+        return if (index in 0..23) {
             timeViewOuterScopes[index]
         } else {
             null
@@ -197,7 +214,7 @@ class TimeScheduleLayout @JvmOverloads constructor(context: Context, attrs: Attr
         timeViewOuterScopes.add(s_hour_23)
     }
 
-    fun updatePlans(data: List<FeedTimeLineFeedTodayPlansResp>) {
+    fun updatePlans(data: List<TimeSchedulePlansParams>) {
         (rlv_plans.adapter as? TimeScheduleAdapter)?.submitList(data)
     }
 
@@ -222,8 +239,17 @@ class TimeScheduleLayout @JvmOverloads constructor(context: Context, attrs: Attr
             text = (fakeView as? AppCompatTextView)?.text.toString()
         }
     }
+
+    fun setListener(listener: OnTimeScheduleLayoutListener) {
+        this.listener = listener
+    }
 }
 
 interface OnTimeScheduleAdapterListener {
     fun onLongClick(data: SinglePlanBean, view: View)
+}
+
+interface OnTimeScheduleLayoutListener {
+    fun onPlansHasAdded(data: SinglePlanBean)
+    fun onTouchViewStatusChange(data: SinglePlanBean, status: TimeSchedulePlansStatus)
 }

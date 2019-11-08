@@ -11,6 +11,8 @@ import com.mdove.civilservantcommunity.R
 import com.mdove.civilservantcommunity.base.BaseFragment
 import com.mdove.civilservantcommunity.plan.TimeScheduleActivity.Companion.TAG_TIME_SCHEDULE_PARAMS
 import com.mdove.civilservantcommunity.plan.model.TimeScheduleParams
+import com.mdove.civilservantcommunity.plan.model.TimeSchedulePlansStatus
+import com.mdove.civilservantcommunity.plan.view.OnTimeScheduleLayoutListener
 import com.mdove.civilservantcommunity.plan.viewmodel.TimeScheduleViewModel
 import kotlinx.android.synthetic.main.fragment_time_schedule.*
 import kotlinx.android.synthetic.main.layout_time_schedule.*
@@ -55,6 +57,18 @@ class TimeScheduleFragment : BaseFragment() {
         }
         viewModel.plansLiveData.observe(this, Observer {
             time_schedule_layout.updatePlans(it)
+        })
+        time_schedule_layout.setListener(object : OnTimeScheduleLayoutListener {
+            override fun onTouchViewStatusChange(
+                data: SinglePlanBean,
+                status: TimeSchedulePlansStatus
+            ) {
+                viewModel.changeSinglePlanBean.value = Pair(data, status)
+            }
+
+            override fun onPlansHasAdded(data: SinglePlanBean) {
+                viewModel.removeSinglePlanBean.value = data
+            }
         })
         view_toolbar.setTitle("时间管理")
     }
