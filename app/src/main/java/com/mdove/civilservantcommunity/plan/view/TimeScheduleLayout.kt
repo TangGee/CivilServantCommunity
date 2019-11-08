@@ -5,6 +5,7 @@ import android.animation.ObjectAnimator
 import android.content.Context
 import android.graphics.Color
 import android.util.AttributeSet
+import android.util.Log
 import android.view.Gravity
 import android.view.MotionEvent
 import android.view.View
@@ -41,6 +42,7 @@ class TimeScheduleLayout @JvmOverloads constructor(context: Context, attrs: Attr
     private val touchViewMap = mutableMapOf<View, SinglePlanBeanToView>()
     // 记录当前从Time块中移出的View
     private var curTouchViewFromTime: View? = null
+    private var lastScrollView: ScrollView? = null
 
     private val mViewDragHelper = ViewDragHelper.create(this, object : ViewDragHelper.Callback() {
         override fun tryCaptureView(child: View, pointerId: Int): Boolean {
@@ -68,10 +70,24 @@ class TimeScheduleLayout @JvmOverloads constructor(context: Context, attrs: Attr
                         listener?.onPlansHasAdded(it.data)
                     }
                     handleAddTimePlans(addView)
+                    val animatorX = ObjectAnimator.ofFloat(lastScrollView, "scaleX", 0.8f, 1f)
+                    val animatorY = ObjectAnimator.ofFloat(lastScrollView, "scaleY", 0.8f, 1f)
+                    AnimatorSet().apply {
+                        duration = 300
+                        playTogether(animatorX, animatorY)
+                        start()
+                    }
                     addView
                 })
             } ?: also {
                 fake_title_view.visibility = View.GONE
+                val animatorX = ObjectAnimator.ofFloat(lastScrollView, "scaleX", 0.8f, 1f)
+                val animatorY = ObjectAnimator.ofFloat(lastScrollView, "scaleY", 0.8f, 1f)
+                AnimatorSet().apply {
+                    duration = 300
+                    playTogether(animatorX, animatorY)
+                    start()
+                }
                 touchViewMap[fake_title_view]?.let {
                     if (it.isFromRlv) {
                         listener?.onTouchViewStatusChange(it.data, TimeSchedulePlansStatus.SHOW)
@@ -93,12 +109,35 @@ class TimeScheduleLayout @JvmOverloads constructor(context: Context, attrs: Attr
         ) {
             super.onViewPositionChanged(changedView, left, top, dx, dy)
             hitTimeOuterScope(changedView, left, top)?.let {
-                val animatorX = ObjectAnimator.ofFloat(it, "scaleX", 1f, 0.8f, 1f)
-                val animatorY = ObjectAnimator.ofFloat(it, "scaleY", 1f, 0.8f, 1f)
-                AnimatorSet().apply {
-                    duration = 500
-                    playTogether(animatorX, animatorY)
-                    start()
+                if ( lastScrollView != it) {
+                    // 移入
+                    if(lastScrollView == null){
+                        val animatorX = ObjectAnimator.ofFloat(it, "scaleX", 1f, 0.8f)
+                        val animatorY = ObjectAnimator.ofFloat(it, "scaleY", 1f, 0.8f)
+                        AnimatorSet().apply {
+                            duration = 300
+                            playTogether(animatorX, animatorY)
+                            start()
+                        }
+                    }else{
+                        // 老的移出
+                        val animatorX = ObjectAnimator.ofFloat(lastScrollView, "scaleX", 0.8f, 1f)
+                        val animatorY = ObjectAnimator.ofFloat(lastScrollView, "scaleY", 0.8f, 1f)
+                        AnimatorSet().apply {
+                            duration = 300
+                            playTogether(animatorX, animatorY)
+                            start()
+                        }
+                        // 新的移入
+                        val animatorX_ = ObjectAnimator.ofFloat(it, "scaleX", 1f, 0.8f)
+                        val animatorY_ = ObjectAnimator.ofFloat(it, "scaleY", 1f, 0.8f)
+                        AnimatorSet().apply {
+                            duration = 300
+                            playTogether(animatorX_, animatorY_)
+                            start()
+                        }
+                    }
+                    lastScrollView = it
                 }
             }
         }
@@ -162,10 +201,10 @@ class TimeScheduleLayout @JvmOverloads constructor(context: Context, attrs: Attr
     }
 
     private fun hitTimeInnerScope(releasedChild: View, left: Int, top: Int): View? {
-        val centerX = left + releasedChild.width / 2
+        val centerX = left + releasedChild.width / 4
         val centerY = top + releasedChild.height / 2
-        val row = left / timeRectWidth
-        val column = top / timeRectHeight
+        val row = centerX / timeRectWidth
+        val column = (top - view_toolbar.height) / timeRectHeight
         val index = column * 4 + row
         return if (index in 0..23) {
             timeViewInnerScopes[index]
@@ -203,10 +242,10 @@ class TimeScheduleLayout @JvmOverloads constructor(context: Context, attrs: Attr
     }
 
     private fun hitTimeOuterScope(touchView: View, left: Int, top: Int): ScrollView? {
-        val centerX = left + touchView.width / 2
+        val centerX = left + touchView.width / 4
         val centerY = top + touchView.height / 2
-        val row = left / timeRectWidth
-        val column = top / timeRectHeight
+        val row = centerX / timeRectWidth
+        val column = (top - view_toolbar.height) / timeRectHeight
         val index = column * 4 + row
         return if (index in 0..23) {
             timeViewOuterScopes[index]
@@ -269,6 +308,9 @@ class TimeScheduleLayout @JvmOverloads constructor(context: Context, attrs: Attr
 
     fun updatePlans(data: List<TimeSchedulePlansParams>) {
         (rlv_plans.adapter as? TimeScheduleAdapter)?.submitList(data)
+        post {
+            rlv_plans.scrollToPosition(0)
+        }
     }
 
     private fun createTextView(fakeView: View): TextView {
