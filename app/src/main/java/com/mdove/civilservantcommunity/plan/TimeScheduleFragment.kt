@@ -1,5 +1,7 @@
 package com.mdove.civilservantcommunity.plan
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,9 +13,12 @@ import com.mdove.civilservantcommunity.R
 import com.mdove.civilservantcommunity.base.BaseFragment
 import com.mdove.civilservantcommunity.plan.TimeScheduleActivity.Companion.TAG_TIME_SCHEDULE_PARAMS
 import com.mdove.civilservantcommunity.plan.model.TimeScheduleParams
+import com.mdove.civilservantcommunity.plan.model.TimeSchedulePlansParams
 import com.mdove.civilservantcommunity.plan.model.TimeSchedulePlansStatus
+import com.mdove.civilservantcommunity.plan.model.TimeScheduleToFeedResult
 import com.mdove.civilservantcommunity.plan.view.OnTimeScheduleLayoutListener
 import com.mdove.civilservantcommunity.plan.viewmodel.TimeScheduleViewModel
+import com.mdove.dependent.common.view.OnToolbarListener
 import kotlinx.android.synthetic.main.fragment_time_schedule.*
 import kotlinx.android.synthetic.main.layout_time_schedule.*
 
@@ -70,8 +75,23 @@ class TimeScheduleFragment : BaseFragment() {
                 viewModel.changeSinglePlanBean.value = Pair(data, status)
             }
 
-            override fun onPlansHasAdded(data: SinglePlanBean) {
+            override fun onPlansHasAdded(data: SinglePlanBean, planTime: Pair<Long, Long>) {
                 viewModel.removeSinglePlanBean.value = data
+                viewModel.putOrderTime(data, planTime)
+            }
+        })
+        view_toolbar.setRightBtnTitle("确定")
+        view_toolbar.setListener(object : OnToolbarListener {
+            override fun onRightBtnClick() {
+                activity?.let {
+                    val intent = Intent()
+                    intent.putExtra(
+                        TAG_TIME_SCHEDULE_PARAMS,
+                        viewModel.createTimeSchedulePlansToFeed()
+                    )
+                    it.setResult(Activity.RESULT_OK, intent)
+                    it.finish()
+                }
             }
         })
         view_toolbar.setTitle("时间管理")

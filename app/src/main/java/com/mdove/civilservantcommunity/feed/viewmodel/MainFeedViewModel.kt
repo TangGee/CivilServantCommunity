@@ -8,6 +8,8 @@ import com.mdove.civilservantcommunity.plan.PlanToFeedParams
 import com.mdove.civilservantcommunity.plan.SinglePlanStatus
 import com.mdove.civilservantcommunity.plan.SinglePlanType
 import com.mdove.civilservantcommunity.plan.model.TimeScheduleParams
+import com.mdove.civilservantcommunity.plan.model.TimeSchedulePlansParams
+import com.mdove.civilservantcommunity.plan.model.TimeSchedulePlansStatus
 import com.mdove.civilservantcommunity.room.MainDb
 import com.mdove.dependent.common.network.NormalResp
 import com.mdove.dependent.common.networkenhance.valueobj.Resource
@@ -145,10 +147,10 @@ class MainFeedViewModel : ViewModel() {
         loadType.value = LoadType.NORMAL
     }
 
-    fun createTimeScheduleParams():TimeScheduleParams{
-        return TimeScheduleParams(mData.value?.data?.let{
+    fun createTimeScheduleParams(): TimeScheduleParams {
+        return TimeScheduleParams(mData.value?.data?.let {
             it.filterIsInstance<FeedTimeLineFeedTodayPlansResp>().map {
-                it
+                TimeSchedulePlansParams(it.params.beanSingle, TimeSchedulePlansStatus.SHOW)
             }
         } ?: mutableListOf())
     }

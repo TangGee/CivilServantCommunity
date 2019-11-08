@@ -1,11 +1,15 @@
 package com.mdove.civilservantcommunity.plan
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import com.mdove.civilservantcommunity.R
 import com.mdove.civilservantcommunity.base.BaseActivity
+import com.mdove.civilservantcommunity.base.launcher.ActivityLauncher
+import com.mdove.civilservantcommunity.plan.TimeScheduleActivity.Companion.TAG_TIME_SCHEDULE_PARAMS
 import com.mdove.civilservantcommunity.plan.model.TimeScheduleParams
+import com.mdove.civilservantcommunity.plan.model.TimeScheduleToFeedResult
 
 /**
  * Created by MDove on 2019-11-07.
@@ -14,12 +18,6 @@ class TimeScheduleActivity : BaseActivity() {
     companion object {
         const val TAG_TIME_SCHEDULE_FRAGMENT = "time_schedule_fragment"
         const val TAG_TIME_SCHEDULE_PARAMS = "time_schedule_params"
-
-        fun goto(context: Context, params: TimeScheduleParams) {
-            val intent = Intent(context, TimeScheduleActivity::class.java)
-            intent.putExtra(TAG_TIME_SCHEDULE_PARAMS, params)
-            context.startActivity(intent)
-        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,6 +33,31 @@ class TimeScheduleActivity : BaseActivity() {
                     TAG_TIME_SCHEDULE_FRAGMENT
                 )
                 .commit()
+        }
+    }
+}
+
+suspend fun ActivityLauncher.gotoTimeScheduleActivity(
+    context: Context,
+    params: TimeScheduleParams
+): TimeScheduleToFeedResult {
+    val intent = Intent(context, TimeScheduleActivity::class.java)
+    intent.putExtra(TAG_TIME_SCHEDULE_PARAMS, params)
+    return startActivityAsync(intent).await().run {
+        return if (resultCode == Activity.RESULT_OK) {
+            if (data != null) {
+                TimeScheduleToFeedResult(
+                    this.data.getParcelableExtra(TAG_TIME_SCHEDULE_PARAMS),
+                    com.mdove.civilservantcommunity.plan.model.Status.SUC
+                )
+            } else {
+                TimeScheduleToFeedResult(
+                    null,
+                    com.mdove.civilservantcommunity.plan.model.Status.CANCEL
+                )
+            }
+        } else {
+            TimeScheduleToFeedResult(null, com.mdove.civilservantcommunity.plan.model.Status.ERROR)
         }
     }
 }

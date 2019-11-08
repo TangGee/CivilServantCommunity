@@ -19,13 +19,17 @@ class TimeScheduleViewModel : ViewModel() {
     val changeSinglePlanBean =
         MutableLiveData<Pair<SinglePlanBean, TimeSchedulePlansStatus>>()
 
+    private val handlePlansData = mutableListOf<TimeSchedulePlansParams>()
+
     val plansLiveData = MediatorLiveData<List<TimeSchedulePlansParams>>().apply {
         addSource(paramsLiveData) {
             value = it.data.map {
                 TimeSchedulePlansParams(
-                    data = it.params.beanSingle,
+                    data = it.data,
                     status = TimeSchedulePlansStatus.SHOW
-                )
+                ).apply {
+                    handlePlansData.add(this)
+                }
             }
         }
 
@@ -56,5 +60,18 @@ class TimeScheduleViewModel : ViewModel() {
                 }
             }
         }
+    }
+
+
+    fun putOrderTime(data: SinglePlanBean, time: Pair<Long, Long>) {
+        handlePlansData.forEach {
+            if (it.data.moduleId == data.moduleId && it.data.content == data.content) {
+                it.timeSchedule = time
+            }
+        }
+    }
+
+    fun createTimeSchedulePlansToFeed(): TimeScheduleParams {
+        return TimeScheduleParams(handlePlansData)
     }
 }

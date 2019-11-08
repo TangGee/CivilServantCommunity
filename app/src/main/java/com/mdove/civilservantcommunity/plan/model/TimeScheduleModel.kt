@@ -11,7 +11,8 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 data class TimeSchedulePlansParams(
     val data: SinglePlanBean,
-    val status: TimeSchedulePlansStatus
+    val status: TimeSchedulePlansStatus,
+    var timeSchedule: Pair<Long, Long>? = null
 ) : Parcelable
 
 enum class TimeSchedulePlansStatus {
@@ -20,4 +21,16 @@ enum class TimeSchedulePlansStatus {
 }
 
 @Parcelize
-data class TimeScheduleParams(val data: List<FeedTimeLineFeedTodayPlansResp>) : Parcelable
+data class TimeScheduleParams(val data: List<TimeSchedulePlansParams>) : Parcelable
+
+@Parcelize
+data class TimeScheduleToFeedResult(
+    val data: TimeScheduleParams?,
+    val status: Status
+) : Parcelable
+
+enum class Status {
+    CANCEL,
+    ERROR,
+    SUC
+}
