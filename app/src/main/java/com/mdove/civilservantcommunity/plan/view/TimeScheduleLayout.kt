@@ -6,7 +6,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
 import android.util.AttributeSet
-import android.util.Log
 import android.view.Gravity
 import android.view.MotionEvent
 import android.view.View
@@ -70,7 +69,10 @@ class TimeScheduleLayout @JvmOverloads constructor(context: Context, attrs: Attr
                             it.data
                         )
                         // 通知Rlv移出Plan
-                        listener?.onPlansHasAdded(it.data, TimeScheduleHelper.getTime(pair.second))
+                        listener?.onPlansHasAdded(
+                            it.data,
+                            TimeScheduleHelper.getTimePairByIndex(pair.second)
+                        )
                     }
                     handleAddTimePlans(addView)
                     lastScrollView?.let {
@@ -287,7 +289,17 @@ class TimeScheduleLayout @JvmOverloads constructor(context: Context, attrs: Attr
     }
 
     fun updatePlans(data: List<TimeSchedulePlansParams>) {
-        (rlv_plans.adapter as? TimeScheduleAdapter)?.submitList(data)
+        val realData = mutableListOf<TimeSchedulePlansParams>()
+        data.forEach {params->
+            params.timeSchedule?.first?.let {
+                timeViewInnerScopes[TimeScheduleHelper.getIndexByTimePair(it)].addView(
+                    createTextView(params.data)
+                )
+            } ?: also {
+                realData.add(params)
+            }
+        }
+        (rlv_plans.adapter as? TimeScheduleAdapter)?.submitList(realData)
         post {
             rlv_plans.scrollToPosition(0)
         }
@@ -314,6 +326,30 @@ class TimeScheduleLayout @JvmOverloads constructor(context: Context, attrs: Attr
                     rightMargin = UIUtils.dip2Px(4).toInt()
                 }
             text = (fakeView as? AppCompatTextView)?.text.toString()
+        }
+    }
+
+    private fun createTextView(bean: SinglePlanBean): TextView {
+        return TextView(context).apply {
+            setBackgroundResource(R.drawable.bg_round_blue)
+            setPadding(
+                UIUtils.dip2Px(4).toInt(),
+                UIUtils.dip2Px(4).toInt(),
+                UIUtils.dip2Px(4).toInt(),
+                UIUtils.dip2Px(4).toInt()
+            )
+            gravity = Gravity.CENTER
+            setTextColor(Color.WHITE)
+            layoutParams =
+                LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+                ).apply {
+                    bottomMargin = UIUtils.dip2Px(4).toInt()
+                    leftMargin = UIUtils.dip2Px(4).toInt()
+                    rightMargin = UIUtils.dip2Px(4).toInt()
+                }
+            text = bean.content
         }
     }
 

@@ -14,8 +14,8 @@ import com.mdove.civilservantcommunity.base.BaseFragment
 import com.mdove.civilservantcommunity.plan.adapter.EditPlanModuleAdapter
 import com.mdove.civilservantcommunity.plan.adapter.OnPlanModuleClickListener
 import com.mdove.civilservantcommunity.plan.adapter.OnSinglePlanClickListener
-import com.mdove.civilservantcommunity.plan.dao.TodayPlansEntity
 import com.mdove.civilservantcommunity.plan.dao.TodayPlansDbBean
+import com.mdove.civilservantcommunity.plan.dao.TodayPlansEntity
 import com.mdove.civilservantcommunity.plan.viewmodel.EditPlanViewModel
 import com.mdove.civilservantcommunity.room.MainDb
 import com.mdove.dependent.common.networkenhance.valueobj.Status
@@ -31,6 +31,12 @@ import kotlinx.coroutines.withContext
 class PlanFragment : BaseFragment() {
     private lateinit var mViewModelEdit: EditPlanViewModel
     private val adapter = EditPlanModuleAdapter(object : OnPlanModuleClickListener {
+        override fun onClickTimeSchedule() {
+            context?.let {
+                TimeScheduleActivity.goto(it, mViewModelEdit.createTimeScheduleParams())
+            }
+        }
+
         override fun onDeletePlanModuleClick(data: PlanModuleBean, delete: Boolean) {
             mViewModelEdit.deletePlanModuleLiveData.value = Pair(data, delete)
         }
@@ -45,27 +51,7 @@ class PlanFragment : BaseFragment() {
                     val plans = mViewModelEdit.createFeedPlans()
                     val insertData = System.currentTimeMillis()
                     val createData = TimeUtils.getDateFromSQL()
-                    var dbId = 0L
-                    withContext(MDoveBackgroundPool) {
-                        // 修计划时，先删了之前当天的计划
-                        MainDb.db.todayPlansDao().getTodayPlansRecord()?.let {
-                            MainDb.db.todayPlansDao().deleteTodayPlanRecord(it)
-                        }
-                        MainDb.db.todayPlansDao().insert(
-                            TodayPlansEntity(
-                                date = insertData,
-                                sucDate = null,
-                                createDate = createData,
-                                resp = TodayPlansDbBean(plans.map { module ->
-                                    module.copy(beanSingles = module.beanSingles.filterNot { single ->
-                                        single.typeSingle == SinglePlanType.CUSTOM_PLAN_BTN
-                                    })
-                                })
-                            )
-                        )?.let {
-                            dbId = it
-                        }
-                    }
+                    val dbId = saveTodayPlans(insertData, createData, plans)
                     dismissLoading()
                     val intent = Intent()
                     intent.putExtra(
@@ -125,5 +111,28 @@ class PlanFragment : BaseFragment() {
                 }
             }
         })
+    }
+
+    private suspend fun saveTodayPlans(
+        insertData: Long,
+        createData: String,
+        plans: List<PlanModuleBean>
+    ): Long = withContext(MDoveBackgroundPool) {
+        // 修计划时，先删了之前当天的计划
+        MainDb.db.todayPlansDao().getTodayPlansRecord()?.let {
+            MainDb.db.todayPlansDao().deleteTodayPlanRecord(it)
+        }
+        MainDb.db.todayPlansDao().insert(
+            TodayPlansEntity(
+                date = insertData,
+                sucDate = null,
+                createDate = createData,
+                resp = TodayPlansDbBean(plans.map { module ->
+                    module.copy(beanSingles = module.beanSingles.filterNot { single ->
+                        single.typeSingle == SinglePlanType.CUSTOM_PLAN_BTN
+                    })
+                })
+            )
+        ) ?: -1
     }
 }

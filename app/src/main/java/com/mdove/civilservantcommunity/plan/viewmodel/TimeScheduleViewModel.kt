@@ -24,12 +24,8 @@ class TimeScheduleViewModel : ViewModel() {
     val plansLiveData = MediatorLiveData<List<TimeSchedulePlansParams>>().apply {
         addSource(paramsLiveData) {
             value = it.data.map {
-                TimeSchedulePlansParams(
-                    data = it.data,
-                    status = TimeSchedulePlansStatus.SHOW
-                ).apply {
-                    handlePlansData.add(this)
-                }
+                handlePlansData.add(it)
+                it
             }
         }
 

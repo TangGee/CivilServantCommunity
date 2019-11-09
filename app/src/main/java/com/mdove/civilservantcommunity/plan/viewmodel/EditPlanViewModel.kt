@@ -4,6 +4,9 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.mdove.civilservantcommunity.plan.*
+import com.mdove.civilservantcommunity.plan.model.TimeScheduleParams
+import com.mdove.civilservantcommunity.plan.model.TimeSchedulePlansParams
+import com.mdove.civilservantcommunity.plan.model.TimeSchedulePlansStatus
 import com.mdove.civilservantcommunity.plan.repository.PlanRepository
 import com.mdove.dependent.common.network.NormalResp
 import com.mdove.dependent.common.networkenhance.valueobj.Resource
@@ -31,22 +34,15 @@ class EditPlanViewModel : ViewModel() {
             )
             it.data?.data?.let { rawList ->
                 rawList.forEach {
-                    val firstSinglePlan = it.firstOrNull()
-                    val moduleId = it.firstOrNull()?.moduleId
-                    val moduleName = it.firstOrNull()?.moduleName
-                    if (moduleId.isNullOrBlank() || moduleName.isNullOrBlank() || firstSinglePlan == null) {
-                        return@forEach
-                    }
+                    val firstSinglePlan = it.firstOrNull()?.beanSingle ?: return@forEach
                     new.add(
                         PlanModuleBean(
-                            moduleId, moduleName,
-                            it.map {
-                                SinglePlanBeanWrapper(it, SinglePlanType.SYS_PLAN)
-                            }.toMutableList()
+                            firstSinglePlan.moduleId!!, firstSinglePlan.moduleName!!,
+                            it.toMutableList()
                                 .apply {
                                     add(
                                         SinglePlanBeanWrapper(
-                                            firstSinglePlan.copy(content = ""),
+                                            firstSinglePlan,
                                             SinglePlanType.CUSTOM_PLAN_BTN
                                         )
                                     )
@@ -56,13 +52,21 @@ class EditPlanViewModel : ViewModel() {
                     )
                 }
             }
-            // 用空表示最后一个ok按钮的bean
             new.add(
                 PlanModuleBean(
                     "btn_ok",
                     "btn_ok",
                     mutableListOf(),
                     PlanModuleType.BTN_OK,
+                    PlanModuleStatus.NORMAL
+                )
+            )
+            new.add(
+                PlanModuleBean(
+                    "btn_time_schedule",
+                    "btn_time_schedule",
+                    mutableListOf(),
+                    PlanModuleType.BTN_TIME_SCHEDULE,
                     PlanModuleStatus.NORMAL
                 )
             )
@@ -173,5 +177,17 @@ class EditPlanViewModel : ViewModel() {
             }))
         }
         return plans
+    }
+
+    fun createTimeScheduleParams(): TimeScheduleParams {
+        return TimeScheduleParams(createFeedPlans().flatMap {
+            it.beanSingles.map { wrapper ->
+                TimeSchedulePlansParams(
+                    wrapper.beanSingle,
+                    TimeSchedulePlansStatus.SHOW,
+                    wrapper.timeSchedule
+                )
+            }
+        })
     }
 }

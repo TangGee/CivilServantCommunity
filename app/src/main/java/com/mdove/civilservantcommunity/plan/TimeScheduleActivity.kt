@@ -19,6 +19,12 @@ class TimeScheduleActivity : BaseActivity() {
     companion object {
         const val TAG_TIME_SCHEDULE_FRAGMENT = "time_schedule_fragment"
         const val TAG_TIME_SCHEDULE_PARAMS = "time_schedule_params"
+
+        fun goto(context: Context, params: TimeScheduleParams) {
+            val intent = Intent(context, TimeScheduleActivity::class.java)
+            intent.putExtra(TAG_TIME_SCHEDULE_PARAMS, params)
+            context.startActivity(intent)
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

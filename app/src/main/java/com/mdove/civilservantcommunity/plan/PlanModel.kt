@@ -56,6 +56,7 @@ data class PlanModuleBean(
 enum class PlanModuleType {
     PADDING,
     NORMAL,
+    BTN_TIME_SCHEDULE,
     BTN_OK
 }
 

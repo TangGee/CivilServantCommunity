@@ -54,6 +54,7 @@ class EditPlanModuleAdapter(
         return when {
             getItem(position).moduleType == PlanModuleType.PADDING -> 2
             getItem(position).moduleType == PlanModuleType.BTN_OK -> 1
+            getItem(position).moduleType == PlanModuleType.BTN_TIME_SCHEDULE -> 3
             else -> 0
         }
     }
@@ -74,9 +75,16 @@ class EditPlanModuleAdapter(
                     false
                 )
             )
+            3 -> PlanModuleTimeScheduleViewHolder(
+                LayoutInflater.from(parent.context).inflate(
+                    R.layout.item_plan_module_btn_time_schedule,
+                    parent,
+                    false
+                )
+            )
             else -> PlanModuleOkViewHolder(
                 LayoutInflater.from(parent.context).inflate(
-                    R.layout.item_plan_module_ok,
+                    R.layout.item_plan_module_btn_ok,
                     parent,
                     false
                 )
@@ -110,6 +118,14 @@ class EditPlanModuleAdapter(
         init {
             itemView.setOnClickListener {
                 listener.onClickCreatePlans()
+            }
+        }
+    }
+
+    inner class PlanModuleTimeScheduleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        init {
+            itemView.setOnClickListener {
+                listener.onClickTimeSchedule()
             }
         }
     }
@@ -154,4 +170,5 @@ class EditPlanModuleAdapter(
 interface OnPlanModuleClickListener {
     fun onDeletePlanModuleClick(data: PlanModuleBean, delete: Boolean)
     fun onClickCreatePlans()
+    fun onClickTimeSchedule()
 }
