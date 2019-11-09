@@ -1,7 +1,6 @@
 package com.mdove.civilservantcommunity.plan.model
 
 import android.os.Parcelable
-import com.mdove.civilservantcommunity.feed.bean.FeedTimeLineFeedTodayPlansResp
 import com.mdove.civilservantcommunity.plan.SinglePlanBean
 import kotlinx.android.parcel.Parcelize
 
@@ -26,10 +25,10 @@ data class TimeScheduleParams(val data: List<TimeSchedulePlansParams>) : Parcela
 @Parcelize
 data class TimeScheduleToFeedResult(
     val data: TimeScheduleParams?,
-    val status: Status
+    val timeScheduleStatus: TimeScheduleStatus
 ) : Parcelable
 
-enum class Status {
+enum class TimeScheduleStatus {
     CANCEL,
     ERROR,
     SUC

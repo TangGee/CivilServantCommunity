@@ -57,7 +57,7 @@ class TimeScheduleLayout @JvmOverloads constructor(context: Context, attrs: Attr
                 releasedChild,
                 releasedChild.left,
                 releasedChild.top
-            ) ?.let {pair->
+            )?.let { pair ->
                 val linearLayout = pair.first as? LinearLayout ?: return@let
                 linearLayout.addView(createTextView(releasedChild).let { addView ->
                     fake_title_view.visibility = View.GONE
@@ -70,18 +70,18 @@ class TimeScheduleLayout @JvmOverloads constructor(context: Context, attrs: Attr
                             it.data
                         )
                         // 通知Rlv移出Plan
-                        listener?.onPlansHasAdded(it.data,TimeScheduleHelper.getTime(pair.second))
+                        listener?.onPlansHasAdded(it.data, TimeScheduleHelper.getTime(pair.second))
                     }
                     handleAddTimePlans(addView)
                     lastScrollView?.let {
-                        scrollAnim(it,true)
+                        scrollAnim(it, true)
                     }
                     addView
                 })
             } ?: also {
                 fake_title_view.visibility = View.GONE
                 lastScrollView?.let {
-                    scrollAnim(it,true)
+                    scrollAnim(it, true)
                 }
                 touchViewMap[fake_title_view]?.let {
                     if (it.isFromRlv) {
@@ -108,14 +108,14 @@ class TimeScheduleLayout @JvmOverloads constructor(context: Context, attrs: Attr
                 if (lastScrollView != it) {
                     // 移入
                     if (lastScrollView == null) {
-                        scrollAnim(it,false)
+                        scrollAnim(it, false)
                     } else {
                         // 老的移出
                         lastScrollView?.let {
-                            scrollAnim(it,true)
+                            scrollAnim(it, true)
                         }
                         // 新的移入
-                        scrollAnim(it,false)
+                        scrollAnim(it, false)
                     }
                     lastScrollView = it
                 }
@@ -308,12 +308,11 @@ class TimeScheduleLayout @JvmOverloads constructor(context: Context, attrs: Attr
                 LinearLayout.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT
-                )
-                    .apply {
-                        topMargin = UIUtils.dip2Px(4).toInt()
-                        leftMargin = UIUtils.dip2Px(4).toInt()
-                        rightMargin = UIUtils.dip2Px(4).toInt()
-                    }
+                ).apply {
+                    bottomMargin = UIUtils.dip2Px(4).toInt()
+                    leftMargin = UIUtils.dip2Px(4).toInt()
+                    rightMargin = UIUtils.dip2Px(4).toInt()
+                }
             text = (fakeView as? AppCompatTextView)?.text.toString()
         }
     }

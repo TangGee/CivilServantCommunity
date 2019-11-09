@@ -22,7 +22,9 @@ data class SinglePlanBeanWrapper(
     @SerializedName("single_plan_type")
     var typeSingle: SinglePlanType,
     @SerializedName("single_plan_status")
-    val statusSingle: SinglePlanStatus = SinglePlanStatus.NORMAL
+    val statusSingle: SinglePlanStatus = SinglePlanStatus.NORMAL,
+    @SerializedName("time_schedule")
+    var timeSchedule: Pair<Long, Long>? = null
 ) : Parcelable
 
 @Parcelize
@@ -30,6 +32,7 @@ enum class SinglePlanStatus : Parcelable {
     SELECT,
     DELETE,
     NORMAL,
+    CONTENT_CHANGE
 }
 
 @Parcelize

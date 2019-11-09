@@ -36,6 +36,7 @@ class MainFeedViewModel : ViewModel() {
     // 从编辑计划页面跳转过来
     val planParamsLiveData = MutableLiveData<PlanToFeedParams>()
     val checkTodayPlanLiveData = MutableLiveData<FeedTodayPlansCheckParams>()
+    val timeScheduleToFeedLiveData = MutableLiveData<TimeScheduleParams>()
 
     val mData: LiveData<Resource<List<BaseFeedResp>>> =
         MediatorLiveData<Resource<List<BaseFeedResp>>>().apply {
@@ -70,6 +71,25 @@ class MainFeedViewModel : ViewModel() {
                     } ?: mutableListOf<BaseFeedResp>())
                     temp.add(FeedPaddingStub())
                     value = Resource(it.status, temp, it.exception)
+                }
+            }
+
+            addSource(timeScheduleToFeedLiveData) { params ->
+                value = value?.let { res ->
+                    Resource(res.status, data = res.data?.let {
+                        it.map { feedResp ->
+                            if (feedResp is FeedTimeLineFeedTodayPlansResp) {
+                                params.data.find {
+                                    it.data.moduleId == feedResp.params.beanSingle.moduleId &&
+                                            it.data.content == feedResp.params.beanSingle.content
+                                }?.let {
+                                    feedResp.copy(params = feedResp.params.copy(timeSchedule = it.timeSchedule,statusSingle = SinglePlanStatus.CONTENT_CHANGE))
+                                } ?: feedResp
+                            } else {
+                                feedResp
+                            }
+                        }
+                    } ?: mutableListOf<BaseFeedResp>(), exception = res.exception)
                 }
             }
 

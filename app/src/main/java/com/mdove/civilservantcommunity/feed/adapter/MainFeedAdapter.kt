@@ -87,7 +87,8 @@ class MainFeedAdapter(
         override fun getChangePayload(oldItem: BaseFeedResp, newItem: BaseFeedResp): Any? {
             return when {
                 (oldItem as? FeedPunchResp)?.count != (newItem as? FeedPunchResp)?.count -> PAYLOAD_PUNCH
-                (oldItem as? FeedTimeLineFeedTodayPlansResp)?.params?.statusSingle != (newItem as? FeedTimeLineFeedTodayPlansResp)?.params?.statusSingle -> PAYLOAD_TODAY_PLANS_STATUS
+                (oldItem as? FeedTimeLineFeedTodayPlansResp)?.params?.statusSingle != (newItem as? FeedTimeLineFeedTodayPlansResp)?.params?.statusSingle && (newItem as? FeedTimeLineFeedTodayPlansResp)?.params?.statusSingle == SinglePlanStatus.SELECT -> PAYLOAD_TODAY_PLANS_STATUS
+                (oldItem as? FeedTimeLineFeedTodayPlansResp)?.params?.statusSingle != (newItem as? FeedTimeLineFeedTodayPlansResp)?.params?.statusSingle && (newItem as? FeedTimeLineFeedTodayPlansResp)?.params?.statusSingle == SinglePlanStatus.CONTENT_CHANGE -> PAYLOAD_TODAY_PLANS_EDIT
                 (oldItem as? FeedTimeLineFeedTodayPlansResp)?.params?.beanSingle?.content != (newItem as? FeedTimeLineFeedTodayPlansResp)?.params?.beanSingle?.content -> PAYLOAD_TODAY_PLANS_EDIT
 
                 else -> null
@@ -327,7 +328,7 @@ class MainFeedAdapter(
     inner class FeedTimeLineFeedTodayPlansViewHolder(itemView: View) :
         RecyclerView.ViewHolder(itemView) {
         private val title = itemView.findViewById<TextView>(R.id.text)
-        private val tvSucTime = itemView.findViewById<TextView>(R.id.tv_create_time)
+        private val tvTimeSchedule = itemView.findViewById<TextView>(R.id.tv_create_time)
         private val timeLine = itemView.findViewById<TimeLineView>(R.id.time_line)
         private val tvModule = itemView.findViewById<TextView>(R.id.tv_module)
         private val cb = itemView.findViewById<AppCompatCheckBox>(R.id.cb_today_plan)
@@ -336,11 +337,11 @@ class MainFeedAdapter(
             reset()
             title.text = resp.params.beanSingle.content
             tvModule.text = resp.params.beanSingle.moduleName
-            resp.sucTime?.let {
-                tvSucTime.visibility = View.VISIBLE
-                tvSucTime.text = TimeUtils.getDateChinese(it)
+            resp.params.timeSchedule?.let {
+                tvTimeSchedule.visibility = View.VISIBLE
+                tvTimeSchedule.text = "${TimeUtils.getDateChinese(it.first)} - ${TimeUtils.getDateChinese(it.second)}"
             } ?: also {
-                tvSucTime.visibility = View.GONE
+                tvTimeSchedule.visibility = View.GONE
             }
 
             bindSelect(resp.params.statusSingle == SinglePlanStatus.SELECT)
@@ -355,6 +356,12 @@ class MainFeedAdapter(
 
         fun payloadBindContent(resp: FeedTimeLineFeedTodayPlansResp) {
             title.text = resp.params.beanSingle.content
+            resp.params.timeSchedule?.let {
+                tvTimeSchedule.visibility = View.VISIBLE
+                tvTimeSchedule.text = "${TimeUtils.getDateChinese(it.first)} - ${TimeUtils.getDateChinese(it.second)}"
+            } ?: also {
+                tvTimeSchedule.visibility = View.GONE
+            }
             bindSelect(resp.params.statusSingle == SinglePlanStatus.SELECT)
         }
 
@@ -403,9 +410,10 @@ class MainFeedAdapter(
                 itemView.findViewById<ConstraintLayout>(R.id.layout_btn_me).setOnClickListener {
                     listener.onClick(CLICK_QUICK_BTN_ME, null)
                 }
-                itemView.findViewById<ConstraintLayout>(R.id.layout_btn_time_schedule).setOnClickListener {
-                    listener.onClick(CLICK_QUICK_BTN_TIME_SCHEDULE, null)
-                }
+                itemView.findViewById<ConstraintLayout>(R.id.layout_btn_time_schedule)
+                    .setOnClickListener {
+                        listener.onClick(CLICK_QUICK_BTN_TIME_SCHEDULE, null)
+                    }
             }
         }
     }

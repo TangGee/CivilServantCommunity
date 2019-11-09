@@ -1,7 +1,6 @@
 package com.mdove.civilservantcommunity.feed
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,11 +22,10 @@ import com.mdove.civilservantcommunity.feed.bean.FeedTimeLineFeedTodayPlansResp
 import com.mdove.civilservantcommunity.feed.bean.FeedTodayPlansCheckParams
 import com.mdove.civilservantcommunity.feed.viewmodel.MainFeedViewModel
 import com.mdove.civilservantcommunity.plan.SinglePlanStatus
-import com.mdove.civilservantcommunity.plan.TimeScheduleActivity
 import com.mdove.civilservantcommunity.plan.dao.TodayPlansDbBean
 import com.mdove.civilservantcommunity.plan.gotoPlanActivity
 import com.mdove.civilservantcommunity.plan.gotoTimeScheduleActivity
-import com.mdove.civilservantcommunity.plan.utils.TimeScheduleHelper
+import com.mdove.civilservantcommunity.plan.model.TimeScheduleStatus
 import com.mdove.civilservantcommunity.punch.bean.PunchReq
 import com.mdove.civilservantcommunity.punch.viewmodel.PunchViewModel
 import com.mdove.civilservantcommunity.room.MainDb
@@ -36,7 +34,6 @@ import com.mdove.dependent.common.networkenhance.valueobj.Status
 import com.mdove.dependent.common.threadpool.FastMain
 import com.mdove.dependent.common.threadpool.MDoveBackgroundPool
 import com.mdove.dependent.common.toast.ToastUtil
-import com.mdove.dependent.common.utils.TimeUtils
 import com.mdove.dependent.common.utils.dismissLoading
 import com.mdove.dependent.common.utils.showLoading
 import kotlinx.android.synthetic.main.fragment_main_feed.*
@@ -138,9 +135,15 @@ class MainFeedFragment : BaseFragment() {
     private fun clickTimeSchdule() {
         (activity as? ActivityLauncher)?.let {
             launch {
-                it.gotoTimeScheduleActivity(context!!,feedViewModel.createTimeScheduleParams())
+                it.gotoTimeScheduleActivity(context!!, feedViewModel.createTimeScheduleParams())
+                    .let {
+                        if (it.timeScheduleStatus == TimeScheduleStatus.SUC) {
+                            it.data?.let {
+                                feedViewModel.timeScheduleToFeedLiveData.value = it
+                            }
+                        }
+                    }
             }
-
         }
     }
 
