@@ -288,18 +288,22 @@ class TimeScheduleLayout @JvmOverloads constructor(context: Context, attrs: Attr
         timeViewOuterScopes.add(s_hour_23)
     }
 
-    fun updatePlans(data: List<TimeSchedulePlansParams>) {
-        val realData = mutableListOf<TimeSchedulePlansParams>()
-        data.forEach {params->
-            params.timeSchedule?.first?.let {
-                timeViewInnerScopes[TimeScheduleHelper.getIndexByTimePair(it)].addView(
+    fun initAddView(data: List<TimeSchedulePlansParams>) {
+        data.find {
+            it.timeSchedule != null
+        }?.let { params ->
+            TimeScheduleHelper.getIndexByTimePair(params.timeSchedule!!.first).takeIf {
+                it != -1
+            }?.let {
+                timeViewInnerScopes[it].addView(
                     createTextView(params.data)
                 )
-            } ?: also {
-                realData.add(params)
             }
         }
-        (rlv_plans.adapter as? TimeScheduleAdapter)?.submitList(realData)
+    }
+
+    fun updatePlans(data: List<TimeSchedulePlansParams>) {
+        (rlv_plans.adapter as? TimeScheduleAdapter)?.submitList(data)
         post {
             rlv_plans.scrollToPosition(0)
         }

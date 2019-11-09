@@ -11,7 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.mdove.civilservantcommunity.feed.MainFeedActivity
 import com.mdove.civilservantcommunity.R
-import com.mdove.civilservantcommunity.base.BaseFragment
+import com.mdove.civilservantcommunity.base.fragment.BaseFragment
 import com.mdove.civilservantcommunity.config.AppConfig
 import com.mdove.civilservantcommunity.account.IAccountHandle
 import com.mdove.civilservantcommunity.account.ITransitionProvider

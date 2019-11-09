@@ -20,7 +20,7 @@ class PlanActivity : AbsSlideCloseActivity() {
         setContentView(R.layout.activity_plan)
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                    .add(R.id.content, PlanFragment(), TAG_PLAN_FRAGMENT)
+                    .add(R.id.content, EditPlanFragment(), TAG_PLAN_FRAGMENT)
                     .commit()
         }
     }

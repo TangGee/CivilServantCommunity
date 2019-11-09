@@ -57,6 +57,8 @@ enum class PlanModuleType {
     PADDING,
     NORMAL,
     BTN_TIME_SCHEDULE,
+    EDIT_PLANS_TIPS,
+    CREATE_PLANS_TIPS,
     BTN_OK
 }
 

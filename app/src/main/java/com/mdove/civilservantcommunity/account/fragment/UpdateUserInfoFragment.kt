@@ -3,7 +3,6 @@ package com.mdove.civilservantcommunity.account.fragment
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,8 +14,7 @@ import com.mdove.civilservantcommunity.account.UpdateUserInfoActivity
 import com.mdove.civilservantcommunity.account.bean.UserInfoParams
 import com.mdove.civilservantcommunity.account.utils.IdentitysHelper
 import com.mdove.civilservantcommunity.account.viewmodel.AccountViewModel
-import com.mdove.civilservantcommunity.base.BaseFragment
-import com.mdove.civilservantcommunity.config.AppConfig
+import com.mdove.civilservantcommunity.base.fragment.BaseFragment
 import com.mdove.civilservantcommunity.view.MultiLineChooseLayout
 import com.mdove.dependent.common.networkenhance.valueobj.Status
 import com.mdove.dependent.common.toast.ToastUtil

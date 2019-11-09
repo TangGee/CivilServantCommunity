@@ -10,7 +10,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mdove.civilservantcommunity.R
-import com.mdove.civilservantcommunity.base.BaseFragment
+import com.mdove.civilservantcommunity.base.fragment.BaseFragment
 import com.mdove.civilservantcommunity.plan.adapter.EditPlanModuleAdapter
 import com.mdove.civilservantcommunity.plan.adapter.OnPlanModuleClickListener
 import com.mdove.civilservantcommunity.plan.adapter.OnSinglePlanClickListener
@@ -28,7 +28,7 @@ import kotlinx.android.synthetic.main.fragment_plan.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class PlanFragment : BaseFragment() {
+class EditPlanFragment : BaseFragment() {
     private lateinit var mViewModelEdit: EditPlanViewModel
     private val adapter = EditPlanModuleAdapter(object : OnPlanModuleClickListener {
         override fun onClickTimeSchedule() {
@@ -119,7 +119,7 @@ class PlanFragment : BaseFragment() {
         plans: List<PlanModuleBean>
     ): Long = withContext(MDoveBackgroundPool) {
         // 修计划时，先删了之前当天的计划
-        MainDb.db.todayPlansDao().getTodayPlansRecord()?.let {
+        MainDb.db.todayPlansDao().getTodayPlansRecord(TimeUtils.getDateFromSQL())?.let {
             MainDb.db.todayPlansDao().deleteTodayPlanRecord(it)
         }
         MainDb.db.todayPlansDao().insert(

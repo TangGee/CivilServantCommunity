@@ -1,13 +1,12 @@
 package com.mdove.civilservantcommunity.test
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.mdove.civilservantcommunity.R
-import com.mdove.civilservantcommunity.base.BaseFragment
+import com.mdove.civilservantcommunity.base.fragment.BaseFragment
 import kotlinx.android.synthetic.main.fragment_test1.*
 
 /**

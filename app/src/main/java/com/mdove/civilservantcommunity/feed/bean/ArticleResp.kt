@@ -64,6 +64,10 @@ data class FeedTimeLineFeedTodayPlansTitleResp(
     val name: String = "今日计划"
 ) : BaseFeedResp()
 
+data class FeedTimeLineFeedTodayPlansTipsTitleResp(
+    val name: String = "添加今日计划"
+) : BaseFeedResp()
+
 data class FeedTodayPlanResp(
     val name: String = "今日计划",
     val params: PlanToFeedParams? = null

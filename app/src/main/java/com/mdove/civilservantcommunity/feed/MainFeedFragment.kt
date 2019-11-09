@@ -9,7 +9,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mdove.civilservantcommunity.R
-import com.mdove.civilservantcommunity.base.BaseFragment
+import com.mdove.civilservantcommunity.base.fragment.BaseFragment
 import com.mdove.civilservantcommunity.base.launcher.ActivityLauncher
 import com.mdove.civilservantcommunity.config.AppConfig
 import com.mdove.civilservantcommunity.detailfeed.DetailFeedActivity
@@ -62,6 +62,9 @@ class MainFeedFragment : BaseFragment() {
                     clickPunch()
                 }
                 MainFeedAdapter.CLICK_QUICK_BTN_PLAN -> {
+                    clickPlan()
+                }
+                MainFeedAdapter.TYPE_FEED_TIME_LINE_FEED_TODAY_PLAN_BTN_TIPS -> {
                     clickPlan()
                 }
                 MainFeedAdapter.CLICK_QUICK_BTN_ME -> {

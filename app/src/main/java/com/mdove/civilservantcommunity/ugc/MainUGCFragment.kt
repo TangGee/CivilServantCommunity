@@ -1,7 +1,6 @@
 package com.mdove.civilservantcommunity.ugc
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,7 +8,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mdove.civilservantcommunity.R
-import com.mdove.civilservantcommunity.base.BaseFragment
+import com.mdove.civilservantcommunity.base.fragment.BaseFragment
 import com.mdove.civilservantcommunity.config.AppConfig
 import com.mdove.civilservantcommunity.ugc.adapter.OnTopicSelectListener
 import com.mdove.civilservantcommunity.ugc.adapter.UgcRlvTopicAdapter

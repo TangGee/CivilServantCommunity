@@ -55,6 +55,8 @@ class EditPlanModuleAdapter(
             getItem(position).moduleType == PlanModuleType.PADDING -> 2
             getItem(position).moduleType == PlanModuleType.BTN_OK -> 1
             getItem(position).moduleType == PlanModuleType.BTN_TIME_SCHEDULE -> 3
+            getItem(position).moduleType == PlanModuleType.EDIT_PLANS_TIPS -> 4
+            getItem(position).moduleType == PlanModuleType.CREATE_PLANS_TIPS -> 5
             else -> 0
         }
     }
@@ -78,6 +80,20 @@ class EditPlanModuleAdapter(
             3 -> PlanModuleTimeScheduleViewHolder(
                 LayoutInflater.from(parent.context).inflate(
                     R.layout.item_plan_module_btn_time_schedule,
+                    parent,
+                    false
+                )
+            )
+            4 -> EditPlansTipsViewHolder(
+                LayoutInflater.from(parent.context).inflate(
+                    R.layout.item_plan_module_edit_plans_tips,
+                    parent,
+                    false
+                )
+            )
+            5 -> CreatePlansTipsViewHolder(
+                LayoutInflater.from(parent.context).inflate(
+                    R.layout.item_plan_module_create_plans_tips,
                     parent,
                     false
                 )
@@ -131,6 +147,8 @@ class EditPlanModuleAdapter(
     }
 
     inner class PaddingViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+    inner class CreatePlansTipsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+    inner class EditPlansTipsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
     inner class PlanModuleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val rlv = itemView.findViewById<RecyclerView>(R.id.rlv)

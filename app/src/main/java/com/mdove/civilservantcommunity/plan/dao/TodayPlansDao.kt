@@ -13,8 +13,8 @@ interface TodayPlansDao {
     @Query("SELECT * FROM today_plans")
     fun getFeedTodayPlans(): List<TodayPlansEntity>?
 
-    @Query("SELECT * FROM today_plans WHERE strftime('%Y-%m-%d','now') = strftime('%Y-%m-%d',create_date)")
-    fun getTodayPlansRecord(): TodayPlansEntity?
+    @Query("SELECT * FROM today_plans WHERE create_date = :todayTime")
+    fun getTodayPlansRecord(todayTime: String): TodayPlansEntity?
 
     @Delete
     fun deleteTodayPlanRecord(entity: TodayPlansEntity)

@@ -1,12 +1,10 @@
-package com.mdove.civilservantcommunity.base
+package com.mdove.civilservantcommunity.base.fragment
 
-import android.content.Context
 import android.view.View
 import androidx.fragment.app.Fragment
-import com.mdove.civilservantcommunity.base.fragment.OnFragmentVisibilityChangedListener
 import com.mdove.dependent.common.threadpool.FastMainScope
 import kotlinx.coroutines.CoroutineScope
-import java.util.ArrayList
+import java.util.*
 import kotlin.coroutines.CoroutineContext
 
 /**

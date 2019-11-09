@@ -48,8 +48,8 @@ class MainFeedViewModel : ViewModel() {
                     temp.add(FeedDateResp())
                     temp.add(FeedQuickBtnsResp())
                     withContext(MDoveBackgroundPool) {
-                        MainDb.db.todayPlansDao().getTodayPlansRecord()?.let { entity ->
-                            temp.add(FeedTimeLineFeedTodayPlansTitleResp())
+                        temp.add(FeedTimeLineFeedTodayPlansTitleResp())
+                        MainDb.db.todayPlansDao().getTodayPlansRecord(TimeUtils.getDateFromSQL())?.let { entity ->
                             temp.addAll(entity.resp.params.flatMap { planModule ->
                                 planModule.beanSingles.map {
                                     FeedTimeLineFeedTodayPlansResp(
@@ -63,12 +63,14 @@ class MainFeedViewModel : ViewModel() {
                             }.apply {
                                 (this.last()).params.typeSingle = SinglePlanType.LAST_PLAN
                             })
+                        } ?: also {
+                            temp.add(FeedTimeLineFeedTodayPlansTipsTitleResp())
                         }
                     }
                     temp.add(FeedTimeLineFeedTitleResp())
-                    if(it.status == Status.ERROR){
+                    if (it.status == Status.ERROR) {
                         temp.add(FeedNetworkErrorTitleResp())
-                    }else {
+                    } else {
                         temp.addAll(it.data?.data?.map { article ->
                             FeedArticleResp(article)
                         }.apply {
@@ -93,7 +95,12 @@ class MainFeedViewModel : ViewModel() {
                                     it.data.moduleId == feedResp.params.beanSingle.moduleId &&
                                             it.data.content == feedResp.params.beanSingle.content
                                 }?.let {
-                                    feedResp.copy(params = feedResp.params.copy(timeSchedule = it.timeSchedule,statusSingle = SinglePlanStatus.CONTENT_CHANGE))
+                                    feedResp.copy(
+                                        params = feedResp.params.copy(
+                                            timeSchedule = it.timeSchedule,
+                                            statusSingle = SinglePlanStatus.CONTENT_CHANGE
+                                        )
+                                    )
                                 } ?: feedResp
                             } else {
                                 feedResp

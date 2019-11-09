@@ -4,6 +4,7 @@ import com.mdove.civilservantcommunity.plan.SinglePlanBeanWrapper
 import com.mdove.civilservantcommunity.room.MainDb
 import com.mdove.dependent.common.network.NormalResp
 import com.mdove.dependent.common.threadpool.MDoveBackgroundPool
+import com.mdove.dependent.common.utils.TimeUtils
 import kotlinx.coroutines.withContext
 
 /**
@@ -14,7 +15,7 @@ class PlanCache {
 
     suspend fun getTodayPlans(): NormalResp<List<List<SinglePlanBeanWrapper>>>? =
         withContext(MDoveBackgroundPool) {
-            MainDb.db.todayPlansDao().getTodayPlansRecord()?.resp?.params?.map {
+            MainDb.db.todayPlansDao().getTodayPlansRecord(TimeUtils.getDateFromSQL())?.resp?.params?.map {
                 it.beanSingles
             }?.takeIf {
                 it.isNotEmpty()

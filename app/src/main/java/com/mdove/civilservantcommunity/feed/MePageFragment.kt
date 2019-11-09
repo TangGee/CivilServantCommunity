@@ -14,7 +14,7 @@ import com.mdove.civilservantcommunity.account.bean.UserInfoParams
 import com.mdove.civilservantcommunity.account.bean.toUserInfoParams
 import com.mdove.civilservantcommunity.account.gotoUpdateUserInfo
 import com.mdove.civilservantcommunity.account.utils.IdentitysHelper
-import com.mdove.civilservantcommunity.base.BaseFragment
+import com.mdove.civilservantcommunity.base.fragment.BaseFragment
 import com.mdove.civilservantcommunity.base.bean.UserInfo
 import com.mdove.civilservantcommunity.base.launcher.ActivityLauncher
 import com.mdove.civilservantcommunity.config.AppConfig

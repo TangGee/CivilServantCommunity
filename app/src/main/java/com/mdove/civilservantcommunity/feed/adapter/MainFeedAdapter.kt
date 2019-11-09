@@ -39,6 +39,9 @@ class MainFeedAdapter(
             if ((oldItem is FeedTimeLineFeedTodayPlansTitleResp) && (newItem is FeedTimeLineFeedTodayPlansTitleResp)) {
                 return true
             }
+            if ((oldItem is FeedTimeLineFeedTodayPlansTipsTitleResp) && (newItem is FeedTimeLineFeedTodayPlansTipsTitleResp)) {
+                return true
+            }
             if ((oldItem is FeedQuickBtnsResp) && (newItem is FeedQuickBtnsResp)) {
                 return true
             }
@@ -80,6 +83,8 @@ class MainFeedAdapter(
                 oldItem.params.statusSingle == newItem.params.statusSingle && oldItem.params.beanSingle.content == newItem.params.beanSingle.content
             } else if ((oldItem is FeedTimeLineFeedTodayPlansTitleResp) && (newItem is FeedTimeLineFeedTodayPlansTitleResp)) {
                 return true
+            } else if ((oldItem is FeedTimeLineFeedTodayPlansTipsTitleResp) && (newItem is FeedTimeLineFeedTodayPlansTipsTitleResp)) {
+                return true
             } else if ((oldItem is FeedTimeLineFeedTitleResp) && (newItem is FeedTimeLineFeedTitleResp)) {
                 return true
             } else if ((oldItem is FeedNetworkErrorTitleResp) && (newItem is FeedNetworkErrorTitleResp)) {
@@ -112,17 +117,17 @@ class MainFeedAdapter(
         const val TYPE_FEED_QUICK_BTNS = 7
         const val TYPE_FEED_DATE = 8
         const val TYPE_FEED_TIME_LINE_FEED_TITLE = 9
-        const val TYPE_FEED_TIME_LINE_FEED_TODAY_PLAM = 10
-        const val TYPE_FEED_TIME_LINE_FEED_TODAY_PLAM_TITLE = 11
+        const val TYPE_FEED_TIME_LINE_FEED_TODAY_PLAN = 10
+        const val TYPE_FEED_TIME_LINE_FEED_TODAY_PLAN_TITLE = 11
         const val TYPE_FEED_PADDING = 12
         const val TYPE_FEED_NETWORK_ERROR = 13
+        const val TYPE_FEED_TIME_LINE_FEED_TODAY_PLAN_BTN_TIPS = 14
 
         const val CLICK_QUICK_BTN_PLAN = 101
         const val CLICK_QUICK_BTN_PUNCH = 102
         const val CLICK_QUICK_BTN_UGC = 103
         const val CLICK_QUICK_BTN_ME = 104
         const val CLICK_QUICK_BTN_TIME_SCHEDULE = 106
-        const val CLICK_FEED_TIME_LINE_PLAN = 105
 
         val PAYLOAD_PUNCH = Any()
         val PAYLOAD_TODAY_PLANS_STATUS = Any()
@@ -139,7 +144,7 @@ class MainFeedAdapter(
                         false
                     )
                 )
-            TYPE_FEED_TIME_LINE_FEED_TODAY_PLAM ->
+            TYPE_FEED_TIME_LINE_FEED_TODAY_PLAN ->
                 FeedTimeLineFeedTodayPlansViewHolder(
                     LayoutInflater.from(parent.context).inflate(
                         R.layout.item_main_feed_today_plans,
@@ -155,7 +160,7 @@ class MainFeedAdapter(
                         false
                     )
                 )
-            TYPE_FEED_TIME_LINE_FEED_TODAY_PLAM_TITLE ->
+            TYPE_FEED_TIME_LINE_FEED_TODAY_PLAN_TITLE ->
                 FeedTimeLineFeedTodayPlansTitleViewHolder(
                     LayoutInflater.from(parent.context).inflate(
                         R.layout.item_main_feed_today_plans_title,
@@ -175,6 +180,14 @@ class MainFeedAdapter(
                 FeedUGCViewHolder(
                     LayoutInflater.from(parent.context).inflate(
                         R.layout.item_feed_ugc,
+                        parent,
+                        false
+                    )
+                )
+            TYPE_FEED_TIME_LINE_FEED_TODAY_PLAN_BTN_TIPS ->
+                FeedTodayPlanBtnTipsHolder(
+                    LayoutInflater.from(parent.context).inflate(
+                        R.layout.item_main_feed_today_plans_tips,
                         parent,
                         false
                     )
@@ -249,8 +262,9 @@ class MainFeedAdapter(
             is FeedPaddingStub -> TYPE_FEED_PADDING
             is FeedNetworkErrorTitleResp -> TYPE_FEED_NETWORK_ERROR
             is FeedTimeLineFeedTitleResp -> TYPE_FEED_TIME_LINE_FEED_TITLE
-            is FeedTimeLineFeedTodayPlansResp -> TYPE_FEED_TIME_LINE_FEED_TODAY_PLAM
-            is FeedTimeLineFeedTodayPlansTitleResp -> TYPE_FEED_TIME_LINE_FEED_TODAY_PLAM_TITLE
+            is FeedTimeLineFeedTodayPlansResp -> TYPE_FEED_TIME_LINE_FEED_TODAY_PLAN
+            is FeedTimeLineFeedTodayPlansTitleResp -> TYPE_FEED_TIME_LINE_FEED_TODAY_PLAN_TITLE
+            is FeedTimeLineFeedTodayPlansTipsTitleResp -> TYPE_FEED_TIME_LINE_FEED_TODAY_PLAN_BTN_TIPS
             else -> TYPE_NORMAL
         }
     }
@@ -326,6 +340,17 @@ class MainFeedAdapter(
         }
     }
 
+    inner class FeedTodayPlanBtnTipsHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        init {
+            listener?.let { listener ->
+                itemView.setOnClickListener {
+                    listener.onClick(TYPE_FEED_TIME_LINE_FEED_TODAY_PLAN_BTN_TIPS, null)
+                }
+            }
+            itemView.findViewById<TimeLineView>(R.id.time_line).hideBottomLine()
+        }
+    }
+
     inner class FeedDateViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val tvDay = itemView.findViewById<TextView>(R.id.tv_day)
         private val tvMonth = itemView.findViewById<TextView>(R.id.tv_month)
@@ -354,7 +379,8 @@ class MainFeedAdapter(
             tvModule.text = resp.params.beanSingle.moduleName
             resp.params.timeSchedule?.let {
                 tvTimeSchedule.visibility = View.VISIBLE
-                tvTimeSchedule.text = "${TimeUtils.getDateChinese(it.first)} - ${TimeUtils.getDateChinese(it.second)}"
+                tvTimeSchedule.text =
+                    "${TimeUtils.getDateChinese(it.first)} - ${TimeUtils.getDateChinese(it.second)}"
             } ?: also {
                 tvTimeSchedule.visibility = View.GONE
             }
@@ -373,7 +399,8 @@ class MainFeedAdapter(
             title.text = resp.params.beanSingle.content
             resp.params.timeSchedule?.let {
                 tvTimeSchedule.visibility = View.VISIBLE
-                tvTimeSchedule.text = "${TimeUtils.getDateChinese(it.first)} - ${TimeUtils.getDateChinese(it.second)}"
+                tvTimeSchedule.text =
+                    "${TimeUtils.getDateChinese(it.first)} - ${TimeUtils.getDateChinese(it.second)}"
             } ?: also {
                 tvTimeSchedule.visibility = View.GONE
             }
@@ -410,6 +437,7 @@ class MainFeedAdapter(
 
     inner class FeedTimeLineFeedTodayPlansTitleViewHolder(itemView: View) :
         RecyclerView.ViewHolder(itemView)
+
     inner class FeedTimeLineFeedTitleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
     inner class FeedNetworkErrorTitleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 

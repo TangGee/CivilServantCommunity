@@ -10,7 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.mdove.civilservantcommunity.R
-import com.mdove.civilservantcommunity.base.BaseFragment
+import com.mdove.civilservantcommunity.base.fragment.BaseFragment
 import com.mdove.civilservantcommunity.plan.TimeScheduleActivity.Companion.TAG_TIME_SCHEDULE_PARAMS
 import com.mdove.civilservantcommunity.plan.dao.TodayPlansDbBean
 import com.mdove.civilservantcommunity.plan.model.TimeScheduleParams
@@ -19,6 +19,7 @@ import com.mdove.civilservantcommunity.plan.view.OnTimeScheduleLayoutListener
 import com.mdove.civilservantcommunity.plan.viewmodel.TimeScheduleViewModel
 import com.mdove.civilservantcommunity.room.MainDb
 import com.mdove.dependent.common.threadpool.MDoveBackgroundPool
+import com.mdove.dependent.common.utils.TimeUtils
 import com.mdove.dependent.common.utils.dismissLoading
 import com.mdove.dependent.common.utils.showLoading
 import com.mdove.dependent.common.view.OnToolbarListener
@@ -66,7 +67,10 @@ class TimeScheduleFragment : BaseFragment() {
             activity?.finish()
         }
         viewModel.plansLiveData.observe(this, Observer {
-            time_schedule_layout.updatePlans(it)
+            time_schedule_layout.initAddView(it)
+            time_schedule_layout.updatePlans(it.filter {
+                it.timeSchedule == null
+            })
         })
         time_schedule_layout.setListener(object : OnTimeScheduleLayoutListener {
             override fun onPlansRelease(data: SinglePlanBean) {
@@ -92,9 +96,9 @@ class TimeScheduleFragment : BaseFragment() {
                     launch {
                         showLoading()
                         val params = viewModel.createTimeSchedulePlansToFeed()
-                        withContext(MDoveBackgroundPool){
+                        withContext(MDoveBackgroundPool) {
                             // TODO 先查再更新，可以优化
-                            MainDb.db.todayPlansDao().getTodayPlansRecord()?.let {
+                            MainDb.db.todayPlansDao().getTodayPlansRecord(TimeUtils.getDateFromSQL())?.let {
                                 // 恶心的重建Entity的过程
                                 it.resp = TodayPlansDbBean(it.resp.params.map { moduleBean ->
                                     moduleBean.copy(beanSingles = moduleBean.beanSingles.map { single ->
@@ -123,5 +127,10 @@ class TimeScheduleFragment : BaseFragment() {
             }
         })
         view_toolbar.setTitle("时间管理")
+        showGuide()
+    }
+
+    private fun showGuide(){
+//        TimeScheduleGuideFragment().show(childFragmentManager,"")
     }
 }

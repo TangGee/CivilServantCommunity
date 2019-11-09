@@ -10,7 +10,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.appbar.AppBarLayout
 import com.mdove.civilservantcommunity.R
-import com.mdove.civilservantcommunity.base.BaseFragment
+import com.mdove.civilservantcommunity.base.fragment.BaseFragment
 import com.mdove.civilservantcommunity.detailfeed.bean.DetailFeedParams
 import com.mdove.civilservantcommunity.detailfeed.bean.DetailFeedResp
 import com.mdove.civilservantcommunity.detailfeed.viewmodel.DetailFeedViewModel

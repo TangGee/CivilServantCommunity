@@ -17,7 +17,7 @@ class HistoryPlansActivity : AbsSlideCloseActivity() {
         setContentView(R.layout.activity_history_plans)
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                .add(R.id.container, PlanFragment(), TAG_HISTORY_PLAN_FRAGMENT)
+                .add(R.id.container, EditPlanFragment(), TAG_HISTORY_PLAN_FRAGMENT)
                 .commit()
         }
     }

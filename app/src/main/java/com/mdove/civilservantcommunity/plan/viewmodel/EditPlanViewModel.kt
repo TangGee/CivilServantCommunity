@@ -33,6 +33,15 @@ class EditPlanViewModel : ViewModel() {
                 )
             )
             it.data?.data?.let { rawList ->
+                new.add(
+                    PlanModuleBean(
+                        "edit_plans",
+                        "edit_plans",
+                        mutableListOf(),
+                        PlanModuleType.EDIT_PLANS_TIPS,
+                        PlanModuleStatus.NORMAL
+                    )
+                )
                 rawList.forEach {
                     val firstSinglePlan = it.firstOrNull()?.beanSingle ?: return@forEach
                     new.add(
@@ -51,6 +60,16 @@ class EditPlanViewModel : ViewModel() {
                         )
                     )
                 }
+            } ?: also {
+                new.add(
+                    PlanModuleBean(
+                        "create_plans",
+                        "create_plans",
+                        mutableListOf(),
+                        PlanModuleType.CREATE_PLANS_TIPS,
+                        PlanModuleStatus.NORMAL
+                    )
+                )
             }
             new.add(
                 PlanModuleBean(

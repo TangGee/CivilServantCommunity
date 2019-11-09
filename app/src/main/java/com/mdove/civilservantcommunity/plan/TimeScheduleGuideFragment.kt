@@ -1,21 +1,21 @@
-package com.mdove.civilservantcommunity.feedback
+package com.mdove.civilservantcommunity.plan
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.mdove.civilservantcommunity.R
-import com.mdove.civilservantcommunity.base.fragment.BaseFragment
+import com.mdove.civilservantcommunity.base.fragment.AbsDialogFragment
 
 /**
- * Created by MDove on 2019-11-04.
+ * Created by MDove on 2019-11-10.
  */
-class FeedBackFragment : BaseFragment(){
+class TimeScheduleGuideFragment :AbsDialogFragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_feed_back,container,false)
+        return inflater.inflate(R.layout.fragment_dialog_time_schedule_guide, container, false)
     }
 }

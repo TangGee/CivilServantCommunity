@@ -8,13 +8,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.mdove.civilservantcommunity.R
-import com.mdove.civilservantcommunity.base.BaseFragment
+import com.mdove.civilservantcommunity.base.fragment.BaseFragment
 import kotlinx.android.synthetic.main.fragment_test2.*
 
 /**
  * Created by zhaojing on 2019-09-07.
  */
-class TestFragment2 :BaseFragment() {
+class TestFragment2 : BaseFragment() {
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
