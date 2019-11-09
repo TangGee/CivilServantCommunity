@@ -68,7 +68,7 @@ class MainFeedFragment : BaseFragment() {
                     clickMePage()
                 }
                 MainFeedAdapter.CLICK_QUICK_BTN_TIME_SCHEDULE -> {
-                    clickTimeSchdule()
+                    clickTimeSchedule()
                 }
                 MainFeedAdapter.TYPE_FEED_PLAN -> {
                     clickPlan()
@@ -132,7 +132,7 @@ class MainFeedFragment : BaseFragment() {
         }
     }
 
-    private fun clickTimeSchdule() {
+    private fun clickTimeSchedule() {
         (activity as? ActivityLauncher)?.let {
             launch {
                 it.gotoTimeScheduleActivity(context!!, feedViewModel.createTimeScheduleParams())
@@ -187,8 +187,16 @@ class MainFeedFragment : BaseFragment() {
                     }
                 }
                 Status.LOADING -> {
-                    sfl.isRefreshing = true
-                    rlv.updateEmptyUI()
+                    if (it.data.isNullOrEmpty()) {
+                        sfl.isRefreshing = true
+                        rlv.updateEmptyUI()
+                    } else {
+                        it.data?.let { list ->
+                            adapter.submitList(list)
+                            sfl.isRefreshing = false
+                            rlv.updateEmptyUI()
+                        }
+                    }
                 }
                 Status.ERROR -> {
                     sfl.isRefreshing = false

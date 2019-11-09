@@ -10,11 +10,10 @@
         android:layout_height="wrap_content"
         android:text="今天也要元气满满的呀~~~"
         android:textColor="@color/white"
-        android:textSize="20dp"
+        android:textSize="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintLeft_toLeftOf="@+id/tv_month"
+        app:layout_constraintTop_toBottomOf="@+id/tv_month" />
 
     <TextView
         android:id="@+id/tv_month"
@@ -22,10 +21,12 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="12dp"
         android:textColor="@color/grey_200"
-        android:textSize="16dp"
+        android:layout_marginLeft="30dp"
+        android:textSize="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintRight_toLeftOf="@+id/tv_day"
         tools:text="10月" />
 
@@ -35,7 +36,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/main_feed_item_margin"
         android:textColor="@color/grey_200"
-        android:textSize="16dp"
+        android:textSize="20dp"
         app:layout_constraintBottom_toBottomOf="@+id/tv_month"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintLeft_toRightOf="@+id/tv_month"
@@ -48,9 +49,9 @@
         android:layout_height="wrap_content"
         android:textColor="@color/grey_200"
         android:textSize="16dp"
+        android:layout_marginLeft="@dimen/main_feed_item_margin"
         app:layout_constraintBottom_toBottomOf="@+id/tv_month"
         app:layout_constraintLeft_toRightOf="@+id/line"
-        app:layout_constraintRight_toRightOf="parent"
         tools:text="星期天" />
 
     <View

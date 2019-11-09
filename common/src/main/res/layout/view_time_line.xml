@@ -46,7 +46,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_chainStyle="packed" />
 
-        <FrameLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/layout_iv_center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -55,17 +55,27 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <com.mdove.dependent.common.view.roundcorner.RoundCornerView
-                android:layout_width="16dp"
-                android:layout_height="16dp"
-                android:background="@color/blue_500"
-                app:allRadius="8dp" />
-
             <com.mdove.dependent.common.view.timeline.StrokeCircle
                 android:id="@+id/center_point"
                 android:layout_width="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
                 android:layout_height="16dp" />
-        </FrameLayout>
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/iv_src"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:padding="2dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:tint="@color/white"
+                app:srcCompat="@drawable/vector_ic_bg_suc"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -5,11 +5,13 @@ import android.graphics.Color
 import android.util.AttributeSet
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.AppCompatImageView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.marginLeft
 import com.mdove.dependent.common.R
 import com.mdove.dependent.common.utils.UIUtils
+import kotlinx.android.synthetic.main.view_time_line.view.*
 
 /**
  * Created by MDove on 2019-10-27.
@@ -41,12 +43,14 @@ class TimeLineView @JvmOverloads constructor(
     private var tlvEndMargin = 0F
     private var hasEndPoint = true
     private var hasTopPoint = true
+    private var useImageView = false
 
     private var topPoint: StrokeCircle
     private var centerPoint: StrokeCircle
     private var endPoint: StrokeCircle
     private var lineTop: View
     private var lineBottom: View
+    private var imageView: AppCompatImageView
 
     init {
         inflate(context, R.layout.view_time_line, this)
@@ -107,6 +111,8 @@ class TimeLineView @JvmOverloads constructor(
                 a.getBoolean(R.styleable.TimeLineView_has_end_point, hasEndPoint)
             hasTopPoint =
                 a.getBoolean(R.styleable.TimeLineView_has_top_point, hasTopPoint)
+            useImageView =
+                a.getBoolean(R.styleable.TimeLineView_use_image_view, useImageView)
             it.recycle()
 
         }
@@ -131,6 +137,11 @@ class TimeLineView @JvmOverloads constructor(
         )
         if (!hasTopPoint) {
             topPoint.visibility = View.GONE
+        }
+
+        imageView = findViewById(R.id.iv_src)
+        if (!useImageView) {
+            imageView.visibility = View.GONE
         }
 
         endPoint = findViewById(R.id.end_point)
@@ -185,6 +196,10 @@ class TimeLineView @JvmOverloads constructor(
         } catch (e: Exception) {
 
         }
+    }
+
+    fun useImageView(use: Boolean) {
+        imageView.visibility = if (use) View.VISIBLE else View.GONE
     }
 
     fun hideBottomLine() {

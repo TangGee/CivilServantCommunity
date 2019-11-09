@@ -54,6 +54,9 @@ class MainFeedAdapter(
             if ((oldItem is FeedTodayPlanResp) && (newItem is FeedTodayPlanResp)) {
                 return true
             }
+            if ((oldItem is FeedNetworkErrorTitleResp) && (newItem is FeedNetworkErrorTitleResp)) {
+                return true
+            }
             if ((oldItem is FeedTimeLineFeedTodayPlansResp) && (newItem is FeedTimeLineFeedTodayPlansResp)) {
                 return true
             }
@@ -78,6 +81,8 @@ class MainFeedAdapter(
             } else if ((oldItem is FeedTimeLineFeedTodayPlansTitleResp) && (newItem is FeedTimeLineFeedTodayPlansTitleResp)) {
                 return true
             } else if ((oldItem is FeedTimeLineFeedTitleResp) && (newItem is FeedTimeLineFeedTitleResp)) {
+                return true
+            } else if ((oldItem is FeedNetworkErrorTitleResp) && (newItem is FeedNetworkErrorTitleResp)) {
                 return true
             } else {
                 true
@@ -110,6 +115,7 @@ class MainFeedAdapter(
         const val TYPE_FEED_TIME_LINE_FEED_TODAY_PLAM = 10
         const val TYPE_FEED_TIME_LINE_FEED_TODAY_PLAM_TITLE = 11
         const val TYPE_FEED_PADDING = 12
+        const val TYPE_FEED_NETWORK_ERROR = 13
 
         const val CLICK_QUICK_BTN_PLAN = 101
         const val CLICK_QUICK_BTN_PUNCH = 102
@@ -137,6 +143,14 @@ class MainFeedAdapter(
                 FeedTimeLineFeedTodayPlansViewHolder(
                     LayoutInflater.from(parent.context).inflate(
                         R.layout.item_main_feed_today_plans,
+                        parent,
+                        false
+                    )
+                )
+            TYPE_FEED_NETWORK_ERROR ->
+                FeedNetworkErrorTitleViewHolder(
+                    LayoutInflater.from(parent.context).inflate(
+                        R.layout.item_main_feed_network_error,
                         parent,
                         false
                     )
@@ -233,6 +247,7 @@ class MainFeedAdapter(
             is FeedQuickBtnsResp -> TYPE_FEED_QUICK_BTNS
             is FeedDateResp -> TYPE_FEED_DATE
             is FeedPaddingStub -> TYPE_FEED_PADDING
+            is FeedNetworkErrorTitleResp -> TYPE_FEED_NETWORK_ERROR
             is FeedTimeLineFeedTitleResp -> TYPE_FEED_TIME_LINE_FEED_TITLE
             is FeedTimeLineFeedTodayPlansResp -> TYPE_FEED_TIME_LINE_FEED_TODAY_PLAM
             is FeedTimeLineFeedTodayPlansTitleResp -> TYPE_FEED_TIME_LINE_FEED_TODAY_PLAM_TITLE
@@ -375,12 +390,14 @@ class MainFeedAdapter(
 
         private fun bindSelect(select: Boolean) {
             if (select) {
+                timeLine.useImageView(true)
                 title.paint.flags = STRIKE_THRU_TEXT_FLAG or ANTI_ALIAS_FLAG
                 title.setTextColor(ContextCompat.getColor(itemView.context, R.color.grey_500))
                 tvModule.setBackgroundResource(R.drawable.bg_round_grey)
                 tvModule.paint.flags = STRIKE_THRU_TEXT_FLAG or ANTI_ALIAS_FLAG
                 tvModule.setBackgroundResource(R.drawable.bg_round_grey)
             } else {
+                timeLine.useImageView(false)
                 title.setTextColor(ContextCompat.getColor(itemView.context, R.color.black))
                 title.paint.flags = 0
                 title.paint.flags = ANTI_ALIAS_FLAG
@@ -393,8 +410,9 @@ class MainFeedAdapter(
 
     inner class FeedTimeLineFeedTodayPlansTitleViewHolder(itemView: View) :
         RecyclerView.ViewHolder(itemView)
-
     inner class FeedTimeLineFeedTitleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+    inner class FeedNetworkErrorTitleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+
     inner class FeedQuickBtnsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         init {
             listener?.let { listener ->

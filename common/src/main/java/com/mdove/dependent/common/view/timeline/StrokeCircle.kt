@@ -77,6 +77,10 @@ class StrokeCircle @JvmOverloads constructor(
         config.strokeColor?.let {
             strokePaint.color = it
         }
+        layoutParams = layoutParams.apply {
+            width = circleWidth.toInt()
+            height = circleWidth.toInt()
+        }
         invalidate()
     }
 }

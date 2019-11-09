@@ -146,6 +146,7 @@
         <attr name="tlv_line_color" format="color" />
         <attr name="tlv_line_width" format="dimension" />
         <attr name="has_end_point" format="boolean" />
+        <attr name="use_image_view" format="boolean" />
         <attr name="tlv_end_point_stroke_width" format="dimension" />
         <attr name="tlv_end_point_width" format="dimension" />
         <attr name="tlv_end_point_stroke_color" format="color" />

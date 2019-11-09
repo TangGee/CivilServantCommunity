@@ -13,6 +13,7 @@ import com.mdove.civilservantcommunity.plan.model.TimeSchedulePlansStatus
 import com.mdove.civilservantcommunity.room.MainDb
 import com.mdove.dependent.common.network.NormalResp
 import com.mdove.dependent.common.networkenhance.valueobj.Resource
+import com.mdove.dependent.common.networkenhance.valueobj.Status
 import com.mdove.dependent.common.threadpool.FastMain
 import com.mdove.dependent.common.threadpool.MDoveBackgroundPool
 import com.mdove.dependent.common.utils.TimeUtils
@@ -31,6 +32,7 @@ class MainFeedViewModel : ViewModel() {
         Transformations.switchMap(loadType) {
             repository.reqFeed()
         }
+
 
     val punchResp = MutableLiveData<Boolean>()
     // 从编辑计划页面跳转过来
@@ -64,13 +66,21 @@ class MainFeedViewModel : ViewModel() {
                         }
                     }
                     temp.add(FeedTimeLineFeedTitleResp())
-                    temp.addAll(it.data?.data?.map { article ->
-                        FeedArticleResp(article)
-                    }.apply {
-                        (this?.last())?.hideEndLine = true
-                    } ?: mutableListOf<BaseFeedResp>())
+                    if(it.status == Status.ERROR){
+                        temp.add(FeedNetworkErrorTitleResp())
+                    }else {
+                        temp.addAll(it.data?.data?.map { article ->
+                            FeedArticleResp(article)
+                        }.apply {
+                            (this?.last())?.hideEndLine = true
+                        } ?: mutableListOf<BaseFeedResp>())
+                    }
                     temp.add(FeedPaddingStub())
-                    value = Resource(it.status, temp, it.exception)
+                    value = Resource(
+                        if (it.status == Status.ERROR) Status.SUCCESS else it.status,
+                        temp,
+                        it.exception
+                    )
                 }
             }
 

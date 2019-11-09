@@ -42,6 +42,10 @@ data class FeedTimeLineFeedTitleResp(
     val name: String = "今日计划"
 ) : BaseFeedResp()
 
+data class FeedNetworkErrorTitleResp(
+    val name: String = "今日计划"
+) : BaseFeedResp()
+
 data class FeedPaddingStub(
     val name: String = "今日计划"
 ) : BaseFeedResp()
