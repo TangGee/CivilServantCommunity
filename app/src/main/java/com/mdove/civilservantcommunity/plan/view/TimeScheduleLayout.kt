@@ -289,15 +289,15 @@ class TimeScheduleLayout @JvmOverloads constructor(context: Context, attrs: Attr
     }
 
     fun initAddView(data: List<TimeSchedulePlansParams>) {
-        data.find {
-            it.timeSchedule != null
-        }?.let { params ->
-            TimeScheduleHelper.getIndexByTimePair(params.timeSchedule!!.first).takeIf {
-                it != -1
-            }?.let {
-                timeViewInnerScopes[it].addView(
-                    createTextView(params.data)
-                )
+        data.forEach { params ->
+            params.timeSchedule?.let {
+                TimeScheduleHelper.getIndexByTimePair(it.first).takeIf {
+                    it != -1
+                }?.let {
+                    timeViewInnerScopes[it].addView(
+                        createTextView(params.data)
+                    )
+                }
             }
         }
     }

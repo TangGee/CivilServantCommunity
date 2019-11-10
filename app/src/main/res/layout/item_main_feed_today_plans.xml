@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/main_feed_end_color">
+    >
 
     <com.mdove.dependent.common.view.roundcorner.RoundCornerConstraintLayout
         android:layout_width="0dp"
@@ -12,7 +12,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginRight="@dimen/main_feed_item_margin"
         android:layout_marginBottom="8dp"
-        android:background="@color/white"
+        android:background="@color/white_trans90"
         android:orientation="vertical"
         app:allRadius="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -82,9 +82,9 @@
 
     <com.mdove.dependent.common.view.timeline.TimeLineView
         android:id="@+id/time_line"
-        android:layout_width="wrap_content"
+        android:layout_width="20dp"
         android:layout_height="0dp"
-        android:layout_marginStart="@dimen/main_feed_item_margin"
+        android:layout_marginStart="10dp"
         app:has_end_point="false"
         app:has_top_point="false"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -97,5 +97,5 @@
         app:tlv_center_point_stroke_width="2dp"
         app:tlv_center_point_width="20dp"
         app:tlv_line_color="@color/grey_200"
-        app:tlv_line_width="4dp" />
+        app:tlv_line_width="3dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

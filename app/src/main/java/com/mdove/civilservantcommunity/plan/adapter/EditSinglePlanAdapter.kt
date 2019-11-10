@@ -32,14 +32,19 @@ class EditSinglePlanAdapter(private val listener: OnSinglePlanClickListener? = n
             newItem: SinglePlanBeanWrapper
         ): Boolean {
             return oldItem.statusSingle == newItem.statusSingle
-                    && oldItem.beanSingle.content == newItem.beanSingle.content
+                    && oldItem.beanSingle.content == newItem.beanSingle.content ||
+                    oldItem.typeSingle == SinglePlanType.CUSTOM_PLAN_BTN
+                    && newItem.typeSingle == SinglePlanType.CUSTOM_PLAN_BTN
         }
 
         override fun areItemsTheSame(
             oldItem: SinglePlanBeanWrapper,
             newItem: SinglePlanBeanWrapper
         ): Boolean {
-            return oldItem.beanSingle.part == newItem.beanSingle.part
+            return oldItem.statusSingle == newItem.statusSingle
+                    && oldItem.beanSingle.content == newItem.beanSingle.content ||
+                    oldItem.typeSingle == SinglePlanType.CUSTOM_PLAN_BTN
+                    && newItem.typeSingle == SinglePlanType.CUSTOM_PLAN_BTN
         }
 
         override fun getChangePayload(

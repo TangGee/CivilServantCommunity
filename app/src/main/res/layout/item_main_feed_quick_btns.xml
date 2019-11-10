@@ -7,7 +7,6 @@
     <View
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@drawable/bg_main_feed_start_color"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -19,7 +18,7 @@
         android:layout_marginLeft="@dimen/main_feed_item_margin"
         android:layout_marginTop="@dimen/main_feed_item_margin"
         android:layout_marginRight="@dimen/main_feed_item_margin"
-        android:background="@color/white"
+        android:background="@color/white_trans90"
         app:allRadius="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
