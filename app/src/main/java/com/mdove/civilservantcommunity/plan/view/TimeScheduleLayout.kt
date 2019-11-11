@@ -6,6 +6,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
 import android.util.AttributeSet
+import android.util.Log
 import android.view.Gravity
 import android.view.MotionEvent
 import android.view.View
@@ -63,8 +64,6 @@ class TimeScheduleLayout @JvmOverloads constructor(context: Context, attrs: Attr
                     touchViewMap[fake_title_view]?.let {
                         // 为添加上的View，put坐标信息
                         touchViewMap[addView] = SinglePlanBeanToView(
-                            fake_title_view.top,
-                            fake_title_view.left,
                             false,
                             it.data
                         )
@@ -160,7 +159,7 @@ class TimeScheduleLayout @JvmOverloads constructor(context: Context, attrs: Attr
                     }
                 curTouchViewFromTime = null
                 touchViewMap[fake_title_view] =
-                    SinglePlanBeanToView(rlv_plans.top, view.left, true, data)
+                    SinglePlanBeanToView(true, data)
                 listener?.onTouchViewStatusChange(data, TimeSchedulePlansStatus.GONE)
                 fake_title_view.text = data.content
                 fake_title_view.visibility = View.VISIBLE
@@ -200,13 +199,23 @@ class TimeScheduleLayout @JvmOverloads constructor(context: Context, attrs: Attr
         val params = touchViewMap[addView] ?: return
         val listener = OnLongClickListener { view ->
             view.alpha = 0.5F
+            val parentTop_ = view.top
+            val parentLeft_ = view.left
+            val paramsTop =
+                (((view.parent as? ViewGroup)?.parent as? ViewGroup)?.parent as? ViewGroup)?.let {
+                    it.top + parentTop_
+                } ?: parentTop_
+            val paramsLeft =
+                ((view.parent as? ViewGroup)?.parent as? ViewGroup)?.let {
+                    it.left + parentLeft_
+                } ?: parentLeft_
             fake_title_view.layoutParams =
                 fake_title_view.layoutParams.apply {
                     this.width = view.width
                     this.height = view.height
                     (this as? ConstraintLayout.LayoutParams)?.let { lp ->
-                        lp.topMargin = params.top
-                        lp.leftMargin = params.left
+                        lp.topMargin = paramsTop
+                        lp.leftMargin = paramsLeft
                     }
                 }
             fake_title_view.text = params.data.content
@@ -288,7 +297,14 @@ class TimeScheduleLayout @JvmOverloads constructor(context: Context, attrs: Attr
         timeViewOuterScopes.add(s_hour_23)
     }
 
-    fun initAddView(data: List<TimeSchedulePlansParams>) {
+    fun refreshDataAndView(data: List<TimeSchedulePlansParams>) {
+        initAddView(data)
+        updatePlans(data.filter {
+            it.timeSchedule == null
+        })
+    }
+
+    private fun initAddView(data: List<TimeSchedulePlansParams>) {
         data.forEach { params ->
             params.timeSchedule?.let {
                 TimeScheduleHelper.getIndexByTimePair(it.first).takeIf {
@@ -302,7 +318,7 @@ class TimeScheduleLayout @JvmOverloads constructor(context: Context, attrs: Attr
         }
     }
 
-    fun updatePlans(data: List<TimeSchedulePlansParams>) {
+    private fun updatePlans(data: List<TimeSchedulePlansParams>) {
         (rlv_plans.adapter as? TimeScheduleAdapter)?.submitList(data)
         post {
             rlv_plans.scrollToPosition(0)
@@ -398,8 +414,6 @@ interface OnTimeScheduleLayoutListener {
 }
 
 data class SinglePlanBeanToView(
-    var top: Int,
-    var left: Int,
     var isFromRlv: Boolean,// 标示这个Bean是来自Time块，还是Rlv
     var data: SinglePlanBean
 )

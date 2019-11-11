@@ -67,10 +67,7 @@ class TimeScheduleFragment : BaseFragment() {
             activity?.finish()
         }
         viewModel.plansLiveData.observe(this, Observer {
-            time_schedule_layout.initAddView(it)
-            time_schedule_layout.updatePlans(it.filter {
-                it.timeSchedule == null
-            })
+            time_schedule_layout.refreshDataAndView(it)
         })
         time_schedule_layout.setListener(object : OnTimeScheduleLayoutListener {
             override fun onPlansRelease(data: SinglePlanBean) {

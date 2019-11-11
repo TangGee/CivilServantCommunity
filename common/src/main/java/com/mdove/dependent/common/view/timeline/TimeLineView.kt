@@ -44,6 +44,8 @@ class TimeLineView @JvmOverloads constructor(
     private var hasEndPoint = true
     private var hasTopPoint = true
     private var useImageView = false
+    private var centerPointInTop = false
+    private var centerPointInTopMargin = 0F
 
     private var topPoint: StrokeCircle
     private var centerPoint: StrokeCircle
@@ -51,6 +53,7 @@ class TimeLineView @JvmOverloads constructor(
     private var lineTop: View
     private var lineBottom: View
     private var imageView: AppCompatImageView
+    private var layoutIvCenter: ConstraintLayout
 
     init {
         inflate(context, R.layout.view_time_line, this)
@@ -107,12 +110,18 @@ class TimeLineView @JvmOverloads constructor(
                 R.styleable.TimeLineView_tlv_end_point_margin,
                 tlvEndMargin
             )
+            centerPointInTopMargin = a.getDimension(
+                R.styleable.TimeLineView_tlv_center_point_in_top_margin,
+                centerPointInTopMargin
+            )
             hasEndPoint =
                 a.getBoolean(R.styleable.TimeLineView_has_end_point, hasEndPoint)
             hasTopPoint =
                 a.getBoolean(R.styleable.TimeLineView_has_top_point, hasTopPoint)
             useImageView =
                 a.getBoolean(R.styleable.TimeLineView_use_image_view, useImageView)
+            centerPointInTop =
+                a.getBoolean(R.styleable.TimeLineView_tlv_center_point_in_top, centerPointInTop)
             it.recycle()
 
         }
@@ -196,6 +205,21 @@ class TimeLineView @JvmOverloads constructor(
         } catch (e: Exception) {
 
         }
+
+        layoutIvCenter = findViewById(R.id.layout_iv_center)
+        if (centerPointInTop) {
+            setCenterInTop(centerPointInTopMargin)
+        }
+    }
+
+    fun setCenterInTop(px: Float) {
+        layoutIvCenter.layoutParams = (layoutParams as? ConstraintLayout.LayoutParams)?.apply {
+            topToTop = ConstraintLayout.LayoutParams.PARENT_ID
+            leftToLeft = ConstraintLayout.LayoutParams.PARENT_ID
+            rightToRight = ConstraintLayout.LayoutParams.PARENT_ID
+            topMargin = px.toInt()
+        }
+        invalidate()
     }
 
     fun useImageView(use: Boolean) {

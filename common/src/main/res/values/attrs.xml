@@ -151,6 +151,8 @@
         <attr name="tlv_end_point_width" format="dimension" />
         <attr name="tlv_end_point_stroke_color" format="color" />
         <attr name="tlv_end_point_color" format="color" />
+        <attr name="tlv_center_point_in_top" format="boolean" />
+        <attr name="tlv_center_point_in_top_margin" format="dimension" />
 
         <attr name="tlv_end_point_margin" format="dimension" />
         <attr name="tlv_top_point_margin" format="dimension" />

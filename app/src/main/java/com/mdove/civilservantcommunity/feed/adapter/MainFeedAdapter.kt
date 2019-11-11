@@ -21,6 +21,7 @@ import com.mdove.civilservantcommunity.plan.SinglePlanStatus
 import com.mdove.civilservantcommunity.plan.SinglePlanType
 import com.mdove.dependent.common.toast.ToastUtil
 import com.mdove.dependent.common.utils.TimeUtils
+import com.mdove.dependent.common.utils.UIUtils
 import com.mdove.dependent.common.view.timeline.TimeLineView
 
 /**
@@ -314,8 +315,6 @@ class MainFeedAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
             is FeedPunchViewHolder -> holder.bind((getItem(position) as FeedPunchResp))
-            is TopOneViewHolder -> holder.bind((getItem(position) as FeedArticleResp).article)
-            is TopTwoViewHolder -> holder.bind((getItem(position) as FeedArticleResp).article)
             is NormalViewHolder -> holder.bind((getItem(position) as FeedArticleResp).article)
             is FeedDateViewHolder -> holder.bind()
             is NewStyleViewHolder -> {
@@ -388,7 +387,9 @@ class MainFeedAdapter(
     inner class FeedTimeLineFeedTodayPlansViewHolder(itemView: View) :
         RecyclerView.ViewHolder(itemView) {
         private val title = itemView.findViewById<TextView>(R.id.text)
-        private val tvTimeSchedule = itemView.findViewById<TextView>(R.id.tv_create_time)
+        private val lineTimeSchedule = itemView.findViewById<View>(R.id.line_time_schedule)
+        private val tvCreateTime = itemView.findViewById<TextView>(R.id.tv_create_time)
+        private val tvTimeSchedule = itemView.findViewById<TextView>(R.id.tv_time_schedule)
         private val timeLine = itemView.findViewById<TimeLineView>(R.id.time_line)
         private val tvModule = itemView.findViewById<TextView>(R.id.tv_module)
         private val cb = itemView.findViewById<AppCompatCheckBox>(R.id.cb_today_plan)
@@ -398,11 +399,13 @@ class MainFeedAdapter(
             title.text = resp.params.beanSingle.content
             tvModule.text = resp.params.beanSingle.moduleName
             resp.params.timeSchedule?.let {
+                lineTimeSchedule.visibility = View.VISIBLE
                 tvTimeSchedule.visibility = View.VISIBLE
                 tvTimeSchedule.text =
-                    "${TimeUtils.getDateChinese(it.first)} - ${TimeUtils.getDateChinese(it.second)}"
+                    "${TimeUtils.getDateChinese(it.first)} - ${TimeUtils.getHourM(it.second)}"
             } ?: also {
                 tvTimeSchedule.visibility = View.GONE
+                lineTimeSchedule.visibility = View.GONE
             }
 
             bindSelect(resp.params.statusSingle == SinglePlanStatus.SELECT)
@@ -420,7 +423,7 @@ class MainFeedAdapter(
             resp.params.timeSchedule?.let {
                 tvTimeSchedule.visibility = View.VISIBLE
                 tvTimeSchedule.text =
-                    "${TimeUtils.getDateChinese(it.first)} - ${TimeUtils.getDateChinese(it.second)}"
+                    "${TimeUtils.getDateChinese(it.first)} - ${TimeUtils.getHourM(it.second)}"
             } ?: also {
                 tvTimeSchedule.visibility = View.GONE
             }
@@ -539,32 +542,6 @@ class MainFeedAdapter(
 
         private fun reset() {
             timeLine.showBottomLine()
-        }
-    }
-
-    inner class TopOneViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(data: ArticleResp) {
-            listener?.let { listener ->
-                itemView.setOnClickListener {
-                    listener.onClick(TYPE_TOP_ONE, data)
-                }
-            }
-            itemView.findViewById<TextView>(R.id.tv_title).text = data.title
-            itemView.findViewById<TextView>(R.id.tv_name).text = data.maketime
-            itemView.findViewById<TextView>(R.id.tv_content).text = data.content
-        }
-    }
-
-    inner class TopTwoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(data: ArticleResp) {
-            listener?.let { listener ->
-                itemView.setOnClickListener {
-                    listener.onClick(TYPE_TOP_TWO, data)
-                }
-            }
-            itemView.findViewById<TextView>(R.id.tv_title).text = data.title
-            itemView.findViewById<TextView>(R.id.tv_name).text = data.maketime
-            itemView.findViewById<TextView>(R.id.tv_content).text = data.content
         }
     }
 
