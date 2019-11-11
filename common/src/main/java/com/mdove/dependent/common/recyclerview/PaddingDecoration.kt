@@ -36,9 +36,9 @@ class PaddingDecoration(padding: Int, val isTop: Boolean = true) :
             }
         }
 
-        val adapter = parent.adapter
-        if (adapter != null && itemPosition == adapter.itemCount - 1) {
-            outRect.bottom = mPadding
-        }
+//        val adapter = parent.adapter
+//        if (adapter != null && itemPosition == adapter.itemCount - 1) {
+//            outRect.bottom = mPadding
+//        }
     }
 }
