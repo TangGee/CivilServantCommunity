@@ -2,7 +2,9 @@ package com.mdove.civilservantcommunity.plan
 
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import com.mdove.civilservantcommunity.config.AppConfig
 import kotlinx.android.parcel.Parcelize
+import java.util.*
 
 @Parcelize
 data class SinglePlanBean(
@@ -48,8 +50,8 @@ data class PlanModuleBean(
     val moduleId: String,
     val moduleName: String,
     val beanSingles: List<SinglePlanBeanWrapper>,
-    val moduleType: PlanModuleType,
-    val moduleStatus: PlanModuleStatus,
+    val moduleType: PlanModuleType = PlanModuleType.NORMAL,
+    val moduleStatus: PlanModuleStatus =PlanModuleStatus.NORMAL,
     val changeVersion: Int = 0 // 对于module来说，它的子item发生变化 version++。这个Diff时就有变化了
 ) : Parcelable
 

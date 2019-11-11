@@ -20,11 +20,13 @@ class StrokeCircle @JvmOverloads constructor(
         color = Color.WHITE
         isAntiAlias = true
         style = Paint.Style.STROKE
+        isDither = true
     }
     private val circlePaint = Paint().apply {
         color = Color.WHITE
         isAntiAlias = true
         style = Paint.Style.FILL
+        isDither = true
     }
     private var circleWidth = 0F
     private var strokeWidth = 0F

@@ -6,8 +6,10 @@ import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatCheckBox
+import androidx.appcompat.widget.AppCompatImageView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
@@ -17,6 +19,7 @@ import com.mdove.civilservantcommunity.R
 import com.mdove.civilservantcommunity.feed.bean.*
 import com.mdove.civilservantcommunity.plan.SinglePlanStatus
 import com.mdove.civilservantcommunity.plan.SinglePlanType
+import com.mdove.dependent.common.toast.ToastUtil
 import com.mdove.dependent.common.utils.TimeUtils
 import com.mdove.dependent.common.view.timeline.TimeLineView
 
@@ -25,6 +28,7 @@ import com.mdove.dependent.common.view.timeline.TimeLineView
  */
 class MainFeedAdapter(
     val listener: OnMainFeedClickListener? = null,
+    val normalListener: OnNormalFeedListener? = null,
     val checkListener: OnMainFeedTodayPlanCheckListener? = null
 ) :
     ListAdapter<BaseFeedResp, RecyclerView.ViewHolder>(object :
@@ -46,6 +50,9 @@ class MainFeedAdapter(
                 return true
             }
             if ((oldItem is FeedPunchResp) && (newItem is FeedPunchResp)) {
+                return true
+            }
+            if ((oldItem is FeedQuickEditNewPlanResp) && (newItem is FeedQuickEditNewPlanResp)) {
                 return true
             }
             if ((oldItem is FeedTodayPlanResp) && (newItem is FeedTodayPlanResp)) {
@@ -87,6 +94,8 @@ class MainFeedAdapter(
                 return true
             } else if ((oldItem is FeedTimeLineFeedTitleResp) && (newItem is FeedTimeLineFeedTitleResp)) {
                 return true
+            } else if ((oldItem is FeedQuickEditNewPlanResp) && (newItem is FeedQuickEditNewPlanResp)) {
+                return true
             } else if ((oldItem is FeedNetworkErrorTitleResp) && (newItem is FeedNetworkErrorTitleResp)) {
                 return true
             } else {
@@ -122,6 +131,8 @@ class MainFeedAdapter(
         const val TYPE_FEED_PADDING = 12
         const val TYPE_FEED_NETWORK_ERROR = 13
         const val TYPE_FEED_TIME_LINE_FEED_TODAY_PLAN_BTN_TIPS = 14
+        const val TYPE_FEED_EDIT_NEW_PLAN = 15
+
 
         const val CLICK_QUICK_BTN_PLAN = 101
         const val CLICK_QUICK_BTN_PUNCH = 102
@@ -148,6 +159,14 @@ class MainFeedAdapter(
                 FeedTimeLineFeedTodayPlansViewHolder(
                     LayoutInflater.from(parent.context).inflate(
                         R.layout.item_main_feed_today_plans,
+                        parent,
+                        false
+                    )
+                )
+            TYPE_FEED_EDIT_NEW_PLAN ->
+                FeedEditNewPlanViewHolder(
+                    LayoutInflater.from(parent.context).inflate(
+                        R.layout.item_main_feed_edit_new_plan,
                         parent,
                         false
                     )
@@ -227,7 +246,7 @@ class MainFeedAdapter(
             TYPE_TOP_ONE ->
                 NewStyleViewHolder(
                     LayoutInflater.from(parent.context).inflate(
-                        R.layout.item_feed_normal_new,
+                        R.layout.item_main_feed_aritcle_normal,
                         parent,
                         false
                     )
@@ -235,7 +254,7 @@ class MainFeedAdapter(
             TYPE_TOP_TWO ->
                 NewStyleViewHolder(
                     LayoutInflater.from(parent.context).inflate(
-                        R.layout.item_feed_normal_new,
+                        R.layout.item_main_feed_aritcle_normal,
                         parent,
                         false
                     )
@@ -243,7 +262,7 @@ class MainFeedAdapter(
             else ->
                 NewStyleViewHolder(
                     LayoutInflater.from(parent.context).inflate(
-                        R.layout.item_feed_normal_new,
+                        R.layout.item_main_feed_aritcle_normal,
                         parent,
                         false
                     )
@@ -260,6 +279,7 @@ class MainFeedAdapter(
             is FeedQuickBtnsResp -> TYPE_FEED_QUICK_BTNS
             is FeedDateResp -> TYPE_FEED_DATE
             is FeedPaddingStub -> TYPE_FEED_PADDING
+            is FeedQuickEditNewPlanResp -> TYPE_FEED_EDIT_NEW_PLAN
             is FeedNetworkErrorTitleResp -> TYPE_FEED_NETWORK_ERROR
             is FeedTimeLineFeedTitleResp -> TYPE_FEED_TIME_LINE_FEED_TITLE
             is FeedTimeLineFeedTodayPlansResp -> TYPE_FEED_TIME_LINE_FEED_TODAY_PLAN
@@ -439,7 +459,12 @@ class MainFeedAdapter(
         RecyclerView.ViewHolder(itemView)
 
     inner class FeedTimeLineFeedTitleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
-    inner class FeedNetworkErrorTitleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+    inner class FeedNetworkErrorTitleViewHolder(itemView: View) :
+        RecyclerView.ViewHolder(itemView) {
+        init {
+            itemView.findViewById<TimeLineView>(R.id.time_line).hideBottomLine()
+        }
+    }
 
     inner class FeedQuickBtnsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         init {
@@ -469,6 +494,25 @@ class MainFeedAdapter(
             listener?.let { listener ->
                 itemView.setOnClickListener {
                     listener.onClick(TYPE_FEED_PLAN, null)
+                }
+            }
+        }
+    }
+
+    inner class FeedEditNewPlanViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private val et = itemView.findViewById<EditText>(R.id.et_new_plan)
+        private val btnSend = itemView.findViewById<AppCompatImageView>(R.id.btn_send_new_plan)
+
+        init {
+            normalListener?.let { listener ->
+                btnSend.setOnClickListener {
+                    val str = et.text.toString()
+                    if (str.isNotBlank()) {
+                        listener.onSendNewPlanClick(str)
+                        et.setText("")
+                    } else {
+                        ToastUtil.toast("空计划，不大好吧~")
+                    }
                 }
             }
         }
@@ -536,6 +580,10 @@ class MainFeedAdapter(
             itemView.findViewById<TextView>(R.id.tv_content).text = data.content
         }
     }
+}
+
+interface OnNormalFeedListener {
+    fun onSendNewPlanClick(content: String)
 }
 
 interface OnMainFeedClickListener {

@@ -1,6 +1,7 @@
 package com.mdove.civilservantcommunity.plan.dao
 
 import androidx.room.*
+import com.mdove.dependent.common.utils.TimeUtils
 
 @Dao
 interface TodayPlansDao {
@@ -14,7 +15,7 @@ interface TodayPlansDao {
     fun getFeedTodayPlans(): List<TodayPlansEntity>?
 
     @Query("SELECT * FROM today_plans WHERE create_date = :todayTime")
-    fun getTodayPlansRecord(todayTime: String): TodayPlansEntity?
+    fun getTodayPlansRecord(todayTime: String = TimeUtils.getDateFromSQL()): TodayPlansEntity?
 
     @Delete
     fun deleteTodayPlanRecord(entity: TodayPlansEntity)

@@ -6,6 +6,8 @@
 
     <color name="white">#ffffff</color>
     <color name="white_trans90">#E6FFFFFF</color>
+    <color name="white_trans30">#4DFFFFFF</color>
+    <color name="white_trans40">#66FFFFFF</color>
 
     <color name="black">#000000</color>
     <color name="transparent">#00000000</color>

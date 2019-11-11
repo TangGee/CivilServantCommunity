@@ -3,10 +3,7 @@ package com.mdove.civilservantcommunity.feed.viewmodel
 import androidx.lifecycle.*
 import com.mdove.civilservantcommunity.feed.bean.*
 import com.mdove.civilservantcommunity.feed.repository.MainFeedRepository
-import com.mdove.civilservantcommunity.plan.PlanModuleStatus
-import com.mdove.civilservantcommunity.plan.PlanToFeedParams
-import com.mdove.civilservantcommunity.plan.SinglePlanStatus
-import com.mdove.civilservantcommunity.plan.SinglePlanType
+import com.mdove.civilservantcommunity.plan.*
 import com.mdove.civilservantcommunity.plan.model.TimeScheduleParams
 import com.mdove.civilservantcommunity.plan.model.TimeSchedulePlansParams
 import com.mdove.civilservantcommunity.plan.model.TimeSchedulePlansStatus
@@ -39,6 +36,7 @@ class MainFeedViewModel : ViewModel() {
     val planParamsLiveData = MutableLiveData<PlanToFeedParams>()
     val checkTodayPlanLiveData = MutableLiveData<FeedTodayPlansCheckParams>()
     val timeScheduleToFeedLiveData = MutableLiveData<TimeScheduleParams>()
+    val editNewPlanToFeedLiveData = MutableLiveData<FeedTimeLineFeedTodayPlansResp>()
 
     val mData: LiveData<Resource<List<BaseFeedResp>>> =
         MediatorLiveData<Resource<List<BaseFeedResp>>>().apply {
@@ -46,6 +44,7 @@ class MainFeedViewModel : ViewModel() {
                 val temp = mutableListOf<BaseFeedResp>()
                 CoroutineScope(FastMain).launch {
                     temp.add(FeedDateResp())
+                    temp.add(FeedQuickEditNewPlanResp())
                     temp.add(FeedQuickBtnsResp())
                     withContext(MDoveBackgroundPool) {
                         temp.add(FeedTimeLineFeedTodayPlansTitleResp())
@@ -83,6 +82,22 @@ class MainFeedViewModel : ViewModel() {
                         temp,
                         it.exception
                     )
+                }
+            }
+
+            // 主Feed直接插入一个计划
+            addSource(editNewPlanToFeedLiveData) { insertResp ->
+                value = value?.let {
+                    val tempData = mutableListOf<BaseFeedResp>()
+                    it.data?.forEach { resp ->
+                        if (resp is FeedTimeLineFeedTodayPlansTitleResp) {
+                            tempData.add(resp)
+                            tempData.add(insertResp)
+                        } else {
+                            tempData.add(resp)
+                        }
+                    }
+                    Resource(it.status, tempData, it.exception)
                 }
             }
 
