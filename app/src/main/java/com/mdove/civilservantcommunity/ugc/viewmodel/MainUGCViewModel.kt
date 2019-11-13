@@ -1,11 +1,12 @@
 package com.mdove.civilservantcommunity.ugc.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.*
 import com.mdove.civilservantcommunity.base.bean.ArticleType
 import com.mdove.civilservantcommunity.base.bean.UserInfo
-import com.mdove.civilservantcommunity.ugc.bean.UGCPostParams
+import com.mdove.civilservantcommunity.ugc.bean.UGCPostNormalParams
+import com.mdove.civilservantcommunity.ugc.bean.UGCPostQuestionParams
 import com.mdove.civilservantcommunity.ugc.bean.UGCRlvTopicBean
+import com.mdove.civilservantcommunity.ugc.bean.UGCTopic
 import com.mdove.civilservantcommunity.ugc.repository.UGCRepository
 import com.mdove.civilservantcommunity.ugc.utils.ArticleTypeHelper
 import com.mdove.dependent.common.network.NormalResp
@@ -19,7 +20,7 @@ class MainUGCViewModel : ViewModel() {
     private val selectTypes = mutableMapOf<String, ArticleType>()
     private val repository = UGCRepository()
 
-    private val postType = MutableLiveData<UGCPostParams>()
+    private val postType = MutableLiveData<UGCPostNormalParams>()
 
     val clickTopicLiveData = MutableLiveData<UGCRlvTopicBean>()
 
@@ -36,20 +37,37 @@ class MainUGCViewModel : ViewModel() {
 
         value = mutableListOf(
             UGCRlvTopicBean("padding", "0", 0, false),
-            UGCRlvTopicBean("求公务员计划表", "1", 1, true),
-            UGCRlvTopicBean("求公务员攻略", "2", 1, false),
-            UGCRlvTopicBean("求四六级攻略", "3", 1, false)
+            UGCRlvTopicBean("求每日计划", "A000", 1, true),
+            UGCRlvTopicBean("求上岸经验分享", "B000", 1, false)
         )
     }
 
     val postResp: LiveData<Resource<NormalResp<String>>> = Transformations.switchMap(postType) {
-        repository.post(it)
+        repository.postShare(it)
     }
 
     fun post(userInfo: UserInfo, title: String, content: String) {
-        postType.value = UGCPostParams(userInfo, selectTypes.map {
+        postType.value = UGCPostNormalParams(userInfo, selectTypes.map {
             it.value
         }, title, content, "1")
+    }
+
+    fun postQuestion(
+        userInfo: UserInfo,
+        title: String,
+        content: String
+    ): LiveData<Resource<NormalResp<String>>>? {
+        return clickTopicLiveData.value?.let {
+            repository.postQuestion(
+                UGCPostQuestionParams(
+                    userInfo,
+                    mutableListOf(UGCTopic(it.name, it.id)),
+                    title,
+                    content,
+                    "1"
+                )
+            )
+        }
     }
 
     fun onSelectType(title: String) {

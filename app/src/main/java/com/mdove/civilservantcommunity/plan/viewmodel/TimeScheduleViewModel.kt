@@ -67,6 +67,10 @@ class TimeScheduleViewModel : ViewModel() {
         }
     }
 
+    fun hasPlans(): Boolean {
+        return !plansLiveData.value.isNullOrEmpty()
+    }
+
     fun createTimeSchedulePlansToFeed(): TimeScheduleParams {
         return TimeScheduleParams(handlePlansData)
     }

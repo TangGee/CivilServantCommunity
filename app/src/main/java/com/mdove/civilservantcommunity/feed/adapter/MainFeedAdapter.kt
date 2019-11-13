@@ -22,6 +22,7 @@ import com.mdove.civilservantcommunity.plan.SinglePlanType
 import com.mdove.dependent.common.toast.ToastUtil
 import com.mdove.dependent.common.utils.TimeUtils
 import com.mdove.dependent.common.utils.UIUtils
+import com.mdove.dependent.common.utils.setDebounceOnClickListener
 import com.mdove.dependent.common.view.timeline.TimeLineView
 
 /**
@@ -329,7 +330,7 @@ class MainFeedAdapter(
     inner class FeedPunchViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(params: FeedPunchResp) {
             listener?.let { listener ->
-                itemView.setOnClickListener {
+                itemView.setDebounceOnClickListener {
                     //                    if (!params.hasPunch) {
                     listener.onClick(TYPE_FEED_PUNCH, null)
 //                    }
@@ -352,7 +353,7 @@ class MainFeedAdapter(
     inner class FeedUGCViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         init {
             listener?.let { listener ->
-                itemView.setOnClickListener {
+                itemView.setDebounceOnClickListener {
                     listener.onClick(TYPE_FEED_UGC, null)
                 }
             }
@@ -362,7 +363,7 @@ class MainFeedAdapter(
     inner class FeedTodayPlanBtnTipsHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         init {
             listener?.let { listener ->
-                itemView.setOnClickListener {
+                itemView.setDebounceOnClickListener {
                     listener.onClick(TYPE_FEED_TIME_LINE_FEED_TODAY_PLAN_BTN_TIPS, null)
                 }
             }
@@ -472,20 +473,20 @@ class MainFeedAdapter(
     inner class FeedQuickBtnsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         init {
             listener?.let { listener ->
-                itemView.findViewById<ConstraintLayout>(R.id.layout_btn_plan).setOnClickListener {
+                itemView.findViewById<ConstraintLayout>(R.id.layout_btn_plan).setDebounceOnClickListener {
                     listener.onClick(CLICK_QUICK_BTN_PLAN, null)
                 }
-                itemView.findViewById<ConstraintLayout>(R.id.layout_btn_punch).setOnClickListener {
+                itemView.findViewById<ConstraintLayout>(R.id.layout_btn_punch).setDebounceOnClickListener {
                     listener.onClick(CLICK_QUICK_BTN_PUNCH, null)
                 }
-                itemView.findViewById<ConstraintLayout>(R.id.layout_btn_ugc).setOnClickListener {
+                itemView.findViewById<ConstraintLayout>(R.id.layout_btn_ugc).setDebounceOnClickListener {
                     listener.onClick(CLICK_QUICK_BTN_UGC, null)
                 }
-                itemView.findViewById<ConstraintLayout>(R.id.layout_btn_me).setOnClickListener {
+                itemView.findViewById<ConstraintLayout>(R.id.layout_btn_me).setDebounceOnClickListener {
                     listener.onClick(CLICK_QUICK_BTN_ME, null)
                 }
                 itemView.findViewById<ConstraintLayout>(R.id.layout_btn_time_schedule)
-                    .setOnClickListener {
+                    .setDebounceOnClickListener {
                         listener.onClick(CLICK_QUICK_BTN_TIME_SCHEDULE, null)
                     }
             }
@@ -495,7 +496,7 @@ class MainFeedAdapter(
     inner class FeedPlanViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         init {
             listener?.let { listener ->
-                itemView.setOnClickListener {
+                itemView.setDebounceOnClickListener {
                     listener.onClick(TYPE_FEED_PLAN, null)
                 }
             }
@@ -509,7 +510,7 @@ class MainFeedAdapter(
         init {
             et.clearFocus()
             normalListener?.let { listener ->
-                btnSend.setOnClickListener {
+                btnSend.setDebounceOnClickListener {
                     val str = et.text.toString()
                     if (str.isNotBlank()) {
                         listener.onSendNewPlanClick(str)
@@ -527,7 +528,7 @@ class MainFeedAdapter(
         fun bind(data: FeedArticleResp) {
             reset()
             listener?.let { listener ->
-                itemView.setOnClickListener {
+                itemView.setDebounceOnClickListener {
                     listener.onClick(TYPE_TOP_ONE, data.article)
                 }
             }
@@ -549,7 +550,7 @@ class MainFeedAdapter(
     inner class NormalViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(data: ArticleResp) {
             listener?.let { listener ->
-                itemView.setOnClickListener {
+                itemView.setDebounceOnClickListener {
                     listener.onClick(TYPE_NORMAL, data)
                 }
             }

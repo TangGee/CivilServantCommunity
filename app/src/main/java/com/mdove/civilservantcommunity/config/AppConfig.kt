@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import com.mdove.civilservantcommunity.MyApplication
 import com.mdove.civilservantcommunity.config.IAppConfig.Companion.KEY_LOGIN_USER_INFO
 import com.mdove.civilservantcommunity.base.bean.UserInfo
+import com.mdove.civilservantcommunity.config.IAppConfig.Companion.KEY_TIME_SCHEDULE_GUIDE
 import com.mdove.dependent.common.utils.fromJson
 import com.mdove.dependent.common.utils.toJson
 
@@ -12,7 +13,7 @@ import com.mdove.dependent.common.utils.toJson
  * Created by MDove on 2019-09-08.
  */
 object AppConfig : IAppConfig {
-    private val PREFS_FILE = "civil_servant_community"
+    private const val PREFS_FILE = "civil_servant_community"
 
     private var sPrefs: SharedPreferences? = null
 
@@ -27,6 +28,15 @@ object AppConfig : IAppConfig {
 
     fun setUserInfo(userInfo: UserInfo?) {
         initSharedPreferences().edit().putString(KEY_LOGIN_USER_INFO, userInfo?.toJson() ?: "")
+            .apply()
+    }
+
+    fun hasShowTimeScheduleGuide(): Boolean {
+        return initSharedPreferences().getBoolean(KEY_TIME_SCHEDULE_GUIDE, false)
+    }
+
+    fun setTimeScheduleGuide(show: Boolean) {
+        initSharedPreferences().edit().putBoolean(KEY_TIME_SCHEDULE_GUIDE, show)
             .apply()
     }
 

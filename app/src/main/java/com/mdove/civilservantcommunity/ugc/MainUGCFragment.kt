@@ -16,6 +16,7 @@ import com.mdove.civilservantcommunity.ugc.bean.UGCRlvTopicBean
 import com.mdove.civilservantcommunity.ugc.viewmodel.MainUGCViewModel
 import com.mdove.civilservantcommunity.view.MultiLineChooseLayout
 import com.mdove.dependent.common.networkenhance.valueobj.Status
+import com.mdove.dependent.common.toast.ToastUtil
 import com.mdove.dependent.common.utils.dismissLoading
 import com.mdove.dependent.common.utils.showLoading
 import kotlinx.android.synthetic.main.fragment_main_ugc.*
@@ -70,7 +71,21 @@ class MainUGCFragment : BaseFragment() {
             val title = et_title.text.toString()
             val content = et_content.text.toString()
             AppConfig.getUserInfo()?.let {
-                viewModel.post(it, title, content)
+                viewModel.postQuestion(it, title, content)?.observe(activity!!, Observer {
+                    when (it.status) {
+                        Status.SUCCESS -> {
+                            dismissLoading()
+                            ToastUtil.toast("请求成功:${it.data?.message ?: ""}")
+                        }
+                        Status.ERROR -> {
+                            dismissLoading()
+                            ToastUtil.toast("请求失败:${it.data?.message ?: ""}")
+                        }
+                        Status.LOADING -> {
+                            showLoading()
+                        }
+                    }
+                })
             }
         }
 

@@ -11,6 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.mdove.civilservantcommunity.R
 import com.mdove.civilservantcommunity.base.fragment.BaseFragment
+import com.mdove.civilservantcommunity.config.AppConfig
 import com.mdove.civilservantcommunity.plan.TimeScheduleActivity.Companion.TAG_TIME_SCHEDULE_PARAMS
 import com.mdove.civilservantcommunity.plan.dao.TodayPlansDbBean
 import com.mdove.civilservantcommunity.plan.model.TimeScheduleParams
@@ -22,9 +23,7 @@ import com.mdove.dependent.common.threadpool.MDoveBackgroundPool
 import com.mdove.dependent.common.utils.TimeUtils
 import com.mdove.dependent.common.utils.dismissLoading
 import com.mdove.dependent.common.utils.showLoading
-import com.mdove.dependent.common.view.OnToolbarListener
 import kotlinx.android.synthetic.main.fragment_time_schedule.*
-import kotlinx.android.synthetic.main.layout_time_schedule.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -93,21 +92,22 @@ class TimeScheduleFragment : BaseFragment() {
                     val params = viewModel.createTimeSchedulePlansToFeed()
                     withContext(MDoveBackgroundPool) {
                         // TODO 先查再更新，可以优化
-                        MainDb.db.todayPlansDao().getTodayPlansRecord(TimeUtils.getDateFromSQL())?.let {
-                            // 恶心的重建Entity的过程
-                            it.resp = TodayPlansDbBean(it.resp.params.map { moduleBean ->
-                                moduleBean.copy(beanSingles = moduleBean.beanSingles.map { single ->
-                                    params.data.find {
-                                        it.data.moduleId == single.beanSingle.moduleId &&
-                                                it.data.content == single.beanSingle.content
-                                    }?.let {
-                                        single.timeSchedule = it.timeSchedule
-                                        single
-                                    } ?: single
+                        MainDb.db.todayPlansDao().getTodayPlansRecord(TimeUtils.getDateFromSQL())
+                            ?.let {
+                                // 恶心的重建Entity的过程
+                                it.resp = TodayPlansDbBean(it.resp.params.map { moduleBean ->
+                                    moduleBean.copy(beanSingles = moduleBean.beanSingles.map { single ->
+                                        params.data.find {
+                                            it.data.moduleId == single.beanSingle.moduleId &&
+                                                    it.data.content == single.beanSingle.content
+                                        }?.let {
+                                            single.timeSchedule = it.timeSchedule
+                                            single
+                                        } ?: single
+                                    })
                                 })
-                            })
-                            MainDb.db.todayPlansDao().update(it)
-                        }
+                                MainDb.db.todayPlansDao().update(it)
+                            }
                     }
                     dismissLoading()
                     val intent = Intent()
@@ -126,7 +126,9 @@ class TimeScheduleFragment : BaseFragment() {
         showGuide()
     }
 
-    private fun showGuide(){
-//        TimeScheduleGuideFragment().show(childFragmentManager,"")
+    private fun showGuide() {
+        if (!AppConfig.hasShowTimeScheduleGuide() && viewModel.hasPlans()) {
+            TimeScheduleGuideFragment().show(childFragmentManager, "")
+        }
     }
 }
