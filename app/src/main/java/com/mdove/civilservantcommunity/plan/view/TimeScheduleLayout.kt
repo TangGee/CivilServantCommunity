@@ -40,11 +40,11 @@ class TimeScheduleLayout @JvmOverloads constructor(context: Context, attrs: Attr
     private val timeRectWidth = UIUtils.getScreenWidth(context) / 6
     private var timeRectHeight = timeRectWidth
     private var listener: OnTimeScheduleLayoutListener? = null
-    // key永远是fake_view，滑动过程中永远是这个View
     private val touchViewMap = mutableMapOf<View, SinglePlanBeanToView>()
     // 记录当前从Time块中移出的View
     private var curTouchViewFromTime: View? = null
     private var lastScrollView: ScrollView? = null
+    private var firstLoad = true
 
     private val mViewDragHelper = ViewDragHelper.create(this, object : ViewDragHelper.Callback() {
         override fun tryCaptureView(child: View, pointerId: Int): Boolean {
@@ -61,19 +61,7 @@ class TimeScheduleLayout @JvmOverloads constructor(context: Context, attrs: Attr
                 val linearLayout = pair.first as? LinearLayout ?: return@let
                 linearLayout.addView(createTextView(releasedChild).let { addView ->
                     fake_title_view.visibility = View.GONE
-                    touchViewMap[fake_title_view]?.let {
-                        // 为添加上的View，put坐标信息
-                        touchViewMap[addView] = SinglePlanBeanToView(
-                            false,
-                            it.data
-                        )
-                        // 通知Rlv移出Plan
-                        listener?.onPlansHasAdded(
-                            it.data,
-                            TimeScheduleHelper.getTimePairByIndex(pair.second)
-                        )
-                    }
-                    handleAddTimePlans(addView)
+                    handleAddView(addView, pair.second)
                     lastScrollView?.let {
                         scrollAnim(it, true)
                     }
@@ -139,6 +127,25 @@ class TimeScheduleLayout @JvmOverloads constructor(context: Context, attrs: Attr
             return measuredHeight - child.measuredHeight
         }
     })
+
+    private fun handleAddView(
+        addView: TextView,
+        index: Int
+    ) {
+        touchViewMap[fake_title_view]?.let {
+            // 为添加上的View，put坐标信息
+            touchViewMap[addView] = SinglePlanBeanToView(
+                false,
+                it.data
+            )
+            // 通知Rlv移出Plan
+            listener?.onPlansHasAdded(
+                it.data,
+                TimeScheduleHelper.getTimePairByIndex(index)
+            )
+        }
+        handleAddTimePlans(addView)
+    }
 
     init {
         View.inflate(context, R.layout.layout_time_schedule, this)
@@ -219,9 +226,7 @@ class TimeScheduleLayout @JvmOverloads constructor(context: Context, attrs: Attr
                     }
                 }
             fake_title_view.text = params.data.content
-            touchViewMap[fake_title_view]?.let {
-                it.isFromRlv = false
-            }
+            touchViewMap[fake_title_view] = params.copy(isFromRlv = false)
             curTouchViewFromTime = view
             fake_title_view.visibility = View.VISIBLE
             true
@@ -298,7 +303,10 @@ class TimeScheduleLayout @JvmOverloads constructor(context: Context, attrs: Attr
     }
 
     fun refreshDataAndView(data: List<TimeSchedulePlansParams>) {
-        initAddView(data)
+        if (firstLoad) {
+            firstLoad = false
+            initAddView(data)
+        }
         updatePlans(data.filter {
             it.timeSchedule == null
         })
@@ -311,7 +319,14 @@ class TimeScheduleLayout @JvmOverloads constructor(context: Context, attrs: Attr
                     it != -1
                 }?.let {
                     timeViewInnerScopes[it].addView(
-                        createTextView(params.data)
+                        createTextView(params.data).apply {
+                            // 为添加上的View，put坐标信息
+                            touchViewMap[this] = SinglePlanBeanToView(
+                                false,
+                                params.data
+                            )
+                            handleAddView(this, it)
+                        }
                     )
                 }
             }

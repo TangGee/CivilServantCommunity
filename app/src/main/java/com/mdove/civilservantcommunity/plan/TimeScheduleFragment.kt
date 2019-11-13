@@ -70,7 +70,7 @@ class TimeScheduleFragment : BaseFragment() {
         })
         time_schedule_layout.setListener(object : OnTimeScheduleLayoutListener {
             override fun onPlansRelease(data: SinglePlanBean) {
-                viewModel.releasSinglePlanBean.value = data
+                viewModel.releaseSinglePlanBean.value = data
             }
 
             override fun onTouchViewStatusChange(
@@ -86,11 +86,12 @@ class TimeScheduleFragment : BaseFragment() {
             }
         })
         btn_ok.setOnClickListener {
-            activity?.let {
+            activity?.let { context ->
                 launch {
                     showLoading()
                     val params = viewModel.createTimeSchedulePlansToFeed()
                     withContext(MDoveBackgroundPool) {
+                        viewModel.createAlarm(context)
                         // TODO 先查再更新，可以优化
                         MainDb.db.todayPlansDao().getTodayPlansRecord(TimeUtils.getDateFromSQL())
                             ?.let {
@@ -115,8 +116,8 @@ class TimeScheduleFragment : BaseFragment() {
                         TAG_TIME_SCHEDULE_PARAMS,
                         params
                     )
-                    it.setResult(Activity.RESULT_OK, intent)
-                    it.finish()
+                    context.setResult(Activity.RESULT_OK, intent)
+                    context.finish()
                 }
             }
         }
