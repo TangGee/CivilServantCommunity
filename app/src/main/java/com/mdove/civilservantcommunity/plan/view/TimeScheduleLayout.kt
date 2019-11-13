@@ -185,7 +185,7 @@ class TimeScheduleLayout @JvmOverloads constructor(context: Context, attrs: Attr
         val centerX = left + releasedChild.width / 4
         val centerY = top + releasedChild.height / 2
         val row = centerX / timeRectWidth
-        val column = (top - view_toolbar.height) / timeRectHeight
+        val column = top / timeRectHeight
         val index = column * 4 + row
         return if (index in 0..23) {
             Pair(timeViewInnerScopes[index], index)
@@ -236,7 +236,7 @@ class TimeScheduleLayout @JvmOverloads constructor(context: Context, attrs: Attr
         val centerX = left + touchView.width / 4
         val centerY = top + touchView.height / 2
         val row = centerX / timeRectWidth
-        val column = (top - view_toolbar.height) / timeRectHeight
+        val column = top / timeRectHeight
         val index = column * 4 + row
         return if (index in 0..23) {
             timeViewOuterScopes[index]

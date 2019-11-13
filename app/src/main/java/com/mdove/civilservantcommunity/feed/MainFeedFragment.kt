@@ -89,7 +89,6 @@ class MainFeedFragment : BaseFragment() {
         }
     }, object : OnNormalFeedListener {
         override fun onSendNewPlanClick(content: String) {
-            var single: SinglePlanBeanWrapper? = null
             launch {
                 showLoading()
                 withContext(MDoveBackgroundPool) {

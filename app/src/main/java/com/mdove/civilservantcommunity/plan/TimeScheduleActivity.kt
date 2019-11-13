@@ -29,9 +29,15 @@ class TimeScheduleActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_history_plans)
+        setContentView(R.layout.activity_edit_plans)
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
+                .setCustomAnimations(
+                    R.anim.mdove_slide_in_bottom,
+                    R.anim.mdove_slide_out_bottom,
+                    R.anim.mdove_slide_in_bottom,
+                    R.anim.mdove_slide_out_bottom
+                )
                 .add(
                     R.id.container,
                     TimeScheduleFragment.newInstance(

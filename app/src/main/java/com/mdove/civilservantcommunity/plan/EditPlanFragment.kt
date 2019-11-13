@@ -21,6 +21,7 @@ import com.mdove.civilservantcommunity.room.MainDb
 import com.mdove.dependent.common.networkenhance.valueobj.Status
 import com.mdove.dependent.common.recyclerview.PaddingDecoration
 import com.mdove.dependent.common.threadpool.MDoveBackgroundPool
+import com.mdove.dependent.common.toast.ToastUtil
 import com.mdove.dependent.common.utils.TimeUtils
 import com.mdove.dependent.common.utils.dismissLoading
 import com.mdove.dependent.common.utils.showLoading
@@ -49,6 +50,10 @@ class EditPlanFragment : BaseFragment() {
                 launch {
                     showLoading()
                     val plans = mViewModelEdit.createFeedPlans()
+                    if (plans.isNullOrEmpty()) {
+                        ToastUtil.toast("执行空计划，这个不太好吧~")
+                        return@launch
+                    }
                     val insertData = System.currentTimeMillis()
                     val createData = TimeUtils.getDateFromSQL()
                     val dbId = saveTodayPlans(insertData, createData, plans)

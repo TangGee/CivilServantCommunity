@@ -5,10 +5,14 @@ import android.util.Log
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import android.view.*
+import com.mdove.dependent.common.threadpool.FastMainScope
+import kotlinx.coroutines.CoroutineScope
+import kotlin.coroutines.CoroutineContext
 
 abstract class BaseDialogFragment(
         protected var _cancelable: Boolean = false,
-        private var _cancelableOnTouchOutside: Boolean = false) : DialogFragment() {
+        private var _cancelableOnTouchOutside: Boolean = false) : DialogFragment() ,
+    CoroutineScope {
 
     open val backgroundRes: Int = 0
 
@@ -24,6 +28,9 @@ abstract class BaseDialogFragment(
             }
         }
     }
+
+    override val coroutineContext: CoroutineContext
+        get() = FastMainScope()
 
     override fun show(manager: FragmentManager?, tag: String?) {
         try {

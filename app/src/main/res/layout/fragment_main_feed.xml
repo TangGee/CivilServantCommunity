@@ -11,9 +11,9 @@
 
         <com.mdove.civilservantcommunity.feed.view.PlaceHolderRecyclerView
             android:id="@+id/rlv"
-            android:windowSoftInputMode="adjustPan"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:focusable="true"
+            android:focusableInTouchMode="true" />
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
 </LinearLayout>

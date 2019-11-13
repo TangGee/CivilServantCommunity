@@ -14,7 +14,7 @@ class HistoryPlansActivity : AbsSlideCloseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_history_plans)
+        setContentView(R.layout.activity_edit_plans)
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
                 .add(R.id.container, EditPlanFragment(), TAG_HISTORY_PLAN_FRAGMENT)

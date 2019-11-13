@@ -30,7 +30,7 @@
 
         <activity android:name=".plan.TimeScheduleActivity"
             android:launchMode="singleTop"
-            android:theme="@style/MyAppTheme"
+            android:theme="@style/TransparentTheme"
             android:screenOrientation="portrait"/>
 
         <activity

@@ -49,19 +49,24 @@ class MainFeedViewModel : ViewModel() {
                     withContext(MDoveBackgroundPool) {
                         temp.add(FeedTimeLineFeedTodayPlansTitleResp())
                         MainDb.db.todayPlansDao().getTodayPlansRecord(TimeUtils.getDateFromSQL())?.let { entity ->
-                            temp.addAll(entity.resp.params.flatMap { planModule ->
-                                planModule.beanSingles.map {
-                                    FeedTimeLineFeedTodayPlansResp(
-                                        entity.id,
-                                        entity.date,
-                                        entity.sucDate,
-                                        entity.createDate ?: TimeUtils.getDateFromSQL(),
-                                        it
-                                    )
-                                }
-                            }.apply {
-                                (this.last()).params.typeSingle = SinglePlanType.LAST_PLAN
-                            })
+                            if (entity.resp.params.isNotEmpty()) {
+                                temp.addAll(entity.resp.params.flatMap { planModule ->
+                                    planModule.beanSingles.map {
+                                        FeedTimeLineFeedTodayPlansResp(
+                                            entity.id,
+                                            entity.date,
+                                            entity.sucDate,
+                                            entity.createDate ?: TimeUtils.getDateFromSQL(),
+                                            it
+                                        )
+                                    }
+                                }.apply {
+                                    (this.lastOrNull())?.params?.typeSingle =
+                                        SinglePlanType.LAST_PLAN
+                                })
+                            } else {
+                                temp.add(FeedTimeLineFeedTodayPlansTipsTitleResp())
+                            }
                         } ?: also {
                             temp.add(FeedTimeLineFeedTodayPlansTipsTitleResp())
                         }
@@ -203,7 +208,11 @@ class MainFeedViewModel : ViewModel() {
     fun createTimeScheduleParams(): TimeScheduleParams {
         return TimeScheduleParams(mData.value?.data?.let {
             it.filterIsInstance<FeedTimeLineFeedTodayPlansResp>().map {
-                TimeSchedulePlansParams(it.params.beanSingle, TimeSchedulePlansStatus.SHOW,it.params.timeSchedule)
+                TimeSchedulePlansParams(
+                    it.params.beanSingle,
+                    TimeSchedulePlansStatus.SHOW,
+                    it.params.timeSchedule
+                )
             }
         } ?: mutableListOf())
     }

@@ -81,15 +81,7 @@ class MainFeedAdapter(
             oldItem: BaseFeedResp,
             newItem: BaseFeedResp
         ): Boolean {
-            return if ((oldItem is FeedArticleResp) && (newItem is FeedArticleResp)) {
-                oldItem.article.title == newItem.article.title
-            } else if ((oldItem is FeedPunchResp) && (newItem is FeedPunchResp)) {
-                oldItem.count == newItem.count
-            } else if ((oldItem is FeedTodayPlanResp) && (newItem is FeedTodayPlanResp)) {
-                oldItem.params == newItem.params
-            } else if ((oldItem is FeedTimeLineFeedTodayPlansResp) && (newItem is FeedTimeLineFeedTodayPlansResp)) {
-                oldItem.params.statusSingle == newItem.params.statusSingle && oldItem.params.beanSingle.content == newItem.params.beanSingle.content
-            } else if ((oldItem is FeedTimeLineFeedTodayPlansTitleResp) && (newItem is FeedTimeLineFeedTodayPlansTitleResp)) {
+            return if ((oldItem is FeedTimeLineFeedTodayPlansTitleResp) && (newItem is FeedTimeLineFeedTodayPlansTitleResp)) {
                 return true
             } else if ((oldItem is FeedTimeLineFeedTodayPlansTipsTitleResp) && (newItem is FeedTimeLineFeedTodayPlansTipsTitleResp)) {
                 return true
@@ -99,7 +91,15 @@ class MainFeedAdapter(
                 return true
             } else if ((oldItem is FeedNetworkErrorTitleResp) && (newItem is FeedNetworkErrorTitleResp)) {
                 return true
-            } else {
+            } else if ((oldItem is FeedArticleResp) && (newItem is FeedArticleResp)) {
+                oldItem.article.title == newItem.article.title
+            } else if ((oldItem is FeedPunchResp) && (newItem is FeedPunchResp)) {
+                oldItem.count == newItem.count
+            } else if ((oldItem is FeedTodayPlanResp) && (newItem is FeedTodayPlanResp)) {
+                oldItem.params == newItem.params
+            } else if ((oldItem is FeedTimeLineFeedTodayPlansResp) && (newItem is FeedTimeLineFeedTodayPlansResp)) {
+                oldItem.params.statusSingle == newItem.params.statusSingle && oldItem.params.beanSingle.content == newItem.params.beanSingle.content
+            } else  {
                 true
             }
         }
@@ -507,6 +507,7 @@ class MainFeedAdapter(
         private val btnSend = itemView.findViewById<AppCompatImageView>(R.id.btn_send_new_plan)
 
         init {
+            et.clearFocus()
             normalListener?.let { listener ->
                 btnSend.setOnClickListener {
                     val str = et.text.toString()
