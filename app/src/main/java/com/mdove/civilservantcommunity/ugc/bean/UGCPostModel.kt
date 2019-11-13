@@ -21,7 +21,7 @@ data class UGCPostNormalParams(
 @Parcelize
 data class UGCPostQuestionParams(
     @SerializedName("user_info") val userInfo: UserInfo,
-    @SerializedName("type") val types: List<UGCTopic>,
+    @SerializedName("type") val types: UGCTopic,
     @SerializedName("title") val title: String,
     @SerializedName("content") val content: String,
     @SerializedName("list_style") val listStyle: String

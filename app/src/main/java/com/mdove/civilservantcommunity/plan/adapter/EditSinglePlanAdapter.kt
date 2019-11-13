@@ -228,7 +228,7 @@ class EditSinglePlanAdapter(private val listener: OnSinglePlanClickListener? = n
         private val etContent = itemView.findViewById<EditText>(R.id.tv_plan_content)
 
         fun bind(wrapper: SinglePlanBeanWrapper) {
-            etContent.setText(wrapper.beanSingle.content)
+            etContent.setText("${wrapper.beanSingle.content}\n${wrapper.beanSingle.factor}")
             updateStatus(wrapper)
             setListener(wrapper)
         }

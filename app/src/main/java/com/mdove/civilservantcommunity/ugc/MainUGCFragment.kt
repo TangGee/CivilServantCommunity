@@ -75,6 +75,7 @@ class MainUGCFragment : BaseFragment() {
                     when (it.status) {
                         Status.SUCCESS -> {
                             dismissLoading()
+                            activity?.finish()
                             ToastUtil.toast("请求成功:${it.data?.message ?: ""}")
                         }
                         Status.ERROR -> {

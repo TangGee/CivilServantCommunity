@@ -61,7 +61,7 @@ class MainUGCViewModel : ViewModel() {
             repository.postQuestion(
                 UGCPostQuestionParams(
                     userInfo,
-                    mutableListOf(UGCTopic(it.name, it.id)),
+                    UGCTopic(it.name, it.id),
                     title,
                     content,
                     "1"

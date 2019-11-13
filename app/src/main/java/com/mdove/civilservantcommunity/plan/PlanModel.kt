@@ -14,7 +14,7 @@ data class SinglePlanBean(
     @SerializedName("part") val part: String? = null,
     @SerializedName("list_style") val listStyle: String? = null,
     @SerializedName("content") val content: String? = null,
-    @SerializedName("factor") val factor: PlanFactorModel? = null
+    @SerializedName("factor") val factor: String? = null
 ) : Parcelable
 
 @Parcelize
@@ -68,14 +68,6 @@ enum class PlanModuleStatus {
     NORMAL,
     DELETE
 }
-
-@Parcelize
-data class PlanFactorModel(
-    @SerializedName("factor_time") val factorTime: String? = null,
-    @SerializedName("factor_count") val factorCount: String? = null,
-    @SerializedName("factor_count_all") val factorCountAll: String? = null,
-    @SerializedName("factor_other") val factorOther: String? = null
-) : Parcelable
 
 @Parcelize
 data class PlanToFeedParams(
