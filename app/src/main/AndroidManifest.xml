@@ -60,7 +60,7 @@
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".plan.PlanActivity"
+            android:name=".plan.EditPlanActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
     </application>

@@ -7,9 +7,9 @@ import android.os.Bundle
 import com.mdove.civilservantcommunity.R
 import com.mdove.civilservantcommunity.base.AbsSlideCloseActivity
 import com.mdove.civilservantcommunity.base.launcher.ActivityLauncher
-import com.mdove.civilservantcommunity.plan.PlanActivity.Companion.INTENT_PARAMS
+import com.mdove.civilservantcommunity.plan.EditPlanActivity.Companion.INTENT_PARAMS
 
-class PlanActivity : AbsSlideCloseActivity() {
+class EditPlanActivity : AbsSlideCloseActivity() {
     companion object {
         private const val TAG_PLAN_FRAGMENT = "tag_plan_fragment"
         const val INTENT_PARAMS = "intent_params_plan"
@@ -29,7 +29,7 @@ class PlanActivity : AbsSlideCloseActivity() {
 suspend fun ActivityLauncher.gotoPlanActivity(
     context: Context
 ): PlanToFeedResult {
-    val intent = Intent(context, PlanActivity::class.java)
+    val intent = Intent(context, EditPlanActivity::class.java)
     return startActivityAsync(intent).await().run {
         return if (resultCode == Activity.RESULT_OK) {
             if (data != null) {

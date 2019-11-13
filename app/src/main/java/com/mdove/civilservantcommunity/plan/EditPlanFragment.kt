@@ -55,7 +55,7 @@ class EditPlanFragment : BaseFragment() {
                     dismissLoading()
                     val intent = Intent()
                     intent.putExtra(
-                        PlanActivity.INTENT_PARAMS,
+                        EditPlanActivity.INTENT_PARAMS,
                         PlanToFeedParams(dbId, insertData, createData, null, plans)
                     )
                     it.setResult(Activity.RESULT_OK, intent)

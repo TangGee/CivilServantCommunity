@@ -130,6 +130,7 @@ class MainFeedViewModel : ViewModel() {
                     val newData = mutableListOf<BaseFeedResp>()
                     it.data?.filter {
                         it !is FeedTimeLineFeedTodayPlansTitleResp && it !is FeedTimeLineFeedTodayPlansResp
+                                && it !is FeedTimeLineFeedTodayPlansTipsTitleResp
                     }?.forEachIndexed { index, baseFeedResp ->
                         // 找到QuickBtns，然后在其下边增加我的今日计划
                         if (baseFeedResp is FeedQuickBtnsResp) {
@@ -202,7 +203,7 @@ class MainFeedViewModel : ViewModel() {
     fun createTimeScheduleParams(): TimeScheduleParams {
         return TimeScheduleParams(mData.value?.data?.let {
             it.filterIsInstance<FeedTimeLineFeedTodayPlansResp>().map {
-                TimeSchedulePlansParams(it.params.beanSingle, TimeSchedulePlansStatus.SHOW)
+                TimeSchedulePlansParams(it.params.beanSingle, TimeSchedulePlansStatus.SHOW,it.params.timeSchedule)
             }
         } ?: mutableListOf())
     }
