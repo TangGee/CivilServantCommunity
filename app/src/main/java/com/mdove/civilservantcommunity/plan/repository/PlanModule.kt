@@ -4,9 +4,9 @@ import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.mdove.civilservantcommunity.MyApplication
-import com.mdove.civilservantcommunity.plan.SinglePlanBean
-import com.mdove.civilservantcommunity.plan.SinglePlanBeanWrapper
-import com.mdove.civilservantcommunity.plan.SinglePlanType
+import com.mdove.civilservantcommunity.plan.model.SinglePlanBean
+import com.mdove.civilservantcommunity.plan.model.SinglePlanBeanWrapper
+import com.mdove.civilservantcommunity.plan.model.SinglePlanType
 import com.mdove.dependent.apiservice.AppDependsProvider
 import com.mdove.dependent.common.gson.GsonArrayHelper.fromJsonArray
 import com.mdove.dependent.common.network.NormalResp
@@ -36,7 +36,10 @@ class PlanModule {
                     fromJsonArray<List<SinglePlanBean>>(json)
                 NormalResp(data.message, data.data?.map {
                     it.map {
-                        SinglePlanBeanWrapper(it, SinglePlanType.SYS_PLAN)
+                        SinglePlanBeanWrapper(
+                            it,
+                            SinglePlanType.SYS_PLAN
+                        )
                     }
                 }, data.exception)
             } catch (e: Exception) {
@@ -47,7 +50,10 @@ class PlanModule {
                 val data = fromJsonArray<List<SinglePlanBean>>(defaultJson)
                 NormalResp(data.message, data.data?.map {
                     it.map {
-                        SinglePlanBeanWrapper(it, SinglePlanType.SYS_PLAN)
+                        SinglePlanBeanWrapper(
+                            it,
+                            SinglePlanType.SYS_PLAN
+                        )
                     }
                 }, data.exception)
             }

@@ -6,7 +6,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
 import com.google.gson.annotations.SerializedName
-import com.mdove.civilservantcommunity.plan.PlanModuleBean
+import com.mdove.civilservantcommunity.plan.model.PlanModuleBean
 import kotlinx.android.parcel.Parcelize
 
 /**

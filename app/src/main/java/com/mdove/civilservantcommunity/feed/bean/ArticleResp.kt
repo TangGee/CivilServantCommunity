@@ -4,9 +4,8 @@ import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import com.mdove.civilservantcommunity.base.bean.ArticleType
 import com.mdove.civilservantcommunity.base.bean.UserInfo
-import com.mdove.civilservantcommunity.plan.SinglePlanBean
-import com.mdove.civilservantcommunity.plan.PlanToFeedParams
-import com.mdove.civilservantcommunity.plan.SinglePlanBeanWrapper
+import com.mdove.civilservantcommunity.plan.model.PlanToFeedParams
+import com.mdove.civilservantcommunity.plan.model.SinglePlanBeanWrapper
 import kotlinx.android.parcel.Parcelize
 
 /**

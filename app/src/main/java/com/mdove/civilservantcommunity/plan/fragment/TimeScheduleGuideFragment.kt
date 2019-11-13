@@ -1,4 +1,4 @@
-package com.mdove.civilservantcommunity.plan
+package com.mdove.civilservantcommunity.plan.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater

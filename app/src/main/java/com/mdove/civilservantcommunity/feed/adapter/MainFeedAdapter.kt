@@ -17,11 +17,10 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.mdove.civilservantcommunity.R
 import com.mdove.civilservantcommunity.feed.bean.*
-import com.mdove.civilservantcommunity.plan.SinglePlanStatus
-import com.mdove.civilservantcommunity.plan.SinglePlanType
+import com.mdove.civilservantcommunity.plan.model.SinglePlanStatus
+import com.mdove.civilservantcommunity.plan.model.SinglePlanType
 import com.mdove.dependent.common.toast.ToastUtil
 import com.mdove.dependent.common.utils.TimeUtils
-import com.mdove.dependent.common.utils.UIUtils
 import com.mdove.dependent.common.utils.setDebounceOnClickListener
 import com.mdove.dependent.common.view.timeline.TimeLineView
 
@@ -141,6 +140,7 @@ class MainFeedAdapter(
         const val CLICK_QUICK_BTN_UGC = 103
         const val CLICK_QUICK_BTN_ME = 104
         const val CLICK_QUICK_BTN_TIME_SCHEDULE = 106
+        const val CLICK_QUICK_BTN_HISTORY_PLANS = 107
 
         val PAYLOAD_PUNCH = Any()
         val PAYLOAD_TODAY_PLANS_STATUS = Any()
@@ -484,6 +484,9 @@ class MainFeedAdapter(
                 }
                 itemView.findViewById<ConstraintLayout>(R.id.layout_btn_me).setDebounceOnClickListener {
                     listener.onClick(CLICK_QUICK_BTN_ME, null)
+                }
+                itemView.findViewById<ConstraintLayout>(R.id.layout_btn_history).setDebounceOnClickListener {
+                    listener.onClick(CLICK_QUICK_BTN_HISTORY_PLANS, null)
                 }
                 itemView.findViewById<ConstraintLayout>(R.id.layout_btn_time_schedule)
                     .setDebounceOnClickListener {

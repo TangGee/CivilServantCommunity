@@ -1,4 +1,4 @@
-package com.mdove.civilservantcommunity.plan
+package com.mdove.civilservantcommunity.plan.fragment
 
 import android.app.Activity
 import android.content.Intent
@@ -11,11 +11,17 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mdove.civilservantcommunity.R
 import com.mdove.civilservantcommunity.base.fragment.BaseFragment
+import com.mdove.civilservantcommunity.plan.activity.EditPlanActivity
+import com.mdove.civilservantcommunity.plan.activity.TimeScheduleActivity
 import com.mdove.civilservantcommunity.plan.adapter.EditPlanModuleAdapter
 import com.mdove.civilservantcommunity.plan.adapter.OnPlanModuleClickListener
 import com.mdove.civilservantcommunity.plan.adapter.OnSinglePlanClickListener
 import com.mdove.civilservantcommunity.plan.dao.TodayPlansDbBean
 import com.mdove.civilservantcommunity.plan.dao.TodayPlansEntity
+import com.mdove.civilservantcommunity.plan.model.PlanModuleBean
+import com.mdove.civilservantcommunity.plan.model.PlanToFeedParams
+import com.mdove.civilservantcommunity.plan.model.SinglePlanBean
+import com.mdove.civilservantcommunity.plan.model.SinglePlanType
 import com.mdove.civilservantcommunity.plan.viewmodel.EditPlanViewModel
 import com.mdove.civilservantcommunity.room.MainDb
 import com.mdove.dependent.common.networkenhance.valueobj.Status
@@ -34,7 +40,10 @@ class EditPlanFragment : BaseFragment() {
     private val adapter = EditPlanModuleAdapter(object : OnPlanModuleClickListener {
         override fun onClickTimeSchedule() {
             context?.let {
-                TimeScheduleActivity.goto(it, mViewModelEdit.createTimeScheduleParams())
+                TimeScheduleActivity.goto(
+                    it,
+                    mViewModelEdit.createTimeScheduleParams()
+                )
             }
         }
 
@@ -61,7 +70,13 @@ class EditPlanFragment : BaseFragment() {
                     val intent = Intent()
                     intent.putExtra(
                         EditPlanActivity.INTENT_PARAMS,
-                        PlanToFeedParams(dbId, insertData, createData, null, plans)
+                        PlanToFeedParams(
+                            dbId,
+                            insertData,
+                            createData,
+                            null,
+                            plans
+                        )
                     )
                     it.setResult(Activity.RESULT_OK, intent)
                     it.finish()

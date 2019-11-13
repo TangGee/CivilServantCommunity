@@ -1,20 +1,11 @@
 package com.mdove.civilservantcommunity.plan.viewmodel
 
-import android.app.AlarmManager
-import android.app.Application
-import android.app.PendingIntent
 import android.content.Context
-import android.content.Intent
-import android.os.Build
-import android.os.SystemClock
-import androidx.annotation.RequiresApi
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.lifecycle.*
-import com.mdove.civilservantcommunity.plan.SinglePlanBean
+import com.mdove.civilservantcommunity.plan.model.SinglePlanBean
 import com.mdove.civilservantcommunity.plan.model.TimeScheduleParams
 import com.mdove.civilservantcommunity.plan.model.TimeSchedulePlansParams
 import com.mdove.civilservantcommunity.plan.model.TimeSchedulePlansStatus
-import com.mdove.civilservantcommunity.plan.receiver.TimeScheduleReceiver
 
 /**
  * Created by MDove on 2019-11-07.

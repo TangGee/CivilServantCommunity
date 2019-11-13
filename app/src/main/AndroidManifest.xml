@@ -28,7 +28,12 @@
             android:launchMode="singleTop"
             android:screenOrientation="portrait"/>
 
-        <activity android:name=".plan.TimeScheduleActivity"
+        <activity android:name=".plan.activity.HistoryPlansActivity"
+            android:launchMode="singleTop"
+            android:theme="@style/MyAppTheme"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".plan.activity.TimeScheduleActivity"
             android:launchMode="singleTop"
             android:theme="@style/TransparentTheme"
             android:screenOrientation="portrait"/>
@@ -60,7 +65,7 @@
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".plan.EditPlanActivity"
+            android:name=".plan.activity.EditPlanActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
     </application>

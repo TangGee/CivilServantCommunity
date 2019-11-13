@@ -6,7 +6,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
 import android.util.AttributeSet
-import android.util.Log
 import android.view.Gravity
 import android.view.MotionEvent
 import android.view.View
@@ -20,7 +19,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.customview.widget.ViewDragHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mdove.civilservantcommunity.R
-import com.mdove.civilservantcommunity.plan.SinglePlanBean
+import com.mdove.civilservantcommunity.plan.model.SinglePlanBean
 import com.mdove.civilservantcommunity.plan.adapter.TimeScheduleAdapter
 import com.mdove.civilservantcommunity.plan.model.TimeSchedulePlansParams
 import com.mdove.civilservantcommunity.plan.model.TimeSchedulePlansStatus

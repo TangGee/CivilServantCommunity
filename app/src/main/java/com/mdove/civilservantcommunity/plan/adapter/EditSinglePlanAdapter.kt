@@ -18,10 +18,10 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.mdove.civilservantcommunity.R
-import com.mdove.civilservantcommunity.plan.SinglePlanBean
-import com.mdove.civilservantcommunity.plan.SinglePlanBeanWrapper
-import com.mdove.civilservantcommunity.plan.SinglePlanStatus
-import com.mdove.civilservantcommunity.plan.SinglePlanType
+import com.mdove.civilservantcommunity.plan.model.SinglePlanBean
+import com.mdove.civilservantcommunity.plan.model.SinglePlanBeanWrapper
+import com.mdove.civilservantcommunity.plan.model.SinglePlanStatus
+import com.mdove.civilservantcommunity.plan.model.SinglePlanType
 import com.mdove.dependent.common.toast.ToastUtil
 
 class EditSinglePlanAdapter(private val listener: OnSinglePlanClickListener? = null) :

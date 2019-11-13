@@ -1,4 +1,4 @@
-package com.mdove.civilservantcommunity.plan
+package com.mdove.civilservantcommunity.plan.fragment
 
 import android.app.Activity
 import android.content.Intent
@@ -12,7 +12,8 @@ import androidx.lifecycle.ViewModelProviders
 import com.mdove.civilservantcommunity.R
 import com.mdove.civilservantcommunity.base.fragment.BaseFragment
 import com.mdove.civilservantcommunity.config.AppConfig
-import com.mdove.civilservantcommunity.plan.TimeScheduleActivity.Companion.TAG_TIME_SCHEDULE_PARAMS
+import com.mdove.civilservantcommunity.plan.model.SinglePlanBean
+import com.mdove.civilservantcommunity.plan.activity.TimeScheduleActivity.Companion.TAG_TIME_SCHEDULE_PARAMS
 import com.mdove.civilservantcommunity.plan.dao.TodayPlansDbBean
 import com.mdove.civilservantcommunity.plan.model.TimeScheduleParams
 import com.mdove.civilservantcommunity.plan.model.TimeSchedulePlansStatus
@@ -129,7 +130,8 @@ class TimeScheduleFragment : BaseFragment() {
 
     private fun showGuide() {
         if (!AppConfig.hasShowTimeScheduleGuide() && viewModel.hasPlans()) {
-            TimeScheduleGuideFragment().show(childFragmentManager, "")
+            TimeScheduleGuideFragment()
+                .show(childFragmentManager, "")
         }
     }
 }

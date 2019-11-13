@@ -36,6 +36,7 @@ dependencies {
     implementation deps.androidx.constraint_layout
 
     implementation deps.retrofit2.gson
+    implementation 'joda-time:joda-time:2.10.1'
 }
 
 androidExtensions {

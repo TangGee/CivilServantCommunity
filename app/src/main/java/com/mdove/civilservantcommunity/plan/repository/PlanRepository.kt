@@ -2,7 +2,7 @@ package com.mdove.civilservantcommunity.plan.repository
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.mdove.civilservantcommunity.plan.SinglePlanBeanWrapper
+import com.mdove.civilservantcommunity.plan.model.SinglePlanBeanWrapper
 import com.mdove.dependent.common.network.AppExecutorsImpl
 import com.mdove.dependent.common.network.NormalResp
 import com.mdove.dependent.common.networkenhance.NetworkBoundResource

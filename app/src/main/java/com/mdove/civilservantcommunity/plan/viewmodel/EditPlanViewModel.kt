@@ -3,10 +3,7 @@ package com.mdove.civilservantcommunity.plan.viewmodel
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.mdove.civilservantcommunity.plan.*
-import com.mdove.civilservantcommunity.plan.model.TimeScheduleParams
-import com.mdove.civilservantcommunity.plan.model.TimeSchedulePlansParams
-import com.mdove.civilservantcommunity.plan.model.TimeSchedulePlansStatus
+import com.mdove.civilservantcommunity.plan.model.*
 import com.mdove.civilservantcommunity.plan.repository.PlanRepository
 import com.mdove.dependent.common.network.NormalResp
 import com.mdove.dependent.common.networkenhance.valueobj.Resource
@@ -167,7 +164,12 @@ class EditPlanViewModel : ViewModel() {
                             planModule.copy(beanSingles = it.filterNot { single ->
                                 custom.moduleId == single.beanSingle.moduleId && single.typeSingle == SinglePlanType.CUSTOM_PLAN_BTN
                             }.toMutableList().apply {
-                                add(SinglePlanBeanWrapper(custom, SinglePlanType.CUSTOM_PLAN))
+                                add(
+                                    SinglePlanBeanWrapper(
+                                        custom,
+                                        SinglePlanType.CUSTOM_PLAN
+                                    )
+                                )
                                 add(
                                     SinglePlanBeanWrapper(
                                         custom.copy(content = ""),

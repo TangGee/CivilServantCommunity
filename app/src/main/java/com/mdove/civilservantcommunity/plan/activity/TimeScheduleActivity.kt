@@ -1,4 +1,4 @@
-package com.mdove.civilservantcommunity.plan
+package com.mdove.civilservantcommunity.plan.activity
 
 import android.app.Activity
 import android.content.Context
@@ -7,7 +7,8 @@ import android.os.Bundle
 import com.mdove.civilservantcommunity.R
 import com.mdove.civilservantcommunity.base.BaseActivity
 import com.mdove.civilservantcommunity.base.launcher.ActivityLauncher
-import com.mdove.civilservantcommunity.plan.TimeScheduleActivity.Companion.TAG_TIME_SCHEDULE_PARAMS
+import com.mdove.civilservantcommunity.plan.activity.TimeScheduleActivity.Companion.TAG_TIME_SCHEDULE_PARAMS
+import com.mdove.civilservantcommunity.plan.fragment.TimeScheduleFragment
 import com.mdove.civilservantcommunity.plan.model.TimeScheduleParams
 import com.mdove.civilservantcommunity.plan.model.TimeScheduleStatus
 import com.mdove.civilservantcommunity.plan.model.TimeScheduleToFeedResult

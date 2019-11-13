@@ -7,9 +7,9 @@ import android.widget.TextView
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.recyclerview.widget.*
 import com.mdove.civilservantcommunity.R
-import com.mdove.civilservantcommunity.plan.PlanModuleBean
-import com.mdove.civilservantcommunity.plan.PlanModuleStatus
-import com.mdove.civilservantcommunity.plan.PlanModuleType
+import com.mdove.civilservantcommunity.plan.model.PlanModuleBean
+import com.mdove.civilservantcommunity.plan.model.PlanModuleStatus
+import com.mdove.civilservantcommunity.plan.model.PlanModuleType
 
 class EditPlanModuleAdapter(
     private val listener: OnPlanModuleClickListener,

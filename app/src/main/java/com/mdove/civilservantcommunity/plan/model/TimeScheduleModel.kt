@@ -1,7 +1,6 @@
 package com.mdove.civilservantcommunity.plan.model
 
 import android.os.Parcelable
-import com.mdove.civilservantcommunity.plan.SinglePlanBean
 import kotlinx.android.parcel.Parcelize
 
 /**

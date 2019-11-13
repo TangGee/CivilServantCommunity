@@ -22,10 +22,12 @@ import com.mdove.civilservantcommunity.feed.bean.ArticleResp
 import com.mdove.civilservantcommunity.feed.bean.FeedTimeLineFeedTodayPlansResp
 import com.mdove.civilservantcommunity.feed.bean.FeedTodayPlansCheckParams
 import com.mdove.civilservantcommunity.feed.viewmodel.MainFeedViewModel
-import com.mdove.civilservantcommunity.plan.*
+import com.mdove.civilservantcommunity.plan.activity.HistoryPlansActivity
+import com.mdove.civilservantcommunity.plan.activity.gotoPlanActivity
+import com.mdove.civilservantcommunity.plan.activity.gotoTimeScheduleActivity
 import com.mdove.civilservantcommunity.plan.dao.TodayPlansDbBean
 import com.mdove.civilservantcommunity.plan.dao.TodayPlansEntity
-import com.mdove.civilservantcommunity.plan.model.TimeScheduleStatus
+import com.mdove.civilservantcommunity.plan.model.*
 import com.mdove.civilservantcommunity.punch.bean.PunchReq
 import com.mdove.civilservantcommunity.punch.viewmodel.PunchViewModel
 import com.mdove.civilservantcommunity.room.MainDb
@@ -72,6 +74,9 @@ class MainFeedFragment : BaseFragment() {
                 MainFeedAdapter.CLICK_QUICK_BTN_ME -> {
                     clickMePage()
                 }
+                MainFeedAdapter.CLICK_QUICK_BTN_HISTORY_PLANS -> {
+                    clickHistoryPlans()
+                }
                 MainFeedAdapter.CLICK_QUICK_BTN_TIME_SCHEDULE -> {
                     clickTimeSchedule()
                 }
@@ -96,12 +101,16 @@ class MainFeedFragment : BaseFragment() {
                     MainDb.db.todayPlansDao().getTodayPlansRecord()?.let { entity ->
                         val cusModuleId = "Z6566"
                         val cusModuleName = "我的计划"
-                        val cusWrapper = SinglePlanBeanWrapper(
-                            SinglePlanBean(
-                                AppConfig.getUserInfo()?.uid ?: UUID.randomUUID().toString()
-                                , cusModuleId, cusModuleName, "1", "1", content
-                            ), SinglePlanType.CUSTOM_PLAN, SinglePlanStatus.NORMAL, null
-                        )
+                        val cusWrapper =
+                            SinglePlanBeanWrapper(
+                                SinglePlanBean(
+                                    AppConfig.getUserInfo()?.uid ?: UUID.randomUUID().toString()
+                                    , cusModuleId, cusModuleName, "1", "1", content
+                                ),
+                                SinglePlanType.CUSTOM_PLAN,
+                                SinglePlanStatus.NORMAL,
+                                null
+                            )
                         val copyEntity = entity.resp.params.find {
                             it.moduleId == cusModuleId
                         }?.let { findBean ->
@@ -191,6 +200,12 @@ class MainFeedFragment : BaseFragment() {
     private fun clickMePage() {
         context?.let {
             MePageActivity.gotoMePage(it)
+        }
+    }
+
+    private fun clickHistoryPlans() {
+        context?.let {
+            HistoryPlansActivity.goto(it)
         }
     }
 
