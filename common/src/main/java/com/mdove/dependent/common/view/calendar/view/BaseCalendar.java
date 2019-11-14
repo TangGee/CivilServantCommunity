@@ -482,7 +482,7 @@ public abstract class BaseCalendar extends ViewPager implements ICalendar {
     @Override
     public CalendarPainter getCalendarPainter() {
         if (mCalendarPainter == null) {
-            mCalendarPainter = new InnerPainter(this);
+            mCalendarPainter = new InnerPainter(this, null);
         }
         return mCalendarPainter;
     }

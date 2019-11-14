@@ -12,8 +12,8 @@ import com.mdove.civilservantcommunity.plan.model.PlanModuleStatus
 import com.mdove.civilservantcommunity.plan.model.PlanModuleType
 
 class EditPlanModuleAdapter(
-    private val listener: OnPlanModuleClickListener,
-    private val singlePlanListener: OnSinglePlanClickListener
+    private val listener: OnPlanModuleClickListener? = null,
+    private val singlePlanListener: OnSinglePlanClickListener? = null
 ) :
     ListAdapter<PlanModuleBean, RecyclerView.ViewHolder>(object :
         DiffUtil.ItemCallback<PlanModuleBean>() {
@@ -133,15 +133,16 @@ class EditPlanModuleAdapter(
     inner class PlanModuleOkViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         init {
             itemView.setOnClickListener {
-                listener.onClickCreatePlans()
+                listener?.onClickCreatePlans()
             }
         }
     }
 
-    inner class PlanModuleTimeScheduleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class PlanModuleTimeScheduleViewHolder(itemView: View) :
+        RecyclerView.ViewHolder(itemView) {
         init {
             itemView.setOnClickListener {
-                listener.onClickTimeSchedule()
+                listener?.onClickTimeSchedule()
             }
         }
     }
@@ -179,7 +180,7 @@ class EditPlanModuleAdapter(
                 (rlv.adapter as? EditSinglePlanAdapter)?.submitList(data.beanSingles)
             }
             btnClose.setOnClickListener {
-                listener.onDeletePlanModuleClick(data, data.moduleStatus != PlanModuleStatus.DELETE)
+                listener?.onDeletePlanModuleClick(data, data.moduleStatus != PlanModuleStatus.DELETE)
             }
         }
     }

@@ -33,6 +33,7 @@ public class InnerPainter implements CalendarPainter {
 
     protected List<LocalDate> mHolidayList;
     protected List<LocalDate> mWorkdayList;
+    private List<LocalDate> mHistoryPlans;
 
     private List<LocalDate> mPointList;
     private Map<LocalDate, String> mReplaceLunarStrMap;
@@ -41,7 +42,7 @@ public class InnerPainter implements CalendarPainter {
 
     private ICalendar mCalendar;
 
-    public InnerPainter(ICalendar calendar) {
+    public InnerPainter(ICalendar calendar, List<LocalDate> historyPlans) {
         this.mAttrs = calendar.getAttrs();
         this.mCalendar = calendar;
         mTextPaint = getPaint();
@@ -52,6 +53,7 @@ public class InnerPainter implements CalendarPainter {
         mReplaceLunarStrMap = new HashMap<>();
         mReplaceLunarColorMap = new HashMap<>();
         mStretchStrMap = new HashMap<>();
+        mHistoryPlans = historyPlans;
 
         List<String> holidayList = CalendarUtil.getHolidayList();
         for (int i = 0; i < holidayList.size(); i++) {
@@ -113,6 +115,9 @@ public class InnerPainter implements CalendarPainter {
             drawLunar(canvas, rectF, localDate, noAlphaColor, false, false);
             drawPoint(canvas, rectF, false, noAlphaColor, localDate);
             drawHolidays(canvas, rectF, false, noAlphaColor, localDate);
+        }
+        if (mHistoryPlans != null && mHistoryPlans.contains(localDate)) {
+            drawHistoryPlansPoint(canvas, rectF);
         }
         drawStretchText(canvas, rectF, noAlphaColor, localDate);
     }
@@ -200,6 +205,13 @@ public class InnerPainter implements CalendarPainter {
             mTextPaint.setAlpha(alphaColor);
             canvas.drawText(lunarString, rectF.centerX(), rectF.centerY() + mAttrs.lunarDistance, mTextPaint);
         }
+    }
+
+    //绘制历史计划
+    private void drawHistoryPlansPoint(Canvas canvas, RectF rectF) {
+        mCirclePaint.setStyle(Paint.Style.FILL);
+        mCirclePaint.setColor(mAttrs.todaySelectContrastColor);
+        canvas.drawCircle(rectF.centerX(), mAttrs.pointLocation == Attrs.DOWN ? (rectF.centerY() + mAttrs.pointDistance) : (rectF.centerY() - mAttrs.pointDistance), mAttrs.pointSize, mCirclePaint);
     }
 
 

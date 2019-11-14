@@ -86,4 +86,5 @@ dependencies {
     implementation project(':network-provider')
     implementation project(':common')
     implementation project(':herohalberd:core')
+    implementation 'joda-time:joda-time:2.10.1'
 }
