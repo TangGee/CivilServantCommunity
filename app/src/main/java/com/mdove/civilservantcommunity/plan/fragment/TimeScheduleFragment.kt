@@ -11,12 +11,16 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.mdove.civilservantcommunity.R
 import com.mdove.civilservantcommunity.base.fragment.BaseFragment
+import com.mdove.civilservantcommunity.base.launcher.ActivityLauncher
 import com.mdove.civilservantcommunity.config.AppConfig
+import com.mdove.civilservantcommunity.plan.activity.EditPlanActivity
 import com.mdove.civilservantcommunity.plan.model.SinglePlanBean
 import com.mdove.civilservantcommunity.plan.activity.TimeScheduleActivity.Companion.TAG_TIME_SCHEDULE_PARAMS
+import com.mdove.civilservantcommunity.plan.activity.gotoPlanActivity
 import com.mdove.civilservantcommunity.plan.dao.TodayPlansDbBean
 import com.mdove.civilservantcommunity.plan.model.TimeScheduleParams
 import com.mdove.civilservantcommunity.plan.model.TimeSchedulePlansStatus
+import com.mdove.civilservantcommunity.plan.model.toTimeSchedulePlarms
 import com.mdove.civilservantcommunity.plan.view.OnTimeScheduleLayoutListener
 import com.mdove.civilservantcommunity.plan.viewmodel.TimeScheduleViewModel
 import com.mdove.civilservantcommunity.room.MainDb
@@ -70,6 +74,16 @@ class TimeScheduleFragment : BaseFragment() {
             time_schedule_layout.refreshDataAndView(it)
         })
         time_schedule_layout.setListener(object : OnTimeScheduleLayoutListener {
+            override fun onClickGotoCreatePlans() {
+                (activity as? ActivityLauncher)?.let {
+                    launch {
+                        it.gotoPlanActivity(context!!).params?.let{
+                            viewModel.paramsLiveData.value = it.toTimeSchedulePlarms()
+                        }
+                    }
+                }
+            }
+
             override fun onPlansRelease(data: SinglePlanBean) {
                 viewModel.releaseSinglePlanBean.value = data
             }

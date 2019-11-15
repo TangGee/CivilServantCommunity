@@ -84,3 +84,11 @@ enum class Status {
     ERROR,
     SUC
 }
+
+fun PlanToFeedParams.toTimeSchedulePlarms(): TimeScheduleParams {
+    return TimeScheduleParams(this.data.flatMap {
+        it.beanSingles
+    }.map {
+        TimeSchedulePlansParams(it.beanSingle, timeSchedule = it.timeSchedule)
+    })
+}

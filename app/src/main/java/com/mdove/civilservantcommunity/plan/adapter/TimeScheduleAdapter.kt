@@ -1,5 +1,7 @@
 package com.mdove.civilservantcommunity.plan.adapter
 
+import android.text.Spannable
+import android.text.style.UnderlineSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,34 +10,38 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.mdove.civilservantcommunity.R
+import com.mdove.civilservantcommunity.plan.model.TimeScheduleBaseParams
+import com.mdove.civilservantcommunity.plan.model.TimeScheduleEmptyParams
 import com.mdove.civilservantcommunity.plan.model.TimeSchedulePlansParams
 import com.mdove.civilservantcommunity.plan.model.TimeSchedulePlansStatus
 import com.mdove.civilservantcommunity.plan.view.OnTimeScheduleAdapterListener
+import android.text.SpannableString
+
 
 /**
  * Created by MDove on 2019-11-07.
  */
 class TimeScheduleAdapter(val listener: OnTimeScheduleAdapterListener) :
-    ListAdapter<TimeSchedulePlansParams, RecyclerView.ViewHolder>(object :
-        DiffUtil.ItemCallback<TimeSchedulePlansParams>() {
+    ListAdapter<TimeScheduleBaseParams, RecyclerView.ViewHolder>(object :
+        DiffUtil.ItemCallback<TimeScheduleBaseParams>() {
         override fun areItemsTheSame(
-            oldItem: TimeSchedulePlansParams,
-            newItem: TimeSchedulePlansParams
+            oldItem: TimeScheduleBaseParams,
+            newItem: TimeScheduleBaseParams
         ): Boolean {
-            return oldItem.data.moduleId == newItem.data.moduleId
-                    && oldItem.data.part == newItem.data.part
+            return (oldItem as? TimeSchedulePlansParams)?.data?.moduleId == (newItem as? TimeSchedulePlansParams)?.data?.moduleId
+                    && (oldItem as? TimeSchedulePlansParams)?.data?.part == (newItem as? TimeSchedulePlansParams)?.data?.part
         }
 
         override fun areContentsTheSame(
-            oldItem: TimeSchedulePlansParams,
-            newItem: TimeSchedulePlansParams
+            oldItem: TimeScheduleBaseParams,
+            newItem: TimeScheduleBaseParams
         ): Boolean {
-            return oldItem.data.content == newItem.data.content && oldItem.status == newItem.status
+            return (oldItem as? TimeSchedulePlansParams)?.data?.content == (oldItem as? TimeSchedulePlansParams)?.data?.content && oldItem.status == newItem.status
         }
 
         override fun getChangePayload(
-            oldItem: TimeSchedulePlansParams,
-            newItem: TimeSchedulePlansParams
+            oldItem: TimeScheduleBaseParams,
+            newItem: TimeScheduleBaseParams
         ): Any? {
             return if (oldItem.status != newItem.status) {
                 PAYLOAD_STATUS
@@ -45,16 +51,37 @@ class TimeScheduleAdapter(val listener: OnTimeScheduleAdapterListener) :
     }) {
     companion object {
         val PAYLOAD_STATUS = Any()
+
+        const val TYPE_NORMAL = 1
+        const val TYPE_EMPTY = 2
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return when (getItem(position)) {
+            is TimeSchedulePlansParams -> TYPE_NORMAL
+            is TimeScheduleEmptyParams -> TYPE_EMPTY
+            else -> TYPE_NORMAL
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return TimeScheduleViewHolder(
-            LayoutInflater.from(parent.context).inflate(
-                R.layout.item_time_schedule_plans,
-                parent,
-                false
+        return if (viewType == TYPE_EMPTY) {
+            TimeScheduleEmptyViewHolder(
+                LayoutInflater.from(parent.context).inflate(
+                    R.layout.item_time_schedule_plans_empty,
+                    parent,
+                    false
+                )
             )
-        )
+        } else {
+            TimeScheduleViewHolder(
+                LayoutInflater.from(parent.context).inflate(
+                    R.layout.item_time_schedule_plans,
+                    parent,
+                    false
+                )
+            )
+        }
     }
 
     override fun onBindViewHolder(
@@ -63,7 +90,7 @@ class TimeScheduleAdapter(val listener: OnTimeScheduleAdapterListener) :
         payloads: MutableList<Any>
     ) {
         if (payloads.contains(PAYLOAD_STATUS)) {
-            (holder as? TimeScheduleViewHolder)?.payloadStatus(getItem(position))
+            (holder as? TimeScheduleViewHolder)?.payloadStatus(getItem(position) as TimeSchedulePlansParams)
         } else {
             super.onBindViewHolder(holder, position, payloads)
         }
@@ -71,7 +98,26 @@ class TimeScheduleAdapter(val listener: OnTimeScheduleAdapterListener) :
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         (holder as? TimeScheduleViewHolder)?.let {
-            it.bind(getItem(position))
+            it.bind(getItem(position) as TimeSchedulePlansParams)
+        }
+    }
+
+    inner class TimeScheduleEmptyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        init {
+            itemView.findViewById<TextView>(R.id.tv_title).apply {
+                val str = "没有任何计划，是否立刻创建计划~~"
+                text = SpannableString(str).apply {
+                    setSpan(
+                        UnderlineSpan(),
+                        7,
+                        str.length,
+                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                    )
+                }
+                setOnClickListener {
+                    listener.onClickGotoCreatePlans()
+                }
+            }
         }
     }
 

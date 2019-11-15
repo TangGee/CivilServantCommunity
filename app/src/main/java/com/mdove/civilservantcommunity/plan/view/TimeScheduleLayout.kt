@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.mdove.civilservantcommunity.R
 import com.mdove.civilservantcommunity.plan.model.SinglePlanBean
 import com.mdove.civilservantcommunity.plan.adapter.TimeScheduleAdapter
+import com.mdove.civilservantcommunity.plan.model.TimeScheduleBaseParams
 import com.mdove.civilservantcommunity.plan.model.TimeSchedulePlansParams
 import com.mdove.civilservantcommunity.plan.model.TimeSchedulePlansStatus
 import com.mdove.civilservantcommunity.plan.utils.TimeScheduleHelper
@@ -153,6 +154,10 @@ class TimeScheduleLayout @JvmOverloads constructor(context: Context, attrs: Attr
             LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         rlv_plans.addItemDecoration(PaddingDecoration(8, false))
         rlv_plans.adapter = TimeScheduleAdapter(object : OnTimeScheduleAdapterListener {
+            override fun onClickGotoCreatePlans() {
+                listener?.onClickGotoCreatePlans()
+            }
+
             override fun onLongClick(data: SinglePlanBean, view: View) {
                 fake_title_view.layoutParams =
                     fake_title_view.layoutParams.apply {
@@ -301,13 +306,13 @@ class TimeScheduleLayout @JvmOverloads constructor(context: Context, attrs: Attr
         timeViewOuterScopes.add(s_hour_23)
     }
 
-    fun refreshDataAndView(data: List<TimeSchedulePlansParams>) {
+    fun refreshDataAndView(data: List<TimeScheduleBaseParams>) {
         if (firstLoad) {
             firstLoad = false
-            initAddView(data)
+            initAddView(data.filterIsInstance(TimeSchedulePlansParams::class.java))
         }
         updatePlans(data.filter {
-            it.timeSchedule == null
+            (it as? TimeSchedulePlansParams)?.timeSchedule == null
         })
     }
 
@@ -332,7 +337,7 @@ class TimeScheduleLayout @JvmOverloads constructor(context: Context, attrs: Attr
         }
     }
 
-    private fun updatePlans(data: List<TimeSchedulePlansParams>) {
+    private fun updatePlans(data: List<TimeScheduleBaseParams>) {
         (rlv_plans.adapter as? TimeScheduleAdapter)?.submitList(data)
         post {
             rlv_plans.scrollToPosition(0)
@@ -415,6 +420,7 @@ class TimeScheduleLayout @JvmOverloads constructor(context: Context, attrs: Attr
 
 interface OnTimeScheduleAdapterListener {
     fun onLongClick(data: SinglePlanBean, view: View)
+    fun onClickGotoCreatePlans()
 }
 
 interface OnTimeScheduleLayoutListener {
@@ -425,6 +431,7 @@ interface OnTimeScheduleLayoutListener {
     fun onPlansRelease(data: SinglePlanBean)
 
     fun onTouchViewStatusChange(data: SinglePlanBean, status: TimeSchedulePlansStatus)
+    fun onClickGotoCreatePlans()
 }
 
 data class SinglePlanBeanToView(

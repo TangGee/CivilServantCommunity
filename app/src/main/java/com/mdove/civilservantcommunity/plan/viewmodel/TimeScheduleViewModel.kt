@@ -2,10 +2,7 @@ package com.mdove.civilservantcommunity.plan.viewmodel
 
 import android.content.Context
 import androidx.lifecycle.*
-import com.mdove.civilservantcommunity.plan.model.SinglePlanBean
-import com.mdove.civilservantcommunity.plan.model.TimeScheduleParams
-import com.mdove.civilservantcommunity.plan.model.TimeSchedulePlansParams
-import com.mdove.civilservantcommunity.plan.model.TimeSchedulePlansStatus
+import com.mdove.civilservantcommunity.plan.model.*
 
 /**
  * Created by MDove on 2019-11-07.
@@ -22,17 +19,21 @@ class TimeScheduleViewModel : ViewModel() {
 
     private val handlePlansData = mutableListOf<TimeSchedulePlansParams>()
 
-    val plansLiveData = MediatorLiveData<List<TimeSchedulePlansParams>>().apply {
+    val plansLiveData = MediatorLiveData<List<TimeScheduleBaseParams>>().apply {
         addSource(paramsLiveData) {
-            value = it.data.map {
+            value = it.data.takeIf {
+                it.isNotEmpty()
+            }?.map {
                 handlePlansData.add(it)
                 it
+            } ?: let {
+                mutableListOf(TimeScheduleEmptyParams())
             }
         }
 
         addSource(releaseSinglePlanBean) { release ->
             value = value?.let {
-                val newData = mutableListOf<TimeSchedulePlansParams>()
+                val newData = mutableListOf<TimeScheduleBaseParams>()
                 newData.add(TimeSchedulePlansParams(release, TimeSchedulePlansStatus.SHOW))
                 newData.addAll(it)
                 newData
@@ -41,17 +42,17 @@ class TimeScheduleViewModel : ViewModel() {
 
         addSource(removeSinglePlanBean) { remove ->
             value = value?.filterNot {
-                it.data.moduleId == remove.moduleId &&
-                        it.data.content == remove.content
+                (it as? TimeSchedulePlansParams)?.data?.moduleId == remove.moduleId &&
+                        (it as? TimeSchedulePlansParams)?.data?.content == remove.content
             }
         }
 
         addSource(changeSinglePlanBean) { change ->
             value = value?.map {
-                if (it.data.moduleId == change.first.moduleId
-                    && it.data.content == change.first.content
+                if ((it as? TimeSchedulePlansParams)?.data?.moduleId == change.first.moduleId
+                    && (it as? TimeSchedulePlansParams)?.data?.content == change.first.content
                 ) {
-                    it.copy(status = change.second)
+                    (it as? TimeSchedulePlansParams)?.copy(status = change.second) ?: it
                 } else {
                     it
                 }

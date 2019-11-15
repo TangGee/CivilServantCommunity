@@ -9,22 +9,20 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 data class TimeSchedulePlansParams(
     val data: SinglePlanBean,
-    val status: TimeSchedulePlansStatus,
-    var timeSchedule: Pair<Long, Long>? = null,
-    val type: TimeSchedulePlansType = TimeSchedulePlansType.NORMAL
-) : Parcelable
+    override var status: TimeSchedulePlansStatus = TimeSchedulePlansStatus.SHOW,
+    var timeSchedule: Pair<Long, Long>? = null
+) : Parcelable, TimeScheduleBaseParams(status)
+
 
 enum class TimeSchedulePlansStatus {
     SHOW,
     GONE
 }
 
+open class TimeScheduleBaseParams(open var status: TimeSchedulePlansStatus = TimeSchedulePlansStatus.SHOW)
 
-enum class TimeSchedulePlansType {
-    NORMAL,
-    EMPTY
-}
-
+data class TimeScheduleEmptyParams(override var status: TimeSchedulePlansStatus = TimeSchedulePlansStatus.SHOW) :
+    TimeScheduleBaseParams(status)
 
 @Parcelize
 data class TimeScheduleParams(val data: List<TimeSchedulePlansParams>) : Parcelable
