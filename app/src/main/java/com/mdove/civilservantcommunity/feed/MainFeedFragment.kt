@@ -26,8 +26,8 @@ import com.mdove.civilservantcommunity.plan.activity.HistoryPlansActivity
 import com.mdove.civilservantcommunity.plan.activity.gotoPlanActivity
 import com.mdove.civilservantcommunity.plan.activity.gotoTimeScheduleActivity
 import com.mdove.civilservantcommunity.plan.dao.TodayPlansDbBean
-import com.mdove.civilservantcommunity.plan.dao.TodayPlansEntity
-import com.mdove.civilservantcommunity.plan.model.*
+import com.mdove.civilservantcommunity.plan.model.SinglePlanStatus
+import com.mdove.civilservantcommunity.plan.model.TimeScheduleStatus
 import com.mdove.civilservantcommunity.punch.bean.PunchReq
 import com.mdove.civilservantcommunity.punch.viewmodel.PunchViewModel
 import com.mdove.civilservantcommunity.room.MainDb
@@ -36,13 +36,11 @@ import com.mdove.dependent.common.networkenhance.valueobj.Status
 import com.mdove.dependent.common.threadpool.FastMain
 import com.mdove.dependent.common.threadpool.MDoveBackgroundPool
 import com.mdove.dependent.common.toast.ToastUtil
-import com.mdove.dependent.common.utils.TimeUtils
 import com.mdove.dependent.common.utils.dismissLoading
 import com.mdove.dependent.common.utils.showLoading
 import kotlinx.android.synthetic.main.fragment_main_feed.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.util.*
 
 /**
  * Created by MDove on 2019-09-06.
@@ -97,69 +95,9 @@ class MainFeedFragment : BaseFragment() {
             launch {
                 showLoading()
                 withContext(MDoveBackgroundPool) {
-                    // TODO 先查再更新（插入），可优化
-                    MainDb.db.todayPlansDao().getTodayPlansRecord()?.let { entity ->
-                        val cusModuleId = "Z6566"
-                        val cusModuleName = "我的计划"
-                        val cusWrapper =
-                            SinglePlanBeanWrapper(
-                                SinglePlanBean(
-                                    AppConfig.getUserInfo()?.uid ?: UUID.randomUUID().toString()
-                                    , cusModuleId, cusModuleName, "1", "1", content
-                                ),
-                                SinglePlanType.CUSTOM_PLAN,
-                                SinglePlanStatus.NORMAL,
-                                null
-                            )
-                        val copyEntity = entity.resp.params.find {
-                            it.moduleId == cusModuleId
-                        }?.let { findBean ->
-                            // 插入到老的自定义Module
-                            TodayPlansEntity(
-                                entity.id,
-                                entity.date,
-                                entity.createDate,
-                                entity.sucDate,
-                                TodayPlansDbBean(
-                                    entity.resp.params.map {
-                                        if (it.moduleId == findBean.moduleId) {
-                                            it.copy(beanSingles = it.beanSingles.toMutableList().apply {
-                                                add(cusWrapper)
-                                            })
-                                        } else {
-                                            it
-                                        }
-                                    }
-                                )
-                            )
-                        } ?: let {
-                            // 新建一个自定的Module
-                            TodayPlansEntity(
-                                entity.id,
-                                entity.date,
-                                entity.createDate,
-                                entity.sucDate,
-                                TodayPlansDbBean(
-                                    entity.resp.params.toMutableList().apply {
-                                        add(
-                                            PlanModuleBean(
-                                                cusModuleId, cusModuleName,
-                                                mutableListOf(cusWrapper)
-                                            )
-                                        )
-                                    })
-                            )
-                        }
-                        MainDb.db.todayPlansDao().update(copyEntity)
+                    MainQuickSender.sendPlanInsertDB(content)?.let {
                         withContext(FastMain) {
-                            feedViewModel.editNewPlanToFeedLiveData.value =
-                                FeedTimeLineFeedTodayPlansResp(
-                                    entity.id,
-                                    entity.date,
-                                    null,
-                                    entity.createDate ?: TimeUtils.getDateFromSQL(),
-                                    cusWrapper
-                                )
+                            feedViewModel.editNewPlanToFeedLiveData.value = it
                         }
                     }
                 }
