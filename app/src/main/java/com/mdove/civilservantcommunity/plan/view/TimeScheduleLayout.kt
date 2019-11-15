@@ -19,11 +19,8 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.customview.widget.ViewDragHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mdove.civilservantcommunity.R
-import com.mdove.civilservantcommunity.plan.model.SinglePlanBean
 import com.mdove.civilservantcommunity.plan.adapter.TimeScheduleAdapter
-import com.mdove.civilservantcommunity.plan.model.TimeScheduleBaseParams
-import com.mdove.civilservantcommunity.plan.model.TimeSchedulePlansParams
-import com.mdove.civilservantcommunity.plan.model.TimeSchedulePlansStatus
+import com.mdove.civilservantcommunity.plan.model.*
 import com.mdove.civilservantcommunity.plan.utils.TimeScheduleHelper
 import com.mdove.dependent.common.recyclerview.PaddingDecoration
 import com.mdove.dependent.common.utils.UIUtils
@@ -313,7 +310,9 @@ class TimeScheduleLayout @JvmOverloads constructor(context: Context, attrs: Attr
         }
         updatePlans(data.filter {
             (it as? TimeSchedulePlansParams)?.timeSchedule == null
-        })
+        }.takeIf {
+            it.isNotEmpty()
+        } ?: mutableListOf(TimeScheduleNoPlanParams()))
     }
 
     private fun initAddView(data: List<TimeSchedulePlansParams>) {

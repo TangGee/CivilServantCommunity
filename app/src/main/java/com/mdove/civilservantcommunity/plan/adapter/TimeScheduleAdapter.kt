@@ -10,12 +10,9 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.mdove.civilservantcommunity.R
-import com.mdove.civilservantcommunity.plan.model.TimeScheduleBaseParams
-import com.mdove.civilservantcommunity.plan.model.TimeScheduleEmptyParams
-import com.mdove.civilservantcommunity.plan.model.TimeSchedulePlansParams
-import com.mdove.civilservantcommunity.plan.model.TimeSchedulePlansStatus
 import com.mdove.civilservantcommunity.plan.view.OnTimeScheduleAdapterListener
 import android.text.SpannableString
+import com.mdove.civilservantcommunity.plan.model.*
 
 
 /**
@@ -54,12 +51,14 @@ class TimeScheduleAdapter(val listener: OnTimeScheduleAdapterListener) :
 
         const val TYPE_NORMAL = 1
         const val TYPE_EMPTY = 2
+        const val TYPE_NO_PLAN = 3
     }
 
     override fun getItemViewType(position: Int): Int {
         return when (getItem(position)) {
             is TimeSchedulePlansParams -> TYPE_NORMAL
             is TimeScheduleEmptyParams -> TYPE_EMPTY
+            is TimeScheduleNoPlanParams -> TYPE_NO_PLAN
             else -> TYPE_NORMAL
         }
     }
@@ -69,6 +68,14 @@ class TimeScheduleAdapter(val listener: OnTimeScheduleAdapterListener) :
             TimeScheduleEmptyViewHolder(
                 LayoutInflater.from(parent.context).inflate(
                     R.layout.item_time_schedule_plans_empty,
+                    parent,
+                    false
+                )
+            )
+        }else if (viewType == TYPE_NO_PLAN) {
+            TimeScheduleNoPlanViewHolder(
+                LayoutInflater.from(parent.context).inflate(
+                    R.layout.item_time_schedule_plans_no_plan,
                     parent,
                     false
                 )
@@ -120,6 +127,8 @@ class TimeScheduleAdapter(val listener: OnTimeScheduleAdapterListener) :
             }
         }
     }
+
+    inner class TimeScheduleNoPlanViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
     inner class TimeScheduleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val tvTitle = itemView.findViewById<TextView>(R.id.tv_title)

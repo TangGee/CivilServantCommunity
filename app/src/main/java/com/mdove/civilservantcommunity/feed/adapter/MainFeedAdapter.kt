@@ -423,10 +423,12 @@ class MainFeedAdapter(
             title.text = resp.params.beanSingle.content
             resp.params.timeSchedule?.let {
                 tvTimeSchedule.visibility = View.VISIBLE
+                lineTimeSchedule.visibility = View.VISIBLE
                 tvTimeSchedule.text =
                     "${TimeUtils.getDateChinese(it.first)} - ${TimeUtils.getHourM(it.second)}"
             } ?: also {
                 tvTimeSchedule.visibility = View.GONE
+                lineTimeSchedule.visibility = View.GONE
             }
             bindSelect(resp.params.statusSingle == SinglePlanStatus.SELECT)
         }

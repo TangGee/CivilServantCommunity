@@ -21,7 +21,12 @@ enum class TimeSchedulePlansStatus {
 
 open class TimeScheduleBaseParams(open var status: TimeSchedulePlansStatus = TimeSchedulePlansStatus.SHOW)
 
+// 初始没有任何计划
 data class TimeScheduleEmptyParams(override var status: TimeSchedulePlansStatus = TimeSchedulePlansStatus.SHOW) :
+    TimeScheduleBaseParams(status)
+
+//  计划已经都被拖入time块
+data class TimeScheduleNoPlanParams(override var status: TimeSchedulePlansStatus = TimeSchedulePlansStatus.SHOW) :
     TimeScheduleBaseParams(status)
 
 @Parcelize
