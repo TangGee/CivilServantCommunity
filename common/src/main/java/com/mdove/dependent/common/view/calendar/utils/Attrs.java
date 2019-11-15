@@ -68,6 +68,7 @@ public class Attrs {
 
     public int todaySelectContrastColor;//当天被选中的对比色，选中当前的农历，原定等颜色
     public int bgCalendarColor;//日历背景
+    public int historyPlanFlagColor;//历史计划在当日的标签颜色
 
     public float stretchTextSize; //拉伸显示的字体大小
     public int stretchTextColor; //拉伸显示的字体颜色

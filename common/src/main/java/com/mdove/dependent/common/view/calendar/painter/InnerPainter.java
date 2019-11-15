@@ -210,7 +210,7 @@ public class InnerPainter implements CalendarPainter {
     //绘制历史计划
     private void drawHistoryPlansPoint(Canvas canvas, RectF rectF) {
         mCirclePaint.setStyle(Paint.Style.FILL);
-        mCirclePaint.setColor(mAttrs.todaySelectContrastColor);
+        mCirclePaint.setColor(mAttrs.historyPlanFlagColor);
         canvas.drawCircle(rectF.centerX(), mAttrs.pointLocation == Attrs.DOWN ? (rectF.centerY() + mAttrs.pointDistance) : (rectF.centerY() - mAttrs.pointDistance), mAttrs.pointSize, mCirclePaint);
     }
 

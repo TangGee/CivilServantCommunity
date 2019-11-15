@@ -9,9 +9,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.mdove.civilservantcommunity.R
 import com.mdove.civilservantcommunity.base.fragment.BaseFragment
 import com.mdove.civilservantcommunity.plan.adapter.EditPlanModuleAdapter
+import com.mdove.civilservantcommunity.plan.adapter.HistoryPlansAdapter
 import com.mdove.civilservantcommunity.plan.viewmodel.HistoryPlansViewModel
 import com.mdove.civilservantcommunity.room.MainDb
+import com.mdove.dependent.common.recyclerview.PaddingDecoration
 import com.mdove.dependent.common.threadpool.MDoveBackgroundPool
+import com.mdove.dependent.common.utils.TimeUtils
 import com.mdove.dependent.common.utils.dismissLoading
 import com.mdove.dependent.common.utils.showLoading
 import com.mdove.dependent.common.view.calendar.painter.InnerPainter
@@ -48,13 +51,17 @@ class HistoryPlansFragment : BaseFragment() {
     }
 
     private fun initHistoryTime() {
-        recyclerView.adapter = EditPlanModuleAdapter()
+        recyclerView.adapter = HistoryPlansAdapter()
+        recyclerView.addItemDecoration(PaddingDecoration(8))
         recyclerView.layoutManager = LinearLayoutManager(context)
         historyPlansViewModel.selectRecordLiveData.observe(this, androidx.lifecycle.Observer {
             it?.let {
-                (recyclerView.adapter as? EditPlanModuleAdapter)?.submitList(it)
+                (recyclerView.adapter as? HistoryPlansAdapter)?.submitList(it)
             }
         })
+
+        //初始化进入时的计划
+        historyPlansViewModel.selectTimeLiveData.value = TimeUtils.getDateFromSQL()
 
         calendar.setOnCalendarChangedListener { _, _, _, localDate ->
             historyPlansViewModel.selectTimeLiveData.value = localDate.toString()

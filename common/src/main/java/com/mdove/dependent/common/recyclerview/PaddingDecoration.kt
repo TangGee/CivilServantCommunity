@@ -8,7 +8,7 @@ import com.mdove.dependent.common.utils.UIUtils
 /**
  * Created by MDove on 2019-11-03.
  */
-class PaddingDecoration(padding: Int, val isTop: Boolean = true) :
+class PaddingDecoration(padding: Int,private val isTop: Boolean = true) :
     RecyclerView.ItemDecoration() {
     private var mPadding = UIUtils.dip2Px(8).toInt()
 
