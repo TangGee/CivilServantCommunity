@@ -64,11 +64,11 @@ data class FeedTimeLineFeedTodayPlansResp(
 ) : BaseFeedResp(), Parcelable
 
 data class FeedTimeLineFeedTodayPlansTitleResp(
-    val name: String = "今日计划"
+    val name: String = "今日计划的时间轴头部"
 ) : BaseFeedResp()
 
 data class FeedTimeLineFeedTodayPlansTipsTitleResp(
-    val name: String = "添加今日计划"
+    val name: String = "新一天空计划提示"
 ) : BaseFeedResp()
 
 data class FeedTodayPlanResp(

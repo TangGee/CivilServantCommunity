@@ -91,7 +91,9 @@ class MainFeedViewModel : ViewModel() {
             addSource(editNewPlanToFeedLiveData) { insertResp ->
                 value = value?.let {
                     val tempData = mutableListOf<BaseFeedResp>()
-                    it.data?.forEach { resp ->
+                    it.data?.filter {
+                        !(it is FeedTimeLineFeedTodayPlansTipsTitleResp)
+                    }?.forEach { resp ->
                         if (resp is FeedTimeLineFeedTodayPlansTitleResp) {
                             tempData.add(resp)
                             tempData.add(insertResp)

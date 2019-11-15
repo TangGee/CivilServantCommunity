@@ -29,6 +29,7 @@ import com.mdove.dependent.common.utils.TimeUtils
 import com.mdove.dependent.common.utils.dismissLoading
 import com.mdove.dependent.common.utils.showLoading
 import kotlinx.android.synthetic.main.fragment_time_schedule.*
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -77,7 +78,7 @@ class TimeScheduleFragment : BaseFragment() {
             override fun onClickGotoCreatePlans() {
                 (activity as? ActivityLauncher)?.let {
                     launch {
-                        it.gotoPlanActivity(context!!).params?.let{
+                        it.gotoPlanActivity(context!!).params?.let {
                             viewModel.paramsLiveData.value = it.toTimeSchedulePlarms()
                         }
                     }
@@ -143,9 +144,13 @@ class TimeScheduleFragment : BaseFragment() {
     }
 
     private fun showGuide() {
-        if (!AppConfig.hasShowTimeScheduleGuide() && viewModel.hasPlans()) {
-            TimeScheduleGuideFragment()
-                .show(childFragmentManager, "")
+        launch {
+            delay(500)
+            if (!AppConfig.hasShowTimeScheduleGuide() && viewModel.hasPlans()) {
+                TimeScheduleGuideFragment()
+                    .show(childFragmentManager, "")
+                AppConfig.setTimeScheduleGuide(true)
+            }
         }
     }
 }
