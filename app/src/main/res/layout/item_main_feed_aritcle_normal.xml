@@ -159,5 +159,5 @@
         app:tlv_center_point_width="16dp"
         app:tlv_center_point_stroke_width="2dp"
         app:tlv_line_color="@color/grey_200"
-        app:tlv_line_width="4dp" />
+        app:tlv_line_width="3dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>
