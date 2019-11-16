@@ -3,18 +3,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingTop="18dp"
+    android:layout_marginTop="@dimen/main_feed_item_margin"
     >
 
     <TextView
         android:id="@+id/tv_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/main_feed_item_margin"
+        android:layout_marginLeft="8dp"
         android:gravity="left"
         android:text="今日要执行的计划"
         android:textColor="@color/grey_200"
-        android:textSize="20sp"
+        android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toRightOf="@+id/circle"
         app:layout_constraintRight_toRightOf="parent"
@@ -24,6 +24,7 @@
         android:layout_width="3dp"
         android:layout_height="0dp"
         android:background="@color/grey_200"
+        app:layout_constraintVertical_chainStyle="packed"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="@+id/circle"
         app:layout_constraintRight_toRightOf="@+id/circle"
@@ -32,15 +33,15 @@
 
     <com.mdove.dependent.common.view.timeline.StrokeCircle
         android:id="@+id/circle"
-        android:layout_width="16dp"
-        android:layout_height="16dp"
-        android:layout_marginLeft="@dimen/main_feed_item_margin"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginLeft="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@+id/tv_title"
         app:layout_constraintTop_toTopOf="parent"
         app:sc_circle_color="@color/red_300"
-        app:sc_circle_width="16dp"
+        app:sc_circle_width="20dp"
         app:sc_stroke_color="@color/white"
         app:sc_stroke_width="2dp" />
 

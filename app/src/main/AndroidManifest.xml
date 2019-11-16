@@ -24,6 +24,11 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".roles.SelectRolesActivity"
+            android:launchMode="singleTop"
+            android:theme="@style/MyAppTheme"
+            android:screenOrientation="portrait"/>
+
         <activity android:name=".feedback.FeedBackActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"/>

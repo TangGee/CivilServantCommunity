@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.mdove.dependent.common.view.roundcorner.RoundCornerConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_marginLeft="@dimen/main_feed_item_margin"
+    android:layout_marginTop="@dimen/main_feed_item_margin"
+    android:layout_marginRight="@dimen/main_feed_item_margin"
+    android:background="@color/white_trans90"
+    app:allRadius="12dp">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/ic"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:padding="2dp"
+        app:srcCompat="@drawable/vector_ic_dev"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="@dimen/main_feed_item_margin"
+        android:layout_marginLeft="@dimen/main_feed_item_margin"
+        android:tint="@color/white"
+        android:background="@drawable/bg_black_circle_24"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        app:layout_constraintTop_toTopOf="@+id/ic"
+        app:layout_constraintBottom_toBottomOf="@+id/ic"
+        app:layout_constraintLeft_toRightOf="@+id/ic"
+        android:text="开发者说"
+        android:textColor="@color/black"
+        android:layout_marginLeft="8dp"
+        android:textSize="16dp"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:layout_width="0dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ic"
+        android:textColor="@color/black_a8"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_margin="@dimen/main_feed_item_margin"
+        android:text="这款产品是我们几个同学在工作之余挤时间做的。最初是想为我们自己做一个用于长期规划职业生涯的工具，后来想想...做的做了，那就拿出来给大家一起用吧~因为时间有限，还望各位多多包涵~"
+        android:textSize="12dp"
+        android:lineHeight="16dp"
+        android:layout_height="wrap_content"/>
+
+</com.mdove.dependent.common.view.roundcorner.RoundCornerConstraintLayout>

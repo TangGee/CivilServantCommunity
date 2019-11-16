@@ -74,6 +74,9 @@ class MainFeedAdapter(
             if ((oldItem is FeedTimeLineFeedTodayPlansResp) && (newItem is FeedTimeLineFeedTodayPlansResp)) {
                 return true
             }
+            if ((oldItem is FeedDevTitleResp) && (newItem is FeedDevTitleResp)) {
+                return true
+            }
             if ((oldItem is FeedTimeLineFeedTitleResp) && (newItem is FeedTimeLineFeedTitleResp)) {
                 return true
             }
@@ -102,6 +105,8 @@ class MainFeedAdapter(
                 oldItem.count == newItem.count
             } else if ((oldItem is FeedTodayPlanResp) && (newItem is FeedTodayPlanResp)) {
                 oldItem.params == newItem.params
+            } else if ((oldItem is FeedDevTitleResp) && (newItem is FeedDevTitleResp)) {
+                return true
             } else if ((oldItem is FeedTimeLineFeedTodayPlansResp) && (newItem is FeedTimeLineFeedTodayPlansResp)) {
                 oldItem.params.statusSingle == newItem.params.statusSingle && oldItem.params.beanSingle.content == newItem.params.beanSingle.content
             } else {
@@ -138,6 +143,7 @@ class MainFeedAdapter(
         const val TYPE_FEED_NETWORK_ERROR = 13
         const val TYPE_FEED_TIME_LINE_FEED_TODAY_PLAN_BTN_TIPS = 14
         const val TYPE_FEED_EDIT_NEW_PLAN = 15
+        const val TYPE_FEED_DEV = 16
 
 
         const val CLICK_QUICK_BTN_PLAN = 101
@@ -179,6 +185,14 @@ class MainFeedAdapter(
                         false
                     )
                 )
+            TYPE_FEED_DEV ->
+                FeedDevTitleViewHolder(
+                    LayoutInflater.from(parent.context).inflate(
+                        R.layout.item_main_feed_dev_layout,
+                        parent,
+                        false
+                    )
+                )
             TYPE_FEED_NETWORK_ERROR ->
                 FeedNetworkErrorTitleViewHolder(
                     LayoutInflater.from(parent.context).inflate(
@@ -198,7 +212,7 @@ class MainFeedAdapter(
             TYPE_FEED_TIME_LINE_FEED_TITLE ->
                 FeedTimeLineFeedTitleViewHolder(
                     LayoutInflater.from(parent.context).inflate(
-                        R.layout.item_feed_main_time_line_title,
+                        R.layout.item_main_feed_title,
                         parent,
                         false
                     )
@@ -293,6 +307,7 @@ class MainFeedAdapter(
             is FeedTimeLineFeedTodayPlansResp -> TYPE_FEED_TIME_LINE_FEED_TODAY_PLAN
             is FeedTimeLineFeedTodayPlansTitleResp -> TYPE_FEED_TIME_LINE_FEED_TODAY_PLAN_TITLE
             is FeedTimeLineFeedTodayPlansTipsTitleResp -> TYPE_FEED_TIME_LINE_FEED_TODAY_PLAN_BTN_TIPS
+            is FeedDevTitleResp -> TYPE_FEED_DEV
             else -> TYPE_NORMAL
         }
     }
@@ -314,7 +329,7 @@ class MainFeedAdapter(
             if (holder is FeedTimeLineFeedTodayPlansViewHolder) {
                 holder.payloadBindContent(getItem(position) as FeedTimeLineFeedTodayPlansResp)
             }
-        }else if (payloads.contains(PAYLOAD_TIME_UPDATE)) {
+        } else if (payloads.contains(PAYLOAD_TIME_UPDATE)) {
             if (holder is FeedDateViewHolder) {
                 holder.payload()
             }
@@ -393,7 +408,7 @@ class MainFeedAdapter(
             tvWeek.text = TimeUtils.getDayOfWeek(time)
         }
 
-        fun payload(){
+        fun payload() {
             val time = System.currentTimeMillis()
             tvMonth.text = "${TimeUtils.getMonth(time)}月"
             tvDay.text = "${TimeUtils.getDay(time)}日"
@@ -482,6 +497,7 @@ class MainFeedAdapter(
         RecyclerView.ViewHolder(itemView)
 
     inner class FeedTimeLineFeedTitleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+    inner class FeedDevTitleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
     inner class FeedNetworkErrorTitleViewHolder(itemView: View) :
         RecyclerView.ViewHolder(itemView) {
         init {

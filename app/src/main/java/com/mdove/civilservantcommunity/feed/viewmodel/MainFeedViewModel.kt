@@ -43,6 +43,7 @@ class MainFeedViewModel : ViewModel() {
                     temp.add(FeedDateResp(System.currentTimeMillis()))
                     temp.add(FeedQuickEditNewPlanResp())
                     temp.add(FeedQuickBtnsResp())
+                    temp.add(FeedDevTitleResp())
                     withContext(MDoveBackgroundPool) {
                         temp.add(FeedTimeLineFeedTodayPlansTitleResp())
                         MainDb.db.todayPlansDao().getTodayPlansRecord(TimeUtils.getDateFromSQL())?.let { entity ->

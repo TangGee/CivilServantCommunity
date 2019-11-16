@@ -146,7 +146,7 @@
         android:id="@+id/time_line"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_marginStart="@dimen/main_feed_item_margin"
+        android:layout_marginStart="10dp"
         app:has_end_point="false"
         app:has_top_point="false"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -156,7 +156,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:tlv_center_point_color="@color/blue_500"
         app:tlv_center_point_stroke_color="@color/white"
-        app:tlv_center_point_width="16dp"
+        app:tlv_center_point_width="20dp"
         app:tlv_center_point_stroke_width="2dp"
         app:tlv_line_color="@color/grey_200"
         app:tlv_line_width="3dp" />
