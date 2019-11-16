@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/srl"
-    android:background="@color/grey_200"
     android:layout_width="match_parent"
+    android:background="@color/white"
     android:layout_height="match_parent">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -49,11 +49,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="top"
+                android:background="@color/white"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="160dp"
+                    android:layout_height="200dp"
                     android:background="@drawable/bg_me_page_top">
 
                     <androidx.cardview.widget.CardView
@@ -61,7 +62,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="100dp"
                         android:layout_marginLeft="12dp"
-                        android:layout_marginTop="45dp"
+                        android:layout_marginTop="85dp"
                         android:layout_marginRight="12dp"
                         app:cardCornerRadius="20dp"
                         app:cardElevation="2dp"
@@ -75,7 +76,7 @@
 
                             <TextView
                                 android:id="@+id/tv_title"
-                                android:layout_width="wrap_content"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="12dp"
                                 android:layout_marginTop="12dp"

@@ -15,7 +15,10 @@ import com.mdove.civilservantcommunity.detailfeed.bean.DetailFeedParams
 import com.mdove.civilservantcommunity.detailfeed.bean.DetailFeedResp
 import com.mdove.civilservantcommunity.detailfeed.viewmodel.DetailFeedViewModel
 import com.mdove.dependent.common.networkenhance.valueobj.Status
+import com.mdove.dependent.common.utils.dismissLoading
+import com.mdove.dependent.common.utils.showLoading
 import kotlinx.android.synthetic.main.fragment_detail_feed_new.*
+import kotlinx.android.synthetic.main.layout_detail_feed_head_view.*
 
 /**
  * Created by MDove on 2019-09-09.
@@ -61,11 +64,14 @@ class DetailFeedFragment : BaseFragment() {
                 Status.SUCCESS -> {
                     srl.isRefreshing = false
                     updateUI(it.data?.data)
+                    dismissLoading()
                 }
                 Status.LOADING -> {
+                    showLoading()
                     srl.isRefreshing = true
                 }
                 Status.ERROR -> {
+                    dismissLoading()
                     srl.isRefreshing = false
                 }
             }

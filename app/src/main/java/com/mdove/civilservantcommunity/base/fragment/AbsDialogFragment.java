@@ -9,10 +9,12 @@ import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 
+import com.mdove.civilservantcommunity.R;
 import com.mdove.civilservantcommunity.base.launcher.ActivityLauncher;
 import com.mdove.dependent.common.threadpool.MDovePoolKt;
 
@@ -65,6 +67,7 @@ public abstract class AbsDialogFragment extends SafeShowDialogFragment implement
     public void onCreate(@Nullable Bundle savedInstanceState) {
         mainContext = MDovePoolKt.FastMainScope();
         super.onCreate(savedInstanceState);
+        setStyle(DialogFragment.STYLE_NORMAL, R.style.AppTheme_Dialog_FullScreen);
         mLauncherHelper.onCreate(this);
     }
 

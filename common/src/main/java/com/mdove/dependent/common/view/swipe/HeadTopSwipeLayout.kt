@@ -12,9 +12,7 @@ import android.view.ViewConfiguration
 open class HeadTopSwipeLayout @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : SwipeRefreshLayoutCustom(context, attrs) {
 
     var mLastX: Float = 0.0f
-
     var mLastY: Float = 0.0f
-
 
     private var mTouchSlop: Int = 0
     private var mPrevX: Float = 0.toFloat()

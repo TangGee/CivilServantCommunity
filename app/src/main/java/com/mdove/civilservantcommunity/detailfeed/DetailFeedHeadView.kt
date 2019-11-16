@@ -37,11 +37,12 @@ class DetailFeedHeadView @JvmOverloads constructor(context: Context, attrs: Attr
             view_toolbar.visibility = View.GONE
             0.0f
         }
-        setTitleInfoAlpha(Math.abs(percent))
+        setTitleInfoAlpha(abs(percent))
     }
 
     private fun setTitleInfoAlpha(percent: Float) {
         view_toolbar.visibility = View.VISIBLE
-        view_toolbar.alpha = percent
+        tv_toolbar_title.alpha = percent
+        layout_nick.alpha = percent
     }
 }

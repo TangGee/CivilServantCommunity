@@ -87,21 +87,21 @@ class EditSinglePlanAdapter(private val listener: OnSinglePlanClickListener? = n
         when (viewType) {
             0 -> return SinglePlanViewHolder(
                 LayoutInflater.from(parent.context).inflate(
-                    R.layout.item_edit_single_plan,
+                    R.layout.item_edit_plan_single_plan,
                     parent,
                     false
                 )
             )
             2 -> return CustomSinglePlanViewHolder(
                 LayoutInflater.from(parent.context).inflate(
-                    R.layout.item_edit_custom_single_plan,
+                    R.layout.item_edit_plan_custom_single_plan,
                     parent,
                     false
                 )
             )
             else -> return SinglePlanCustomBtnViewHolder(
                 LayoutInflater.from(parent.context).inflate(
-                    R.layout.item_edit_custom_single_et_plan,
+                    R.layout.item_edit_plan_custom_single_et_plan,
                     parent,
                     false
                 )

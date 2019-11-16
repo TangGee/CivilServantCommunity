@@ -60,6 +60,7 @@ class EditPlanFragment : BaseFragment() {
                     showLoading()
                     val plans = mViewModelEdit.createFeedPlans()
                     if (plans.isNullOrEmpty()) {
+                        dismissLoading()
                         ToastUtil.toast("执行空计划，这个不太好吧~")
                         return@launch
                     }
