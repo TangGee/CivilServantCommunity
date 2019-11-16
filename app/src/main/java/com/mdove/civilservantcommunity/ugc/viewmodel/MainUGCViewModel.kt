@@ -21,6 +21,14 @@ class MainUGCViewModel : ViewModel() {
     private val repository = UGCRepository()
 
     private val postType = MutableLiveData<UGCPostNormalParams>()
+    private val getTopicFlag = MutableLiveData<String>()
+    private val allTopicsLiveData = Transformations.switchMap(getTopicFlag) {
+        repository.getAllTopics()
+    }
+    private val defaultTopics = mutableListOf(
+        UGCRlvTopicBean("求复习计划安排", "P001", true),
+        UGCRlvTopicBean("求上岸经验", "A001", false)
+    )
 
     val clickTopicLiveData = MutableLiveData<UGCRlvTopicBean>()
 
@@ -35,15 +43,25 @@ class MainUGCViewModel : ViewModel() {
             }
         }
 
-        value = mutableListOf(
-            UGCRlvTopicBean("padding", "0", 0, false),
-            UGCRlvTopicBean("求每日计划", "A000", 1, true),
-            UGCRlvTopicBean("求上岸经验分享", "B000", 1, false)
-        )
+        addSource(allTopicsLiveData) { res ->
+            value = value?.let {
+                res.data?.data?.mapIndexed { index, topics ->
+                    UGCRlvTopicBean(
+                        topics.typeName,
+                        topics.typeName,
+                        index == 0
+                    )
+                } ?: defaultTopics
+            } ?: defaultTopics
+        }
     }
 
     val postResp: LiveData<Resource<NormalResp<String>>> = Transformations.switchMap(postType) {
         repository.postShare(it)
+    }
+
+    fun getTopics() {
+        getTopicFlag.value = ""
     }
 
     fun post(userInfo: UserInfo, title: String, content: String) {

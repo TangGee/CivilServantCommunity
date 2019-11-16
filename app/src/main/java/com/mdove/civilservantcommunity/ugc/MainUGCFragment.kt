@@ -16,6 +16,7 @@ import com.mdove.civilservantcommunity.ugc.bean.UGCRlvTopicBean
 import com.mdove.civilservantcommunity.ugc.viewmodel.MainUGCViewModel
 import com.mdove.civilservantcommunity.view.MultiLineChooseLayout
 import com.mdove.dependent.common.networkenhance.valueobj.Status
+import com.mdove.dependent.common.recyclerview.PaddingDecoration
 import com.mdove.dependent.common.toast.ToastUtil
 import com.mdove.dependent.common.utils.dismissLoading
 import com.mdove.dependent.common.utils.showLoading
@@ -50,12 +51,7 @@ class MainUGCFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        view_toolbar.setTitle("求助大神")
-        view_toolbar.setRightBtnTitle("发送")
-        layout_identity.setList(viewModel.typeTitles)
-        rlv_topic.layoutManager =
-            LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        rlv_topic.adapter = adapter
+        initView()
         viewModel.topics.observe(this, Observer {
             adapter.submitList(it)
         })
@@ -66,6 +62,8 @@ class MainUGCFragment : BaseFragment() {
                 viewModel.onSelectType(text)
             }
         })
+
+        viewModel.getTopics()
 
         btn_ok.setOnClickListener {
             val title = et_title.text.toString()
@@ -103,5 +101,15 @@ class MainUGCFragment : BaseFragment() {
                 }
             }
         })
+    }
+
+    private fun initView() {
+        view_toolbar.setTitle("求助大神")
+        view_toolbar.setRightBtnTitle("发送")
+        layout_identity.setList(viewModel.typeTitles)
+        rlv_topic.layoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        rlv_topic.addItemDecoration(PaddingDecoration(12, false))
+        rlv_topic.adapter = adapter
     }
 }

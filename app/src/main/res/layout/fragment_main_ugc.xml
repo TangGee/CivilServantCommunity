@@ -32,6 +32,7 @@
         android:layout_height="wrap_content"
         android:background="@color/grey_200"
         android:paddingLeft="12dp"
+        android:visibility="gone"
         android:paddingRight="12dp"
         android:paddingBottom="12dp"
         app:layout_constraintLeft_toLeftOf="parent"

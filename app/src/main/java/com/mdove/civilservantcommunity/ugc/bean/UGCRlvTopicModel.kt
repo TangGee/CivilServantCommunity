@@ -11,6 +11,5 @@ import kotlinx.android.parcel.Parcelize
 data class UGCRlvTopicBean(
     @SerializedName("name") val name: String,
     @SerializedName("id") val id: String,
-    @SerializedName("type") val type: Int,
     @SerializedName("select_status") val selectStatus: Boolean
 ) : Parcelable

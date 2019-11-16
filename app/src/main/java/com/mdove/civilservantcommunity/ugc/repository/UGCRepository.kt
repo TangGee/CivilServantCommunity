@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.mdove.civilservantcommunity.ugc.bean.UGCPostNormalParams
 import com.mdove.civilservantcommunity.ugc.bean.UGCPostQuestionParams
+import com.mdove.civilservantcommunity.ugc.bean.UGCTopic
 import com.mdove.dependent.common.network.AppExecutorsImpl
 import com.mdove.dependent.common.network.NormalResp
 import com.mdove.dependent.common.networkenhance.NetworkBoundResource
@@ -39,6 +40,31 @@ class UGCRepository {
 
             override fun createCall(): LiveData<ApiResponse<NormalResp<String>>> {
                 return ugcModule.postShare(normalParams)
+            }
+        }.asLiveData()
+    }
+
+    fun getAllTopics(): LiveData<Resource<NormalResp<List<UGCTopic>>>>{
+        return object :
+            NetworkBoundResource<NormalResp<List<UGCTopic>>, NormalResp<List<UGCTopic>>>(
+                AppExecutorsImpl()
+            ) {
+            override fun saveCallResult(item: NormalResp<List<UGCTopic>>) {
+                ugcCache.cacheGetTopicsResp = item
+            }
+
+            override fun shouldFetch(data: NormalResp<List<UGCTopic>>?): Boolean {
+                return true
+            }
+
+            override fun loadFromDb(): LiveData<NormalResp<List<UGCTopic>>> {
+                return MutableLiveData<NormalResp<List<UGCTopic>>>().apply {
+                    value = ugcCache.cacheGetTopicsResp ?: NormalResp<List<UGCTopic>>()
+                }
+            }
+
+            override fun createCall(): LiveData<ApiResponse<NormalResp<List<UGCTopic>>>> {
+                return ugcModule.getAllTopics()
             }
         }.asLiveData()
     }
