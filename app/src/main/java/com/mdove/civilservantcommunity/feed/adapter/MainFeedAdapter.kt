@@ -59,6 +59,9 @@ class MainFeedAdapter(
             if ((oldItem is FeedTodayPlanResp) && (newItem is FeedTodayPlanResp)) {
                 return true
             }
+            if ((oldItem is FeedDateResp) && (newItem is FeedDateResp)) {
+                return true
+            }
             if ((oldItem is FeedPaddingStub) && (newItem is FeedPaddingStub)) {
                 return true
             }
@@ -91,6 +94,8 @@ class MainFeedAdapter(
                 return true
             } else if ((oldItem is FeedNetworkErrorTitleResp) && (newItem is FeedNetworkErrorTitleResp)) {
                 return true
+            } else if ((oldItem is FeedDateResp) && (newItem is FeedDateResp)) {
+                return (oldItem as? FeedDateResp)?.isSameDay == (newItem as? FeedDateResp)?.isSameDay
             } else if ((oldItem is FeedArticleResp) && (newItem is FeedArticleResp)) {
                 oldItem.article.title == newItem.article.title
             } else if ((oldItem is FeedPunchResp) && (newItem is FeedPunchResp)) {
@@ -99,7 +104,7 @@ class MainFeedAdapter(
                 oldItem.params == newItem.params
             } else if ((oldItem is FeedTimeLineFeedTodayPlansResp) && (newItem is FeedTimeLineFeedTodayPlansResp)) {
                 oldItem.params.statusSingle == newItem.params.statusSingle && oldItem.params.beanSingle.content == newItem.params.beanSingle.content
-            } else  {
+            } else {
                 true
             }
         }
@@ -110,7 +115,7 @@ class MainFeedAdapter(
                 (oldItem as? FeedTimeLineFeedTodayPlansResp)?.params?.statusSingle != (newItem as? FeedTimeLineFeedTodayPlansResp)?.params?.statusSingle && (newItem as? FeedTimeLineFeedTodayPlansResp)?.params?.statusSingle == SinglePlanStatus.SELECT -> PAYLOAD_TODAY_PLANS_STATUS
                 (oldItem as? FeedTimeLineFeedTodayPlansResp)?.params?.statusSingle != (newItem as? FeedTimeLineFeedTodayPlansResp)?.params?.statusSingle && (newItem as? FeedTimeLineFeedTodayPlansResp)?.params?.statusSingle == SinglePlanStatus.CONTENT_CHANGE -> PAYLOAD_TODAY_PLANS_EDIT
                 (oldItem as? FeedTimeLineFeedTodayPlansResp)?.params?.beanSingle?.content != (newItem as? FeedTimeLineFeedTodayPlansResp)?.params?.beanSingle?.content -> PAYLOAD_TODAY_PLANS_EDIT
-
+                (oldItem as? FeedDateResp)?.isSameDay == (newItem as? FeedDateResp)?.isSameDay -> PAYLOAD_TIME_UPDATE
                 else -> null
             }
         }
@@ -145,6 +150,7 @@ class MainFeedAdapter(
         val PAYLOAD_PUNCH = Any()
         val PAYLOAD_TODAY_PLANS_STATUS = Any()
         val PAYLOAD_TODAY_PLANS_EDIT = Any()
+        val PAYLOAD_TIME_UPDATE = Any()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -308,6 +314,10 @@ class MainFeedAdapter(
             if (holder is FeedTimeLineFeedTodayPlansViewHolder) {
                 holder.payloadBindContent(getItem(position) as FeedTimeLineFeedTodayPlansResp)
             }
+        }else if (payloads.contains(PAYLOAD_TIME_UPDATE)) {
+            if (holder is FeedDateViewHolder) {
+                holder.payload()
+            }
         } else {
             super.onBindViewHolder(holder, position, payloads)
         }
@@ -377,6 +387,13 @@ class MainFeedAdapter(
         private val tvWeek = itemView.findViewById<TextView>(R.id.tv_week)
 
         fun bind() {
+            val time = System.currentTimeMillis()
+            tvMonth.text = "${TimeUtils.getMonth(time)}月"
+            tvDay.text = "${TimeUtils.getDay(time)}日"
+            tvWeek.text = TimeUtils.getDayOfWeek(time)
+        }
+
+        fun payload(){
             val time = System.currentTimeMillis()
             tvMonth.text = "${TimeUtils.getMonth(time)}月"
             tvDay.text = "${TimeUtils.getDay(time)}日"
@@ -475,21 +492,26 @@ class MainFeedAdapter(
     inner class FeedQuickBtnsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         init {
             listener?.let { listener ->
-                itemView.findViewById<ConstraintLayout>(R.id.layout_btn_plan).setDebounceOnClickListener {
-                    listener.onClick(CLICK_QUICK_BTN_PLAN, null)
-                }
-                itemView.findViewById<ConstraintLayout>(R.id.layout_btn_punch).setDebounceOnClickListener {
-                    listener.onClick(CLICK_QUICK_BTN_PUNCH, null)
-                }
-                itemView.findViewById<ConstraintLayout>(R.id.layout_btn_ugc).setDebounceOnClickListener {
-                    listener.onClick(CLICK_QUICK_BTN_UGC, null)
-                }
-                itemView.findViewById<ConstraintLayout>(R.id.layout_btn_me).setDebounceOnClickListener {
-                    listener.onClick(CLICK_QUICK_BTN_ME, null)
-                }
-                itemView.findViewById<ConstraintLayout>(R.id.layout_btn_history).setDebounceOnClickListener {
-                    listener.onClick(CLICK_QUICK_BTN_HISTORY_PLANS, null)
-                }
+                itemView.findViewById<ConstraintLayout>(R.id.layout_btn_plan)
+                    .setDebounceOnClickListener {
+                        listener.onClick(CLICK_QUICK_BTN_PLAN, null)
+                    }
+                itemView.findViewById<ConstraintLayout>(R.id.layout_btn_punch)
+                    .setDebounceOnClickListener {
+                        listener.onClick(CLICK_QUICK_BTN_PUNCH, null)
+                    }
+                itemView.findViewById<ConstraintLayout>(R.id.layout_btn_ugc)
+                    .setDebounceOnClickListener {
+                        listener.onClick(CLICK_QUICK_BTN_UGC, null)
+                    }
+                itemView.findViewById<ConstraintLayout>(R.id.layout_btn_me)
+                    .setDebounceOnClickListener {
+                        listener.onClick(CLICK_QUICK_BTN_ME, null)
+                    }
+                itemView.findViewById<ConstraintLayout>(R.id.layout_btn_history)
+                    .setDebounceOnClickListener {
+                        listener.onClick(CLICK_QUICK_BTN_HISTORY_PLANS, null)
+                    }
                 itemView.findViewById<ConstraintLayout>(R.id.layout_btn_time_schedule)
                     .setDebounceOnClickListener {
                         listener.onClick(CLICK_QUICK_BTN_TIME_SCHEDULE, null)

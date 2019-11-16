@@ -57,6 +57,7 @@ class EditPlanModuleAdapter(
             getItem(position).moduleType == PlanModuleType.BTN_TIME_SCHEDULE -> 3
             getItem(position).moduleType == PlanModuleType.EDIT_PLANS_TIPS -> 4
             getItem(position).moduleType == PlanModuleType.CREATE_PLANS_TIPS -> 5
+            getItem(position).moduleType == PlanModuleType.SCORE -> 6
             else -> 0
         }
     }
@@ -66,13 +67,6 @@ class EditPlanModuleAdapter(
             0 -> PlanModuleViewHolder(
                 LayoutInflater.from(parent.context).inflate(
                     R.layout.item_edit_plan_module,
-                    parent,
-                    false
-                )
-            )
-            2 -> PaddingViewHolder(
-                LayoutInflater.from(parent.context).inflate(
-                    R.layout.item_rlv_padding_heght,
                     parent,
                     false
                 )
@@ -94,6 +88,13 @@ class EditPlanModuleAdapter(
             5 -> CreatePlansTipsViewHolder(
                 LayoutInflater.from(parent.context).inflate(
                     R.layout.item_plan_module_create_plans_tips,
+                    parent,
+                    false
+                )
+            )
+            6 -> ScoreViewHolder(
+                LayoutInflater.from(parent.context).inflate(
+                    R.layout.item_edit_plan_score,
                     parent,
                     false
                 )
@@ -147,7 +148,7 @@ class EditPlanModuleAdapter(
         }
     }
 
-    inner class PaddingViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+    inner class ScoreViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
     inner class CreatePlansTipsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
     inner class EditPlansTipsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 

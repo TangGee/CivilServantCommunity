@@ -40,7 +40,7 @@ class MainFeedViewModel : ViewModel() {
             addSource(feedData) {
                 val temp = mutableListOf<BaseFeedResp>()
                 CoroutineScope(FastMain).launch {
-                    temp.add(FeedDateResp())
+                    temp.add(FeedDateResp(System.currentTimeMillis()))
                     temp.add(FeedQuickEditNewPlanResp())
                     temp.add(FeedQuickBtnsResp())
                     withContext(MDoveBackgroundPool) {

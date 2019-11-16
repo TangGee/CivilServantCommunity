@@ -22,10 +22,10 @@ class EditPlanViewModel : ViewModel() {
             // 首个ViewHolder占位
             new.add(
                 PlanModuleBean(
-                    "padding",
-                    "padding",
+                    "score",
+                    "score",
                     mutableListOf(),
-                    PlanModuleType.PADDING,
+                    PlanModuleType.SCORE,
                     PlanModuleStatus.NORMAL
                 )
             )

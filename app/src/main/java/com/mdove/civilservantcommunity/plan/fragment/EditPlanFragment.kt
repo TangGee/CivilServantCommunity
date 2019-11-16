@@ -31,7 +31,7 @@ import com.mdove.dependent.common.toast.ToastUtil
 import com.mdove.dependent.common.utils.TimeUtils
 import com.mdove.dependent.common.utils.dismissLoading
 import com.mdove.dependent.common.utils.showLoading
-import kotlinx.android.synthetic.main.fragment_plan.*
+import kotlinx.android.synthetic.main.fragment_edit_plan.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -109,7 +109,7 @@ class EditPlanFragment : BaseFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_plan, container, false)
+        return inflater.inflate(R.layout.fragment_edit_plan, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

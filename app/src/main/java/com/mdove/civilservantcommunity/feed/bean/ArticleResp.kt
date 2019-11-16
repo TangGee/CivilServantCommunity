@@ -6,6 +6,7 @@ import com.mdove.civilservantcommunity.base.bean.ArticleType
 import com.mdove.civilservantcommunity.base.bean.UserInfo
 import com.mdove.civilservantcommunity.plan.model.PlanToFeedParams
 import com.mdove.civilservantcommunity.plan.model.SinglePlanBeanWrapper
+import com.mdove.dependent.common.utils.TimeUtils
 import kotlinx.android.parcel.Parcelize
 
 /**
@@ -30,8 +31,11 @@ data class FeedPlanResp(
 ) : BaseFeedResp()
 
 data class FeedDateResp(
-    val name: String = "今日计划"
-) : BaseFeedResp()
+    val time: Long
+) : BaseFeedResp() {
+    val isSameDay
+        get() = TimeUtils.isSameDay(time, System.currentTimeMillis())
+}
 
 data class FeedQuickBtnsResp(
     val name: String = "今日计划"
@@ -85,8 +89,7 @@ data class FeedTodayPlansCheckParams(
 data class FeedArticleResp(
     val article: ArticleResp,
     var hideEndLine: Boolean = false
-) :
-    BaseFeedResp(), Parcelable
+) : BaseFeedResp(), Parcelable
 
 sealed class BaseFeedResp
 

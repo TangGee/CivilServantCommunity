@@ -246,6 +246,7 @@ class EditSinglePlanAdapter(private val listener: OnSinglePlanClickListener? = n
         }
 
         private fun updateStatus(wrapper: SinglePlanBeanWrapper) {
+            etContent.clearFocus()
             if (wrapper.statusSingle == SinglePlanStatus.DELETE) {
                 btnDelete.setImageResource(R.drawable.vector_bg_delete_restore)
                 etContent.paint.flags = Paint.STRIKE_THRU_TEXT_FLAG or Paint.ANTI_ALIAS_FLAG
