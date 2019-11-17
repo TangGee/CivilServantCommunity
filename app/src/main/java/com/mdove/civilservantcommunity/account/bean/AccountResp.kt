@@ -3,7 +3,7 @@ package com.mdove.civilservantcommunity.account.bean
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import com.mdove.civilservantcommunity.base.bean.UserInfo
-import com.mdove.civilservantcommunity.feed.bean.ArticleResp
+import com.mdove.civilservantcommunity.feed.bean.FeedArticleFeedResp
 import kotlinx.android.parcel.Parcelize
 
 /**
@@ -21,7 +21,7 @@ data class MePageDataResp(
     @SerializedName("uid") val uid: String,
     @SerializedName("user_name") val userName: String,
     @SerializedName("phone") val phone: String,
-    @SerializedName("article_list") val articleList: List<ArticleResp>? = null,
+    @SerializedName("article_list") val feedArticleList: List<FeedArticleFeedResp>? = null,
     @SerializedName("user_type") val userType: String
 ) : Parcelable
 
@@ -30,11 +30,11 @@ data class UserInfoParams(
     @SerializedName("uid") val uid: String,
     @SerializedName("user_name") val userName: String,
     @SerializedName("phone") val phone: String,
-    @SerializedName("article_list") val articleList: List<ArticleResp>? = null,
+    @SerializedName("article_list") val feedArticleList: List<FeedArticleFeedResp>? = null,
     @SerializedName("user_type") val userType: String
 ) : Parcelable
 
 fun MePageDataResp.toUserInfoParams(): UserInfoParams {
-    return UserInfoParams(this.uid, this.userName, this.phone, this.articleList, this.userType)
+    return UserInfoParams(this.uid, this.userName, this.phone, this.feedArticleList, this.userType)
 }
 

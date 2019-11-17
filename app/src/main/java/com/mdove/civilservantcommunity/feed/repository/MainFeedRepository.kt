@@ -2,7 +2,8 @@ package com.mdove.civilservantcommunity.feed.repository
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.mdove.civilservantcommunity.feed.bean.ArticleResp
+import com.mdove.civilservantcommunity.feed.bean.FeedReqParams
+import com.mdove.civilservantcommunity.feed.bean.MainFeedResp
 import com.mdove.dependent.common.network.AppExecutorsImpl
 import com.mdove.dependent.common.network.NormalResp
 import com.mdove.dependent.common.networkenhance.NetworkBoundResource
@@ -15,28 +16,28 @@ import com.mdove.dependent.common.networkenhance.valueobj.Resource
 class MainFeedRepository {
     private val mainFeedModule = MainFeedModule()
     private val mainFeedCacheModule = MainFeedCacheModule()
-    fun reqFeed(): LiveData<Resource<NormalResp<List<ArticleResp>>>> {
+    fun reqFeed(feedParams: FeedReqParams): LiveData<Resource<NormalResp<List<MainFeedResp>>>> {
         return object :
-            NetworkBoundResource<NormalResp<List<ArticleResp>>, NormalResp<List<ArticleResp>>>(
+            NetworkBoundResource<NormalResp<List<MainFeedResp>>, NormalResp<List<MainFeedResp>>>(
                 AppExecutorsImpl()
             ) {
-            override fun saveCallResult(item: NormalResp<List<ArticleResp>>) {
+            override fun saveCallResult(item: NormalResp<List<MainFeedResp>>) {
                 mainFeedCacheModule.mCacheFeedResp = item
             }
 
-            override fun shouldFetch(data: NormalResp<List<ArticleResp>>?): Boolean {
+            override fun shouldFetch(data: NormalResp<List<MainFeedResp>>?): Boolean {
                 return true
             }
 
-            override fun loadFromDb(): LiveData<NormalResp<List<ArticleResp>>> {
+            override fun loadFromDb(): LiveData<NormalResp<List<MainFeedResp>>> {
                 // 暂不需要
-                return MutableLiveData<NormalResp<List<ArticleResp>>>().apply {
-                    value = mainFeedCacheModule.mCacheFeedResp ?: NormalResp<List<ArticleResp>>()
+                return MutableLiveData<NormalResp<List<MainFeedResp>>>().apply {
+                    value = mainFeedCacheModule.mCacheFeedResp ?: NormalResp<List<MainFeedResp>>()
                 }
             }
 
-            override fun createCall(): LiveData<ApiResponse<NormalResp<List<ArticleResp>>>> {
-                return mainFeedModule.reqFeed()
+            override fun createCall(): LiveData<ApiResponse<NormalResp<List<MainFeedResp>>>> {
+                return mainFeedModule.reqFeed(feedParams)
             }
         }.asLiveData()
     }

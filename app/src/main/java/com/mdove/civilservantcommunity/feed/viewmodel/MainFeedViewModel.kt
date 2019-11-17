@@ -22,9 +22,9 @@ class MainFeedViewModel : ViewModel() {
     private val loadType = MutableLiveData<LoadType>()
     private val repository = MainFeedRepository()
 
-    private val feedData: LiveData<Resource<NormalResp<List<ArticleResp>>>> =
+    private val feedData: LiveData<Resource<NormalResp<List<MainFeedResp>>>> =
         Transformations.switchMap(loadType) {
-            repository.reqFeed()
+            repository.reqFeed(FeedReqParams(1, 10))
         }
 
 
@@ -74,9 +74,9 @@ class MainFeedViewModel : ViewModel() {
                         temp.add(FeedNetworkErrorTitleResp())
                     } else {
                         temp.addAll(it.data?.data?.map { article ->
-                            FeedArticleResp(article)
-                        }.apply {
-                            (this?.last())?.hideEndLine = true
+                            article.toMainFeedResp()
+                        }?.filterNotNull()?.apply {
+                            (this.last()).hideEndLine = true
                         } ?: mutableListOf<BaseFeedResp>())
                     }
                     temp.add(FeedPaddingStub())

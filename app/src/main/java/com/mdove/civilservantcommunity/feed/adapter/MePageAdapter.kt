@@ -8,26 +8,26 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.mdove.civilservantcommunity.R
-import com.mdove.civilservantcommunity.feed.bean.ArticleResp
+import com.mdove.civilservantcommunity.feed.bean.FeedArticleFeedResp
 
 /**
  * Created by MDove on 2019-09-11.
  */
 class MePageAdapter(val listener: OnMePageClickListener? = null) :
-    ListAdapter<ArticleResp, RecyclerView.ViewHolder>(object :
-    DiffUtil.ItemCallback<ArticleResp>() {
+    ListAdapter<FeedArticleFeedResp, RecyclerView.ViewHolder>(object :
+    DiffUtil.ItemCallback<FeedArticleFeedResp>() {
     override fun areItemsTheSame(
-        oldItem: ArticleResp,
-        newItem: ArticleResp
+        oldItem: FeedArticleFeedResp,
+        newItem: FeedArticleFeedResp
     ): Boolean {
-        return oldItem.aid == newItem.aid
+        return oldItem.article.aid == newItem.article.aid
     }
 
     override fun areContentsTheSame(
-        oldItem: ArticleResp,
-        newItem: ArticleResp
+        oldItem: FeedArticleFeedResp,
+        newItem: FeedArticleFeedResp
     ): Boolean {
-        return oldItem.title == newItem.title
+        return oldItem.article.title == newItem.article.title
     }
 }) {
     private val TYPE_TOP_ONE = 1
@@ -78,58 +78,58 @@ class MePageAdapter(val listener: OnMePageClickListener? = null) :
     }
 
     inner class TopOneViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(data: ArticleResp) {
+        fun bind(data: FeedArticleFeedResp) {
             listener?.let { listener ->
                 itemView.setOnClickListener {
                     listener.onClick(data)
                 }
             }
-            itemView.findViewById<TextView>(R.id.tv_title).text = data.title
-            itemView.findViewById<TextView>(R.id.tv_name).text = data.maketime
-            itemView.findViewById<TextView>(R.id.tv_content).text = data.content
+            itemView.findViewById<TextView>(R.id.tv_title).text = data.article.title
+            itemView.findViewById<TextView>(R.id.tv_name).text = data.article.makeTime
+            itemView.findViewById<TextView>(R.id.tv_content).text = data.article.content
         }
     }
 
     inner class FeedMeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(data: ArticleResp) {
+        fun bind(data: FeedArticleFeedResp) {
             listener?.let { listener ->
                 itemView.setOnClickListener {
                     listener.onClick(data)
                 }
             }
-            itemView.findViewById<TextView>(R.id.tv_title).text = data.title
-            itemView.findViewById<TextView>(R.id.tv_name).text = data.maketime
-            itemView.findViewById<TextView>(R.id.tv_content).text = data.content
+            itemView.findViewById<TextView>(R.id.tv_title).text = data.article.title
+            itemView.findViewById<TextView>(R.id.tv_name).text = data.article.makeTime
+            itemView.findViewById<TextView>(R.id.tv_content).text = data.article.content
         }
     }
 
     inner class TopTwoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(data: ArticleResp) {
+        fun bind(data: FeedArticleFeedResp) {
             listener?.let { listener ->
                 itemView.setOnClickListener {
                     listener.onClick(data)
                 }
             }
-            itemView.findViewById<TextView>(R.id.tv_title).text = data.title
-            itemView.findViewById<TextView>(R.id.tv_name).text = data.maketime
-            itemView.findViewById<TextView>(R.id.tv_content).text = data.content
+            itemView.findViewById<TextView>(R.id.tv_title).text = data.article.title
+            itemView.findViewById<TextView>(R.id.tv_name).text = data.article.makeTime
+            itemView.findViewById<TextView>(R.id.tv_content).text = data.article.content
         }
     }
 
     inner class NormalViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(data: ArticleResp) {
+        fun bind(data: FeedArticleFeedResp) {
             listener?.let { listener ->
                 itemView.setOnClickListener {
                     listener.onClick(data)
                 }
             }
-            itemView.findViewById<TextView>(R.id.tv_title).text = data.title
-            itemView.findViewById<TextView>(R.id.tv_name).text = data.maketime
-            itemView.findViewById<TextView>(R.id.tv_content).text = data.content
+            itemView.findViewById<TextView>(R.id.tv_title).text = data.article.title
+            itemView.findViewById<TextView>(R.id.tv_name).text = data.article.makeTime
+            itemView.findViewById<TextView>(R.id.tv_content).text = data.article.content
         }
     }
 }
 
 interface OnMePageClickListener{
-    fun onClick(resp: ArticleResp)
+    fun onClick(respFeed: FeedArticleFeedResp)
 }

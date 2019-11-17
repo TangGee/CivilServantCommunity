@@ -3,6 +3,9 @@ package com.mdove.civilservantcommunity.feed.adapter
 import android.graphics.Paint.ANTI_ALIAS_FLAG
 import android.graphics.Paint.STRIKE_THRU_TEXT_FLAG
 import android.text.Html
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -38,7 +41,10 @@ class MainFeedAdapter(
             oldItem: BaseFeedResp,
             newItem: BaseFeedResp
         ): Boolean {
-            if ((oldItem is FeedArticleResp) && (newItem is FeedArticleResp)) {
+            if ((oldItem is FeedArticleFeedResp) && (newItem is FeedArticleFeedResp)) {
+                return true
+            }
+            if ((oldItem is FeedQuestionFeedResp) && (newItem is FeedQuestionFeedResp)) {
                 return true
             }
             if ((oldItem is FeedTimeLineFeedTodayPlansTitleResp) && (newItem is FeedTimeLineFeedTodayPlansTitleResp)) {
@@ -95,11 +101,13 @@ class MainFeedAdapter(
                 return true
             } else if ((oldItem is FeedQuickEditNewPlanResp) && (newItem is FeedQuickEditNewPlanResp)) {
                 return true
+            } else if ((oldItem is FeedQuestionFeedResp) && (newItem is FeedQuestionFeedResp)) {
+                return oldItem.question.qid == newItem.question.qid
             } else if ((oldItem is FeedNetworkErrorTitleResp) && (newItem is FeedNetworkErrorTitleResp)) {
                 return true
             } else if ((oldItem is FeedDateResp) && (newItem is FeedDateResp)) {
                 return (oldItem as? FeedDateResp)?.isSameDay == (newItem as? FeedDateResp)?.isSameDay
-            } else if ((oldItem is FeedArticleResp) && (newItem is FeedArticleResp)) {
+            } else if ((oldItem is FeedArticleFeedResp) && (newItem is FeedArticleFeedResp)) {
                 oldItem.article.title == newItem.article.title
             } else if ((oldItem is FeedPunchResp) && (newItem is FeedPunchResp)) {
                 oldItem.count == newItem.count
@@ -129,7 +137,7 @@ class MainFeedAdapter(
     companion object {
         const val TYPE_TOP_ONE = 1
         const val TYPE_TOP_TWO = 2
-        const val TYPE_NORMAL = 3
+        const val TYPE_FEED_NORMAL_CARD = 3
         const val TYPE_FEED_PUNCH = 0
         const val TYPE_FEED_PLAN = 5
         const val TYPE_FEED_UGC = 4
@@ -144,6 +152,7 @@ class MainFeedAdapter(
         const val TYPE_FEED_TIME_LINE_FEED_TODAY_PLAN_BTN_TIPS = 14
         const val TYPE_FEED_EDIT_NEW_PLAN = 15
         const val TYPE_FEED_DEV = 16
+        const val TYPE_FEED_QUESTION_CARD = 17
 
 
         const val CLICK_QUICK_BTN_PLAN = 101
@@ -181,6 +190,14 @@ class MainFeedAdapter(
                 FeedEditNewPlanViewHolder(
                     LayoutInflater.from(parent.context).inflate(
                         R.layout.item_main_feed_edit_new_plan,
+                        parent,
+                        false
+                    )
+                )
+            TYPE_FEED_QUESTION_CARD ->
+                FeedQuestionViewHolder(
+                    LayoutInflater.from(parent.context).inflate(
+                        R.layout.item_main_feed_question_card,
                         parent,
                         false
                     )
@@ -265,22 +282,6 @@ class MainFeedAdapter(
                         false
                     )
                 )
-            TYPE_TOP_ONE ->
-                NewStyleViewHolder(
-                    LayoutInflater.from(parent.context).inflate(
-                        R.layout.item_main_feed_aritcle_normal,
-                        parent,
-                        false
-                    )
-                )
-            TYPE_TOP_TWO ->
-                NewStyleViewHolder(
-                    LayoutInflater.from(parent.context).inflate(
-                        R.layout.item_main_feed_aritcle_normal,
-                        parent,
-                        false
-                    )
-                )
             else ->
                 NewStyleViewHolder(
                     LayoutInflater.from(parent.context).inflate(
@@ -308,7 +309,9 @@ class MainFeedAdapter(
             is FeedTimeLineFeedTodayPlansTitleResp -> TYPE_FEED_TIME_LINE_FEED_TODAY_PLAN_TITLE
             is FeedTimeLineFeedTodayPlansTipsTitleResp -> TYPE_FEED_TIME_LINE_FEED_TODAY_PLAN_BTN_TIPS
             is FeedDevTitleResp -> TYPE_FEED_DEV
-            else -> TYPE_NORMAL
+            is FeedQuestionFeedResp -> TYPE_FEED_QUESTION_CARD
+            is FeedArticleFeedResp -> TYPE_FEED_NORMAL_CARD
+            else -> TYPE_FEED_NORMAL_CARD
         }
     }
 
@@ -341,10 +344,15 @@ class MainFeedAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
             is FeedPunchViewHolder -> holder.bind((getItem(position) as FeedPunchResp))
-            is NormalViewHolder -> holder.bind((getItem(position) as FeedArticleResp).article)
+            is NormalViewHolder -> holder.bind((getItem(position) as FeedArticleFeedResp))
             is FeedDateViewHolder -> holder.bind()
             is NewStyleViewHolder -> {
-                (getItem(position) as? FeedArticleResp)?.let {
+                (getItem(position) as? FeedArticleFeedResp)?.let {
+                    holder.bind(it)
+                }
+            }
+            is FeedQuestionViewHolder -> {
+                (getItem(position) as? FeedQuestionFeedResp)?.let {
                     holder.bind(it)
                 }
             }
@@ -546,6 +554,35 @@ class MainFeedAdapter(
         }
     }
 
+    inner class FeedQuestionViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        init {
+            listener?.let { listener ->
+                itemView.setDebounceOnClickListener {
+                    listener.onClick(TYPE_FEED_PLAN, null)
+                }
+            }
+        }
+
+        fun bind(question: FeedQuestionFeedResp) {
+            itemView.findViewById<TextView>(R.id.tv_title).text = question.question.title
+            itemView.findViewById<TextView>(R.id.tv_name).text = question.question.makeTime
+            itemView.findViewById<TextView>(R.id.tv_content).text = question.question.content
+            val answer = question.answer.let {
+                val username = it.userInfo?.username ?: "匿名用户"
+                val str = "$username：${it.content ?: ""}"
+                SpannableString(str).apply {
+                    setSpan(
+                        ForegroundColorSpan(ContextCompat.getColor(itemView.context,R.color.amber_500)),
+                        0,
+                        username.length,
+                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                    )
+                }.toString()
+            }
+            itemView.findViewById<TextView>(R.id.tv_answer).text = answer
+        }
+    }
+
     inner class FeedEditNewPlanViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val et = itemView.findViewById<EditText>(R.id.et_new_plan)
         private val btnSend = itemView.findViewById<AppCompatImageView>(R.id.btn_send_new_plan)
@@ -568,15 +605,15 @@ class MainFeedAdapter(
 
     inner class NewStyleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val timeLine = itemView.findViewById<TimeLineView>(R.id.time_line)
-        fun bind(data: FeedArticleResp) {
+        fun bind(data: FeedArticleFeedResp) {
             reset()
             listener?.let { listener ->
                 itemView.setDebounceOnClickListener {
-                    listener.onClick(TYPE_TOP_ONE, data.article)
+                    listener.onClick(TYPE_TOP_ONE, data)
                 }
             }
             itemView.findViewById<TextView>(R.id.tv_title).text = data.article.title
-            itemView.findViewById<TextView>(R.id.tv_name).text = data.article.maketime?.let {
+            itemView.findViewById<TextView>(R.id.tv_name).text = data.article.makeTime?.let {
                 TimeUtils.getDateChinese(java.lang.Long.getLong(it))
             } ?: ""
             itemView.findViewById<TextView>(R.id.tv_content).text = data.article.content
@@ -591,15 +628,15 @@ class MainFeedAdapter(
     }
 
     inner class NormalViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(data: ArticleResp) {
+        fun bind(data: FeedArticleFeedResp) {
             listener?.let { listener ->
                 itemView.setDebounceOnClickListener {
-                    listener.onClick(TYPE_NORMAL, data)
+                    listener.onClick(TYPE_FEED_NORMAL_CARD, data)
                 }
             }
-            itemView.findViewById<TextView>(R.id.tv_title).text = data.title
-            itemView.findViewById<TextView>(R.id.tv_name).text = data.maketime
-            itemView.findViewById<TextView>(R.id.tv_content).text = data.content
+            itemView.findViewById<TextView>(R.id.tv_title).text = data.article.title
+            itemView.findViewById<TextView>(R.id.tv_name).text = data.article.makeTime
+            itemView.findViewById<TextView>(R.id.tv_content).text = data.article.content
         }
     }
 }
@@ -609,7 +646,7 @@ interface OnNormalFeedListener {
 }
 
 interface OnMainFeedClickListener {
-    fun onClick(type: Int, resp: ArticleResp?)
+    fun onClick(type: Int, respFeed: FeedArticleFeedResp?)
 }
 
 interface OnMainFeedTodayPlanCheckListener {

@@ -22,7 +22,7 @@ import com.mdove.civilservantcommunity.detailfeed.DetailFeedActivity
 import com.mdove.civilservantcommunity.detailfeed.bean.DetailFeedParams
 import com.mdove.civilservantcommunity.feed.adapter.MePageAdapter
 import com.mdove.civilservantcommunity.feed.adapter.OnMePageClickListener
-import com.mdove.civilservantcommunity.feed.bean.ArticleResp
+import com.mdove.civilservantcommunity.feed.bean.FeedArticleFeedResp
 import com.mdove.civilservantcommunity.feed.viewmodel.MePageViewModel
 import com.mdove.civilservantcommunity.ugc.MainUGCActivity
 import com.mdove.dependent.common.networkenhance.valueobj.Status
@@ -57,9 +57,9 @@ class MePageFragment : BaseFragment() {
         btn_update.paint.flags = Paint.UNDERLINE_TEXT_FLAG
         view_toolbar.setTitle("我的主页")
         mAdapter = MePageAdapter(object : OnMePageClickListener {
-            override fun onClick(resp: ArticleResp) {
-                if (context != null && resp.aid != null) {
-                    DetailFeedActivity.gotoFeedDetail(context!!, DetailFeedParams(resp.aid))
+            override fun onClick(respFeed: FeedArticleFeedResp) {
+                if (context != null && respFeed.article.aid != null) {
+                    DetailFeedActivity.gotoFeedDetail(context!!, DetailFeedParams(respFeed.article.aid))
                 }
             }
         })
@@ -135,10 +135,10 @@ class MePageFragment : BaseFragment() {
         AppConfig.setUserInfo(UserInfo(params.uid, params.userName))
         tv_name.text = params.userName
         tv_type.text = IdentitysHelper.getIdentity(params.userType)
-        if (!params.articleList.isNullOrEmpty()) {
+        if (!params.feedArticleList.isNullOrEmpty()) {
             layout_empty.visibility = View.GONE
             layout_edit.visibility = View.VISIBLE
-            mAdapter.submitList(params.articleList)
+            mAdapter.submitList(params.feedArticleList)
         } else {
             layout_edit.visibility = View.GONE
             layout_empty.visibility = View.VISIBLE

@@ -12,18 +12,8 @@ import kotlinx.android.parcel.Parcelize
 /**
  * Created by MDove on 2019-09-06.
  */
-@Parcelize
-data class ArticleResp(
-    @SerializedName("aid") val aid: String? = "",
-    @SerializedName("user_info") val userInfo: UserInfo? = null,
-    @SerializedName("title") val title: String? = "",
-    @SerializedName("content") val content: String? = "",
-    @SerializedName("make_time") val maketime: String? = "",
-    @SerializedName("typeSingle") val type: List<ArticleType>? = null,
-    @SerializedName("list_style") val listStyle: Int? = 0
-) : Parcelable
-
 data class FeedPunchResp(val count: Int = 0, var hasPunch: Boolean = false) : BaseFeedResp()
+
 data class FeedUGCResp(val name: String = "打卡") : BaseFeedResp()
 data class FeedDevTitleResp(val name: String = "开发者说") : BaseFeedResp()
 
@@ -87,10 +77,15 @@ data class FeedTodayPlansCheckParams(
 )
 
 @Parcelize
-data class FeedArticleResp(
-    val article: ArticleResp,
-    var hideEndLine: Boolean = false
+data class FeedArticleFeedResp(
+    val article: MainFeedArticleResp
 ) : BaseFeedResp(), Parcelable
 
-sealed class BaseFeedResp
+@Parcelize
+data class FeedQuestionFeedResp(
+    val question: MainFeedQuestionResp,
+    val answer: MainFeedAnswerResp
+) : BaseFeedResp(), Parcelable
+
+abstract class BaseFeedResp(var hideEndLine: Boolean = false)
 

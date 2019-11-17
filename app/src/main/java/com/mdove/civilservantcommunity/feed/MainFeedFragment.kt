@@ -18,7 +18,7 @@ import com.mdove.civilservantcommunity.feed.adapter.MainFeedAdapter
 import com.mdove.civilservantcommunity.feed.adapter.OnMainFeedClickListener
 import com.mdove.civilservantcommunity.feed.adapter.OnMainFeedTodayPlanCheckListener
 import com.mdove.civilservantcommunity.feed.adapter.OnNormalFeedListener
-import com.mdove.civilservantcommunity.feed.bean.ArticleResp
+import com.mdove.civilservantcommunity.feed.bean.FeedArticleFeedResp
 import com.mdove.civilservantcommunity.feed.bean.FeedTimeLineFeedTodayPlansResp
 import com.mdove.civilservantcommunity.feed.bean.FeedTodayPlansCheckParams
 import com.mdove.civilservantcommunity.feed.viewmodel.MainFeedViewModel
@@ -49,7 +49,7 @@ class MainFeedFragment : BaseFragment() {
     private lateinit var feedViewModel: MainFeedViewModel
     private lateinit var punchViewModel: PunchViewModel
     private val adapter = MainFeedAdapter(object : OnMainFeedClickListener {
-        override fun onClick(type: Int, resp: ArticleResp?) {
+        override fun onClick(type: Int, respFeed: FeedArticleFeedResp?) {
             when (type) {
                 MainFeedAdapter.TYPE_FEED_PUNCH -> {
                     clickPunch()
@@ -82,7 +82,7 @@ class MainFeedFragment : BaseFragment() {
                     clickPlan()
                 }
                 else -> {
-                    resp?.aid?.let { aid ->
+                    respFeed?.article?.aid?.let { aid ->
                         context?.let { context ->
                             DetailFeedActivity.gotoFeedDetail(context, DetailFeedParams(aid))
                         }
