@@ -20,9 +20,8 @@ abstract class AbsSlideCloseActivity : BaseActivity(), MDovePanelSlideListener,
     protected lateinit var mContentView: FrameLayout
 
     override var slideable
-        get() = mSlidingPaneLayout.prohibitSideslip && canSlideNow()
+        get() = canSlideNow()
         set(value) {
-            mSlidingPaneLayout.prohibitSideslip = !(value && canSlideNow())
         }
 
     open fun canSlideNow(): Boolean {//便于子类重写
