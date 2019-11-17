@@ -8,13 +8,14 @@ import com.mdove.civilservantcommunity.R
 import com.mdove.civilservantcommunity.account.UpdateUserInfoActivity.Companion.INTENT_PARAMS
 import com.mdove.civilservantcommunity.account.bean.UserInfoParams
 import com.mdove.civilservantcommunity.account.fragment.UpdateUserInfoFragment
+import com.mdove.civilservantcommunity.base.AbsSlideCloseActivity
 import com.mdove.civilservantcommunity.base.BaseActivity
 import com.mdove.civilservantcommunity.base.launcher.ActivityLauncher
 
 /**
  * Created by MDove on 2019-09-16.
  */
-class UpdateUserInfoActivity : BaseActivity() {
+class UpdateUserInfoActivity : AbsSlideCloseActivity() {
     companion object {
         const val TAG_UPDATE_USER_INFO_FRAGMENT = "tag_update_user_info_fragment"
         const val INTENT_PARAMS = "intent_params_update_user_info"

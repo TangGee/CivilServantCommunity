@@ -7,10 +7,10 @@ import android.os.Bundle
 import com.mdove.civilservantcommunity.R
 import com.mdove.civilservantcommunity.base.AbsSlideCloseActivity
 import com.mdove.civilservantcommunity.base.launcher.ActivityLauncher
+import com.mdove.civilservantcommunity.plan.activity.EditPlanActivity.Companion.INTENT_PARAMS
+import com.mdove.civilservantcommunity.plan.fragment.EditPlanContainerFragment
 import com.mdove.civilservantcommunity.plan.model.PlanToFeedResult
 import com.mdove.civilservantcommunity.plan.model.Status
-import com.mdove.civilservantcommunity.plan.activity.EditPlanActivity.Companion.INTENT_PARAMS
-import com.mdove.civilservantcommunity.plan.fragment.EditPlanFragment
 
 class EditPlanActivity : AbsSlideCloseActivity() {
     companion object {
@@ -23,11 +23,12 @@ class EditPlanActivity : AbsSlideCloseActivity() {
         setContentView(R.layout.activity_plan)
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                    .add(R.id.content,
-                        EditPlanFragment(),
-                        TAG_PLAN_FRAGMENT
-                    )
-                    .commit()
+                .add(
+                    R.id.content,
+                    EditPlanContainerFragment(),
+                    TAG_PLAN_FRAGMENT
+                )
+                .commit()
         }
     }
 }

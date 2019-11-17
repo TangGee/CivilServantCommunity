@@ -115,7 +115,6 @@ class EditPlanFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        view_toolbar.setTitle("制定提升方案")
         rlv.layoutManager = LinearLayoutManager(context)
         rlv.adapter = adapter
         rlv.addItemDecoration(PaddingDecoration(12))

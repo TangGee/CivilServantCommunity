@@ -67,6 +67,7 @@
         <activity
             android:name=".account.UpdateUserInfoActivity"
             android:launchMode="singleTop"
+            android:theme="@style/MyAppTheme"
             android:screenOrientation="portrait" />
 
         <activity

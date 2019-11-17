@@ -80,8 +80,8 @@ class UpdateUserInfoFragment : BaseFragment() {
             when (it.status) {
                 Status.SUCCESS -> {
                     dismissLoading()
-                    it.data?.let { msg ->
-                        ToastUtil.toast(msg.toString(), Toast.LENGTH_SHORT)
+                    it.data?.let { it ->
+                        ToastUtil.toast(it.message, Toast.LENGTH_SHORT)
                     }
                 }
                 Status.LOADING -> {

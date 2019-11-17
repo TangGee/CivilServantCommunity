@@ -42,9 +42,9 @@
         android:textColor="@color/black_a8"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_margin="@dimen/main_feed_item_margin"
-        android:text="这款产品是我们几个同学在工作之余挤时间做的。最初是想为我们自己做一个用于长期规划职业生涯的工具，后来想想...做的做了，那就拿出来给大家一起用吧~因为时间有限，还望各位多多包涵~"
-        android:textSize="12dp"
-        android:lineHeight="16dp"
+        android:text="这款产品是我们几个同学在工作之余挤时间做的。最初是想为我们自己做一个用于长期规划职业生涯的工具，后来想想...做都做了，那不如拿出来大家一起用吧~\n不过因为我们时间有限，会有很多不足的地方，还望各位老铁多多包涵~"
+        android:textSize="14dp"
+        android:lineHeight="22dp"
         android:layout_height="wrap_content"/>
 
 </com.mdove.dependent.common.view.roundcorner.RoundCornerConstraintLayout>

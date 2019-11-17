@@ -2,6 +2,7 @@ package com.mdove.dependent.common.view
 
 import android.app.Activity
 import android.content.Context
+import android.graphics.PorterDuff
 import android.util.AttributeSet
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -28,6 +29,12 @@ class NormalToolbar @JvmOverloads constructor(context: Context, attrs: Attribute
         }
     }
 
+    fun setColorForAll(colorRes: Int) {
+        tv_title.setTextColor(colorRes)
+        btn_right.setTextColor(colorRes)
+        btn_back.setColorFilter(colorRes, PorterDuff.Mode.DST_IN)
+    }
+
     fun setTitle(title: String) {
         tv_title.text = title
     }
@@ -38,6 +45,14 @@ class NormalToolbar @JvmOverloads constructor(context: Context, attrs: Attribute
 
     fun setListener(listener: OnToolbarListener) {
         this.listener = listener
+    }
+
+    fun setToolbarBackground(res: Int) {
+        setBackgroundResource(res)
+    }
+
+    fun setToolbarBackgroundIsNull() {
+        background = null
     }
 }
 
