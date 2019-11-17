@@ -1,4 +1,4 @@
-package com.ss.android.buzz.base
+package  com.mdove.dependent.common.view.sliding
 
 /**
  * slidebackactivity slidecloseactivity 实现

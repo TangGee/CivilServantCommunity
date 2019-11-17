@@ -32,7 +32,7 @@ class NormalToolbar @JvmOverloads constructor(context: Context, attrs: Attribute
     fun setColorForAll(colorRes: Int) {
         tv_title.setTextColor(colorRes)
         btn_right.setTextColor(colorRes)
-        btn_back.setColorFilter(colorRes, PorterDuff.Mode.DST_IN)
+        btn_back.setColorFilter(colorRes, PorterDuff.Mode.SRC_IN)
     }
 
     fun setTitle(title: String) {

@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import androidx.lifecycle.ViewModelProviders
 import com.mdove.civilservantcommunity.R
 import com.mdove.civilservantcommunity.base.AbsSlideCloseActivity
 import com.mdove.civilservantcommunity.base.launcher.ActivityLauncher
@@ -11,12 +12,15 @@ import com.mdove.civilservantcommunity.plan.activity.EditPlanActivity.Companion.
 import com.mdove.civilservantcommunity.plan.fragment.EditPlanContainerFragment
 import com.mdove.civilservantcommunity.plan.model.PlanToFeedResult
 import com.mdove.civilservantcommunity.plan.model.Status
+import com.mdove.civilservantcommunity.plan.viewmodel.EditPlanContainerViewModel
 
 class EditPlanActivity : AbsSlideCloseActivity() {
     companion object {
         private const val TAG_PLAN_FRAGMENT = "tag_plan_fragment"
         const val INTENT_PARAMS = "intent_params_plan"
     }
+
+    private lateinit var containerViewModel: EditPlanContainerViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,6 +34,11 @@ class EditPlanActivity : AbsSlideCloseActivity() {
                 )
                 .commit()
         }
+        containerViewModel = ViewModelProviders.of(this).get(EditPlanContainerViewModel::class.java)
+    }
+
+    override fun canSlideNow(): Boolean {
+        return containerViewModel.canSlide
     }
 }
 

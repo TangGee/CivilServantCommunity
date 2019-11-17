@@ -7,8 +7,8 @@ import android.widget.FrameLayout
 import androidx.core.content.ContextCompat
 import androidx.slidingpanelayout.widget.SlidingPaneLayout
 import com.mdove.dependent.common.view.sliding.MDovePanelSlideListener
+import com.mdove.dependent.common.view.sliding.MDoveSlideableListener
 import com.mdove.dependent.common.view.sliding.PagerEnabledSlidingPaneLayout
-import com.ss.android.buzz.base.MDoveSlideableListener
 
 /**
  * Created by MDove on 2019-10-26.
@@ -20,7 +20,7 @@ abstract class AbsSlideCloseActivity : BaseActivity(), MDovePanelSlideListener,
     protected lateinit var mContentView: FrameLayout
 
     override var slideable
-        get() = mSlidingPaneLayout.prohibitSideslip
+        get() = mSlidingPaneLayout.prohibitSideslip && canSlideNow()
         set(value) {
             mSlidingPaneLayout.prohibitSideslip = !(value && canSlideNow())
         }
@@ -37,6 +37,7 @@ abstract class AbsSlideCloseActivity : BaseActivity(), MDovePanelSlideListener,
     private fun initSlidingPaneLayout() {
         val slidingPaneLayout = PagerEnabledSlidingPaneLayout(this)
         slidingPaneLayout.setPanelSlideListener(this)
+        slidingPaneLayout.setSlidingPanelListener(this)
         slidingPaneLayout.sliderFadeColor = ContextCompat.getColor(this, android.R.color.transparent)
         // mOverhangSize值为菜单到右边屏幕的最短距离，默认是32dp
         try {

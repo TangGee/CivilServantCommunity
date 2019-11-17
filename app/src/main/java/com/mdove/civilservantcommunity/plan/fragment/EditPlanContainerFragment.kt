@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import androidx.lifecycle.ViewModelProviders
+import androidx.viewpager.widget.ViewPager
 import com.mdove.civilservantcommunity.R
 import com.mdove.civilservantcommunity.base.fragment.BaseFragment
 import com.mdove.civilservantcommunity.plan.viewmodel.EditPlanContainerViewModel
@@ -38,6 +39,7 @@ class EditPlanContainerFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         vp.adapter = EditPlanVpAdapter(fragmentManager!!)
+        vp.addOnPageChangeListener(onPageChangeListener)
         tab.setViewPager(vp, titles.toArrayList())
         view_toolbar.setTitle("我的规划")
         view_toolbar.setToolbarBackgroundIsNull()
@@ -56,6 +58,22 @@ class EditPlanContainerFragment : BaseFragment() {
 
         override fun getCount(): Int {
             return 3
+        }
+    }
+
+    private val onPageChangeListener = object : ViewPager.OnPageChangeListener {
+        override fun onPageScrollStateChanged(state: Int) {
+            viewModel.canSlide = state == ViewPager.SCROLL_STATE_IDLE && tab.currentTab == 0
+        }
+
+        override fun onPageScrolled(
+            position: Int,
+            positionOffset: Float,
+            positionOffsetPixels: Int
+        ) {
+        }
+
+        override fun onPageSelected(position: Int) {
         }
     }
 }
