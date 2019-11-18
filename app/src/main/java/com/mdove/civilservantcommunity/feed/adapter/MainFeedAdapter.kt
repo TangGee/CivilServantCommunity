@@ -127,7 +127,7 @@ class MainFeedAdapter(
         override fun getChangePayload(oldItem: BaseFeedResp, newItem: BaseFeedResp): Any? {
             return when {
                 (oldItem as? FeedPunchResp)?.count != (newItem as? FeedPunchResp)?.count -> PAYLOAD_PUNCH
-                (oldItem as? FeedTimeLineFeedTodayPlansResp)?.params?.statusSingle != (newItem as? FeedTimeLineFeedTodayPlansResp)?.params?.statusSingle && (newItem as? FeedTimeLineFeedTodayPlansResp)?.params?.statusSingle == SinglePlanStatus.SELECT -> PAYLOAD_TODAY_PLANS_STATUS
+                (oldItem as? FeedTimeLineFeedTodayPlansResp)?.params?.statusSingle != (newItem as? FeedTimeLineFeedTodayPlansResp)?.params?.statusSingle -> PAYLOAD_TODAY_PLANS_STATUS
                 (oldItem as? FeedTimeLineFeedTodayPlansResp)?.params?.statusSingle != (newItem as? FeedTimeLineFeedTodayPlansResp)?.params?.statusSingle && (newItem as? FeedTimeLineFeedTodayPlansResp)?.params?.statusSingle == SinglePlanStatus.CONTENT_CHANGE -> PAYLOAD_TODAY_PLANS_EDIT
                 (oldItem as? FeedTimeLineFeedTodayPlansResp)?.params?.beanSingle?.content != (newItem as? FeedTimeLineFeedTodayPlansResp)?.params?.beanSingle?.content -> PAYLOAD_TODAY_PLANS_EDIT
                 (oldItem as? FeedDateResp)?.isSameDay == (newItem as? FeedDateResp)?.isSameDay -> PAYLOAD_TIME_UPDATE
@@ -139,7 +139,6 @@ class MainFeedAdapter(
 
     companion object {
         const val TYPE_TOP_ONE = 1
-        const val TYPE_TOP_TWO = 2
         const val TYPE_FEED_NORMAL_CARD = 3
         const val TYPE_FEED_PUNCH = 0
         const val TYPE_FEED_PLAN = 5
@@ -345,7 +344,7 @@ class MainFeedAdapter(
             if (holder is FeedTimeLineFeedTodayPlansViewHolder) {
                 holder.payloadEndLine(getItem(position).hideEndLine)
             }
-        }else {
+        } else {
             super.onBindViewHolder(holder, position, payloads)
         }
     }
@@ -405,9 +404,10 @@ class MainFeedAdapter(
     inner class FeedTodayPlanBtnTipsHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         init {
             listener?.let { listener ->
-                itemView.findViewById<RoundCornerConstraintLayout>(R.id.layout_remind).setDebounceOnClickListener {
-                    listener.onClick(TYPE_FEED_TIME_LINE_FEED_TODAY_PLAN_BTN_TIPS, null)
-                }
+                itemView.findViewById<RoundCornerConstraintLayout>(R.id.layout_remind)
+                    .setDebounceOnClickListener {
+                        listener.onClick(TYPE_FEED_TIME_LINE_FEED_TODAY_PLAN_BTN_TIPS, null)
+                    }
                 itemView.findViewById<TextView>(R.id.btn_no_suc_plan).setDebounceOnClickListener {
                     listener.onClick(TYPE_FEED_TIME_LINE_FEED_TODAY_PLAN_BTN_APPLY_OLD, null)
                 }
@@ -590,7 +590,12 @@ class MainFeedAdapter(
                 val str = "$username：${it.content ?: ""}"
                 SpannableString(str).apply {
                     setSpan(
-                        ForegroundColorSpan(ContextCompat.getColor(itemView.context,R.color.amber_500)),
+                        ForegroundColorSpan(
+                            ContextCompat.getColor(
+                                itemView.context,
+                                R.color.amber_500
+                            )
+                        ),
                         0,
                         username.length,
                         Spannable.SPAN_EXCLUSIVE_EXCLUSIVE

@@ -96,7 +96,7 @@ class MainFeedFragment : BaseFragment() {
     }, object : OnNormalFeedListener {
         override fun onSendNewPlanClick(content: String) {
             launch {
-                showLoading()
+//                showLoading()
                 withContext(MDoveBackgroundPool) {
                     MainQuickSender.sendPlanInsertDB(content)?.let {
                         withContext(FastMain) {
@@ -104,13 +104,13 @@ class MainFeedFragment : BaseFragment() {
                         }
                     }
                 }
-                dismissLoading()
+//                dismissLoading()
             }
         }
     }, object : OnMainFeedTodayPlanCheckListener {
         override fun onCheck(resp: FeedTimeLineFeedTodayPlansResp, isCheck: Boolean) {
             launch {
-                showLoading()
+//                showLoading()
                 withContext(MDoveBackgroundPool) {
                     val selectSinglePlan = resp.params.beanSingle
                     MainDb.db.todayPlansDao().getFeedTodayPlan(resp.entityId)?.let {
@@ -131,7 +131,7 @@ class MainFeedFragment : BaseFragment() {
                         )
                     }
                 }
-                dismissLoading()
+//                dismissLoading()
                 feedViewModel.checkTodayPlanLiveData.value =
                     FeedTodayPlansCheckParams(resp, isCheck)
             }
