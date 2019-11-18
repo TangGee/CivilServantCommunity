@@ -232,6 +232,13 @@ object TimeUtils {
         return format.format(Date())
     }
 
+    fun getDateFromSQLYesterday(): String {
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd")
+        val calendar = Calendar.getInstance()
+        calendar.set(Calendar.HOUR_OF_DAY, -24)
+        return dateFormat.format(calendar.time)
+    }
+
     //HH为24小时进制
     fun getDateChinese(time: Date): String {
         val format = SimpleDateFormat("yyyy年MM月dd日")

@@ -29,7 +29,7 @@ data class SinglePlanBeanWrapper(
 
 @Parcelize
 enum class SinglePlanStatus : Parcelable {
-    SELECT,
+    SELECT,// 打钩
     DELETE,
     NORMAL,
     CONTENT_CHANGE
@@ -38,7 +38,6 @@ enum class SinglePlanStatus : Parcelable {
 @Parcelize
 enum class SinglePlanType : Parcelable {
     SYS_PLAN,
-    LAST_PLAN,
     CUSTOM_PLAN,
     CUSTOM_PLAN_BTN
 }

@@ -81,6 +81,9 @@ class MainFeedFragment : BaseFragment() {
                 MainFeedAdapter.TYPE_FEED_PLAN -> {
                     clickPlan()
                 }
+                MainFeedAdapter.TYPE_FEED_TIME_LINE_FEED_TODAY_PLAN_BTN_APPLY_OLD -> {
+                    applyOldPlans()
+                }
                 else -> {
                     respFeed?.article?.aid?.let { aid ->
                         context?.let { context ->
@@ -134,6 +137,10 @@ class MainFeedFragment : BaseFragment() {
             }
         }
     })
+
+    private fun applyOldPlans() {
+        feedViewModel.applyOldPlansLiveData.value = ""
+    }
 
     private fun clickMePage() {
         context?.let {

@@ -25,6 +25,7 @@ import com.mdove.civilservantcommunity.plan.model.SinglePlanType
 import com.mdove.dependent.common.toast.ToastUtil
 import com.mdove.dependent.common.utils.TimeUtils
 import com.mdove.dependent.common.utils.setDebounceOnClickListener
+import com.mdove.dependent.common.view.roundcorner.RoundCornerConstraintLayout
 import com.mdove.dependent.common.view.timeline.TimeLineView
 
 /**
@@ -117,6 +118,7 @@ class MainFeedAdapter(
                 return true
             } else if ((oldItem is FeedTimeLineFeedTodayPlansResp) && (newItem is FeedTimeLineFeedTodayPlansResp)) {
                 oldItem.params.statusSingle == newItem.params.statusSingle && oldItem.params.beanSingle.content == newItem.params.beanSingle.content
+                        && oldItem.hideEndLine == newItem.hideEndLine
             } else {
                 true
             }
@@ -129,6 +131,7 @@ class MainFeedAdapter(
                 (oldItem as? FeedTimeLineFeedTodayPlansResp)?.params?.statusSingle != (newItem as? FeedTimeLineFeedTodayPlansResp)?.params?.statusSingle && (newItem as? FeedTimeLineFeedTodayPlansResp)?.params?.statusSingle == SinglePlanStatus.CONTENT_CHANGE -> PAYLOAD_TODAY_PLANS_EDIT
                 (oldItem as? FeedTimeLineFeedTodayPlansResp)?.params?.beanSingle?.content != (newItem as? FeedTimeLineFeedTodayPlansResp)?.params?.beanSingle?.content -> PAYLOAD_TODAY_PLANS_EDIT
                 (oldItem as? FeedDateResp)?.isSameDay == (newItem as? FeedDateResp)?.isSameDay -> PAYLOAD_TIME_UPDATE
+                (oldItem.hideEndLine != newItem.hideEndLine) -> PAYLOAD_HAS_END_LINE
                 else -> null
             }
         }
@@ -153,6 +156,7 @@ class MainFeedAdapter(
         const val TYPE_FEED_EDIT_NEW_PLAN = 15
         const val TYPE_FEED_DEV = 16
         const val TYPE_FEED_QUESTION_CARD = 17
+        const val TYPE_FEED_TIME_LINE_FEED_TODAY_PLAN_BTN_APPLY_OLD = 18
 
 
         const val CLICK_QUICK_BTN_PLAN = 101
@@ -166,6 +170,7 @@ class MainFeedAdapter(
         val PAYLOAD_TODAY_PLANS_STATUS = Any()
         val PAYLOAD_TODAY_PLANS_EDIT = Any()
         val PAYLOAD_TIME_UPDATE = Any()
+        val PAYLOAD_HAS_END_LINE = Any()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -189,7 +194,7 @@ class MainFeedAdapter(
             TYPE_FEED_EDIT_NEW_PLAN ->
                 FeedEditNewPlanViewHolder(
                     LayoutInflater.from(parent.context).inflate(
-                        R.layout.item_main_feed_edit_new_plan,
+                        R.layout.item_main_feed_send_new_plan,
                         parent,
                         false
                     )
@@ -245,7 +250,7 @@ class MainFeedAdapter(
             TYPE_FEED_TIME_LINE_FEED_TODAY_PLAN_BTN_TIPS ->
                 FeedTodayPlanBtnTipsHolder(
                     LayoutInflater.from(parent.context).inflate(
-                        R.layout.item_main_feed_today_plans_tips,
+                        R.layout.item_main_feed_today_plans_remind_layout,
                         parent,
                         false
                     )
@@ -336,7 +341,11 @@ class MainFeedAdapter(
             if (holder is FeedDateViewHolder) {
                 holder.payload()
             }
-        } else {
+        } else if (payloads.contains(PAYLOAD_HAS_END_LINE)) {
+            if (holder is FeedTimeLineFeedTodayPlansViewHolder) {
+                holder.payloadEndLine(getItem(position).hideEndLine)
+            }
+        }else {
             super.onBindViewHolder(holder, position, payloads)
         }
     }
@@ -396,8 +405,11 @@ class MainFeedAdapter(
     inner class FeedTodayPlanBtnTipsHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         init {
             listener?.let { listener ->
-                itemView.setDebounceOnClickListener {
+                itemView.findViewById<RoundCornerConstraintLayout>(R.id.layout_remind).setDebounceOnClickListener {
                     listener.onClick(TYPE_FEED_TIME_LINE_FEED_TODAY_PLAN_BTN_TIPS, null)
+                }
+                itemView.findViewById<TextView>(R.id.btn_no_suc_plan).setDebounceOnClickListener {
+                    listener.onClick(TYPE_FEED_TIME_LINE_FEED_TODAY_PLAN_BTN_APPLY_OLD, null)
                 }
             }
             itemView.findViewById<TimeLineView>(R.id.time_line).hideBottomLine()
@@ -454,8 +466,14 @@ class MainFeedAdapter(
             cb.setOnCheckedChangeListener { _, isChecked ->
                 checkListener?.onCheck(resp, isChecked)
             }
-            if (resp.params.typeSingle == SinglePlanType.LAST_PLAN) {
+            payloadEndLine(resp.hideEndLine)
+        }
+
+        fun payloadEndLine(goneEndLie: Boolean) {
+            if (goneEndLie) {
                 timeLine.hideBottomLine()
+            } else {
+                timeLine.showBottomLine()
             }
         }
 
@@ -486,9 +504,9 @@ class MainFeedAdapter(
                 timeLine.useImageView(true)
                 title.paint.flags = STRIKE_THRU_TEXT_FLAG or ANTI_ALIAS_FLAG
                 title.setTextColor(ContextCompat.getColor(itemView.context, R.color.grey_500))
-                tvModule.setBackgroundResource(R.drawable.bg_round_grey)
+                tvModule.setBackgroundResource(R.drawable.bg_round_grey_500)
                 tvModule.paint.flags = STRIKE_THRU_TEXT_FLAG or ANTI_ALIAS_FLAG
-                tvModule.setBackgroundResource(R.drawable.bg_round_grey)
+                tvModule.setBackgroundResource(R.drawable.bg_round_grey_500)
             } else {
                 timeLine.useImageView(false)
                 title.setTextColor(ContextCompat.getColor(itemView.context, R.color.black))

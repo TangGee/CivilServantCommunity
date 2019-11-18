@@ -107,7 +107,7 @@
             android:ellipsize="end"
             android:textSize="12dp"
             app:layout_constraintRight_toLeftOf="@+id/btn_go"
-            android:background="@drawable/bg_round_grey_light"
+            android:background="@drawable/bg_round_grey_200"
             android:layout_height="wrap_content"/>
 
         <androidx.appcompat.widget.AppCompatImageView

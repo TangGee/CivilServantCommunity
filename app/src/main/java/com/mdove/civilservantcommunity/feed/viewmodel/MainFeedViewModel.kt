@@ -3,6 +3,7 @@ package com.mdove.civilservantcommunity.feed.viewmodel
 import androidx.lifecycle.*
 import com.mdove.civilservantcommunity.feed.bean.*
 import com.mdove.civilservantcommunity.feed.repository.MainFeedRepository
+import com.mdove.civilservantcommunity.plan.dao.TodayPlansEntity
 import com.mdove.civilservantcommunity.plan.model.*
 import com.mdove.civilservantcommunity.room.MainDb
 import com.mdove.dependent.common.network.NormalResp
@@ -34,6 +35,8 @@ class MainFeedViewModel : ViewModel() {
     val checkTodayPlanLiveData = MutableLiveData<FeedTodayPlansCheckParams>()
     val timeScheduleToFeedLiveData = MutableLiveData<TimeScheduleParams>()
     val editNewPlanToFeedLiveData = MutableLiveData<FeedTimeLineFeedTodayPlansResp>()
+    // 一键应用昨天未完成的任务
+    val applyOldPlansLiveData = MutableLiveData<String>()
 
     val mData: LiveData<Resource<List<BaseFeedResp>>> =
         MediatorLiveData<Resource<List<BaseFeedResp>>>().apply {
@@ -59,8 +62,7 @@ class MainFeedViewModel : ViewModel() {
                                         )
                                     }
                                 }.apply {
-                                    (this.lastOrNull())?.params?.typeSingle =
-                                        SinglePlanType.LAST_PLAN
+                                    (this.lastOrNull())?.hideEndLine = true
                                 })
                             } else {
                                 temp.add(FeedTimeLineFeedTodayPlansTipsTitleResp())
@@ -103,6 +105,62 @@ class MainFeedViewModel : ViewModel() {
                         }
                     }
                     Resource(it.status, tempData, it.exception)
+                }
+            }
+
+            addSource(applyOldPlansLiveData) {
+                CoroutineScope(FastMain).launch {
+                    val yesterdayPlans = withContext(MDoveBackgroundPool) {
+                        val yesterday = MainDb.db.todayPlansDao()
+                            .getTodayPlansRecord(TimeUtils.getDateFromSQLYesterday())
+                        yesterday?.let {
+                            // 把老的计划插入到今天的记录中，先过滤已完成的
+                            val insertResp = it.resp.copy(params = it.resp.params.map {
+                                it.copy(beanSingles = it.beanSingles.filter {
+                                    it.statusSingle != SinglePlanStatus.SELECT
+                                })
+                            })
+                            MainDb.db.todayPlansDao().insert(
+                                TodayPlansEntity(
+                                    date = System.currentTimeMillis(),
+                                    createDate = TimeUtils.getDateFromSQL(),
+                                    sucDate = null,
+                                    resp = insertResp
+                                )
+                            )
+                        }
+                        yesterday
+                    }
+                    yesterdayPlans?.let { entity ->
+                        value = value?.let { res ->
+                            val tempData = mutableListOf<BaseFeedResp>()
+                            res.data?.filter {
+                                it !is FeedTimeLineFeedTodayPlansTipsTitleResp
+                            }?.forEach { resp ->
+                                if (resp is FeedTimeLineFeedTodayPlansTitleResp) {
+                                    tempData.add(resp)
+                                    tempData.addAll(entity.resp.params.flatMap {
+                                        it.beanSingles
+                                    }.filter {
+                                        it.statusSingle != SinglePlanStatus.SELECT
+                                    }.map {
+                                        FeedTimeLineFeedTodayPlansResp(
+                                            entity.id,
+                                            entity.date,
+                                            entity.sucDate,
+                                            entity.createDate ?: TimeUtils.getDateFromSQL(),
+                                            it
+                                        )
+                                    }.apply {
+                                        last().hideEndLine = true
+                                    })
+                                } else {
+                                    tempData.add(resp)
+                                }
+                            }
+                            Resource(res.status, tempData, res.exception)
+                        }
+                    }
                 }
             }
 
@@ -156,7 +214,7 @@ class MainFeedViewModel : ViewModel() {
                                     )
                                 }
                             }.apply {
-                                (this.last()).params.typeSingle = SinglePlanType.LAST_PLAN
+                                (this.last()).hideEndLine = true
                             })
                         } else {
                             newData.add(baseFeedResp)
