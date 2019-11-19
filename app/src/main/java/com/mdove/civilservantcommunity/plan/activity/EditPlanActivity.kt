@@ -14,6 +14,7 @@ import com.mdove.civilservantcommunity.plan.model.PlanToFeedResult
 import com.mdove.civilservantcommunity.plan.model.Status
 import com.mdove.civilservantcommunity.plan.viewmodel.EditPlanContainerViewModel
 
+
 class EditPlanActivity : AbsSlideCloseActivity() {
     companion object {
         private const val TAG_PLAN_FRAGMENT = "tag_plan_fragment"
@@ -23,6 +24,7 @@ class EditPlanActivity : AbsSlideCloseActivity() {
     private lateinit var containerViewModel: EditPlanContainerViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        setStatusBarTextColorIsBlack(true)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_plan)
         if (savedInstanceState == null) {

@@ -1,12 +1,15 @@
 package com.mdove.civilservantcommunity.base
 
 import android.os.Bundle
+import android.view.View
 import com.mdove.civilservantcommunity.R
 import com.mdove.civilservantcommunity.base.launcher.BaseLauncherActivity
 import com.mdove.dependent.common.threadpool.FastMainScope
 import com.mdove.civilservantcommunity.view.utils.StatusBarUtil
 import kotlinx.coroutines.CoroutineScope
 import kotlin.coroutines.CoroutineContext
+import android.view.View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+
 
 /**
  * Created by MDove on 2019-09-02.
@@ -36,6 +39,7 @@ open class BaseActivity : BaseLauncherActivity(), CoroutineScope {
 
         val STAY = R.anim.stay
     }
+
     open var animType = TYPE_ANIM_NORMAL
 
     override val coroutineContext: CoroutineContext
@@ -43,13 +47,27 @@ open class BaseActivity : BaseLauncherActivity(), CoroutineScope {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if(enableTranslucent()) {
+        //2、清除状态栏文字深色，同时保留之前的flag
+
+        if (enableTranslucent()) {
             StatusBarUtil.setTranslucent(this)
         }
         startAnim(animType)
     }
 
-    open fun enableTranslucent() :Boolean{
+    fun setStatusBarTextColorIsBlack(isBlack: Boolean = false) {
+        if (isBlack) {
+            // 设置状态栏黑色
+            window.decorView.systemUiVisibility =
+                window.decorView.systemUiVisibility or SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+        } else {
+            // 清除状态栏黑色字体颜色
+            window.decorView.systemUiVisibility =
+                window.decorView.systemUiVisibility xor SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+        }
+    }
+
+    open fun enableTranslucent(): Boolean {
         return true
     }
 

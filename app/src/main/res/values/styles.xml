@@ -9,6 +9,7 @@
     </style>
 
     <style name="MyAppTheme" parent="Theme.AppCompat.Light.NoActionBar"/>
+    <style name="MyAppBlackTheme" parent="Theme.AppCompat.DayNight.NoActionBar"/>
 
     <style name="TransparentTheme" parent="MyAppTheme">
         <item name="android:windowBackground">@color/transparent</item>
