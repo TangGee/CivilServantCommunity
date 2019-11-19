@@ -3,9 +3,6 @@ package com.mdove.civilservantcommunity.feed.adapter
 import android.graphics.Paint.ANTI_ALIAS_FLAG
 import android.graphics.Paint.STRIKE_THRU_TEXT_FLAG
 import android.text.Html
-import android.text.Spannable
-import android.text.SpannableString
-import android.text.style.ForegroundColorSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,12 +18,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.mdove.civilservantcommunity.R
 import com.mdove.civilservantcommunity.feed.bean.*
 import com.mdove.civilservantcommunity.plan.model.SinglePlanStatus
-import com.mdove.civilservantcommunity.plan.model.SinglePlanType
 import com.mdove.dependent.common.toast.ToastUtil
 import com.mdove.dependent.common.utils.TimeUtils
+import com.mdove.dependent.common.utils.UIUtils
 import com.mdove.dependent.common.utils.setDebounceOnClickListener
 import com.mdove.dependent.common.view.roundcorner.RoundCornerConstraintLayout
 import com.mdove.dependent.common.view.timeline.TimeLineView
+import java.util.*
 
 /**
  * Created by MDove on 2019-09-06.
@@ -573,6 +571,8 @@ class MainFeedAdapter(
     }
 
     inner class FeedQuestionViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private val tvAnswer = itemView.findViewById<TextView>(R.id.tv_answer)
+
         init {
             listener?.let { listener ->
                 itemView.setDebounceOnClickListener {
@@ -583,26 +583,18 @@ class MainFeedAdapter(
 
         fun bind(question: FeedQuestionFeedResp) {
             itemView.findViewById<TextView>(R.id.tv_title).text = question.question.title
-            itemView.findViewById<TextView>(R.id.tv_name).text = question.question.makeTime
+            itemView.findViewById<TextView>(R.id.tv_name).text =question.question.makeTime
             itemView.findViewById<TextView>(R.id.tv_content).text = question.question.content
-            val answer = question.answer.let {
+            question.answer.let {
                 val username = it.userInfo?.username ?: "匿名用户"
                 val str = "$username：${it.content ?: ""}"
-                SpannableString(str).apply {
-                    setSpan(
-                        ForegroundColorSpan(
-                            ContextCompat.getColor(
-                                itemView.context,
-                                R.color.amber_500
-                            )
-                        ),
-                        0,
-                        username.length,
-                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                UIUtils.setTextViewSpanColor(
+                    tvAnswer, str, 0, username.length, ContextCompat.getColor(
+                        itemView.context,
+                        R.color.amber_500
                     )
-                }.toString()
+                )
             }
-            itemView.findViewById<TextView>(R.id.tv_answer).text = answer
         }
     }
 
@@ -637,7 +629,7 @@ class MainFeedAdapter(
             }
             itemView.findViewById<TextView>(R.id.tv_title).text = data.article.title
             itemView.findViewById<TextView>(R.id.tv_name).text = data.article.makeTime?.let {
-                TimeUtils.getDateChinese(java.lang.Long.getLong(it))
+                it
             } ?: ""
             itemView.findViewById<TextView>(R.id.tv_content).text = data.article.content
             if (data.hideEndLine) {
