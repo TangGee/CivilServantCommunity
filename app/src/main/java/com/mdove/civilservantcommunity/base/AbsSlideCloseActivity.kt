@@ -19,12 +19,7 @@ abstract class AbsSlideCloseActivity : BaseActivity(), MDovePanelSlideListener,
     protected lateinit var mSlidingPaneLayout: PagerEnabledSlidingPaneLayout
     protected lateinit var mContentView: FrameLayout
 
-    override var slideable
-        get() = canSlideNow()
-        set(value) {
-        }
-
-    open fun canSlideNow(): Boolean {//便于子类重写
+    override fun canSlideNow(x: Int, y: Int): Boolean {//便于子类重写
         return true
     }
 

@@ -24,6 +24,7 @@ import com.mdove.dependent.common.view.calendar.enumeration.CalendarState;
 import com.mdove.dependent.common.view.calendar.enumeration.MultipleNumModel;
 import com.mdove.dependent.common.view.calendar.enumeration.SelectedModel;
 import com.mdove.dependent.common.view.calendar.listener.OnCalendarChangedListener;
+import com.mdove.dependent.common.view.calendar.listener.OnCalendarHorizontalScrollingListener;
 import com.mdove.dependent.common.view.calendar.listener.OnCalendarMultipleChangedListener;
 import com.mdove.dependent.common.view.calendar.listener.OnCalendarScrollingListener;
 import com.mdove.dependent.common.view.calendar.listener.OnCalendarStateChangedListener;
@@ -56,6 +57,7 @@ public abstract class NCalendar extends FrameLayout implements IICalendar, Neste
     protected CalendarState calendarState;//默认月
     private OnCalendarStateChangedListener onCalendarStateChangedListener;
     private OnCalendarScrollingListener onCalendarScrollingListener;
+    private OnCalendarHorizontalScrollingListener mListener;
 
     protected View childView;//NCalendar内部包含的直接子view，直接子view并不一定是NestScrillChild
     private View targetView;//实际滑动的view 当targetView==null时，子view没有NestScrillChild或者NestScrillChild不可见，此时滑动交给onTochEvent处理
@@ -803,6 +805,10 @@ public abstract class NCalendar extends FrameLayout implements IICalendar, Neste
 
     }
 
+    public View getTouchTargetView() {
+        return targetView;
+    }
+
     //childView周状态的条件 容错状态
     protected boolean isChildWeekState() {
         return childView.getY() <= weekHeight;
@@ -835,6 +841,12 @@ public abstract class NCalendar extends FrameLayout implements IICalendar, Neste
             childView.setY(calendarState == CalendarState.MONTH ? monthHeight : weekHeight);
             isInflateFinish = true;
         }
+    }
+
+    public void setOnCalendarHorizontalScrollingListener(OnCalendarHorizontalScrollingListener listener) {
+        mListener = listener;
+        weekCalendar.setOnCalendarHorizontalScrollingListener(listener);
+        monthCalendar.setOnCalendarHorizontalScrollingListener(listener);
     }
 
     //获取月日历自动到周状态的y值

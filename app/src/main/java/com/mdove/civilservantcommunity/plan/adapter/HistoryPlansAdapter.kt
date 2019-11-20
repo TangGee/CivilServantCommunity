@@ -1,9 +1,13 @@
 package com.mdove.civilservantcommunity.plan.adapter
 
+import android.graphics.Paint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.appcompat.widget.AppCompatImageView
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -11,6 +15,7 @@ import com.mdove.civilservantcommunity.R
 import com.mdove.civilservantcommunity.plan.model.HistoryPlansBaseBean
 import com.mdove.civilservantcommunity.plan.model.HistoryPlansEmptyTipsBean
 import com.mdove.civilservantcommunity.plan.model.HistoryPlansSinglePlanBean
+import com.mdove.civilservantcommunity.plan.model.SinglePlanStatus
 import com.mdove.dependent.common.utils.TimeUtils
 import com.mdove.dependent.common.view.timeline.TimeLineView
 
@@ -99,8 +104,8 @@ class HistoryPlansAdapter : ListAdapter<HistoryPlansBaseBean, RecyclerView.ViewH
         private val title = itemView.findViewById<TextView>(R.id.text)
         private val lineTimeSchedule = itemView.findViewById<View>(R.id.line_time_schedule)
         private val tvTimeSchedule = itemView.findViewById<TextView>(R.id.tv_time_schedule)
-        private val timeLine = itemView.findViewById<TimeLineView>(R.id.time_line)
         private val tvModule = itemView.findViewById<TextView>(R.id.tv_module)
+        private val layoutComplete = itemView.findViewById<ConstraintLayout>(R.id.layout_complete)
 
         fun bind(planBean: HistoryPlansSinglePlanBean) {
             title.text = planBean.beanSingle.content
@@ -109,10 +114,33 @@ class HistoryPlansAdapter : ListAdapter<HistoryPlansBaseBean, RecyclerView.ViewH
                 lineTimeSchedule.visibility = View.VISIBLE
                 tvTimeSchedule.visibility = View.VISIBLE
                 tvTimeSchedule.text =
-                    "${TimeUtils.getDateChinese(it.first)} - ${TimeUtils.getHourM(it.second)}"
+                    "预期${TimeUtils.getDateChinese(it.first)} - ${TimeUtils.getHourM(it.second)}之内完成"
             } ?: also {
                 tvTimeSchedule.visibility = View.GONE
                 lineTimeSchedule.visibility = View.GONE
+            }
+            if (planBean.statusSingle == SinglePlanStatus.SELECT) {
+                layoutComplete.visibility = View.VISIBLE
+                title.paint.flags = Paint.STRIKE_THRU_TEXT_FLAG or Paint.ANTI_ALIAS_FLAG
+                tvTimeSchedule.paint.flags = Paint.STRIKE_THRU_TEXT_FLAG or Paint.ANTI_ALIAS_FLAG
+                title.setTextColor(ContextCompat.getColor(itemView.context, R.color.grey_500))
+                lineTimeSchedule.setBackgroundColor(ContextCompat.getColor(itemView.context, R.color.grey_500))
+                tvTimeSchedule.setTextColor(ContextCompat.getColor(itemView.context, R.color.grey_500))
+                tvModule.setBackgroundResource(R.drawable.bg_round_grey_500)
+                tvModule.paint.flags = Paint.STRIKE_THRU_TEXT_FLAG or Paint.ANTI_ALIAS_FLAG
+                tvModule.setBackgroundResource(R.drawable.bg_round_grey_500)
+            } else {
+                layoutComplete.visibility = View.GONE
+                title.setTextColor(ContextCompat.getColor(itemView.context, R.color.black))
+                title.paint.flags = 0
+                title.paint.flags = Paint.ANTI_ALIAS_FLAG
+                lineTimeSchedule.setBackgroundColor(ContextCompat.getColor(itemView.context, R.color.black))
+                tvTimeSchedule.setTextColor(ContextCompat.getColor(itemView.context, R.color.black))
+                tvTimeSchedule.paint.flags = 0
+                tvTimeSchedule.paint.flags = Paint.ANTI_ALIAS_FLAG
+                tvModule.setBackgroundResource(R.drawable.bg_round_blue)
+                tvModule.paint.flags = 0
+                tvModule.paint.flags = Paint.ANTI_ALIAS_FLAG
             }
         }
     }

@@ -27,7 +27,7 @@ public class PagerEnabledSlidingPaneLayout extends SlidingPaneLayout {
     public boolean onInterceptTouchEvent(MotionEvent ev) {
         switch (MotionEventCompat.getActionMasked(ev)) {
             case MotionEvent.ACTION_MOVE:
-                if (mListener != null && !mListener.getSlideable()) {
+                if (mListener != null && !mListener.canSlideNow((int) ev.getRawX(), (int) ev.getRawY())) {
                     MotionEvent ev2 = MotionEvent.obtain(ev);
                     ev2.setAction(MotionEvent.ACTION_CANCEL);
                     super.onInterceptTouchEvent(ev2);
@@ -41,7 +41,7 @@ public class PagerEnabledSlidingPaneLayout extends SlidingPaneLayout {
     public boolean onTouchEvent(MotionEvent ev) {
         switch (MotionEventCompat.getActionMasked(ev)) {
             case MotionEvent.ACTION_MOVE:
-                if (mListener != null && !mListener.getSlideable()) {
+                if (mListener != null && !mListener.canSlideNow((int) ev.getRawX(), (int) ev.getRawY())) {
                     MotionEvent ev2 = MotionEvent.obtain(ev);
                     ev2.setAction(MotionEvent.ACTION_CANCEL);
                     super.onInterceptTouchEvent(ev2);

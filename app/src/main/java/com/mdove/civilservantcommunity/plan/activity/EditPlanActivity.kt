@@ -39,7 +39,7 @@ class EditPlanActivity : AbsSlideCloseActivity() {
         containerViewModel = ViewModelProviders.of(this).get(EditPlanContainerViewModel::class.java)
     }
 
-    override fun canSlideNow(): Boolean {
+    override fun canSlideNow(x: Int, y: Int): Boolean {
         return containerViewModel.canSlide
     }
 }

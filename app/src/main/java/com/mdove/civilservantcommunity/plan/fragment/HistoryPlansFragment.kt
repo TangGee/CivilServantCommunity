@@ -8,7 +8,6 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mdove.civilservantcommunity.R
 import com.mdove.civilservantcommunity.base.fragment.BaseFragment
-import com.mdove.civilservantcommunity.plan.adapter.EditPlanModuleAdapter
 import com.mdove.civilservantcommunity.plan.adapter.HistoryPlansAdapter
 import com.mdove.civilservantcommunity.plan.viewmodel.HistoryPlansViewModel
 import com.mdove.civilservantcommunity.room.MainDb
@@ -60,12 +59,14 @@ class HistoryPlansFragment : BaseFragment() {
             }
         })
 
+
         //初始化进入时的计划
         historyPlansViewModel.selectTimeLiveData.value = TimeUtils.getDateFromSQL()
 
         calendar.setOnCalendarChangedListener { _, _, _, localDate ->
             historyPlansViewModel.selectTimeLiveData.value = localDate.toString()
         }
+
         launch {
             showLoading()
             withContext(MDoveBackgroundPool) {
@@ -79,5 +80,11 @@ class HistoryPlansFragment : BaseFragment() {
                 calendar.calendarPainter = InnerPainter(calendar, it)
             }
         }
+    }
+
+    fun inCalendarTouchScope(x: Int, y: Int): Boolean {
+        val w = calendar.getChildAt(0).width
+        val h = calendar.getChildAt(0).height
+        return x in 1 until w && y in 1 until h
     }
 }

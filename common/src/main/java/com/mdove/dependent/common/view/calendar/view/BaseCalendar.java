@@ -18,6 +18,7 @@ import com.mdove.dependent.common.view.calendar.enumeration.CalendarBuild;
 import com.mdove.dependent.common.view.calendar.enumeration.MultipleNumModel;
 import com.mdove.dependent.common.view.calendar.enumeration.SelectedModel;
 import com.mdove.dependent.common.view.calendar.listener.OnCalendarChangedListener;
+import com.mdove.dependent.common.view.calendar.listener.OnCalendarHorizontalScrollingListener;
 import com.mdove.dependent.common.view.calendar.listener.OnCalendarMultipleChangedListener;
 import com.mdove.dependent.common.view.calendar.listener.OnClickDisableDateListener;
 import com.mdove.dependent.common.view.calendar.listener.OnMWDateChangeListener;
@@ -90,6 +91,19 @@ public abstract class BaseCalendar extends ViewPager implements ICalendar {
 
         setBackgroundColor(mCalendarBgColor);
         addOnPageChangeListener(new SimpleOnPageChangeListener() {
+            @Override
+            public void onPageScrollStateChanged(int state) {
+                super.onPageScrollStateChanged(state);
+                if (mListener == null) {
+                    return;
+                }
+                if (state != SCROLL_STATE_IDLE) {
+                    mListener.onCalendarHorizontalScrolling(true);
+                } else {
+                    mListener.onCalendarHorizontalScrolling(false);
+                }
+            }
+
             @Override
             public void onPageSelected(final int position) {
                 drawView(position);
@@ -609,6 +623,12 @@ public abstract class BaseCalendar extends ViewPager implements ICalendar {
         if (mSelectedModel == SelectedModel.SINGLE_SELECTED) {
             mAllSelectDateList.add(mInitializeDate);
         }
+    }
+
+    private OnCalendarHorizontalScrollingListener mListener;
+
+    public void setOnCalendarHorizontalScrollingListener(OnCalendarHorizontalScrollingListener listener) {
+        mListener = listener;
     }
 
     @Override
