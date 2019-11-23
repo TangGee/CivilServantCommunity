@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/btn_normal"
+        android:gravity="center"
+        android:text="launch_model : SingleTask"
+        android:textColor="@color/black"
+        android:textSize="20sp" />
+    <TextView
+        android:id="@+id/btn_normal"
+        android:layout_width="match_parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/content"
+        app:layout_constraintRight_toRightOf="parent"
+        android:gravity="center"
+        android:text="启动normal模式的Activity"
+        android:textColor="@color/white"
+        android:background="@color/black"
+        android:textSize="20sp"
+        android:layout_height="100dp"/>
+    <TextView
+        android:id="@+id/btn_single_task"
+        android:layout_width="match_parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_normal"
+        app:layout_constraintRight_toRightOf="parent"
+        android:gravity="center"
+        android:text="启动SingleTask模式的Activity，并有affinity"
+        android:textColor="@color/white"
+        android:background="@color/black"
+        android:textSize="20sp"
+        android:layout_height="100dp"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

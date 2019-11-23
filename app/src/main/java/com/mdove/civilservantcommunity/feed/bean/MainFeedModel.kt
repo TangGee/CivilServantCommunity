@@ -49,7 +49,7 @@ data class MainFeedAnswerResp(
     @SerializedName("qid") val qid: String? = "",
     @SerializedName("content") val content: String? = "",
     @SerializedName("maketime") val makeTime: String? = "",
-    @SerializedName("list_style") val listStyle: Int? = 0
+    @SerializedName("list_style") val listStyle: String? = ""
 ) : Parcelable
 
 fun MainFeedResp.toMainFeedResp(): BaseFeedResp? {
@@ -67,3 +67,5 @@ fun MainFeedResp.toMainFeedResp(): BaseFeedResp? {
         else -> null
     }
 }
+
+const val QUESTION_QUICK_SEND_LIST_STYLE = "4"

@@ -14,11 +14,9 @@ import com.mdove.civilservantcommunity.base.launcher.ActivityLauncher
 import com.mdove.civilservantcommunity.config.AppConfig
 import com.mdove.civilservantcommunity.detailfeed.DetailFeedActivity
 import com.mdove.civilservantcommunity.detailfeed.bean.DetailFeedParams
-import com.mdove.civilservantcommunity.feed.adapter.MainFeedAdapter
-import com.mdove.civilservantcommunity.feed.adapter.OnMainFeedClickListener
-import com.mdove.civilservantcommunity.feed.adapter.OnMainFeedTodayPlanCheckListener
-import com.mdove.civilservantcommunity.feed.adapter.OnNormalFeedListener
+import com.mdove.civilservantcommunity.feed.adapter.*
 import com.mdove.civilservantcommunity.feed.bean.FeedArticleFeedResp
+import com.mdove.civilservantcommunity.feed.bean.FeedQuestionFeedResp
 import com.mdove.civilservantcommunity.feed.bean.FeedTimeLineFeedTodayPlansResp
 import com.mdove.civilservantcommunity.feed.bean.FeedTodayPlansCheckParams
 import com.mdove.civilservantcommunity.feed.viewmodel.MainFeedViewModel
@@ -30,6 +28,7 @@ import com.mdove.civilservantcommunity.plan.model.SinglePlanStatus
 import com.mdove.civilservantcommunity.plan.model.TimeScheduleStatus
 import com.mdove.civilservantcommunity.punch.bean.PunchReq
 import com.mdove.civilservantcommunity.punch.viewmodel.PunchViewModel
+import com.mdove.civilservantcommunity.question.viewmodel.CommentViewModel
 import com.mdove.civilservantcommunity.room.MainDb
 import com.mdove.civilservantcommunity.ugc.MainUGCActivity
 import com.mdove.dependent.common.networkenhance.valueobj.Status
@@ -48,6 +47,7 @@ import kotlinx.coroutines.withContext
 class MainFeedFragment : BaseFragment() {
     private lateinit var feedViewModel: MainFeedViewModel
     private lateinit var punchViewModel: PunchViewModel
+    private lateinit var commentViewModel: CommentViewModel
     private val adapter = MainFeedAdapter(object : OnMainFeedClickListener {
         override fun onClick(type: Int, respFeed: FeedArticleFeedResp?) {
             when (type) {
@@ -96,7 +96,7 @@ class MainFeedFragment : BaseFragment() {
     }, object : OnNormalFeedListener {
         override fun onSendNewPlanClick(content: String) {
             launch {
-//                showLoading()
+                //                showLoading()
                 withContext(MDoveBackgroundPool) {
                     MainQuickSender.sendPlanInsertDB(content)?.let {
                         withContext(FastMain) {
@@ -107,10 +107,14 @@ class MainFeedFragment : BaseFragment() {
 //                dismissLoading()
             }
         }
+    }, object : OnMainFeedQuickClickListener {
+        override fun onClick(type: Int, questionResp: FeedQuestionFeedResp) {
+            commentViewModel.questionResp.value = questionResp
+        }
     }, object : OnMainFeedTodayPlanCheckListener {
         override fun onCheck(resp: FeedTimeLineFeedTodayPlansResp, isCheck: Boolean) {
             launch {
-//                showLoading()
+                //                showLoading()
                 withContext(MDoveBackgroundPool) {
                     val selectSinglePlan = resp.params.beanSingle
                     MainDb.db.todayPlansDao().getFeedTodayPlan(resp.entityId)?.let {
@@ -197,6 +201,7 @@ class MainFeedFragment : BaseFragment() {
         activity?.let {
             feedViewModel = ViewModelProviders.of(it).get(MainFeedViewModel::class.java)
             punchViewModel = ViewModelProviders.of(it).get(PunchViewModel::class.java)
+            commentViewModel = ViewModelProviders.of(it).get(CommentViewModel::class.java)
         }
     }
 
@@ -236,6 +241,26 @@ class MainFeedFragment : BaseFragment() {
                 Status.ERROR -> {
                     sfl.isRefreshing = false
                     ToastUtil.toast("请求失败", Toast.LENGTH_SHORT)
+                }
+            }
+        })
+
+        commentViewModel.saveAnswerLiveData.observe(this, Observer {
+            when(it.status){
+                Status.ERROR->{
+                    dismissLoading()
+                    it.data?.message?.let {
+                        ToastUtil.toast(it)
+                    }
+                }
+                Status.LOADING->{
+                    showLoading()
+                }
+                Status.SUCCESS->{
+                    dismissLoading()
+                    it.data?.message?.let {
+                        ToastUtil.toast(it)
+                    }
                 }
             }
         })

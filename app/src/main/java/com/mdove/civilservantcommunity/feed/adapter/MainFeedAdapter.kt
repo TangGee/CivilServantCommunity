@@ -15,16 +15,18 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.flexbox.FlexboxLayout
 import com.mdove.civilservantcommunity.R
 import com.mdove.civilservantcommunity.feed.bean.*
+import com.mdove.civilservantcommunity.plan.dao.TodayPlansEntity
 import com.mdove.civilservantcommunity.plan.model.SinglePlanStatus
+import com.mdove.dependent.common.gson.GsonProvider
 import com.mdove.dependent.common.toast.ToastUtil
 import com.mdove.dependent.common.utils.TimeUtils
 import com.mdove.dependent.common.utils.UIUtils
 import com.mdove.dependent.common.utils.setDebounceOnClickListener
 import com.mdove.dependent.common.view.roundcorner.RoundCornerConstraintLayout
 import com.mdove.dependent.common.view.timeline.TimeLineView
-import java.util.*
 
 /**
  * Created by MDove on 2019-09-06.
@@ -32,6 +34,7 @@ import java.util.*
 class MainFeedAdapter(
     val listener: OnMainFeedClickListener? = null,
     val normalListener: OnNormalFeedListener? = null,
+    val questionListener: OnMainFeedQuickClickListener? = null,
     val checkListener: OnMainFeedTodayPlanCheckListener? = null
 ) :
     ListAdapter<BaseFeedResp, RecyclerView.ViewHolder>(object :
@@ -154,7 +157,7 @@ class MainFeedAdapter(
         const val TYPE_FEED_DEV = 16
         const val TYPE_FEED_QUESTION_CARD = 17
         const val TYPE_FEED_TIME_LINE_FEED_TODAY_PLAN_BTN_APPLY_OLD = 18
-
+        const val TYPE_FEED_QUESTION_CARD_CLICK_QUICK_SEND = 19
 
         const val CLICK_QUICK_BTN_PLAN = 101
         const val CLICK_QUICK_BTN_PUNCH = 102
@@ -572,6 +575,7 @@ class MainFeedAdapter(
 
     inner class FeedQuestionViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val tvAnswer = itemView.findViewById<TextView>(R.id.tv_answer)
+        private val flex = itemView.findViewById<FlexboxLayout>(R.id.flex)
 
         init {
             listener?.let { listener ->
@@ -583,17 +587,43 @@ class MainFeedAdapter(
 
         fun bind(question: FeedQuestionFeedResp) {
             itemView.findViewById<TextView>(R.id.tv_title).text = question.question.title
-            itemView.findViewById<TextView>(R.id.tv_name).text =question.question.makeTime
+            itemView.findViewById<TextView>(R.id.tv_name).text = question.question.makeTime
             itemView.findViewById<TextView>(R.id.tv_content).text = question.question.content
+            itemView.findViewById<TextView>(R.id.btn_quick).setOnClickListener {
+                questionListener?.onClick(TYPE_FEED_QUESTION_CARD_CLICK_QUICK_SEND, question)
+            }
             question.answer.let {
                 val username = it.userInfo?.username ?: "匿名用户"
-                val str = "$username：${it.content ?: ""}"
-                UIUtils.setTextViewSpanColor(
-                    tvAnswer, str, 0, username.length, ContextCompat.getColor(
-                        itemView.context,
-                        R.color.amber_500
+                if (it.listStyle == QUESTION_QUICK_SEND_LIST_STYLE) {
+                    GsonProvider.getDefaultGson().fromJson(it.content,TodayPlansEntity::class.java).let{
+                        val str = "$username：我的计划，参考一下？"
+                        UIUtils.setTextViewSpanColor(
+                            tvAnswer, str, 0, username.length, ContextCompat.getColor(
+                                itemView.context,
+                                R.color.amber_500
+                            )
+                        )
+                        flex.removeAllViews()
+                        it.resp.params.flatMap {
+                            it.beanSingles
+                        }.forEach {
+                            flex.addView(
+                                TextView(flex.context).apply {
+                                    layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                                        ViewGroup.LayoutParams.WRAP_CONTENT)
+                                    text = it.beanSingle.content ?: "!!!"
+                                })
+                        }
+                    }
+                } else {
+                    val str = "$username：${it.content ?: ""}"
+                    UIUtils.setTextViewSpanColor(
+                        tvAnswer, str, 0, username.length, ContextCompat.getColor(
+                            itemView.context,
+                            R.color.amber_500
+                        )
                     )
-                )
+                }
             }
         }
     }
@@ -662,6 +692,10 @@ interface OnNormalFeedListener {
 
 interface OnMainFeedClickListener {
     fun onClick(type: Int, respFeed: FeedArticleFeedResp?)
+}
+
+interface OnMainFeedQuickClickListener {
+    fun onClick(type: Int, questionResp: FeedQuestionFeedResp)
 }
 
 interface OnMainFeedTodayPlanCheckListener {

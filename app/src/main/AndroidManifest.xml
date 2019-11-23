@@ -12,17 +12,43 @@
         android:theme="@style/TransparentTheme"
         android:supportsRtl="true"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity
+       <!-- <activity
             android:name=".feed.MainFeedActivity"
             android:launchMode="singleTop"
             android:theme="@style/MyAppTheme"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>-->
 
+        <activity
+            android:name=".test.TestMainLauncherActivity"
+            android:theme="@style/MyAppTheme"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".test.TestSingleInstanceLauncherActivity"
+            android:theme="@style/MyAppTheme"
+            android:launchMode="singleInstance"/>
+        <activity android:name=".test.TestTopAffinityLauncherActivity"
+            android:theme="@style/MyAppTheme"
+            android:launchMode="singleTop"
+            android:taskAffinity="app.mdove"/>
+        <activity android:name=".test.TestSingleTaskLauncherActivity"
+            android:theme="@style/MyAppTheme"
+            android:launchMode="singleTask"
+            />
+        <activity android:name=".test.TestSingleTaskAffinityLauncherActivity"
+            android:taskAffinity="app.mdove.singletask"
+            android:theme="@style/MyAppTheme"
+            android:launchMode="singleTask"
+            />
 
         <activity android:name=".roles.SelectRolesActivity"
             android:launchMode="singleTop"
