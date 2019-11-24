@@ -4,4 +4,6 @@
 
     <string name="string_time_schedule_guide"><![CDATA[功能引导：<br>1、<font color="#EF5350">长按</font>计划可以拖动<br>2、拖动到<font color="#EF5350">时间表中</font>可以进行时间提醒]]></string>
     <string name="string_edit_plan_score_tv_tips">\"官方推荐\"</string>
+    <string name="string_no_content">文章状态异常，暂时无法显示</string>
+    <string name="string_no_name">匿名用户</string>
 </resources>

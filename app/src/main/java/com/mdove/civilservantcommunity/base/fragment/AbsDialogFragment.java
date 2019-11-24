@@ -3,8 +3,11 @@ package com.mdove.civilservantcommunity.base.fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Point;
 import android.os.Bundle;
+import android.view.Display;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
@@ -69,6 +72,26 @@ public abstract class AbsDialogFragment extends SafeShowDialogFragment implement
         super.onCreate(savedInstanceState);
         setStyle(DialogFragment.STYLE_NORMAL, R.style.AppTheme_Dialog_FullScreen);
         mLauncherHelper.onCreate(this);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        Window window = getDialog().getWindow();
+        if (window != null && isFull()) {
+            WindowManager windowManager = window.getWindowManager();
+            Display display = windowManager.getDefaultDisplay();
+            WindowManager.LayoutParams windowParam = window.getAttributes();
+            Point point = new Point();
+            display.getSize(point);
+            windowParam.width = point.x;
+            windowParam.height = point.y;
+            window.setAttributes(windowParam);
+        }
+    }
+
+    protected boolean isFull() {
+        return true;
     }
 
     @Override

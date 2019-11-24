@@ -11,7 +11,9 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mdove.civilservantcommunity.R
 import com.mdove.civilservantcommunity.base.fragment.BaseFragment
+import com.mdove.civilservantcommunity.question.adapter.OnClickQuestionListener
 import com.mdove.civilservantcommunity.question.adapter.QuestionAdapter
+import com.mdove.civilservantcommunity.question.bean.AnswerDetailBean
 import com.mdove.civilservantcommunity.question.bean.QuestionReqParams
 import com.mdove.civilservantcommunity.question.viewmodel.QuestionViewModel
 import com.mdove.dependent.common.networkenhance.valueobj.Status
@@ -26,7 +28,11 @@ import kotlinx.android.synthetic.main.fragment_question.*
  */
 class QuestionFragment : BaseFragment() {
     private lateinit var mViewModel: QuestionViewModel
-    private var adapter = QuestionAdapter()
+    private var adapter = QuestionAdapter(object : OnClickQuestionListener {
+        override fun onClickMore(bean: AnswerDetailBean) {
+            CommentDialogFragment.newInstance(bean).show(childFragmentManager, null)
+        }
+    })
 
     companion object {
         const val PARAMS_FRAGMENT = "params_fragment"

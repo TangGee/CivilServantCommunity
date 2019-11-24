@@ -95,12 +95,12 @@ class MePageAdapter(val listener: OnMePageClickListener? = null) :
             }
             data.question?.let {
                 tvTime.visibility = View.VISIBLE
-                tvContent.text = it.content ?: "文章状态异常，暂时无法显示"
-                tvTitle.text = it.title ?: "文章状态异常，暂时无法显示"
+                tvContent.text = it.content ?: itemView.context.getString(R.string.string_no_content)
+                tvTitle.text = it.title ?: itemView.context.getString(R.string.string_no_content)
             } ?: also {
                 tvTime.visibility = View.GONE
-                tvContent.text = "文章状态异常，暂时无法显示"
-                tvTitle.text = "文章状态异常，暂时无法显示"
+                tvContent.text = itemView.context.getString(R.string.string_no_content)
+                tvTitle.text = itemView.context.getString(R.string.string_no_content)
             }
         }
     }
@@ -135,8 +135,8 @@ class MePageAdapter(val listener: OnMePageClickListener? = null) :
                     4,
                     ContextCompat.getColor(itemView.context, R.color.amber_600)
                 )
-                tvContent.text = data.question?.content ?: "文章状态异常，暂时无法显示"
-                tvTitle.text = data.question?.title ?: "文章状态异常，暂时无法显示"
+                tvContent.text = data.question?.content ?: itemView.context.getString(R.string.string_no_content)
+                tvTitle.text = data.question?.title ?: itemView.context.getString(R.string.string_no_content)
             }
         }
     }

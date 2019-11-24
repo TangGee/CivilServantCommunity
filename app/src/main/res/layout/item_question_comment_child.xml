@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white">
+
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="@dimen/margin_item_question_comment"
+        android:text="XXX"
+        android:textColor="@color/black"
+        android:textSize="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/tv_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_content"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="@dimen/margin_item_question_comment"
+        android:layout_marginRight="@dimen/margin_item_question_comment"
+        android:gravity="left"
+        android:text="XXX"
+        android:textColor="@color/black_ac"
+        android:textSize="14dp"
+        app:layout_constraintBottom_toTopOf="@+id/tv_time"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_name" />
+
+    <TextView
+        android:id="@+id/tv_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="XXX"
+        android:textColor="@color/grey_500"
+        android:layout_marginRight="8dp"
+        android:textSize="14dp"
+        app:layout_constraintBottom_toBottomOf="@+id/btn_send_comment"
+        app:layout_constraintRight_toLeftOf="@+id/btn_send_comment"
+        app:layout_constraintTop_toTopOf="@+id/btn_send_comment"
+        />
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/btn_send_comment"
+        app:srcCompat="@drawable/vector_ic_send_comment"
+        android:layout_width="24dp"
+        android:tint="@color/grey_500"
+        android:layout_marginTop="8dp"
+        android:layout_marginRight="@dimen/margin_item_question_comment"
+        android:layout_marginBottom="@dimen/margin_item_question_comment"
+        app:layout_constraintTop_toBottomOf="@+id/tv_content"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_height="24dp"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

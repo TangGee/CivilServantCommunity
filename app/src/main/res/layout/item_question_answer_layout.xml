@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/white"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@color/white">
 
     <TextView
         android:id="@+id/tv_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/margin_item_question_answer_layout"
+        android:layout_marginTop="8dp"
         android:layout_marginRight="@dimen/margin_item_question_answer_layout"
-        android:layout_marginTop="@dimen/margin_item_question_answer_layout"
         android:gravity="left"
         android:text="xxx"
         android:textColor="@color/blue_500"
@@ -22,11 +22,24 @@
         app:layout_constraintVertical_chainStyle="packed" />
 
     <TextView
+        android:id="@+id/tv_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/margin_item_question_answer_layout"
+        android:text="时间"
+        android:textColor="@color/grey_500"
+        android:textSize="12dp"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_name"
+        app:layout_constraintTop_toTopOf="@+id/tv_name"
+        app:layout_constraintRight_toRightOf="parent"
+        />
+
+    <TextView
         android:id="@+id/tv_content"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/margin_item_question_answer_layout"
-        android:layout_marginTop="@dimen/margin_item_question_answer_layout"
+        android:layout_marginTop="8dp"
         android:layout_marginRight="@dimen/margin_item_question_answer_layout"
         android:ellipsize="end"
         android:gravity="left"
@@ -45,7 +58,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/margin_item_question_answer_layout"
-        android:layout_marginTop="@dimen/margin_item_question_answer_layout"
+        android:layout_marginTop="8dp"
         android:layout_marginRight="@dimen/margin_item_question_answer_layout"
         android:background="@drawable/bg_round_grey_200"
         android:paddingLeft="8dp"
@@ -59,19 +72,30 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@+id/btn_go"
         app:layout_constraintTop_toBottomOf="@+id/tv_content"
-        app:layout_constraintVertical_chainStyle="packed" />
+        app:layout_constraintVertical_chainStyle="packed"
+        app:layout_goneMarginRight="@dimen/margin_item_question_answer_layout" />
 
     <TextView
         android:id="@+id/btn_go"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="4dp"
-        android:text="详情"
+        android:text="查看更多"
         android:textColor="#8a8a8a"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="@+id/tv_answer"
-        app:layout_constraintRight_toLeftOf="@+id/iv_detail"
-        />
+        app:layout_constraintRight_toLeftOf="@+id/iv_detail" />
+
+    <View
+        android:id="@+id/line"
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/grey_200"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_answer" />
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/iv_detail"
@@ -82,16 +106,5 @@
         app:layout_constraintBottom_toBottomOf="@+id/tv_answer"
         app:layout_constraintRight_toRightOf="parent"
         app:srcCompat="@drawable/vector_feed_to_detail" />
-
-    <View
-        android:id="@+id/line"
-        android:layout_width="match_parent"
-        android:layout_height="10dp"
-        android:layout_marginTop="@dimen/margin_item_question_answer_layout"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_answer"
-        android:background="@color/grey_200"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

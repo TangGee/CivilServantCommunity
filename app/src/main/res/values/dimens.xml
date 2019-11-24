@@ -4,4 +4,5 @@
     <dimen name="edit_plan_module_inner_margin">8dp</dimen>
     <dimen name="question_item_margin">12dp</dimen>
     <dimen name="margin_item_question_answer_layout">12dp</dimen>
+    <dimen name="margin_item_question_comment">12dp</dimen>
 </resources>

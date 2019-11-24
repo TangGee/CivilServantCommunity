@@ -2,9 +2,9 @@ package com.mdove.dependent.common.loading
 
 import android.os.Bundle
 import android.util.Log
+import android.view.*
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
-import android.view.*
 import com.mdove.dependent.common.threadpool.FastMainScope
 import kotlinx.coroutines.CoroutineScope
 import kotlin.coroutines.CoroutineContext

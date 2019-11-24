@@ -43,7 +43,35 @@ class CommentRepository {
         }.asLiveData()
     }
 
+    // 一级评论
     fun saveComment(params: CommentReqParams): LiveData<Resource<NormalResp<String>>> {
+        return object :
+            NetworkBoundResource<NormalResp<String>, NormalResp<String>>(
+                AppExecutorsImpl()
+            ) {
+            override fun saveCallResult(item: NormalResp<String>) {
+                cacheModule.mQuestionCacheResp = item
+            }
+
+            override fun shouldFetch(data: NormalResp<String>?): Boolean {
+                return true
+            }
+
+            override fun loadFromDb(): LiveData<NormalResp<String>> {
+                // 暂不需要
+                return MutableLiveData<NormalResp<String>>().apply {
+                    value = cacheModule.mQuestionCacheResp ?: NormalResp<String>()
+                }
+            }
+
+            override fun createCall(): LiveData<ApiResponse<NormalResp<String>>> {
+                return netModule.saveComment(params)
+            }
+        }.asLiveData()
+    }
+
+    // 二级评论
+    fun saveTwoComment(params: CommentReqParams): LiveData<Resource<NormalResp<String>>> {
         return object :
             NetworkBoundResource<NormalResp<String>, NormalResp<String>>(
                 AppExecutorsImpl()
