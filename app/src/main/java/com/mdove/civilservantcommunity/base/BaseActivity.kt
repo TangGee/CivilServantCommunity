@@ -47,8 +47,6 @@ open class BaseActivity : BaseLauncherActivity(), CoroutineScope {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //2、清除状态栏文字深色，同时保留之前的flag
-
         if (enableTranslucent()) {
             StatusBarUtil.setTranslucent(this)
         }

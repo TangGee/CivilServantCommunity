@@ -1,5 +1,6 @@
 package com.mdove.civilservantcommunity.question
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -98,5 +99,6 @@ class QuestionFragment : BaseFragment() {
 
         view_toolbar.setToolbarBackgroundIsNull()
         view_toolbar.setTitle("提问")
+        view_toolbar.setColorForAll(Color.BLACK)
     }
 }

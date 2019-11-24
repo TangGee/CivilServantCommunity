@@ -597,7 +597,7 @@ class MainFeedAdapter(
                             UIUtils.setTextViewSpanColor(
                                 tvAnswer, str, 0, username.length, ContextCompat.getColor(
                                     itemView.context,
-                                    R.color.amber_500
+                                    R.color.amber_600
                                 )
                             )
                             flex.removeAllViews()
@@ -619,7 +619,7 @@ class MainFeedAdapter(
                     UIUtils.setTextViewSpanColor(
                         tvAnswer, str, 0, username.length, ContextCompat.getColor(
                             itemView.context,
-                            R.color.amber_500
+                            R.color.amber_600
                         )
                     )
                 }

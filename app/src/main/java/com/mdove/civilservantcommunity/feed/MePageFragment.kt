@@ -22,7 +22,9 @@ import com.mdove.civilservantcommunity.detailfeed.DetailFeedActivity
 import com.mdove.civilservantcommunity.detailfeed.bean.DetailFeedParams
 import com.mdove.civilservantcommunity.feed.adapter.MePageAdapter
 import com.mdove.civilservantcommunity.feed.adapter.OnMePageClickListener
-import com.mdove.civilservantcommunity.feed.bean.FeedArticleFeedResp
+import com.mdove.civilservantcommunity.account.bean.MePageAnswerInfoMePage
+import com.mdove.civilservantcommunity.account.bean.MePageArticleInfoMePage
+import com.mdove.civilservantcommunity.account.bean.MePageQuestionInfoMePage
 import com.mdove.civilservantcommunity.feed.viewmodel.MePageViewModel
 import com.mdove.civilservantcommunity.ugc.MainUGCActivity
 import com.mdove.dependent.common.networkenhance.valueobj.Status
@@ -57,10 +59,16 @@ class MePageFragment : BaseFragment() {
         btn_update.paint.flags = Paint.UNDERLINE_TEXT_FLAG
         view_toolbar.setTitle("我的主页")
         mAdapter = MePageAdapter(object : OnMePageClickListener {
-            override fun onClick(respFeed: FeedArticleFeedResp) {
-                if (context != null && respFeed.article.aid != null) {
-                    DetailFeedActivity.gotoFeedDetail(context!!, DetailFeedParams(respFeed.article.aid))
+            override fun onClickArticle(article: MePageArticleInfoMePage) {
+                if (context != null && article.aid != null) {
+                    DetailFeedActivity.gotoFeedDetail(context!!, DetailFeedParams(article.aid))
                 }
+            }
+
+            override fun onClickQuestion(article: MePageQuestionInfoMePage) {
+            }
+
+            override fun onClickAnswer(article: MePageAnswerInfoMePage) {
             }
         })
         rlv.layoutManager = LinearLayoutManager(context)
@@ -135,7 +143,7 @@ class MePageFragment : BaseFragment() {
         AppConfig.setUserInfo(UserInfo(params.uid, params.userName))
         tv_name.text = params.userName
         tv_type.text = IdentitysHelper.getIdentity(params.userType)
-        if (!params.feedArticleList.isNullOrEmpty()) {
+        if (params.feedArticleList != null) {
             layout_empty.visibility = View.GONE
             layout_edit.visibility = View.VISIBLE
             mAdapter.submitList(params.feedArticleList)
