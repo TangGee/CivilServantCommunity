@@ -28,7 +28,9 @@ import com.mdove.civilservantcommunity.plan.model.SinglePlanStatus
 import com.mdove.civilservantcommunity.plan.model.TimeScheduleStatus
 import com.mdove.civilservantcommunity.punch.bean.PunchReq
 import com.mdove.civilservantcommunity.punch.viewmodel.PunchViewModel
-import com.mdove.civilservantcommunity.question.viewmodel.CommentViewModel
+import com.mdove.civilservantcommunity.question.QuestionActivity
+import com.mdove.civilservantcommunity.question.bean.QuestionReqParams
+import com.mdove.civilservantcommunity.question.viewmodel.QuestionViewModel
 import com.mdove.civilservantcommunity.room.MainDb
 import com.mdove.civilservantcommunity.ugc.MainUGCActivity
 import com.mdove.dependent.common.networkenhance.valueobj.Status
@@ -47,7 +49,7 @@ import kotlinx.coroutines.withContext
 class MainFeedFragment : BaseFragment() {
     private lateinit var feedViewModel: MainFeedViewModel
     private lateinit var punchViewModel: PunchViewModel
-    private lateinit var commentViewModel: CommentViewModel
+    private lateinit var mQuestionViewModel: QuestionViewModel
     private val adapter = MainFeedAdapter(object : OnMainFeedClickListener {
         override fun onClick(type: Int, respFeed: FeedArticleFeedResp?) {
             when (type) {
@@ -109,7 +111,11 @@ class MainFeedFragment : BaseFragment() {
         }
     }, object : OnMainFeedQuickClickListener {
         override fun onClick(type: Int, questionResp: FeedQuestionFeedResp) {
-            commentViewModel.questionResp.value = questionResp
+            context?.let { context ->
+                questionResp.question.qid?.let {
+                    QuestionActivity.gotoQuestion(context, QuestionReqParams(it))
+                }
+            }
         }
     }, object : OnMainFeedTodayPlanCheckListener {
         override fun onCheck(resp: FeedTimeLineFeedTodayPlansResp, isCheck: Boolean) {
@@ -201,7 +207,7 @@ class MainFeedFragment : BaseFragment() {
         activity?.let {
             feedViewModel = ViewModelProviders.of(it).get(MainFeedViewModel::class.java)
             punchViewModel = ViewModelProviders.of(it).get(PunchViewModel::class.java)
-            commentViewModel = ViewModelProviders.of(it).get(CommentViewModel::class.java)
+            mQuestionViewModel = ViewModelProviders.of(it).get(QuestionViewModel::class.java)
         }
     }
 
@@ -245,18 +251,18 @@ class MainFeedFragment : BaseFragment() {
             }
         })
 
-        commentViewModel.saveAnswerLiveData.observe(this, Observer {
-            when(it.status){
-                Status.ERROR->{
+        mQuestionViewModel.saveAnswerLiveData.observe(this, Observer {
+            when (it.status) {
+                Status.ERROR -> {
                     dismissLoading()
                     it.data?.message?.let {
                         ToastUtil.toast(it)
                     }
                 }
-                Status.LOADING->{
+                Status.LOADING -> {
                     showLoading()
                 }
-                Status.SUCCESS->{
+                Status.SUCCESS -> {
                     dismissLoading()
                     it.data?.message?.let {
                         ToastUtil.toast(it)

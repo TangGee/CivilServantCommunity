@@ -1,10 +1,10 @@
-package com.mdove.civilservantcommunity.question
+package com.mdove.civilservantcommunity.question.repository
 
 import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.mdove.civilservantcommunity.feed.bean.FeedReqParams
-import com.mdove.civilservantcommunity.feed.bean.MainFeedResp
+import com.mdove.civilservantcommunity.question.bean.QuestionDetailResp
+import com.mdove.civilservantcommunity.question.bean.QuestionReqParams
 import com.mdove.dependent.apiservice.AppDependsProvider
 import com.mdove.dependent.common.network.NormalResp
 import com.mdove.dependent.common.networkenhance.api.ApiErrorResponse
@@ -16,26 +16,25 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 /**
- * Created by zhaojing on 2019-11-19.
+ * Created by MDove on 2019-11-21.
  */
-class QuestionDetailModule {
+class QuestionModule {
 
-    fun reqFeed(feedParams: FeedReqParams): LiveData<ApiResponse<NormalResp<List<MainFeedResp>>>> {
-        val liveData = MutableLiveData<ApiResponse<NormalResp<List<MainFeedResp>>>>()
+    fun reqQuestionDetail(params: QuestionReqParams): LiveData<ApiResponse<NormalResp<QuestionDetailResp>>> {
+        val liveData = MutableLiveData<ApiResponse<NormalResp<QuestionDetailResp>>>()
 
         val network = AppDependsProvider.networkService
-        val builder = Uri.parse("${network.host}/play/select_main_feed").buildUpon()
-        builder.appendQueryParameter("page", feedParams.page.toString())
-        builder.appendQueryParameter("counts", feedParams.counts.toString())
+        val builder = Uri.parse("${network.host}/play/select_question_info").buildUpon()
+        builder.appendQueryParameter("qd", params.qid)
         val url = builder.toString()
 
         CoroutineScope(MDoveApiPool).launch {
             val resp = try {
                 val json = network.networkClient.get(url)
-                val data: NormalResp<List<MainFeedResp>> = fromServerResp(json)
+                val data: NormalResp<QuestionDetailResp> = fromServerResp(json)
                 data
             } catch (e: Exception) {
-                NormalResp<List<MainFeedResp>>(exception = e)
+                NormalResp<QuestionDetailResp>(exception = e)
             }
             if (resp.exception == null) {
                 liveData.postValue(ApiSuccessResponse(resp))

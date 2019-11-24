@@ -9,71 +9,78 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
-        android:theme="@style/TransparentTheme"
         android:supportsRtl="true"
+        android:theme="@style/TransparentTheme"
         tools:ignore="GoogleAppIndexingWarning">
-       <!-- <activity
-            android:name=".feed.MainFeedActivity"
-            android:launchMode="singleTop"
-            android:theme="@style/MyAppTheme"
-            android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>-->
 
         <activity
-            android:name=".test.TestMainLauncherActivity"
-            android:theme="@style/MyAppTheme"
-            android:screenOrientation="portrait">
+            android:name=".feed.MainFeedActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/MyAppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <activity android:name=".test.TestSingleInstanceLauncherActivity"
-            android:theme="@style/MyAppTheme"
-            android:launchMode="singleInstance"/>
-        <activity android:name=".test.TestTopAffinityLauncherActivity"
-            android:theme="@style/MyAppTheme"
+        <!--        <activity-->
+        <!--            android:name=".test.TestMainLauncherActivity"-->
+        <!--            android:theme="@style/MyAppTheme"-->
+        <!--            android:screenOrientation="portrait">-->
+        <!--            <intent-filter>-->
+        <!--                <action android:name="android.intent.action.MAIN" />-->
+        <!--                <category android:name="android.intent.category.LAUNCHER" />-->
+        <!--            </intent-filter>-->
+        <!--        </activity>-->
+
+        <activity
+            android:name=".test.TestSingleInstanceLauncherActivity"
+            android:launchMode="singleInstance"
+            android:theme="@style/MyAppTheme" />
+        <activity
+            android:name=".test.TestTopAffinityLauncherActivity"
             android:launchMode="singleTop"
-            android:taskAffinity="app.mdove"/>
-        <activity android:name=".test.TestSingleTaskLauncherActivity"
-            android:theme="@style/MyAppTheme"
+            android:taskAffinity="app.mdove"
+            android:theme="@style/MyAppTheme" />
+        <activity
+            android:name=".test.TestSingleTaskLauncherActivity"
             android:launchMode="singleTask"
-            />
-        <activity android:name=".test.TestSingleTaskAffinityLauncherActivity"
+            android:theme="@style/MyAppTheme" />
+        <activity
+            android:name=".test.TestSingleTaskAffinityLauncherActivity"
+            android:launchMode="singleTask"
             android:taskAffinity="app.mdove.singletask"
-            android:theme="@style/MyAppTheme"
-            android:launchMode="singleTask"
-            />
+            android:theme="@style/MyAppTheme" />
 
-        <activity android:name=".roles.SelectRolesActivity"
+        <activity
+            android:name=".roles.SelectRolesActivity"
             android:launchMode="singleTop"
-            android:theme="@style/MyAppTheme"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/MyAppTheme" />
 
-        <activity android:name=".feedback.FeedBackActivity"
+        <activity
+            android:name=".feedback.FeedBackActivity"
             android:launchMode="singleTop"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
 
-        <activity android:name=".plan.activity.HistoryPlansActivity"
+        <activity
+            android:name=".plan.activity.HistoryPlansActivity"
             android:launchMode="singleTop"
-            android:theme="@style/TransparentTheme"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/TransparentTheme" />
 
-        <activity android:name=".plan.activity.TimeScheduleActivity"
+        <activity
+            android:name=".plan.activity.TimeScheduleActivity"
             android:launchMode="singleTop"
-            android:theme="@style/TransparentTheme"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/TransparentTheme" />
 
         <activity
             android:name=".account.AccountActivity"
             android:launchMode="singleTop"
-            android:theme="@style/MyAppTheme"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/MyAppTheme" />
 
         <activity
             android:name=".detailfeed.DetailFeedActivity"
@@ -86,6 +93,11 @@
             android:screenOrientation="portrait" />
 
         <activity
+            android:name=".question.QuestionActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+
+        <activity
             android:name=".feed.MePageActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
@@ -93,8 +105,8 @@
         <activity
             android:name=".account.UpdateUserInfoActivity"
             android:launchMode="singleTop"
-            android:theme="@style/MyAppTheme"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/MyAppTheme" />
 
         <activity
             android:name=".plan.activity.EditPlanActivity"

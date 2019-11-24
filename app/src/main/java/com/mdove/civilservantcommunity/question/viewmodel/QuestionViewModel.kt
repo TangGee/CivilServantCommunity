@@ -8,7 +8,10 @@ import com.mdove.civilservantcommunity.config.AppConfig
 import com.mdove.civilservantcommunity.feed.bean.FeedQuestionFeedResp
 import com.mdove.civilservantcommunity.plan.dao.TodayPlansEntity
 import com.mdove.civilservantcommunity.question.bean.AnswerReqParams
+import com.mdove.civilservantcommunity.question.bean.QuestionDetailResp
+import com.mdove.civilservantcommunity.question.bean.QuestionReqParams
 import com.mdove.civilservantcommunity.question.repository.CommentRepository
+import com.mdove.civilservantcommunity.question.repository.QuestionRepository
 import com.mdove.civilservantcommunity.room.MainDb
 import com.mdove.dependent.common.network.NormalResp
 import com.mdove.dependent.common.networkenhance.valueobj.Resource
@@ -23,11 +26,17 @@ import kotlinx.coroutines.withContext
 /**
  * Created by MDove on 2019-11-21.
  */
-class CommentViewModel : ViewModel() {
+class QuestionViewModel : ViewModel() {
     private val repository = CommentRepository()
+    private val questionRepository = QuestionRepository()
 
     val questionResp = MutableLiveData<FeedQuestionFeedResp>()
+    val questionDetailResp = MutableLiveData<QuestionReqParams>()
     private val proxyAnswerReqParamsLiveData = MutableLiveData<AnswerReqParams>()
+
+    val questionDetailLiveData = Transformations.switchMap(questionDetailResp) {
+        questionRepository.reqQuestionDetail(it)
+    }
 
     val saveAnswerLiveData = MediatorLiveData<Resource<NormalResp<String>>>().apply {
         addSource(Transformations.switchMap(proxyAnswerReqParamsLiveData) {

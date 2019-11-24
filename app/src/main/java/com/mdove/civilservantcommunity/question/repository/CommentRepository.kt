@@ -15,7 +15,7 @@ import com.mdove.dependent.common.networkenhance.valueobj.Resource
  */
 class CommentRepository {
     private val netModule = CommentModule()
-    private val cacheModule = CommentCacheModule()
+    private val cacheModule = CacheModule()
 
     fun saveAnswer(params: AnswerReqParams): LiveData<Resource<NormalResp<String>>> {
         return object :
