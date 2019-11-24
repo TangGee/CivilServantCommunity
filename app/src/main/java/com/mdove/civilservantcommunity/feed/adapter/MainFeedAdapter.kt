@@ -577,44 +577,43 @@ class MainFeedAdapter(
         private val tvAnswer = itemView.findViewById<TextView>(R.id.tv_answer)
         private val flex = itemView.findViewById<FlexboxLayout>(R.id.flex)
 
-        init {
-            listener?.let { listener ->
-                itemView.setDebounceOnClickListener {
-                    listener.onClick(TYPE_FEED_PLAN, null)
-                }
-            }
-        }
-
         fun bind(question: FeedQuestionFeedResp) {
             itemView.findViewById<TextView>(R.id.tv_title).text = question.question.title
             itemView.findViewById<TextView>(R.id.tv_name).text = question.question.makeTime
             itemView.findViewById<TextView>(R.id.tv_content).text = question.question.content
-            itemView.findViewById<TextView>(R.id.btn_quick).setOnClickListener {
+            itemView.findViewById<TextView>(R.id.btn_quick).setDebounceOnClickListener {
                 questionListener?.onClick(TYPE_FEED_QUESTION_CARD_CLICK_QUICK_SEND, question)
             }
+            itemView.setDebounceOnClickListener {
+                questionListener?.onClick(TYPE_FEED_QUESTION_CARD_CLICK_QUICK_SEND, question)
+            }
+
             question.answer.let {
                 val username = it.userInfo?.username ?: "匿名用户"
                 if (it.listStyle == QUESTION_QUICK_SEND_LIST_STYLE) {
-                    GsonProvider.getDefaultGson().fromJson(it.content,TodayPlansEntity::class.java).let{
-                        val str = "$username：我的计划，参考一下？"
-                        UIUtils.setTextViewSpanColor(
-                            tvAnswer, str, 0, username.length, ContextCompat.getColor(
-                                itemView.context,
-                                R.color.amber_500
+                    GsonProvider.getDefaultGson().fromJson(it.content, TodayPlansEntity::class.java)
+                        .let {
+                            val str = "$username：我的计划，参考一下？"
+                            UIUtils.setTextViewSpanColor(
+                                tvAnswer, str, 0, username.length, ContextCompat.getColor(
+                                    itemView.context,
+                                    R.color.amber_500
+                                )
                             )
-                        )
-                        flex.removeAllViews()
-                        it.resp.params.flatMap {
-                            it.beanSingles
-                        }.forEach {
-                            flex.addView(
-                                TextView(flex.context).apply {
-                                    layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-                                        ViewGroup.LayoutParams.WRAP_CONTENT)
-                                    text = it.beanSingle.content ?: "!!!"
-                                })
+                            flex.removeAllViews()
+                            it.resp.params.flatMap {
+                                it.beanSingles
+                            }.forEach {
+                                flex.addView(
+                                    TextView(flex.context).apply {
+                                        layoutParams = ViewGroup.LayoutParams(
+                                            ViewGroup.LayoutParams.WRAP_CONTENT,
+                                            ViewGroup.LayoutParams.WRAP_CONTENT
+                                        )
+                                        text = it.beanSingle.content ?: "!!!"
+                                    })
+                            }
                         }
-                    }
                 } else {
                     val str = "$username：${it.content ?: ""}"
                     UIUtils.setTextViewSpanColor(

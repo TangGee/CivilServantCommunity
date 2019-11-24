@@ -24,7 +24,7 @@ data class QuestionDetailBean(
     @SerializedName("type") val topics: UGCTopic? = null,
     @SerializedName("title") val title: String? = "",
     @SerializedName("content") val content: String? = "",
-    @SerializedName("maketime") val makeTime: String? = "",
+    @SerializedName("maketime") val makeTime: Long? = null,
     @SerializedName("list_style") val listStyle: Int? = 0
 ) : Parcelable
 
@@ -41,7 +41,7 @@ data class AnswerDetailAnBean(
     @SerializedName("user_info") val userInfo: UserInfo? = null,
     @SerializedName("qid") val qid: String? = "",
     @SerializedName("content") val content: String? = "",
-    @SerializedName("maketime") val makeTime: String? = "",
+    @SerializedName("maketime") val makeTime: Long? = null,
     @SerializedName("list_style") val listStyle: String? = ""
 ) : Parcelable
 
@@ -50,7 +50,7 @@ data class PlayCommentOnelisBean(
     @SerializedName("anid") val anid: String? = "",
     @SerializedName("comment_info") val info: CommentInfoBean? = null,
     @SerializedName("content") val content: String? = "",
-    @SerializedName("maketime") val makeTime: String? = "",
+    @SerializedName("maketime") val makeTime: Long? = null,
     @SerializedName("list_style") val listStyle: String? = ""
 ) : Parcelable
 
@@ -61,7 +61,7 @@ data class PlayCommentTwolisBean(
     @SerializedName("to_info") val toInfo: ToInfoBean? = null,
     @SerializedName("content") val content: String? = "",
     @SerializedName("father_id") val fatherId: String? = "",
-    @SerializedName("maketime") val makeTime: String? = "",
+    @SerializedName("maketime") val makeTime: Long? = null,
     @SerializedName("list_style") val listStyle: String? = ""
 ) : Parcelable
 

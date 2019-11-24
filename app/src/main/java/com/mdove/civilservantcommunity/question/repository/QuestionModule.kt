@@ -25,7 +25,7 @@ class QuestionModule {
 
         val network = AppDependsProvider.networkService
         val builder = Uri.parse("${network.host}/play/select_question_info").buildUpon()
-        builder.appendQueryParameter("qd", params.qid)
+        builder.appendQueryParameter("qid", params.qid)
         val url = builder.toString()
 
         CoroutineScope(MDoveApiPool).launch {
