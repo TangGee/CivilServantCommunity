@@ -12,7 +12,7 @@
         android:layout_marginLeft="40dp"
         android:layout_marginTop="@dimen/margin_item_question_comment"
         android:text="XXX"
-        android:textColor="@color/black"
+        android:textColor="@color/black_a8"
         android:textSize="16dp"
         app:layout_constraintBottom_toTopOf="@+id/tv_content"
         app:layout_constraintLeft_toLeftOf="parent"

@@ -27,9 +27,6 @@ import kotlinx.android.synthetic.main.fragment_dialog_question_send_comment.*
  * Created by DMove on 2019-11-24.
  */
 class SendCommentDialogFragment : AbsDialogFragment() {
-    // 输入框
-    private var rootHeight: Int = 0
-    private var keyboardHeight: Int = 0
     private var inputMethodManager: InputMethodManager? = null
     private var softKeyBoardListener: SoftKeyBoardListener? = null
     private lateinit var viewModel: CommentViewModel
@@ -65,7 +62,6 @@ class SendCommentDialogFragment : AbsDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initIntent()
-        initSoftKeyboardListener()
         initView()
         et_comment.postDelayed({
             viewModel.inputStatusLiveData.value = InputStatus.INPUT_STATUS_SHOW
@@ -96,9 +92,9 @@ class SendCommentDialogFragment : AbsDialogFragment() {
                 }
             })
         }
-        layout_root.setDebounceOnClickListener {
-            dismissAllowingStateLoss()
-        }
+//        layout_root.setDebounceOnClickListener {
+//            dismissAllowingStateLoss()
+//        }
         et_comment.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 enableSend((s?.isBlank() != true))
@@ -149,43 +145,6 @@ class SendCommentDialogFragment : AbsDialogFragment() {
                     it.windowToken,
                     0
                 )
-            }
-        }
-    }
-
-    private fun initSoftKeyboardListener() {
-        if (softKeyBoardListener == null) {
-            activity?.let {
-                softKeyBoardListener = SoftKeyBoardListener(it).apply {
-                    onSoftKeyBoardChangeListener =
-                        object : SoftKeyBoardListener.OnSoftKeyBoardChangeListener {
-
-                            override fun keyBoardShow(height: Int) {
-                                // 部分手机弹起键盘时会把手机隐藏的底部导航栏拉起且推动布局，导致键盘高度计算异常
-                                keyboardHeight =
-                                    if (rootHeight != 0 && rootHeight > layout_root.height) {
-                                        height - (rootHeight - layout_root.height)
-                                    } else {
-                                        height
-                                    }
-
-                                stub?.let { view ->
-                                    //下方空白区域和键盘等高
-                                    val lp = view.layoutParams as ConstraintLayout.LayoutParams
-                                    lp.height = keyboardHeight
-                                    view.layoutParams = lp
-                                }
-                            }
-
-                            override fun keyBoardHide(height: Int) {
-                                stub?.let { view ->
-                                    val lp = view.layoutParams as ConstraintLayout.LayoutParams
-                                    lp.height = 0
-                                    view.layoutParams = lp
-                                }
-                            }
-                        }
-                }
             }
         }
     }
