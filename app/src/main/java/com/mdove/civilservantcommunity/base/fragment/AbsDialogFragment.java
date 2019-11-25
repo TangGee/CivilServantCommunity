@@ -103,7 +103,6 @@ public abstract class AbsDialogFragment extends SafeShowDialogFragment implement
         }
     }
 
-
     @Override
     public void onDismiss(@Nullable DialogInterface dialog) {
         try {

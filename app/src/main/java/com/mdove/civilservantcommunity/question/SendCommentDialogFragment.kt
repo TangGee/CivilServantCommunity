@@ -16,6 +16,7 @@ import com.mdove.civilservantcommunity.R
 import com.mdove.civilservantcommunity.base.fragment.AbsDialogFragment
 import com.mdove.civilservantcommunity.question.bean.QuestionCommentSendParams
 import com.mdove.civilservantcommunity.question.viewmodel.CommentViewModel
+import com.mdove.civilservantcommunity.question.viewmodel.InputStatus
 import com.mdove.dependent.common.networkenhance.valueobj.Status
 import com.mdove.dependent.common.utils.SoftKeyBoardListener
 import com.mdove.dependent.common.utils.setDebounceOnClickListener
@@ -26,6 +27,7 @@ import kotlinx.android.synthetic.main.fragment_dialog_question_send_comment.*
  * Created by DMove on 2019-11-24.
  */
 class SendCommentDialogFragment : AbsDialogFragment() {
+    // 输入框
     private var rootHeight: Int = 0
     private var keyboardHeight: Int = 0
     private var inputMethodManager: InputMethodManager? = null
@@ -60,13 +62,13 @@ class SendCommentDialogFragment : AbsDialogFragment() {
         return inflater.inflate(R.layout.fragment_dialog_question_send_comment, container, false)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         initIntent()
         initSoftKeyboardListener()
         initView()
         et_comment.postDelayed({
-            showOrHideSoftKeyboard(true)
+            viewModel.inputStatusLiveData.value = InputStatus.INPUT_STATUS_SHOW
         }, 200)
     }
 
@@ -81,13 +83,13 @@ class SendCommentDialogFragment : AbsDialogFragment() {
             val content = et_comment.text.toString()
             viewModel.sendComment(content)?.observe(this, Observer {
                 when (it.status) {
-                    Status.ERROR->{
+                    Status.ERROR -> {
                         dismiss()
                     }
-                    Status.LOADING->{
+                    Status.LOADING -> {
                         showLoading()
                     }
-                    Status.SUCCESS->{
+                    Status.SUCCESS -> {
                         dismiss()
                         dismissAllowingStateLoss()
                     }
@@ -107,6 +109,9 @@ class SendCommentDialogFragment : AbsDialogFragment() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
             }
+        })
+        viewModel.inputStatusLiveData.observe(this, Observer {
+            showOrHideSoftKeyboard(it == InputStatus.INPUT_STATUS_SHOW)
         })
     }
 
@@ -164,18 +169,18 @@ class SendCommentDialogFragment : AbsDialogFragment() {
                                         height
                                     }
 
-                                layout_edit?.let { view ->
+                                stub?.let { view ->
                                     //下方空白区域和键盘等高
-//                                    val lp = view.layoutParams as ConstraintLayout.LayoutParams
-//                                    lp.bottomToBottom = keyboardHeight
-//                                    view.layoutParams = lp
+                                    val lp = view.layoutParams as ConstraintLayout.LayoutParams
+                                    lp.height = keyboardHeight
+                                    view.layoutParams = lp
                                 }
                             }
 
                             override fun keyBoardHide(height: Int) {
-                                layout_edit?.let { view ->
+                                stub?.let { view ->
                                     val lp = view.layoutParams as ConstraintLayout.LayoutParams
-                                    lp.bottomToBottom = 0
+                                    lp.height = 0
                                     view.layoutParams = lp
                                 }
                             }
@@ -190,7 +195,7 @@ class SendCommentDialogFragment : AbsDialogFragment() {
         softKeyBoardListener?.release()
         softKeyBoardListener = null
         inputMethodManager?.hideSoftInputFromWindow(
-            layout_edit.windowToken,
+            et_comment.windowToken,
             0
         )
     }

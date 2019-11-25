@@ -1,6 +1,7 @@
 package com.mdove.civilservantcommunity.question.viewmodel
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.mdove.civilservantcommunity.config.AppConfig
 import com.mdove.civilservantcommunity.question.bean.CommentInfo
@@ -17,6 +18,10 @@ import com.mdove.dependent.common.toast.ToastUtil
 class CommentViewModel : ViewModel() {
     private val repository = CommentRepository()
     var params: QuestionCommentSendParams? = null
+
+    val inputStatusLiveData  = MutableLiveData<InputStatus>().apply {
+        value = InputStatus.INPUT_STATUS_HIDE
+    }
 
     fun sendComment(content: String): LiveData<Resource<NormalResp<String>>>? {
         return params?.let {
@@ -35,4 +40,9 @@ class CommentViewModel : ViewModel() {
             repository.saveComment(it)
         }
     }
+}
+
+enum class InputStatus{
+    INPUT_STATUS_SHOW,
+    INPUT_STATUS_HIDE,
 }

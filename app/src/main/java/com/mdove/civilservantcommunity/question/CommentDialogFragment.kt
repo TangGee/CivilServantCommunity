@@ -1,15 +1,22 @@
 package com.mdove.civilservantcommunity.question
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mdove.civilservantcommunity.R
 import com.mdove.civilservantcommunity.base.fragment.AbsDialogFragment
 import com.mdove.civilservantcommunity.question.adapter.OnQuestionCommentListener
 import com.mdove.civilservantcommunity.question.adapter.QuestionCommentAdapter
 import com.mdove.civilservantcommunity.question.bean.*
+import com.mdove.civilservantcommunity.question.viewmodel.CommentViewModel
+import com.mdove.dependent.common.utils.SoftKeyBoardListener
 import com.mdove.dependent.common.utils.setDebounceOnClickListener
 import com.mdove.dependent.common.view.dragroot.DragRootView
 import kotlinx.android.synthetic.main.fragment_comment_dialog.*
@@ -24,7 +31,8 @@ class CommentDialogFragment : AbsDialogFragment() {
         }
 
         override fun onClickSendCommentChild(data: QuestionCommentPairBean) {
-            SendCommentDialogFragment.newInstance(QuestionCommentSendParams(child = data)).show(childFragmentManager, null)
+            SendCommentDialogFragment.newInstance(QuestionCommentSendParams(child = data))
+                .show(childFragmentManager, null)
         }
     })
 
@@ -40,9 +48,12 @@ class CommentDialogFragment : AbsDialogFragment() {
         }
     }
 
+    private lateinit var viewModel: CommentViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(STYLE_NORMAL, R.style.CommentDialogFragment_Dialog)
+        viewModel = ViewModelProviders.of(activity!!).get(CommentViewModel::class.java)
     }
 
     override fun onCreateView(
