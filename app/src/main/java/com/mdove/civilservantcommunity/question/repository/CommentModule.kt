@@ -7,6 +7,7 @@ import com.mdove.civilservantcommunity.feed.bean.FeedReqParams
 import com.mdove.civilservantcommunity.feed.bean.MainFeedResp
 import com.mdove.civilservantcommunity.question.bean.AnswerReqParams
 import com.mdove.civilservantcommunity.question.bean.CommentReqParams
+import com.mdove.civilservantcommunity.question.bean.CommentToReqParams
 import com.mdove.dependent.apiservice.AppDependsProvider
 import com.mdove.dependent.common.network.NormalResp
 import com.mdove.dependent.common.networkenhance.api.ApiErrorResponse
@@ -24,6 +25,34 @@ import kotlinx.coroutines.launch
 class CommentModule {
 
     fun saveComment(params: CommentReqParams): LiveData<ApiResponse<NormalResp<String>>> {
+        val liveData = MutableLiveData<ApiResponse<NormalResp<String>>>()
+
+        val network = AppDependsProvider.networkService
+        val builder = Uri.parse("${network.host}/play/save_comment").buildUpon()
+        val url = builder.toString()
+
+        CoroutineScope(MDoveApiPool).launch {
+            val resp = try {
+                val json = network.networkClient.post(url, params.toJson())
+                val data: NormalResp<String> = fromServerResp(json)
+                data
+            } catch (e: Exception) {
+                NormalResp<String>(exception = e)
+            }
+            if (resp.exception == null) {
+                liveData.postValue(ApiSuccessResponse(resp))
+            } else {
+                liveData.postValue(
+                    ApiErrorResponse(
+                        resp.exception ?: RuntimeException("unknown_error")
+                    )
+                )
+            }
+        }
+        return liveData
+    }
+
+    fun saveToComment(params: CommentToReqParams): LiveData<ApiResponse<NormalResp<String>>> {
         val liveData = MutableLiveData<ApiResponse<NormalResp<String>>>()
 
         val network = AppDependsProvider.networkService

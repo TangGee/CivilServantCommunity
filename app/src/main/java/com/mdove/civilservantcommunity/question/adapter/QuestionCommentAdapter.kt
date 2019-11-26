@@ -116,7 +116,7 @@ class QuestionCommentAdapter(val listener: OnQuestionCommentListener? = null) :
         fun bind(data: QuestionCommentPairBean) {
             val fromName = data.child.commentInfo?.userName
                 ?: itemView.context.getString(R.string.string_no_name)
-            val toName = data.father.info?.userName
+            val toName = data.child.toInfo?.toUserName
                 ?: itemView.context.getString(R.string.string_no_name)
             val name = "$fromName 对 $toName"
             tvName.text = name

@@ -3,13 +3,16 @@ package com.mdove.civilservantcommunity.question
 import android.content.Context
 import android.os.Bundle
 import android.text.Editable
+import android.text.SpannableString
+import android.text.Spanned
 import android.text.TextWatcher
+import android.text.style.ForegroundColorSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.getColor
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.mdove.civilservantcommunity.R
@@ -18,9 +21,10 @@ import com.mdove.civilservantcommunity.question.bean.QuestionCommentSendParams
 import com.mdove.civilservantcommunity.question.viewmodel.CommentViewModel
 import com.mdove.civilservantcommunity.question.viewmodel.InputStatus
 import com.mdove.dependent.common.networkenhance.valueobj.Status
-import com.mdove.dependent.common.utils.SoftKeyBoardListener
+import com.mdove.dependent.common.utils.UIUtils
 import com.mdove.dependent.common.utils.setDebounceOnClickListener
 import com.mdove.dependent.common.utils.showLoading
+import com.mdove.dependent.common.view.span.RadiusBackgroundSpan
 import kotlinx.android.synthetic.main.fragment_dialog_question_send_comment.*
 
 /**
@@ -28,7 +32,6 @@ import kotlinx.android.synthetic.main.fragment_dialog_question_send_comment.*
  */
 class SendCommentDialogFragment : AbsDialogFragment() {
     private var inputMethodManager: InputMethodManager? = null
-    private var softKeyBoardListener: SoftKeyBoardListener? = null
     private lateinit var viewModel: CommentViewModel
 
     companion object {
@@ -77,7 +80,7 @@ class SendCommentDialogFragment : AbsDialogFragment() {
     private fun initView() {
         btn_send.setDebounceOnClickListener {
             val content = et_comment.text.toString()
-            viewModel.sendComment(content)?.observe(this, Observer {
+            viewModel.trySendComment(content)?.observe(this, Observer {
                 when (it.status) {
                     Status.ERROR -> {
                         dismiss()
@@ -92,15 +95,42 @@ class SendCommentDialogFragment : AbsDialogFragment() {
                 }
             })
         }
-//        layout_root.setDebounceOnClickListener {
-//            dismissAllowingStateLoss()
-//        }
+        btn_close.setDebounceOnClickListener {
+            dismissAllowingStateLoss()
+        }
+        root.exitInvoke = {
+            dismissAllowingStateLoss()
+        }
+        val name = viewModel.params?.child?.child?.commentInfo?.userName
+            ?: viewModel.params?.father?.info?.userName ?: getString(R.string.string_no_name)
+        val spannableString = SpannableString("回复：$name")
+        spannableString.setSpan(
+            ForegroundColorSpan(getColor(context!!, R.color.black)),
+            3,
+            name.length + 3,
+            Spanned.SPAN_INCLUSIVE_INCLUSIVE
+        )
+        spannableString.setSpan(
+            RadiusBackgroundSpan(
+                getColor(context, R.color.grey_200),
+                UIUtils.dip2Px(context, 2).toInt()
+            ),
+            3,
+            name.length,
+            Spanned.SPAN_INCLUSIVE_INCLUSIVE
+        )
+        tv_to_name.text = spannableString
         et_comment.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 enableSend((s?.isBlank() != true))
             }
 
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            override fun beforeTextChanged(
+                s: CharSequence?,
+                start: Int,
+                count: Int,
+                after: Int
+            ) {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
@@ -114,7 +144,7 @@ class SendCommentDialogFragment : AbsDialogFragment() {
     private fun enableSend(enable: Boolean) {
         context?.let {
             btn_send.setTextColor(
-                ContextCompat.getColor(
+                getColor(
                     it,
                     if (enable) {
                         btn_send.isEnabled = true
@@ -151,8 +181,6 @@ class SendCommentDialogFragment : AbsDialogFragment() {
 
     override fun onStop() {
         super.onStop()
-        softKeyBoardListener?.release()
-        softKeyBoardListener = null
         inputMethodManager?.hideSoftInputFromWindow(
             et_comment.windowToken,
             0

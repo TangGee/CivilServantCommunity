@@ -18,10 +18,21 @@ data class CommentReqParams(
     @SerializedName("is_father") val isFather: String = "1"
 ) : Parcelable
 
+// 二级评论
+@Parcelize
+data class CommentToReqParams(
+    @SerializedName("anid") val anid: String,
+    @SerializedName("father_id") val fatherId: String,
+    @SerializedName("comment_info") val info: CommentInfo,
+    @SerializedName("to_info") val toInfo: ToInfo,
+    @SerializedName("content") val content: String,
+    @SerializedName("is_father") val isFather: String = "2"
+) : Parcelable
+
 @Parcelize
 data class ToInfo(
     @SerializedName("to_id") val toId: String,
-    @SerializedName("to_uid") val toUid: CommentInfo,
+    @SerializedName("to_uid") val toUid: String,
     @SerializedName("to_username") val toUsername: String
 ) : Parcelable
 

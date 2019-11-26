@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.mdove.civilservantcommunity.question.bean.AnswerReqParams
 import com.mdove.civilservantcommunity.question.bean.CommentReqParams
+import com.mdove.civilservantcommunity.question.bean.CommentToReqParams
 import com.mdove.dependent.common.network.AppExecutorsImpl
 import com.mdove.dependent.common.network.NormalResp
 import com.mdove.dependent.common.networkenhance.NetworkBoundResource
@@ -71,7 +72,7 @@ class CommentRepository {
     }
 
     // 二级评论
-    fun saveTwoComment(params: CommentReqParams): LiveData<Resource<NormalResp<String>>> {
+    fun saveToComment(params: CommentToReqParams): LiveData<Resource<NormalResp<String>>> {
         return object :
             NetworkBoundResource<NormalResp<String>, NormalResp<String>>(
                 AppExecutorsImpl()
@@ -92,7 +93,7 @@ class CommentRepository {
             }
 
             override fun createCall(): LiveData<ApiResponse<NormalResp<String>>> {
-                return netModule.saveComment(params)
+                return netModule.saveToComment(params)
             }
         }.asLiveData()
     }
