@@ -19,22 +19,35 @@ import kotlinx.android.synthetic.main.fragment_comment_dialog.*
 /**
  * Created by MDove on 2019-11-24.
  */
-class CommentDialogFragment : AbsDialogFragment() {
+class CommentFeedDialogFragment : AbsDialogFragment() {
     private var adapter = QuestionCommentAdapter(object : OnQuestionCommentListener {
         override fun onClickSendComment(data: QuestionCommentBean) {
-            SendCommentDialogFragment.newInstance(QuestionCommentSendParams(data)).show(childFragmentManager, null)
+            CommentSendDialogFragment.newInstance(
+                OneCommentSendParams(
+                    data.info,
+                    content = null,
+                    anid = data.anid,
+                    listStyle = data.listStyle
+                )
+            ).show(childFragmentManager, null)
         }
 
         override fun onClickSendCommentChild(data: QuestionCommentPairBean) {
-            SendCommentDialogFragment.newInstance(QuestionCommentSendParams(child = data))
-                .show(childFragmentManager, null)
+            CommentSendDialogFragment.newInstance(
+                TwoCommentSendParams(
+                    data.child.commentInfo,
+                    content = null,
+                    anid = data.child.anid,
+                    listStyle = data.child.listStyle
+                )
+            ).show(childFragmentManager, null)
         }
     })
 
     companion object {
         const val PARAMS_FRAGMENT = "params_fragment"
-        fun newInstance(bean: AnswerDetailBean): CommentDialogFragment {
-            return CommentDialogFragment().apply {
+        fun newInstance(bean: AnswerDetailBean): CommentFeedDialogFragment {
+            return CommentFeedDialogFragment().apply {
                 arguments = Bundle().apply {
                     putParcelable(PARAMS_FRAGMENT, bean)
                     classLoader = bean::class.java.classLoader

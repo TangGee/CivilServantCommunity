@@ -13,14 +13,13 @@ import com.mdove.civilservantcommunity.R
 import com.mdove.civilservantcommunity.base.fragment.BaseFragment
 import com.mdove.civilservantcommunity.question.adapter.OnClickQuestionListener
 import com.mdove.civilservantcommunity.question.adapter.QuestionAdapter
+import com.mdove.civilservantcommunity.question.bean.AnswerCommentSendParams
 import com.mdove.civilservantcommunity.question.bean.AnswerDetailBean
+import com.mdove.civilservantcommunity.question.bean.QuestionCommentSendParams
 import com.mdove.civilservantcommunity.question.bean.QuestionReqParams
 import com.mdove.civilservantcommunity.question.viewmodel.QuestionViewModel
 import com.mdove.dependent.common.networkenhance.valueobj.Status
-import com.mdove.dependent.common.utils.TimeUtils
-import com.mdove.dependent.common.utils.UIUtils
-import com.mdove.dependent.common.utils.dismissLoading
-import com.mdove.dependent.common.utils.showLoading
+import com.mdove.dependent.common.utils.*
 import kotlinx.android.synthetic.main.fragment_question.*
 
 /**
@@ -30,7 +29,7 @@ class QuestionFragment : BaseFragment() {
     private lateinit var mViewModel: QuestionViewModel
     private var adapter = QuestionAdapter(object : OnClickQuestionListener {
         override fun onClickMore(bean: AnswerDetailBean) {
-            CommentDialogFragment.newInstance(bean).show(childFragmentManager, null)
+            CommentFeedDialogFragment.newInstance(bean).show(childFragmentManager, null)
         }
     })
 
@@ -103,6 +102,10 @@ class QuestionFragment : BaseFragment() {
             }
         })
 
+        layout_send.setDebounceOnClickListener {
+            CommentSendDialogFragment.newInstance(mViewModel.buildAnswerCommentSendParams())
+                .show(childFragmentManager, null)
+        }
         view_toolbar.setToolbarBackgroundIsNull()
         view_toolbar.setTitle("提问")
         view_toolbar.setColorForAll(Color.BLACK)

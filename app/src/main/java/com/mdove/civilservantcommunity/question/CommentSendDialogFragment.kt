@@ -11,12 +11,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.getColor
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.mdove.civilservantcommunity.R
 import com.mdove.civilservantcommunity.base.fragment.AbsDialogFragment
+import com.mdove.civilservantcommunity.question.bean.BaseCommentSendParams
 import com.mdove.civilservantcommunity.question.bean.QuestionCommentSendParams
 import com.mdove.civilservantcommunity.question.viewmodel.CommentViewModel
 import com.mdove.civilservantcommunity.question.viewmodel.InputStatus
@@ -30,14 +30,14 @@ import kotlinx.android.synthetic.main.fragment_dialog_question_send_comment.*
 /**
  * Created by DMove on 2019-11-24.
  */
-class SendCommentDialogFragment : AbsDialogFragment() {
+class CommentSendDialogFragment : AbsDialogFragment() {
     private var inputMethodManager: InputMethodManager? = null
     private lateinit var viewModel: CommentViewModel
 
     companion object {
         const val PARAMS_FRAGMENT = "params_fragment"
-        fun newInstance(params: QuestionCommentSendParams): SendCommentDialogFragment {
-            return SendCommentDialogFragment().apply {
+        fun newInstance(params: BaseCommentSendParams): CommentSendDialogFragment {
+            return CommentSendDialogFragment().apply {
                 arguments = Bundle().apply {
                     putParcelable(PARAMS_FRAGMENT, params)
                     classLoader = params::class.java.classLoader
@@ -72,8 +72,8 @@ class SendCommentDialogFragment : AbsDialogFragment() {
     }
 
     private fun initIntent() {
-        arguments?.getParcelable<QuestionCommentSendParams>(PARAMS_FRAGMENT)?.let {
-            viewModel.params = it
+        arguments?.getParcelable<BaseCommentSendParams>(PARAMS_FRAGMENT)?.let {
+            viewModel.params.value = it
         }
     }
 
@@ -101,25 +101,28 @@ class SendCommentDialogFragment : AbsDialogFragment() {
         root.exitInvoke = {
             dismissAllowingStateLoss()
         }
-        val name = viewModel.params?.child?.child?.commentInfo?.userName
-            ?: viewModel.params?.father?.info?.userName ?: getString(R.string.string_no_name)
-        val spannableString = SpannableString("回复：$name")
-        spannableString.setSpan(
-            ForegroundColorSpan(getColor(context!!, R.color.black)),
-            3,
-            name.length + 3,
-            Spanned.SPAN_INCLUSIVE_INCLUSIVE
-        )
-        spannableString.setSpan(
-            RadiusBackgroundSpan(
-                getColor(context, R.color.grey_200),
-                UIUtils.dip2Px(context, 2).toInt()
-            ),
-            3,
-            name.length,
-            Spanned.SPAN_INCLUSIVE_INCLUSIVE
-        )
-        tv_to_name.text = spannableString
+        viewModel.titleLiveData.observe(this, Observer {
+            it?.let {
+                val spannableString = SpannableString(it.content)
+                spannableString.setSpan(
+                    ForegroundColorSpan(getColor(context!!, R.color.black)),
+                    it.spanStart,
+                    it.spanEnd,
+                    Spanned.SPAN_INCLUSIVE_INCLUSIVE
+                )
+                spannableString.setSpan(
+                    RadiusBackgroundSpan(
+                        getColor(context, R.color.grey_200),
+                        UIUtils.dip2Px(context, 2).toInt()
+                    ),
+                    it.spanStart,
+                    it.spanEnd,
+                    Spanned.SPAN_INCLUSIVE_INCLUSIVE
+                )
+                tv_to_name.text = spannableString
+            }
+        })
+
         et_comment.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 enableSend((s?.isBlank() != true))

@@ -25,7 +25,7 @@ data class QuestionDetailBean(
     @SerializedName("title") val title: String? = "",
     @SerializedName("content") val content: String? = "",
     @SerializedName("maketime") val makeTime: Long? = null,
-    @SerializedName("list_style") val listStyle: Int? = 0
+    @SerializedName("list_style") val listStyle: String? = null
 ) : Parcelable
 
 @Parcelize

@@ -12,7 +12,6 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 data class CommentReqParams(
     @SerializedName("anid") val anid: String,
-    @SerializedName("father_id") val fatherId: String,
     @SerializedName("comment_info") val info: CommentInfo,
     @SerializedName("content") val content: String,
     @SerializedName("is_father") val isFather: String = "1"

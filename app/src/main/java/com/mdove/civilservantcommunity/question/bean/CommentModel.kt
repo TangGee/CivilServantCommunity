@@ -22,6 +22,37 @@ data class QuestionCommentSendParams(
 ) : Parcelable, BaseQuestionCommentBean()
 
 @Parcelize
+data class OneCommentSendParams(
+    val commentInfo: CommentInfoBean? = null,
+    val isFather: String = "1",
+    override val content: String?,
+    val anid: String?,
+    override val listStyle: String?
+) : Parcelable, BaseCommentSendParams
+
+@Parcelize
+data class TwoCommentSendParams(
+    val commentInfo: CommentInfoBean? = null,
+    val isFather: String = "2",
+    override val content: String?,
+    val anid: String?,
+    override val listStyle: String?
+) : Parcelable, BaseCommentSendParams
+
+@Parcelize
+data class AnswerCommentSendParams(
+    val qid :String?,
+    val questionUserName :String?,
+    override val content: String?,
+    override val listStyle: String?
+) : Parcelable, BaseCommentSendParams
+
+interface BaseCommentSendParams : Parcelable {
+    val content: String?
+    val listStyle: String?
+}
+
+@Parcelize
 data class QuestionCommentBean(
     @SerializedName("anid") val anid: String? = "",
     @SerializedName("comment_info") val info: CommentInfoBean? = null,

@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import com.mdove.civilservantcommunity.config.AppConfig
 import com.mdove.civilservantcommunity.feed.bean.FeedQuestionFeedResp
 import com.mdove.civilservantcommunity.plan.dao.TodayPlansEntity
+import com.mdove.civilservantcommunity.question.bean.AnswerCommentSendParams
 import com.mdove.civilservantcommunity.question.bean.AnswerReqParams
 import com.mdove.civilservantcommunity.question.bean.QuestionDetailResp
 import com.mdove.civilservantcommunity.question.bean.QuestionReqParams
@@ -78,7 +79,13 @@ class QuestionViewModel : ViewModel() {
         }
     }
 
-//    private fun buildCommentReqParams(question: FeedQuestionFeedResp, entity: TodayPlansEntity) {
-//        return CommentReqParams(question.question.qid)
-//    }
+    fun buildAnswerCommentSendParams(): AnswerCommentSendParams {
+        val question = questionDetailLiveData.value?.data?.data?.question
+        return AnswerCommentSendParams(
+            question?.qid,
+            question?.userInfo?.username,
+            null,
+            question?.listStyle
+        )
+    }
 }
