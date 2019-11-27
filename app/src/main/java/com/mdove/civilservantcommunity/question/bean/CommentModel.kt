@@ -14,6 +14,7 @@ data class QuestionCommentPairBean(
     val child: QuestionCommentChildBean
 ) : Parcelable, BaseQuestionCommentBean()
 
+// 一级评论的Params
 @Parcelize
 data class OneCommentSendParams(
     val commentInfo: CommentInfoBean? = null,
@@ -23,6 +24,7 @@ data class OneCommentSendParams(
     override val listStyle: String?
 ) : Parcelable, BaseCommentSendParams
 
+// 二级评论的Params
 @Parcelize
 data class TwoCommentSendParams(
     val commentInfo: CommentInfoBean? = null,
@@ -33,6 +35,7 @@ data class TwoCommentSendParams(
     override val listStyle: String?
 ) : Parcelable, BaseCommentSendParams
 
+// 回答某问题的Params
 @Parcelize
 data class AnswerCommentSendParams(
     val qid :String?,

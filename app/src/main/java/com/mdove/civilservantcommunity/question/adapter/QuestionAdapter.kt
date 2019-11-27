@@ -54,7 +54,6 @@ class QuestionAdapter(val listener: OnClickQuestionListener? = null) :
         private val tvAnswer = itemView.findViewById<TextView>(R.id.tv_answer)
         private val btnGo = itemView.findViewById<TextView>(R.id.btn_go)
         private val btnReply = itemView.findViewById<TextView>(R.id.btn_reply)
-        private val ivDetail = itemView.findViewById<AppCompatImageView>(R.id.iv_detail)
 
         fun bind(bean: AnswerDetailBean) {
             tvUser.text = bean.an?.userInfo?.username ?: itemView.context.getText(R.string.string_no_name)
@@ -65,7 +64,6 @@ class QuestionAdapter(val listener: OnClickQuestionListener? = null) :
                 val realContent = userName.plus("的评论：").plus(it.content ?: "无效发文，暂时隐藏...")
                 tvAnswer.visibility = View.VISIBLE
                 btnGo.visibility = View.VISIBLE
-                ivDetail.visibility = View.VISIBLE
                 UIUtils.setTextViewSpanColor(
                     tvAnswer, realContent, 2, userName.length, ContextCompat.getColor(
                         itemView.context,
@@ -76,7 +74,6 @@ class QuestionAdapter(val listener: OnClickQuestionListener? = null) :
                 btnReply.visibility = View.VISIBLE
                 tvAnswer.visibility = View.GONE
                 btnGo.visibility = View.INVISIBLE
-                ivDetail.visibility = View.GONE
             }
             btnReply.setDebounceOnClickListener {
                 listener?.onClickReply(bean)

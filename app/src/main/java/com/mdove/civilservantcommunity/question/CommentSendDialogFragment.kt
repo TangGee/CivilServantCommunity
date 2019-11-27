@@ -17,7 +17,6 @@ import androidx.lifecycle.ViewModelProviders
 import com.mdove.civilservantcommunity.R
 import com.mdove.civilservantcommunity.base.fragment.AbsDialogFragment
 import com.mdove.civilservantcommunity.question.bean.BaseCommentSendParams
-import com.mdove.civilservantcommunity.question.bean.QuestionCommentSendParams
 import com.mdove.civilservantcommunity.question.viewmodel.CommentViewModel
 import com.mdove.civilservantcommunity.question.viewmodel.InputStatus
 import com.mdove.dependent.common.networkenhance.valueobj.Status
