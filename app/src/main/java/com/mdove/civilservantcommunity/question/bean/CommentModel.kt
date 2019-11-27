@@ -14,13 +14,6 @@ data class QuestionCommentPairBean(
     val child: QuestionCommentChildBean
 ) : Parcelable, BaseQuestionCommentBean()
 
-// SendCommentDialogFragment用的
-@Parcelize
-data class QuestionCommentSendParams(
-    val father: QuestionCommentBean? = null,
-    val child: QuestionCommentPairBean? = null
-) : Parcelable, BaseQuestionCommentBean()
-
 @Parcelize
 data class OneCommentSendParams(
     val commentInfo: CommentInfoBean? = null,
@@ -34,6 +27,7 @@ data class OneCommentSendParams(
 data class TwoCommentSendParams(
     val commentInfo: CommentInfoBean? = null,
     val isFather: String = "2",
+    val fatherId: String? = null,
     override val content: String?,
     val anid: String?,
     override val listStyle: String?

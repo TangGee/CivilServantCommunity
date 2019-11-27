@@ -95,7 +95,7 @@
             android:layout_height="35dp"
             android:layout_marginRight="12dp"
             android:layout_marginLeft="8dp"
-            android:text="文明评论~~"
+            android:text="师者，传道受业解惑也~"
             android:textSize="16dp"
             android:gravity="left|center"
             android:paddingLeft="12dp"

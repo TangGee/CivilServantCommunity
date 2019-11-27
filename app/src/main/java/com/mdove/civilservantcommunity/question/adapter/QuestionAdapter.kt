@@ -53,13 +53,15 @@ class QuestionAdapter(val listener: OnClickQuestionListener? = null) :
         private val tvContent = itemView.findViewById<TextView>(R.id.tv_content)
         private val tvAnswer = itemView.findViewById<TextView>(R.id.tv_answer)
         private val btnGo = itemView.findViewById<TextView>(R.id.btn_go)
+        private val btnReply = itemView.findViewById<TextView>(R.id.btn_reply)
         private val ivDetail = itemView.findViewById<AppCompatImageView>(R.id.iv_detail)
 
         fun bind(bean: AnswerDetailBean) {
-            tvUser.text = bean.an?.userInfo?.username ?: "匿名用户"
+            tvUser.text = bean.an?.userInfo?.username ?: itemView.context.getText(R.string.string_no_name)
             tvContent.text = bean.an?.content ?: "无效发文，暂时隐藏..."
             bean.playCommentOnelist?.firstOrNull()?.let {
-                val userName = "来自${it.info?.userName ?: "匿名用户"}"
+                btnReply.visibility = View.GONE
+                val userName = "来自${it.info?.userName ?: itemView.context.getText(R.string.string_no_name)}"
                 val realContent = userName.plus("的评论：").plus(it.content ?: "无效发文，暂时隐藏...")
                 tvAnswer.visibility = View.VISIBLE
                 btnGo.visibility = View.VISIBLE
@@ -71,9 +73,13 @@ class QuestionAdapter(val listener: OnClickQuestionListener? = null) :
                     )
                 )
             } ?: also {
+                btnReply.visibility = View.VISIBLE
                 tvAnswer.visibility = View.GONE
-                btnGo.visibility = View.GONE
+                btnGo.visibility = View.INVISIBLE
                 ivDetail.visibility = View.GONE
+            }
+            btnReply.setDebounceOnClickListener {
+                listener?.onClickReply(bean)
             }
             itemView.setDebounceOnClickListener {
                 listener?.onClickMore(bean)
@@ -84,4 +90,5 @@ class QuestionAdapter(val listener: OnClickQuestionListener? = null) :
 
 interface OnClickQuestionListener {
     fun onClickMore(bean: AnswerDetailBean)
+    fun onClickReply(bean: AnswerDetailBean)
 }

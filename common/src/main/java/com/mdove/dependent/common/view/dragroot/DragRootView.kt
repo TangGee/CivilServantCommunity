@@ -55,9 +55,7 @@ class DragRootView @JvmOverloads constructor(context: Context, attrs: AttributeS
                 mDownPoint = floatArrayOf(event.x, event.y)
                 mCanceled = false
             }
-            MotionEvent.ACTION_MOVE -> if (mTouchSlop < Math.abs(event.x - mDownPoint!![0]) || mTouchSlop < Math.abs(
-                    event.y - mDownPoint!![1]
-                )
+            MotionEvent.ACTION_MOVE -> if (mTouchSlop < abs(event.x - mDownPoint!![0]) || mTouchSlop < abs(event.y - mDownPoint!![1])
             ) {
                 mCanceled = true
             }
@@ -144,7 +142,7 @@ class DragRootView @JvmOverloads constructor(context: Context, attrs: AttributeS
             var rlvIsTouch = false
             findAllRlv(this@DragRootView)
             mHasComputer = true
-            if (!innerRlvs.isEmpty()) {
+            if (innerRlvs.isNotEmpty()) {
                 val rect =
                     Rect(0, 0, UIUtils.getScreenWidth(context), UIUtils.getScreenHeight(context))
                 innerRlvs.forEach {

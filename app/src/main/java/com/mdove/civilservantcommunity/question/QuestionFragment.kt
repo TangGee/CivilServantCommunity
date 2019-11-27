@@ -13,10 +13,7 @@ import com.mdove.civilservantcommunity.R
 import com.mdove.civilservantcommunity.base.fragment.BaseFragment
 import com.mdove.civilservantcommunity.question.adapter.OnClickQuestionListener
 import com.mdove.civilservantcommunity.question.adapter.QuestionAdapter
-import com.mdove.civilservantcommunity.question.bean.AnswerCommentSendParams
-import com.mdove.civilservantcommunity.question.bean.AnswerDetailBean
-import com.mdove.civilservantcommunity.question.bean.QuestionCommentSendParams
-import com.mdove.civilservantcommunity.question.bean.QuestionReqParams
+import com.mdove.civilservantcommunity.question.bean.*
 import com.mdove.civilservantcommunity.question.viewmodel.QuestionViewModel
 import com.mdove.dependent.common.networkenhance.valueobj.Status
 import com.mdove.dependent.common.utils.*
@@ -28,6 +25,20 @@ import kotlinx.android.synthetic.main.fragment_question.*
 class QuestionFragment : BaseFragment() {
     private lateinit var mViewModel: QuestionViewModel
     private var adapter = QuestionAdapter(object : OnClickQuestionListener {
+        override fun onClickReply(bean: AnswerDetailBean) {
+            CommentSendDialogFragment.newInstance(
+                OneCommentSendParams(
+                    commentInfo = CommentInfoBean(
+                        bean.an?.userInfo?.uid,
+                        bean.an?.userInfo?.username
+                    ),
+                    content = null,
+                    anid = bean.an?.anid,
+                    listStyle = bean.an?.listStyle
+                )
+            ).show(childFragmentManager, null)
+        }
+
         override fun onClickMore(bean: AnswerDetailBean) {
             CommentFeedDialogFragment.newInstance(bean).show(childFragmentManager, null)
         }

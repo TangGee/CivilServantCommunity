@@ -37,6 +37,7 @@ class CommentFeedDialogFragment : AbsDialogFragment() {
                 TwoCommentSendParams(
                     data.child.commentInfo,
                     content = null,
+                    fatherId = data.child.fatherId,
                     anid = data.child.anid,
                     listStyle = data.child.listStyle
                 )

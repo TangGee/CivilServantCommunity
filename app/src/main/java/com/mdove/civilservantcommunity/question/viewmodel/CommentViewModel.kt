@@ -16,7 +16,7 @@ import com.mdove.dependent.common.toast.ToastUtil
 class CommentViewModel(application: Application) : AndroidViewModel(application) {
     private val repository = CommentRepository()
     val params = MutableLiveData<BaseCommentSendParams>()
-    val titleLiveData = Transformations.map(params) {
+    val titleLiveData: LiveData<CommentSendDialogTitle> = Transformations.map(params) {
         when (it) {
             is OneCommentSendParams -> {
                 val name = it.commentInfo?.userName ?: application.getString(R.string.string_no_name)
@@ -59,15 +59,16 @@ class CommentViewModel(application: Application) : AndroidViewModel(application)
                 }
                 is TwoCommentSendParams -> {
                     // 此时的二级评论，是对child说的
-                    val fatherId = it.commentInfo?.commentId
-                    val fatherName = it.commentInfo?.userName
-                    val fatherUid = it.commentInfo?.uid
+                    val fatherId = it.fatherId
+                    val toId = it.commentInfo?.commentId
+                    val toName = it.commentInfo?.userName
+                    val toUid = it.commentInfo?.uid
                     val anid = it.anid
                     val commentInfo = AppConfig.getUserInfo()?.let {
                         CommentInfo(it.uid, it.username)
                     }
-                    if (commentInfo != null && anid != null && fatherId != null && fatherName != null && fatherUid != null) {
-                        val toInfo = ToInfo(fatherId, fatherUid, fatherName)
+                    if (commentInfo != null && anid != null && fatherId != null && toId != null && toUid != null && toName != null) {
+                        val toInfo = ToInfo(toId, toUid, toName)
                         repository.saveToComment(
                             CommentToReqParams(
                                 anid,
