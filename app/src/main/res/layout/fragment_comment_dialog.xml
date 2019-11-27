@@ -8,7 +8,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/bg_round_white_12">
+        android:background="@drawable/bg_comment_send_dialog">
 
         <TextView
             android:id="@+id/tv_title"
@@ -42,6 +42,7 @@
             android:layout_height="0dp"
             app:layout_constrainedHeight="true"
             android:background="@color/white"
+            android:layout_marginBottom="25dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"

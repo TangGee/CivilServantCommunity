@@ -20,6 +20,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.mdove.civilservantcommunity.R;
 import com.mdove.civilservantcommunity.base.launcher.ActivityLauncher;
 import com.mdove.dependent.common.threadpool.MDovePoolKt;
+import com.mdove.dependent.common.utils.UIUtils;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -84,8 +85,8 @@ public abstract class AbsDialogFragment extends SafeShowDialogFragment implement
             WindowManager.LayoutParams windowParam = window.getAttributes();
             Point point = new Point();
             display.getSize(point);
-            windowParam.width = point.x;
-            windowParam.height = point.y;
+            windowParam.width = UIUtils.getScreenWidth(getContext());
+            windowParam.height = UIUtils.getScreenHeight(getContext());
             window.setAttributes(windowParam);
         }
     }

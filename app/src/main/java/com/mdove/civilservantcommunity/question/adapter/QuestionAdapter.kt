@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.mdove.civilservantcommunity.R
 import com.mdove.civilservantcommunity.question.bean.AnswerDetailBean
+import com.mdove.dependent.common.utils.TimeUtils
 import com.mdove.dependent.common.utils.UIUtils
 import com.mdove.dependent.common.utils.setDebounceOnClickListener
 
@@ -54,10 +55,12 @@ class QuestionAdapter(val listener: OnClickQuestionListener? = null) :
         private val tvAnswer = itemView.findViewById<TextView>(R.id.tv_answer)
         private val btnGo = itemView.findViewById<TextView>(R.id.btn_go)
         private val btnReply = itemView.findViewById<TextView>(R.id.btn_reply)
+        private val tvTime = itemView.findViewById<TextView>(R.id.tv_time)
 
         fun bind(bean: AnswerDetailBean) {
             tvUser.text = bean.an?.userInfo?.username ?: itemView.context.getText(R.string.string_no_name)
             tvContent.text = bean.an?.content ?: "无效发文，暂时隐藏..."
+            tvTime.text = TimeUtils.getDateChinese(bean.an?.makeTime)
             bean.playCommentOnelist?.firstOrNull()?.let {
                 btnReply.visibility = View.GONE
                 val userName = "来自${it.info?.userName ?: itemView.context.getText(R.string.string_no_name)}"
