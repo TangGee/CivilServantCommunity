@@ -17,6 +17,11 @@ data class QuestionDetailResp(
     @SerializedName("answer") val answers: List<AnswerDetailBean>? = null
 )
 
+sealed class BaseDetailQuestionBean
+
+@Parcelize
+data class DetailQuestionSendBean(val name: String = "回答") : Parcelable, BaseDetailQuestionBean()
+
 @Parcelize
 data class QuestionDetailBean(
     @SerializedName("qid") val qid: String? = "",
@@ -26,14 +31,14 @@ data class QuestionDetailBean(
     @SerializedName("content") val content: String? = "",
     @SerializedName("maketime") val makeTime: Long? = null,
     @SerializedName("list_style") val listStyle: String? = null
-) : Parcelable
+) : Parcelable,BaseDetailQuestionBean()
 
 @Parcelize
 data class AnswerDetailBean(
     @SerializedName("an") val an: AnswerDetailAnBean? = null,
     @SerializedName("play_comment_onelist") val playCommentOnelist: List<PlayCommentOnelisBean>? = null,
     @SerializedName("play_comment_twolist") val playCommentTwolistplayCommentOnelist: List<PlayCommentTwolisBean>? = null
-) : Parcelable
+) : Parcelable, BaseDetailQuestionBean()
 
 @Parcelize
 data class AnswerDetailAnBean(

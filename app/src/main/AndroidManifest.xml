@@ -93,7 +93,7 @@
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".question.QuestionActivity"
+            android:name=".question.DetailQuestionActivity"
             android:launchMode="singleTop"
             android:windowSoftInputMode="adjustResize|stateHidden"
             android:screenOrientation="portrait" />

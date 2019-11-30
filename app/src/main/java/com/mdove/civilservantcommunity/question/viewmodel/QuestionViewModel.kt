@@ -7,10 +7,7 @@ import androidx.lifecycle.ViewModel
 import com.mdove.civilservantcommunity.config.AppConfig
 import com.mdove.civilservantcommunity.feed.bean.FeedQuestionFeedResp
 import com.mdove.civilservantcommunity.plan.dao.TodayPlansEntity
-import com.mdove.civilservantcommunity.question.bean.AnswerCommentSendParams
-import com.mdove.civilservantcommunity.question.bean.AnswerReqParams
-import com.mdove.civilservantcommunity.question.bean.QuestionDetailResp
-import com.mdove.civilservantcommunity.question.bean.QuestionReqParams
+import com.mdove.civilservantcommunity.question.bean.*
 import com.mdove.civilservantcommunity.question.repository.CommentRepository
 import com.mdove.civilservantcommunity.question.repository.QuestionRepository
 import com.mdove.civilservantcommunity.room.MainDb
@@ -35,9 +32,34 @@ class QuestionViewModel : ViewModel() {
     val questionDetailResp = MutableLiveData<QuestionReqParams>()
     private val proxyAnswerReqParamsLiveData = MutableLiveData<AnswerReqParams>()
 
-    val questionDetailLiveData = Transformations.switchMap(questionDetailResp) {
+    private val reqLiveData = Transformations.switchMap(questionDetailResp) {
         questionRepository.reqQuestionDetail(it)
     }
+
+    val questionDetailLiveData =
+        MediatorLiveData<Resource<NormalResp<List<BaseDetailQuestionBean>>>>().apply {
+            addSource(reqLiveData) { res ->
+                value = res.data?.data?.let {
+                    Resource<NormalResp<List<BaseDetailQuestionBean>>>(
+                        res.status,
+                        NormalResp(
+                            res.data?.message ?: "",
+                            mutableListOf<BaseDetailQuestionBean>().apply {
+                                it.question?.let {
+                                    add(it)
+                                    add(DetailQuestionSendBean())
+                                }
+                                it.answers?.let {
+                                    addAll(it)
+                                }
+                            },
+                            null
+                        ),
+                        null
+                    )
+                }
+            }
+        }
 
     val saveAnswerLiveData = MediatorLiveData<Resource<NormalResp<String>>>().apply {
         addSource(Transformations.switchMap(proxyAnswerReqParamsLiveData) {
@@ -80,7 +102,7 @@ class QuestionViewModel : ViewModel() {
     }
 
     fun buildAnswerCommentSendParams(): AnswerCommentSendParams {
-        val question = questionDetailLiveData.value?.data?.data?.question
+        val question = reqLiveData.value?.data?.data?.question
         return AnswerCommentSendParams(
             question?.qid,
             question?.userInfo?.username,

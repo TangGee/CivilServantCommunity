@@ -6,19 +6,35 @@
     android:background="@color/white">
 
     <TextView
+        android:id="@+id/layout_fake"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginLeft="@dimen/margin_item_question_answer_layout"
+        android:layout_marginTop="8dp"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"
+        android:layout_marginRight="@dimen/margin_item_question_answer_layout"
+        android:gravity="center"
+        android:text="假装有图"
+        android:background="@drawable/bg_circle_blue_30"
+        android:textColor="@color/white"
+        android:textSize="10dp"
+        app:layout_constraintBottom_toTopOf="@+id/tv_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <TextView
         android:id="@+id/tv_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/margin_item_question_answer_layout"
-        android:layout_marginTop="8dp"
-        android:layout_marginRight="@dimen/margin_item_question_answer_layout"
         android:gravity="left"
         android:text="xxx"
         android:textColor="@color/blue_500"
-        android:textSize="14dp"
-        app:layout_constraintBottom_toTopOf="@+id/tv_content"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        android:textSize="12dp"
+        app:layout_constraintLeft_toRightOf="@+id/layout_fake"
+        app:layout_constraintTop_toTopOf="@+id/layout_fake"
         app:layout_constraintVertical_chainStyle="packed" />
 
     <TextView
@@ -27,11 +43,11 @@
         android:layout_height="wrap_content"
         android:layout_marginRight="@dimen/margin_item_question_answer_layout"
         android:text="时间"
+        android:layout_marginLeft="@dimen/margin_item_question_answer_layout"
         android:textColor="@color/grey_500"
-        android:textSize="12dp"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_name"
-        app:layout_constraintTop_toTopOf="@+id/tv_name"
-        app:layout_constraintRight_toRightOf="parent"
+        android:textSize="10dp"
+        app:layout_constraintBottom_toBottomOf="@+id/layout_fake"
+        app:layout_constraintLeft_toRightOf="@+id/layout_fake"
         />
 
     <TextView
@@ -45,12 +61,12 @@
         android:gravity="left"
         android:maxLines="2"
         android:text="公务员公务员公务员公务员公务员公务员公务员公务员公务员"
-        android:textColor="@color/grey_700"
-        android:textSize="12dp"
+        android:textColor="@color/black_aa"
+        android:textSize="14dp"
         app:layout_constraintBottom_toTopOf="@+id/tv_answer"
-        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/layout_fake"
         app:layout_constraintRight_toLeftOf="@+id/btn_go"
-        app:layout_constraintTop_toBottomOf="@+id/tv_name"
+        app:layout_constraintTop_toBottomOf="@+id/layout_fake"
         app:layout_constraintVertical_chainStyle="packed" />
 
     <TextView
@@ -69,7 +85,7 @@
         android:textColor="@color/grey_600"
         android:textSize="12dp"
         app:layout_constraintBottom_toTopOf="@+id/line"
-        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/layout_fake"
         app:layout_constraintRight_toLeftOf="@+id/btn_go"
         app:layout_constraintTop_toBottomOf="@+id/tv_content"
         app:layout_constraintVertical_chainStyle="packed"

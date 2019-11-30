@@ -5,26 +5,30 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mdove.civilservantcommunity.R
 import com.mdove.civilservantcommunity.base.fragment.BaseFragment
 import com.mdove.civilservantcommunity.question.adapter.OnClickQuestionListener
-import com.mdove.civilservantcommunity.question.adapter.QuestionAdapter
+import com.mdove.civilservantcommunity.question.adapter.DetailQuestionAdapter
 import com.mdove.civilservantcommunity.question.bean.*
 import com.mdove.civilservantcommunity.question.viewmodel.QuestionViewModel
 import com.mdove.dependent.common.networkenhance.valueobj.Status
 import com.mdove.dependent.common.utils.*
-import kotlinx.android.synthetic.main.fragment_question.*
+import kotlinx.android.synthetic.main.fragment_detail_question.*
 
 /**
  * Created by MDove on 2019-11-24.
  */
-class QuestionFragment : BaseFragment() {
+class DetailQuestionFragment : BaseFragment() {
     private lateinit var mViewModel: QuestionViewModel
-    private var adapter = QuestionAdapter(object : OnClickQuestionListener {
+    private var adapter = DetailQuestionAdapter(object : OnClickQuestionListener {
+        override fun onClickSendAnswer() {
+            CommentSendDialogFragment.newInstance(mViewModel.buildAnswerCommentSendParams())
+                .show(childFragmentManager, null)
+        }
+
         override fun onClickReply(bean: AnswerDetailBean) {
             CommentSendDialogFragment.newInstance(
                 OneCommentSendParams(
@@ -46,8 +50,8 @@ class QuestionFragment : BaseFragment() {
 
     companion object {
         const val PARAMS_FRAGMENT = "params_fragment"
-        fun newInstance(params: QuestionReqParams): QuestionFragment {
-            return QuestionFragment().apply {
+        fun newInstance(params: QuestionReqParams): DetailQuestionFragment {
+            return DetailQuestionFragment().apply {
                 arguments = Bundle().apply {
                     putParcelable(PARAMS_FRAGMENT, params)
                     classLoader = params::class.java.classLoader
@@ -66,7 +70,7 @@ class QuestionFragment : BaseFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_question, container, false)
+        return inflater.inflate(R.layout.fragment_detail_question, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -78,45 +82,25 @@ class QuestionFragment : BaseFragment() {
         rlv.adapter = adapter
         rlv.layoutManager = LinearLayoutManager(context)
 
-        mViewModel.questionDetailLiveData.observe(this, Observer {
-            when (it.status) {
-                Status.SUCCESS -> {
-                    dismissLoading()
-                    it.data?.data?.let {
-                        it.question?.let {
-                            val userName = "来自：${it.userInfo?.username ?: "匿名用户"}"
-                            UIUtils.setTextViewSpanColor(
-                                tv_question_user,
-                                userName,
-                                3,
-                                userName.length,
-                                ContextCompat.getColor(
-                                    context!!,
-                                    R.color.blue_500
-                                )
-                            )
-                        }
-                        tv_question_title.text = it.question?.title ?: "无标题"
-                        tv_question_content.text = it.question?.content ?: "无内容"
-                        tv_question_time.text = TimeUtils.getDateChinese(it.question?.makeTime)
-                        it.answers?.let {
+        mViewModel.questionDetailLiveData.observe(this, Observer {res->
+            res?.let{
+                when (it.status) {
+                    Status.SUCCESS -> {
+                        dismissLoading()
+                        it.data?.data?.let {
                             adapter.submitList(it)
                         }
                     }
-                }
-                Status.LOADING -> {
-                    showLoading()
-                }
-                Status.ERROR -> {
-                    dismissLoading()
+                    Status.LOADING -> {
+                        showLoading()
+                    }
+                    Status.ERROR -> {
+                        dismissLoading()
+                    }
                 }
             }
         })
 
-        layout_send.setDebounceOnClickListener {
-            CommentSendDialogFragment.newInstance(mViewModel.buildAnswerCommentSendParams())
-                .show(childFragmentManager, null)
-        }
         view_toolbar.setToolbarBackgroundIsNull()
         view_toolbar.setTitle("提问")
         view_toolbar.setColorForAll(Color.BLACK)

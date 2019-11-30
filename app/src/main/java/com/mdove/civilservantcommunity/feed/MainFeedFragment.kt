@@ -28,7 +28,7 @@ import com.mdove.civilservantcommunity.plan.model.SinglePlanStatus
 import com.mdove.civilservantcommunity.plan.model.TimeScheduleStatus
 import com.mdove.civilservantcommunity.punch.bean.PunchReq
 import com.mdove.civilservantcommunity.punch.viewmodel.PunchViewModel
-import com.mdove.civilservantcommunity.question.QuestionActivity
+import com.mdove.civilservantcommunity.question.DetailQuestionActivity
 import com.mdove.civilservantcommunity.question.bean.QuestionReqParams
 import com.mdove.civilservantcommunity.question.viewmodel.QuestionViewModel
 import com.mdove.civilservantcommunity.room.MainDb
@@ -113,7 +113,7 @@ class MainFeedFragment : BaseFragment() {
         override fun onClick(type: Int, questionResp: FeedQuestionFeedResp) {
             context?.let { context ->
                 questionResp.question.qid?.let {
-                    QuestionActivity.gotoQuestion(context, QuestionReqParams(it))
+                    DetailQuestionActivity.gotoQuestion(context, QuestionReqParams(it))
                 }
             }
         }

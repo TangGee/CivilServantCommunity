@@ -10,13 +10,13 @@ import com.mdove.civilservantcommunity.question.bean.QuestionReqParams
 /**
  * Created by MDove on 2019-11-24.
  */
-class QuestionActivity : AbsSlideCloseActivity() {
+class DetailQuestionActivity : AbsSlideCloseActivity() {
     companion object {
         val TAG_QUESTION_FRAGMNET = "tag_question_fragment"
         val INTENT_PARAMS_QUESTION_FRAGMNET = "intent_params_question_fragment"
 
         fun gotoQuestion(context: Context, reqParams: QuestionReqParams) {
-            val intent = Intent(context, QuestionActivity::class.java)
+            val intent = Intent(context, DetailQuestionActivity::class.java)
             intent.putExtra(INTENT_PARAMS_QUESTION_FRAGMNET, reqParams)
             context.startActivity(intent)
         }
@@ -30,7 +30,7 @@ class QuestionActivity : AbsSlideCloseActivity() {
             supportFragmentManager.beginTransaction()
                 .add(
                     R.id.container,
-                    QuestionFragment.newInstance(
+                    DetailQuestionFragment.newInstance(
                         intent.getParcelableExtra(INTENT_PARAMS_QUESTION_FRAGMNET)
                     ),
                     TAG_QUESTION_FRAGMNET
