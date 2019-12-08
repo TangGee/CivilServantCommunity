@@ -63,7 +63,8 @@ data class FeedTimeLineFeedTodayPlansTitleResp(
 ) : BaseFeedResp()
 
 data class FeedTimeLineFeedTodayPlansTipsTitleResp(
-    val name: String = "新一天空计划提示"
+    val name: String = "新一天空计划提示",
+    val showApply: Boolean //一键应用之前的的计划
 ) : BaseFeedResp()
 
 data class FeedTodayPlanResp(

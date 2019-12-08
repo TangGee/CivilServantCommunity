@@ -7,6 +7,7 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
+import com.mdove.apt_annotation.TestAnnotation
 import com.mdove.civilservantcommunity.R
 import com.mdove.civilservantcommunity.account.AccountActivity
 import com.mdove.civilservantcommunity.base.BaseActivity
@@ -27,6 +28,7 @@ class MainFeedActivity : BaseActivity() {
         }
     }
 
+    @TestAnnotation(123)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initLogin()

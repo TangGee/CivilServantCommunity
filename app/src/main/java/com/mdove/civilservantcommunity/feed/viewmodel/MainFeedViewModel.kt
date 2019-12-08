@@ -49,6 +49,8 @@ class MainFeedViewModel : ViewModel() {
                     temp.add(FeedDevTitleResp())
                     withContext(MDoveBackgroundPool) {
                         temp.add(FeedTimeLineFeedTodayPlansTitleResp())
+                        val showApply =
+                            MainDb.db.todayPlansDao().getTodayPlansRecord(TimeUtils.getDateFromSQLYesterday()) != null
                         MainDb.db.todayPlansDao().getTodayPlansRecord(TimeUtils.getDateFromSQL())?.let { entity ->
                             if (entity.resp.params.isNotEmpty()) {
                                 temp.addAll(entity.resp.params.flatMap { planModule ->
@@ -65,10 +67,10 @@ class MainFeedViewModel : ViewModel() {
                                     (this.lastOrNull())?.hideEndLine = true
                                 })
                             } else {
-                                temp.add(FeedTimeLineFeedTodayPlansTipsTitleResp())
+                                temp.add(FeedTimeLineFeedTodayPlansTipsTitleResp(showApply = showApply))
                             }
                         } ?: also {
-                            temp.add(FeedTimeLineFeedTodayPlansTipsTitleResp())
+                            temp.add(FeedTimeLineFeedTodayPlansTipsTitleResp(showApply = showApply))
                         }
                     }
                     temp.add(FeedTimeLineFeedTitleResp())

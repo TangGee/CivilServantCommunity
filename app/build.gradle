@@ -77,6 +77,8 @@ dependencies {
     implementation deps.arch.lifecycle_extensions
     implementation deps.retrofit2.gson
 
+    annotationProcessor project(':apt-test')
+
     kapt deps.room.compiler
     implementation deps.room.runtime
 
@@ -86,6 +88,7 @@ dependencies {
     implementation project(':api-service')
     implementation project(':network-provider')
     implementation project(':common')
+    implementation project(":apt-annotation")
     implementation project(':herohalberd:core')
     implementation 'joda-time:joda-time:2.10.1'
 }

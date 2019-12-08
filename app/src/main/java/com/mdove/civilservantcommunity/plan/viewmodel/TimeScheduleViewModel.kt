@@ -1,8 +1,21 @@
 package com.mdove.civilservantcommunity.plan.viewmodel
 
+import android.app.AlarmManager
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
+import android.os.Build
+import android.os.SystemClock
+import androidx.core.app.NotificationCompat
 import androidx.lifecycle.*
+import com.mdove.civilservantcommunity.MyApplication
 import com.mdove.civilservantcommunity.plan.model.*
+import com.mdove.dependent.common.utils.Func1
+import com.mdove.dependent.common.utils.NotificationUtils
+import com.mdove.civilservantcommunity.R
+import com.mdove.civilservantcommunity.feed.MainFeedActivity
+import com.mdove.civilservantcommunity.plan.receiver.TimeScheduleReceiver
+
 
 /**
  * Created by MDove on 2019-11-07.
@@ -78,22 +91,28 @@ class TimeScheduleViewModel : ViewModel() {
     }
 
     fun createAlarm(context: Context) {
-//        handlePlansData.filter {
-//            it.timeSchedule != null
-//        }.forEach {
-//            val startTime = System.currentTimeMillis() +
-//                    60 * 1000
-//            val intent = Intent(context, TimeScheduleReceiver::class.java)
-//            intent.action = "NOTIFICATION"
-//            val pi = PendingIntent.getBroadcast(context, 0, intent, 0)
-//            val manager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-//            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
-//                manager.set(AlarmManager.RTC_WAKEUP, startTime, pi)
-//            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-//                manager.setExact(AlarmManager.RTC_WAKEUP, startTime, pi)
-//            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-//                manager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, startTime, pi)
-//            }
-//        }
+        handlePlansData.filter {
+            it.timeSchedule != null
+        }.forEach { it ->
+            val alarmMgr = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+            val alarmIntent = Intent(context, TimeScheduleReceiver::class.java).let { intent ->
+                intent.action = TimeScheduleReceiver.ACTION
+                PendingIntent.getBroadcast(context, 0, intent, 0)
+            }
+
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+                alarmMgr.setExact(
+                    AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                    it.timeSchedule?.first!!,
+                    alarmIntent
+                )
+            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                alarmMgr.setExactAndAllowWhileIdle(
+                    AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                    System.currentTimeMillis() + 60*1000,
+                    alarmIntent
+                )
+            }
+        }
     }
 }

@@ -10,7 +10,7 @@ import kotlinx.android.parcel.Parcelize
 data class TimeSchedulePlansParams(
     val data: SinglePlanBean,
     override var status: TimeSchedulePlansStatus = TimeSchedulePlansStatus.SHOW,
-    var timeSchedule: Pair<Long, Long>? = null
+    var timeSchedule: Pair<Long, Long>? = null // first:8 second:9 8:00 - 9:00
 ) : Parcelable, TimeScheduleBaseParams(status)
 
 
