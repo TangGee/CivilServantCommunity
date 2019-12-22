@@ -109,7 +109,7 @@ class TimeScheduleViewModel : ViewModel() {
             } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 alarmMgr.setExactAndAllowWhileIdle(
                     AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                    System.currentTimeMillis() + 60*1000,
+                    System.currentTimeMillis() + 60 * 1000,
                     alarmIntent
                 )
             }

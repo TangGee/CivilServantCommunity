@@ -44,9 +44,8 @@ class MainFeedViewModel : ViewModel() {
                 val temp = mutableListOf<BaseFeedResp>()
                 CoroutineScope(FastMain).launch {
                     temp.add(FeedDateResp(System.currentTimeMillis()))
-                    temp.add(FeedQuickEditNewPlanResp())
-                    temp.add(FeedQuickBtnsResp())
                     temp.add(FeedDevTitleResp())
+                    temp.add(FeedQuickEditNewPlanResp())
                     withContext(MDoveBackgroundPool) {
                         temp.add(FeedTimeLineFeedTodayPlansTitleResp())
                         val showApply =
@@ -73,6 +72,7 @@ class MainFeedViewModel : ViewModel() {
                             temp.add(FeedTimeLineFeedTodayPlansTipsTitleResp(showApply = showApply))
                         }
                     }
+                    temp.add(FeedQuickBtnsResp())
                     temp.add(FeedTimeLineFeedTitleResp())
                     if (it.status == Status.ERROR) {
                         temp.add(FeedNetworkErrorTitleResp())

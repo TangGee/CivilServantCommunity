@@ -366,6 +366,7 @@ class MainFeedAdapter(
                 }
             }
             is FeedTimeLineFeedTodayPlansViewHolder -> holder.bind((getItem(position) as FeedTimeLineFeedTodayPlansResp))
+            is FeedTodayPlanBtnTipsHolder -> holder.bind((getItem(position) as FeedTimeLineFeedTodayPlansTipsTitleResp))
         }
     }
 
@@ -414,6 +415,11 @@ class MainFeedAdapter(
                 }
             }
             itemView.findViewById<TimeLineView>(R.id.time_line).hideBottomLine()
+        }
+
+        fun bind(bean: FeedTimeLineFeedTodayPlansTipsTitleResp) {
+            itemView.findViewById<TextView>(R.id.btn_no_suc_plan).visibility =
+                if (bean.showApply) View.VISIBLE else View.GONE
         }
     }
 
