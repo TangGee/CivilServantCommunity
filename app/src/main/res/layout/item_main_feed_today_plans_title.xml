@@ -15,10 +15,10 @@
         android:text="今日要执行的计划"
         android:textColor="@color/grey_200"
         android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/circle"
         app:layout_constraintLeft_toRightOf="@+id/circle"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/circle" />
 
     <View
         android:layout_width="3dp"

@@ -3,10 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="@dimen/edit_plan_module_margin"
-    android:layout_marginBottom="@dimen/edit_plan_module_margin"
     android:background="@color/white"
-    app:allRadius="8dp">
+    android:layout_margin="@dimen/edit_plan_module_margin"
+    app:allRadius="12dp">
 
     <TextView
         android:id="@+id/tv_module_name"

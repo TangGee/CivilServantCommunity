@@ -4,7 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="@dimen/edit_plan_module_margin"
-    android:background="@color/white"
+    android:layout_marginLeft="@dimen/edit_plan_module_margin"
+    android:layout_marginRight="@dimen/edit_plan_module_margin"
+    android:background="@drawable/bg_round_white_12"
     android:orientation="vertical">
 
     <RelativeLayout
@@ -17,7 +19,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/edit_plan_module_margin"
             android:text="模块"
-            android:textColor="@color/blue_500"
+            android:textColor="@color/grey_600"
             android:textSize="20sp"
             android:layout_alignParentLeft="true"
             />
@@ -33,7 +35,7 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_marginRight="@dimen/edit_plan_module_margin"
-            android:tint="@color/black"
+            android:tint="@color/grey_600"
             android:layout_alignParentRight="true"
             android:layout_centerInParent="true"
             app:srcCompat="@drawable/vector_bg_delete" />

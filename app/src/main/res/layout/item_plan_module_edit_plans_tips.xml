@@ -4,12 +4,22 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/white"
     android:layout_marginTop="@dimen/edit_plan_module_margin"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintLeft_toLeftOf="parent"
     app:layout_constraintRight_toRightOf="parent"
     app:layout_constraintTop_toTopOf="parent">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/ic_alert"
+        android:layout_width="26dp"
+        app:srcCompat="@drawable/vector_ic_alert"
+        app:layout_constraintTop_toTopOf="@+id/tv_title"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginLeft="12dp"
+        android:tint="@color/grey_600"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_title"
+        android:layout_height="26dp"/>
 
     <View
         android:layout_width="match_parent"
@@ -18,13 +28,15 @@
         android:layout_height="1dp"/>
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:id="@+id/tv_title"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/ic_alert"
         android:layout_margin="@dimen/main_feed_item_margin"
+        android:background="@drawable/bg_round_white_12"
         android:gravity="center"
         android:text="修改你的计划，让今天的提升事半功倍哟~"
         android:textColor="@color/grey_600"

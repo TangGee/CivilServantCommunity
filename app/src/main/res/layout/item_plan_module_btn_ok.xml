@@ -5,7 +5,9 @@
     android:layout_height="wrap_content"
     android:background="@color/white"
     android:layout_marginTop="@dimen/edit_plan_module_margin"
-    app:allRadius="8dp">
+    android:layout_marginLeft="@dimen/edit_plan_module_margin"
+    android:layout_marginRight="@dimen/edit_plan_module_margin"
+    app:allRadius="12dp">
 
     <TextView
         android:id="@+id/tv_module_name"
