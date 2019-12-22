@@ -1,5 +1,6 @@
 package com.mdove.civilservantcommunity.ugc
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -20,7 +21,10 @@ import com.mdove.dependent.common.recyclerview.PaddingDecoration
 import com.mdove.dependent.common.toast.ToastUtil
 import com.mdove.dependent.common.utils.dismissLoading
 import com.mdove.dependent.common.utils.showLoading
+import com.mdove.dependent.common.view.OnToolbarListener
+import kotlinx.android.synthetic.main.fragment_edit_plan_container.*
 import kotlinx.android.synthetic.main.fragment_main_ugc.*
+import kotlinx.android.synthetic.main.fragment_main_ugc.view_toolbar
 
 /**
  * Created by MDove on 2019-09-15.
@@ -65,28 +69,30 @@ class MainUGCFragment : BaseFragment() {
 
         viewModel.getTopics()
 
-        btn_ok.setOnClickListener {
-            val title = et_title.text.toString()
-            val content = et_content.text.toString()
-            AppConfig.getUserInfo()?.let {
-                viewModel.postQuestion(it, title, content)?.observe(activity!!, Observer {
-                    when (it.status) {
-                        Status.SUCCESS -> {
-                            dismissLoading()
-                            activity?.finish()
-                            ToastUtil.toast("请求成功:${it.data?.message ?: ""}")
+        view_toolbar.setListener(object :OnToolbarListener {
+            override fun onRightBtnClick() {
+                val title = et_title.text.toString()
+                val content = et_content.text.toString()
+                AppConfig.getUserInfo()?.let {
+                    viewModel.postQuestion(it, title, content)?.observe(activity!!, Observer {
+                        when (it.status) {
+                            Status.SUCCESS -> {
+                                dismissLoading()
+                                activity?.finish()
+                                ToastUtil.toast("请求成功:${it.data?.message ?: ""}")
+                            }
+                            Status.ERROR -> {
+                                dismissLoading()
+                                ToastUtil.toast("请求失败:${it.data?.message ?: ""}")
+                            }
+                            Status.LOADING -> {
+                                showLoading()
+                            }
                         }
-                        Status.ERROR -> {
-                            dismissLoading()
-                            ToastUtil.toast("请求失败:${it.data?.message ?: ""}")
-                        }
-                        Status.LOADING -> {
-                            showLoading()
-                        }
-                    }
-                })
+                    })
+                }
             }
-        }
+        })
 
         viewModel.postResp.observe(this, Observer {
             when (it.status) {
@@ -106,6 +112,9 @@ class MainUGCFragment : BaseFragment() {
     private fun initView() {
         view_toolbar.setTitle("求助大神")
         view_toolbar.setRightBtnTitle("发送")
+        view_toolbar.setToolbarBackgroundIsNull()
+        view_toolbar.setColorForAll(Color.BLACK)
+
         layout_identity.setList(viewModel.typeTitles)
         rlv_topic.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)

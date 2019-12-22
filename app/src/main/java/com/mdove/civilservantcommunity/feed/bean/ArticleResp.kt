@@ -32,6 +32,10 @@ data class FeedQuickBtnsResp(
     val name: String = "今日计划"
 ) : BaseFeedResp()
 
+data class FeedEncourageTipsResp(
+    val name: String = "主Feed鼓励"
+) : BaseFeedResp()
+
 data class FeedQuickEditNewPlanResp(
     val name: String = "快捷发送计划"
 ) : BaseFeedResp()

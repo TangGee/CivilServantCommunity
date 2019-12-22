@@ -48,7 +48,7 @@ class MainUGCViewModel : ViewModel() {
                 res.data?.data?.mapIndexed { index, topics ->
                     UGCRlvTopicBean(
                         topics.typeName,
-                        topics.typeName,
+                        topics.typeId,
                         index == 0
                     )
                 } ?: defaultTopics

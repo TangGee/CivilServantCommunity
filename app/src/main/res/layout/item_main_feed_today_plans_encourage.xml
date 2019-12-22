@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <com.mdove.dependent.common.view.roundcorner.RoundCornerConstraintLayout
+        android:id="@+id/layout_content"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/main_feed_item_margin"
+        android:layout_marginTop="8dp"
+        android:layout_marginRight="@dimen/main_feed_item_margin"
+        android:background="@color/white_trans90"
+        android:orientation="vertical"
+        app:allRadius="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/line"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/ic"
+            android:layout_width="26dp"
+            app:srcCompat="@drawable/vector_ic_like"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@+id/tv"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintTop_toTopOf="@+id/tv"
+            android:tint="@color/grey_600"
+            android:layout_marginLeft="36dp"
+            app:layout_constraintBottom_toBottomOf="@+id/tv"
+            android:layout_height="26dp"/>
+
+        <TextView
+            android:id="@+id/tv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="36dp"
+            android:gravity="center"
+            android:text="学习不易，记得中午给自己加个鸡腿呦~"
+            android:textColor="@color/grey_600"
+            android:textSize="16dp"
+            app:layout_constraintLeft_toRightOf="@+id/ic"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </com.mdove.dependent.common.view.roundcorner.RoundCornerConstraintLayout>
+
+    <View
+        android:id="@+id/line"
+        android:layout_width="3dp"
+        android:layout_height="0dp"
+        android:background="@color/grey_200"
+        android:layout_marginLeft="19dp"
+        android:layout_marginRight="8.5dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/layout_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

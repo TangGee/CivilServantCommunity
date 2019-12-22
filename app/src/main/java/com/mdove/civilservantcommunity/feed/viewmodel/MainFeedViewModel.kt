@@ -46,12 +46,14 @@ class MainFeedViewModel : ViewModel() {
                     temp.add(FeedDateResp(System.currentTimeMillis()))
                     temp.add(FeedDevTitleResp())
                     temp.add(FeedQuickEditNewPlanResp())
+                    temp.add(FeedQuickBtnsResp())
                     withContext(MDoveBackgroundPool) {
                         temp.add(FeedTimeLineFeedTodayPlansTitleResp())
                         val showApply =
                             MainDb.db.todayPlansDao().getTodayPlansRecord(TimeUtils.getDateFromSQLYesterday()) != null
                         MainDb.db.todayPlansDao().getTodayPlansRecord(TimeUtils.getDateFromSQL())?.let { entity ->
                             if (entity.resp.params.isNotEmpty()) {
+                                temp.add(FeedEncourageTipsResp())
                                 temp.addAll(entity.resp.params.flatMap { planModule ->
                                     planModule.beanSingles.map {
                                         FeedTimeLineFeedTodayPlansResp(
@@ -72,7 +74,6 @@ class MainFeedViewModel : ViewModel() {
                             temp.add(FeedTimeLineFeedTodayPlansTipsTitleResp(showApply = showApply))
                         }
                     }
-                    temp.add(FeedQuickBtnsResp())
                     temp.add(FeedTimeLineFeedTitleResp())
                     if (it.status == Status.ERROR) {
                         temp.add(FeedNetworkErrorTitleResp())

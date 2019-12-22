@@ -4,41 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/btn_ok"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="12dp"
-        android:layout_marginBottom="24dp"
-        android:text="发  布"
-        android:textColor="@color/black"
-        android:textSize="20dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rlv_topic"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@color/grey_200"
-        app:layout_constraintBottom_toTopOf="@+id/layout_identity"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/et_title" />
-
-    <com.mdove.civilservantcommunity.view.MultiLineChooseLayout
-        android:id="@+id/layout_identity"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@color/grey_200"
-        android:paddingLeft="12dp"
-        android:visibility="gone"
-        android:paddingRight="12dp"
-        android:paddingBottom="12dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rlv_topic" />
-
     <com.mdove.dependent.common.view.NormalToolbar
         android:id="@+id/view_toolbar"
         android:layout_width="0dp"
@@ -46,6 +11,16 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rlv_topic"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/grey_200"
+        app:layout_constraintBottom_toTopOf="@+id/et_title"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view_toolbar" />
 
     <com.mdove.dependent.common.view.richspan.EditTextForUGC
         android:id="@+id/et_title"
@@ -58,10 +33,33 @@
         android:hint="标题（可不填）"
         android:textSize="20dp"
         app:layout_constrainedHeight="true"
-        app:layout_constraintBottom_toTopOf="@+id/rlv_topic"
+        app:layout_constraintBottom_toTopOf="@+id/line"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view_toolbar" />
+        app:layout_constraintTop_toBottomOf="@+id/rlv_topic" />
+
+    <com.mdove.civilservantcommunity.view.MultiLineChooseLayout
+        android:id="@+id/layout_identity"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/grey_200"
+        android:paddingLeft="12dp"
+        android:visibility="gone"
+        android:paddingRight="12dp"
+        android:paddingBottom="12dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_title" />
+
+    <View
+        android:id="@+id/line"
+        android:layout_width="0dp"
+        android:background="@color/grey_200"
+        app:layout_constraintTop_toBottomOf="@+id/et_title"
+        app:layout_constraintBottom_toTopOf="@+id/et_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_height="10dp"/>
 
     <com.mdove.dependent.common.view.richspan.EditTextForUGC
         android:id="@+id/et_content"
@@ -73,9 +71,9 @@
         android:gravity="left"
         android:hint="内容"
         android:textSize="20dp"
-        app:layout_constraintBottom_toTopOf="@+id/btn_ok"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/layout_identity" />
+        app:layout_constraintTop_toBottomOf="@+id/line" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

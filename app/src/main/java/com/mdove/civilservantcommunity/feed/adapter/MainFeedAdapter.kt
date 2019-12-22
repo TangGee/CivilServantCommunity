@@ -61,6 +61,9 @@ class MainFeedAdapter(
             if ((oldItem is FeedPunchResp) && (newItem is FeedPunchResp)) {
                 return true
             }
+            if ((oldItem is FeedEncourageTipsResp) && (newItem is FeedEncourageTipsResp)) {
+                return true
+            }
             if ((oldItem is FeedQuickEditNewPlanResp) && (newItem is FeedQuickEditNewPlanResp)) {
                 return true
             }
@@ -115,6 +118,8 @@ class MainFeedAdapter(
                 oldItem.count == newItem.count
             } else if ((oldItem is FeedTodayPlanResp) && (newItem is FeedTodayPlanResp)) {
                 oldItem.params == newItem.params
+            } else if ((oldItem is FeedEncourageTipsResp) && (newItem is FeedEncourageTipsResp)) {
+                return true
             } else if ((oldItem is FeedDevTitleResp) && (newItem is FeedDevTitleResp)) {
                 return true
             } else if ((oldItem is FeedTimeLineFeedTodayPlansResp) && (newItem is FeedTimeLineFeedTodayPlansResp)) {
@@ -158,6 +163,7 @@ class MainFeedAdapter(
         const val TYPE_FEED_QUESTION_CARD = 17
         const val TYPE_FEED_TIME_LINE_FEED_TODAY_PLAN_BTN_APPLY_OLD = 18
         const val TYPE_FEED_QUESTION_CARD_CLICK_QUICK_SEND = 19
+        const val TYPE_FEED_TODAY_PLANS_ENCOURAGE = 20
 
         const val CLICK_QUICK_BTN_PLAN = 101
         const val CLICK_QUICK_BTN_PUNCH = 102
@@ -287,6 +293,15 @@ class MainFeedAdapter(
                         false
                     )
                 )
+            TYPE_FEED_TODAY_PLANS_ENCOURAGE -> {
+                FeedTodayPlanEncourageViewHolder(
+                    LayoutInflater.from(parent.context).inflate(
+                        R.layout.item_main_feed_today_plans_encourage,
+                        parent,
+                        false
+                    )
+                )
+            }
             else ->
                 NewStyleViewHolder(
                     LayoutInflater.from(parent.context).inflate(
@@ -316,6 +331,7 @@ class MainFeedAdapter(
             is FeedDevTitleResp -> TYPE_FEED_DEV
             is FeedQuestionFeedResp -> TYPE_FEED_QUESTION_CARD
             is FeedArticleFeedResp -> TYPE_FEED_NORMAL_CARD
+            is FeedEncourageTipsResp -> TYPE_FEED_TODAY_PLANS_ENCOURAGE
             else -> TYPE_FEED_NORMAL_CARD
         }
     }
@@ -458,15 +474,11 @@ class MainFeedAdapter(
             reset()
             title.text = resp.params.beanSingle.content
             tvModule.text = resp.params.beanSingle.moduleName
-            resp.params.timeSchedule?.let {
-                lineTimeSchedule.visibility = View.VISIBLE
-                tvTimeSchedule.visibility = View.VISIBLE
-                tvTimeSchedule.text =
-                    "${TimeUtils.getDateChinese(it.first)} - ${TimeUtils.getHourM(it.second)}"
-            } ?: also {
-                tvTimeSchedule.visibility = View.GONE
-                lineTimeSchedule.visibility = View.GONE
-            }
+            lineTimeSchedule.visibility = View.VISIBLE
+            tvTimeSchedule.visibility = View.VISIBLE
+            tvTimeSchedule.text = resp.params.timeSchedule?.let {
+                "预期在：${TimeUtils.getDateChinese(it.first)} - ${TimeUtils.getHourM(it.second)} 内完成"
+            } ?: "创建时间：${TimeUtils.getDateChinese(resp.date)}"
 
             bindSelect(resp.params.statusSingle == SinglePlanStatus.SELECT)
             cb.isChecked = resp.params.statusSingle == SinglePlanStatus.SELECT
@@ -569,6 +581,7 @@ class MainFeedAdapter(
         }
     }
 
+    inner class FeedTodayPlanEncourageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
     inner class FeedPlanViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         init {
             listener?.let { listener ->

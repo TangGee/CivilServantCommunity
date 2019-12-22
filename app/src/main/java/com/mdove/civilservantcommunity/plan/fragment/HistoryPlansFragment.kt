@@ -59,7 +59,6 @@ class HistoryPlansFragment : BaseFragment() {
             }
         })
 
-
         //初始化进入时的计划
         historyPlansViewModel.selectTimeLiveData.value = TimeUtils.getDateFromSQL()
 
