@@ -19,6 +19,7 @@ import com.mdove.civilservantcommunity.feed.bean.FeedArticleFeedResp
 import com.mdove.civilservantcommunity.feed.bean.FeedQuestionFeedResp
 import com.mdove.civilservantcommunity.feed.bean.FeedTimeLineFeedTodayPlansResp
 import com.mdove.civilservantcommunity.feed.bean.FeedTodayPlansCheckParams
+import com.mdove.civilservantcommunity.feed.viewmodel.LoadType
 import com.mdove.civilservantcommunity.feed.viewmodel.MainFeedViewModel
 import com.mdove.civilservantcommunity.plan.activity.HistoryPlansActivity
 import com.mdove.civilservantcommunity.plan.activity.gotoPlanActivity
@@ -34,6 +35,8 @@ import com.mdove.civilservantcommunity.question.viewmodel.QuestionViewModel
 import com.mdove.civilservantcommunity.room.MainDb
 import com.mdove.civilservantcommunity.ugc.MainUGCActivity
 import com.mdove.dependent.common.networkenhance.valueobj.Status
+import com.mdove.dependent.common.recyclerview.PaddingDecoration
+import com.mdove.dependent.common.recyclerview.PaddingType
 import com.mdove.dependent.common.threadpool.FastMain
 import com.mdove.dependent.common.threadpool.MDoveBackgroundPool
 import com.mdove.dependent.common.toast.ToastUtil
@@ -96,6 +99,14 @@ class MainFeedFragment : BaseFragment() {
             }
         }
     }, object : OnNormalFeedListener {
+        override fun onClickGoUGC() {
+            clickUGC()
+        }
+
+        override fun loadedMore() {
+            feedViewModel.reqFeed(LoadType.LOAD_MORE)
+        }
+
         override fun onSendNewPlanClick(content: String) {
             launch {
                 //                showLoading()
@@ -222,6 +233,7 @@ class MainFeedFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         rlv.adapter = adapter
+        rlv.addItemDecoration(PaddingDecoration(8,PaddingType.BOTTOM))
         rlv.layoutManager = LinearLayoutManager(context)
         feedViewModel.mData.observe(this, Observer {
             when (it.status) {

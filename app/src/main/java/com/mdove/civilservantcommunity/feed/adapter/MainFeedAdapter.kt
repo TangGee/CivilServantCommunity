@@ -1,5 +1,6 @@
 package com.mdove.civilservantcommunity.feed.adapter
 
+import android.graphics.Paint
 import android.graphics.Paint.ANTI_ALIAS_FLAG
 import android.graphics.Paint.STRIKE_THRU_TEXT_FLAG
 import android.text.Html
@@ -58,6 +59,9 @@ class MainFeedAdapter(
             if ((oldItem is FeedQuickBtnsResp) && (newItem is FeedQuickBtnsResp)) {
                 return true
             }
+            if ((oldItem is FeedLoadMoreResp) && (newItem is FeedLoadMoreResp)) {
+                return true
+            }
             if ((oldItem is FeedPunchResp) && (newItem is FeedPunchResp)) {
                 return true
             }
@@ -73,10 +77,10 @@ class MainFeedAdapter(
             if ((oldItem is FeedDateResp) && (newItem is FeedDateResp)) {
                 return true
             }
-            if ((oldItem is FeedPaddingStub) && (newItem is FeedPaddingStub)) {
+            if ((oldItem is FeedTodayPlanResp) && (newItem is FeedTodayPlanResp)) {
                 return true
             }
-            if ((oldItem is FeedTodayPlanResp) && (newItem is FeedTodayPlanResp)) {
+            if ((oldItem is FeedNoContentResp) && (newItem is FeedNoContentResp)) {
                 return true
             }
             if ((oldItem is FeedNetworkErrorTitleResp) && (newItem is FeedNetworkErrorTitleResp)) {
@@ -112,10 +116,14 @@ class MainFeedAdapter(
                 return true
             } else if ((oldItem is FeedDateResp) && (newItem is FeedDateResp)) {
                 return (oldItem as? FeedDateResp)?.isSameDay == (newItem as? FeedDateResp)?.isSameDay
+            } else if ((oldItem is FeedNoContentResp) && (newItem is FeedNoContentResp)) {
+                return true
             } else if ((oldItem is FeedArticleFeedResp) && (newItem is FeedArticleFeedResp)) {
                 oldItem.article.title == newItem.article.title
             } else if ((oldItem is FeedPunchResp) && (newItem is FeedPunchResp)) {
                 oldItem.count == newItem.count
+            } else if ((oldItem is FeedLoadMoreResp) && (newItem is FeedLoadMoreResp)) {
+                return true
             } else if ((oldItem is FeedTodayPlanResp) && (newItem is FeedTodayPlanResp)) {
                 oldItem.params == newItem.params
             } else if ((oldItem is FeedEncourageTipsResp) && (newItem is FeedEncourageTipsResp)) {
@@ -155,7 +163,6 @@ class MainFeedAdapter(
         const val TYPE_FEED_TIME_LINE_FEED_TITLE = 9
         const val TYPE_FEED_TIME_LINE_FEED_TODAY_PLAN = 10
         const val TYPE_FEED_TIME_LINE_FEED_TODAY_PLAN_TITLE = 11
-        const val TYPE_FEED_PADDING = 12
         const val TYPE_FEED_NETWORK_ERROR = 13
         const val TYPE_FEED_TIME_LINE_FEED_TODAY_PLAN_BTN_TIPS = 14
         const val TYPE_FEED_EDIT_NEW_PLAN = 15
@@ -164,6 +171,8 @@ class MainFeedAdapter(
         const val TYPE_FEED_TIME_LINE_FEED_TODAY_PLAN_BTN_APPLY_OLD = 18
         const val TYPE_FEED_QUESTION_CARD_CLICK_QUICK_SEND = 19
         const val TYPE_FEED_TODAY_PLANS_ENCOURAGE = 20
+        const val TYPE_FEED_LOAD_MORE = 21
+        const val TYPE_FEED_NO_CONTENT = 22
 
         const val CLICK_QUICK_BTN_PLAN = 101
         const val CLICK_QUICK_BTN_PUNCH = 102
@@ -253,6 +262,14 @@ class MainFeedAdapter(
                         false
                     )
                 )
+            TYPE_FEED_LOAD_MORE ->
+                FeedLoadMoreViewHolder(
+                    LayoutInflater.from(parent.context).inflate(
+                        R.layout.item_normal_loading,
+                        parent,
+                        false
+                    )
+                )
             TYPE_FEED_TIME_LINE_FEED_TODAY_PLAN_BTN_TIPS ->
                 FeedTodayPlanBtnTipsHolder(
                     LayoutInflater.from(parent.context).inflate(
@@ -265,14 +282,6 @@ class MainFeedAdapter(
                 FeedDateViewHolder(
                     LayoutInflater.from(parent.context).inflate(
                         R.layout.item_main_feed_date,
-                        parent,
-                        false
-                    )
-                )
-            TYPE_FEED_PADDING ->
-                FeedPaddingViewHolder(
-                    LayoutInflater.from(parent.context).inflate(
-                        R.layout.item_main_feed_padding,
                         parent,
                         false
                     )
@@ -302,6 +311,13 @@ class MainFeedAdapter(
                     )
                 )
             }
+            TYPE_FEED_NO_CONTENT->{
+                FeedNoContentViewHolder(LayoutInflater.from(parent.context).inflate(
+                    R.layout.item_main_feed_no_more_content,
+                    parent,
+                    false
+                ))
+            }
             else ->
                 NewStyleViewHolder(
                     LayoutInflater.from(parent.context).inflate(
@@ -321,7 +337,6 @@ class MainFeedAdapter(
             is FeedTodayPlanResp -> TYPE_FEED_TODAY_PLAN
             is FeedQuickBtnsResp -> TYPE_FEED_QUICK_BTNS
             is FeedDateResp -> TYPE_FEED_DATE
-            is FeedPaddingStub -> TYPE_FEED_PADDING
             is FeedQuickEditNewPlanResp -> TYPE_FEED_EDIT_NEW_PLAN
             is FeedNetworkErrorTitleResp -> TYPE_FEED_NETWORK_ERROR
             is FeedTimeLineFeedTitleResp -> TYPE_FEED_TIME_LINE_FEED_TITLE
@@ -332,6 +347,8 @@ class MainFeedAdapter(
             is FeedQuestionFeedResp -> TYPE_FEED_QUESTION_CARD
             is FeedArticleFeedResp -> TYPE_FEED_NORMAL_CARD
             is FeedEncourageTipsResp -> TYPE_FEED_TODAY_PLANS_ENCOURAGE
+            is FeedLoadMoreResp -> TYPE_FEED_LOAD_MORE
+            is FeedNoContentResp -> TYPE_FEED_NO_CONTENT
             else -> TYPE_FEED_NORMAL_CARD
         }
     }
@@ -371,6 +388,7 @@ class MainFeedAdapter(
             is FeedPunchViewHolder -> holder.bind((getItem(position) as FeedPunchResp))
             is NormalViewHolder -> holder.bind((getItem(position) as FeedArticleFeedResp))
             is FeedDateViewHolder -> holder.bind()
+            is FeedLoadMoreViewHolder -> holder.bind()
             is NewStyleViewHolder -> {
                 (getItem(position) as? FeedArticleFeedResp)?.let {
                     holder.bind(it)
@@ -459,7 +477,6 @@ class MainFeedAdapter(
         }
     }
 
-    inner class FeedPaddingViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
     inner class FeedTimeLineFeedTodayPlansViewHolder(itemView: View) :
         RecyclerView.ViewHolder(itemView) {
         private val title = itemView.findViewById<TextView>(R.id.text)
@@ -541,12 +558,29 @@ class MainFeedAdapter(
     inner class FeedTimeLineFeedTodayPlansTitleViewHolder(itemView: View) :
         RecyclerView.ViewHolder(itemView)
 
+    inner class FeedLoadMoreViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        fun bind() {
+            normalListener?.loadedMore()
+        }
+    }
+
     inner class FeedTimeLineFeedTitleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
     inner class FeedDevTitleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
-    inner class FeedNetworkErrorTitleViewHolder(itemView: View) :
-        RecyclerView.ViewHolder(itemView) {
+    inner class FeedNetworkErrorTitleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         init {
             itemView.findViewById<TimeLineView>(R.id.time_line).hideBottomLine()
+        }
+    }
+
+    inner class FeedNoContentViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        init {
+            itemView.findViewById<TextView>(R.id.btn_go_ugc).apply {
+                setOnClickListener {
+                    normalListener?.onClickGoUGC()
+                }
+                paint.flags = Paint.UNDERLINE_TEXT_FLAG
+                paint.isAntiAlias = true
+            }
         }
     }
 
@@ -706,6 +740,8 @@ class MainFeedAdapter(
 
 interface OnNormalFeedListener {
     fun onSendNewPlanClick(content: String)
+    fun loadedMore()
+    fun onClickGoUGC()
 }
 
 interface OnMainFeedClickListener {

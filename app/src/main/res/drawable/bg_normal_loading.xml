@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rotate
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:drawable="@drawable/vector_loading"
+    android:pivotX="50%"
+    android:pivotY="50%"
+    android:fromDegrees="0"
+    android:toDegrees="360"
+    android:interpolator="@android:anim/linear_interpolator"
+    android:repeatCount="infinite">
+
+    <!--设置rotate的速度，可以通过fromDegree，toDegree， 一个周期默认4秒-->
+    <!--https://stackoverflow.com/questions/3165938/how-to-increase-the-rotation-speed-in-android-->
+</rotate>

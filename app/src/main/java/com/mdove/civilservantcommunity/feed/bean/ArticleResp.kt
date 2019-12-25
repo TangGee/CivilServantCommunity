@@ -36,6 +36,10 @@ data class FeedEncourageTipsResp(
     val name: String = "主Feed鼓励"
 ) : BaseFeedResp()
 
+data class FeedLoadMoreResp(
+    val name: String = "load more"
+) : BaseFeedResp()
+
 data class FeedQuickEditNewPlanResp(
     val name: String = "快捷发送计划"
 ) : BaseFeedResp()
@@ -48,10 +52,9 @@ data class FeedNetworkErrorTitleResp(
     val name: String = "今日计划"
 ) : BaseFeedResp()
 
-data class FeedPaddingStub(
-    val name: String = "今日计划"
+data class FeedNoContentResp(
+    val name: String = "无更多内容"
 ) : BaseFeedResp()
-
 
 @Parcelize
 data class FeedTimeLineFeedTodayPlansResp(

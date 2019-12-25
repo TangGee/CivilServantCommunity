@@ -18,6 +18,7 @@ import com.mdove.civilservantcommunity.ugc.viewmodel.MainUGCViewModel
 import com.mdove.civilservantcommunity.view.MultiLineChooseLayout
 import com.mdove.dependent.common.networkenhance.valueobj.Status
 import com.mdove.dependent.common.recyclerview.PaddingDecoration
+import com.mdove.dependent.common.recyclerview.PaddingType
 import com.mdove.dependent.common.toast.ToastUtil
 import com.mdove.dependent.common.utils.dismissLoading
 import com.mdove.dependent.common.utils.showLoading
@@ -118,7 +119,7 @@ class MainUGCFragment : BaseFragment() {
         layout_identity.setList(viewModel.typeTitles)
         rlv_topic.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        rlv_topic.addItemDecoration(PaddingDecoration(12, false))
+        rlv_topic.addItemDecoration(PaddingDecoration(12, PaddingType.LEFT))
         rlv_topic.adapter = adapter
     }
 }

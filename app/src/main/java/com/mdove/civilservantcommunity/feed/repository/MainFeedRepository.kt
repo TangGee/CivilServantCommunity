@@ -16,12 +16,14 @@ import com.mdove.dependent.common.networkenhance.valueobj.Resource
 class MainFeedRepository {
     private val mainFeedModule = MainFeedModule()
     private val mainFeedCacheModule = MainFeedCacheModule()
-    fun reqFeed(feedParams: FeedReqParams): LiveData<Resource<NormalResp<List<MainFeedResp>>>> {
+    private var curPage = 1
+    fun reqFeed(count: Int, forceRefresh: Boolean): LiveData<Resource<NormalResp<List<MainFeedResp>>>> {
         return object :
             NetworkBoundResource<NormalResp<List<MainFeedResp>>, NormalResp<List<MainFeedResp>>>(
                 AppExecutorsImpl()
             ) {
             override fun saveCallResult(item: NormalResp<List<MainFeedResp>>) {
+                curPage += 1
                 mainFeedCacheModule.mCacheFeedResp = item
             }
 
@@ -37,7 +39,7 @@ class MainFeedRepository {
             }
 
             override fun createCall(): LiveData<ApiResponse<NormalResp<List<MainFeedResp>>>> {
-                return mainFeedModule.reqFeed(feedParams)
+                return mainFeedModule.reqFeed(FeedReqParams(if (forceRefresh) 1 else curPage, count))
             }
         }.asLiveData()
     }

@@ -25,7 +25,7 @@ class MainFeedViewModel : ViewModel() {
 
     private val feedData: LiveData<Resource<NormalResp<List<MainFeedResp>>>> =
         Transformations.switchMap(loadType) {
-            repository.reqFeed(FeedReqParams(1, 10))
+            repository.reqFeed(6, it == LoadType.NORMAL || it == LoadType.REFRESH)
         }
 
 
@@ -41,6 +41,11 @@ class MainFeedViewModel : ViewModel() {
     val mData: LiveData<Resource<List<BaseFeedResp>>> =
         MediatorLiveData<Resource<List<BaseFeedResp>>>().apply {
             addSource(feedData) {
+                val oldData = value?.data?.filter {
+                    it is FeedArticleFeedResp || it is FeedQuestionFeedResp
+                }?.takeIf {
+                    it.isNotEmpty()
+                }
                 val temp = mutableListOf<BaseFeedResp>()
                 CoroutineScope(FastMain).launch {
                     temp.add(FeedDateResp(System.currentTimeMillis()))
@@ -75,16 +80,34 @@ class MainFeedViewModel : ViewModel() {
                         }
                     }
                     temp.add(FeedTimeLineFeedTitleResp())
-                    if (it.status == Status.ERROR) {
-                        temp.add(FeedNetworkErrorTitleResp())
-                    } else {
-                        temp.addAll(it.data?.data?.map { article ->
-                            article.toMainFeedResp()
-                        }?.filterNotNull()?.apply {
-                            (this.last()).hideEndLine = true
-                        } ?: mutableListOf<BaseFeedResp>())
+                    when {
+                        it.status == Status.ERROR -> {
+                            oldData?.let {
+                                temp.addAll(it)
+                            }
+                            temp.add(FeedNetworkErrorTitleResp())
+                        }
+                        it.status == Status.SUCCESS -> {
+                            it.data?.data?.mapNotNull { article ->
+                                article.toMainFeedResp()
+                            }?.takeIf {
+                                it.isNotEmpty()
+                            }?.let { newData ->
+                                oldData?.forEach {
+                                    it.hideEndLine = false
+                                    temp.add(it)
+                                }
+                                (newData.last()).hideEndLine = true
+                                temp.addAll(newData)
+                                temp.add(FeedLoadMoreResp())
+                            } ?: also {
+                                addDefaultList(oldData, temp)
+                            }
+                        }
+                        else -> {
+                            addDefaultList(oldData, temp)
+                        }
                     }
-                    temp.add(FeedPaddingStub())
                     value = Resource(
                         if (it.status == Status.ERROR) Status.SUCCESS else it.status,
                         temp,
@@ -261,9 +284,25 @@ class MainFeedViewModel : ViewModel() {
             }
         }
 
+    private fun addDefaultList(
+        oldData: List<BaseFeedResp>?,
+        temp: MutableList<BaseFeedResp>
+    ) {
+        oldData?.forEachIndexed { index, resp ->
+            if (index == oldData.size-1) {
+                resp.hideEndLine = true
+                temp.add(resp)
+                temp.add(FeedNoContentResp())
+            } else {
+                resp.hideEndLine = false
+                temp.add(resp)
+            }
+        }
+    }
 
-    fun reqFeed() {
-        loadType.value = LoadType.NORMAL
+
+    fun reqFeed(type: LoadType = LoadType.NORMAL) {
+        loadType.value = type
     }
 
     fun createTimeScheduleParams(): TimeScheduleParams {

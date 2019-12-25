@@ -8,7 +8,7 @@ import com.mdove.dependent.common.utils.UIUtils
 /**
  * Created by MDove on 2019-11-03.
  */
-class PaddingDecoration(padding: Int,private val isTop: Boolean = true) :
+class PaddingDecoration(padding: Int,private val type: PaddingType = PaddingType.TOP) :
     RecyclerView.ItemDecoration() {
     private var mPadding = UIUtils.dip2Px(8).toInt()
 
@@ -29,10 +29,19 @@ class PaddingDecoration(padding: Int,private val isTop: Boolean = true) :
             return
         }
         if (itemPosition == 0) {
-            if (isTop) {
-                outRect.top = mPadding
-            } else {
-                outRect.left = mPadding
+            when(type){
+                PaddingType.TOP->{
+                    outRect.top = mPadding
+                }
+                PaddingType.LEFT->{
+                    outRect.left = mPadding
+                }
+                PaddingType.BOTTOM->{
+                    outRect.bottom = mPadding
+                }
+                PaddingType.RIGHT->{
+                    outRect.right = mPadding
+                }
             }
         }
 
@@ -41,4 +50,11 @@ class PaddingDecoration(padding: Int,private val isTop: Boolean = true) :
 //            outRect.bottom = mPadding
 //        }
     }
+}
+
+enum class PaddingType{
+    TOP,
+    BOTTOM,
+    RIGHT,
+    LEFT
 }

@@ -23,6 +23,7 @@ import com.mdove.civilservantcommunity.plan.adapter.TimeScheduleAdapter
 import com.mdove.civilservantcommunity.plan.model.*
 import com.mdove.civilservantcommunity.plan.utils.TimeScheduleHelper
 import com.mdove.dependent.common.recyclerview.PaddingDecoration
+import com.mdove.dependent.common.recyclerview.PaddingType
 import com.mdove.dependent.common.utils.UIUtils
 import com.mdove.dependent.common.view.removeSelf
 import kotlinx.android.synthetic.main.layout_time_schedule.view.*
@@ -149,7 +150,7 @@ class TimeScheduleLayout @JvmOverloads constructor(context: Context, attrs: Attr
         initScopes()
         rlv_plans.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        rlv_plans.addItemDecoration(PaddingDecoration(8, false))
+        rlv_plans.addItemDecoration(PaddingDecoration(8, PaddingType.LEFT))
         rlv_plans.adapter = TimeScheduleAdapter(object : OnTimeScheduleAdapterListener {
             override fun onClickGotoCreatePlans() {
                 listener?.onClickGotoCreatePlans()
