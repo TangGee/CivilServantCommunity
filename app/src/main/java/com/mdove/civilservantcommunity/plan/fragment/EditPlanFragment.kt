@@ -129,6 +129,12 @@ class EditPlanFragment : BaseFragment() {
                 Status.LOADING -> {
                     rlv.updateEmptyUI()
                 }
+                Status.ERROR->{
+                    it.data?.data?.let {
+                        adapter.submitList(it)
+                        rlv.updateEmptyUI()
+                    }
+                }
             }
         })
     }

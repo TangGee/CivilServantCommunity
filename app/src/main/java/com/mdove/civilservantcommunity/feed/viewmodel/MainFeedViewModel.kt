@@ -108,6 +108,7 @@ class MainFeedViewModel : ViewModel() {
                             addDefaultList(oldData, temp)
                         }
                     }
+                    temp.add(FeedBottomPaddingResp())
                     value = Resource(
                         if (it.status == Status.ERROR) Status.SUCCESS else it.status,
                         temp,

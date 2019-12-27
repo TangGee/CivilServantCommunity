@@ -59,6 +59,8 @@ enum class PlanModuleType {
     BTN_TIME_SCHEDULE,
     EDIT_PLANS_TIPS,
     CREATE_PLANS_TIPS,
+    ERROR_ICON,
+    ERROR_TITLE,
     BTN_OK
 }
 

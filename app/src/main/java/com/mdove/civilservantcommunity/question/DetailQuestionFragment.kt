@@ -15,6 +15,8 @@ import com.mdove.civilservantcommunity.question.adapter.DetailQuestionAdapter
 import com.mdove.civilservantcommunity.question.bean.*
 import com.mdove.civilservantcommunity.question.viewmodel.QuestionViewModel
 import com.mdove.dependent.common.networkenhance.valueobj.Status
+import com.mdove.dependent.common.recyclerview.PaddingDecoration
+import com.mdove.dependent.common.recyclerview.PaddingType
 import com.mdove.dependent.common.utils.*
 import kotlinx.android.synthetic.main.fragment_detail_question.*
 
@@ -79,8 +81,9 @@ class DetailQuestionFragment : BaseFragment() {
             mViewModel.questionDetailResp.value = it
         }
 
-        rlv.adapter = adapter
+        rlv.addItemDecoration(PaddingDecoration(8, PaddingType.BOTTOM))
         rlv.layoutManager = LinearLayoutManager(context)
+        rlv.adapter = adapter
 
         mViewModel.questionDetailLiveData.observe(this, Observer {res->
             res?.let{
@@ -96,12 +99,15 @@ class DetailQuestionFragment : BaseFragment() {
                     }
                     Status.ERROR -> {
                         dismissLoading()
+                        it.data?.data?.let {
+                            adapter.submitList(it)
+                        }
                     }
                 }
             }
         })
 
-        view_toolbar.setToolbarBackgroundIsNull()
+        view_toolbar.setDefaultToolbarBackgroundColor()
         view_toolbar.setTitle("提问")
         view_toolbar.setColorForAll(Color.BLACK)
     }

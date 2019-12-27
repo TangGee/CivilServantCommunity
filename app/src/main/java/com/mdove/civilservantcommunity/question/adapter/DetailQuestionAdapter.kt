@@ -9,10 +9,11 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.mdove.civilservantcommunity.R
-import com.mdove.civilservantcommunity.question.bean.AnswerDetailBean
-import com.mdove.civilservantcommunity.question.bean.BaseDetailQuestionBean
-import com.mdove.civilservantcommunity.question.bean.DetailQuestionSendBean
-import com.mdove.civilservantcommunity.question.bean.QuestionDetailBean
+import com.mdove.civilservantcommunity.base.adapter.TYPE_NORMAL_ERROR_ICON
+import com.mdove.civilservantcommunity.base.adapter.TYPE_NORMAL_ERROR_TITLE
+import com.mdove.civilservantcommunity.base.adapter.createNormalErrorIconViewHolder
+import com.mdove.civilservantcommunity.base.adapter.createNormalErrorTitleViewHolder
+import com.mdove.civilservantcommunity.question.bean.*
 import com.mdove.dependent.common.utils.TimeUtils
 import com.mdove.dependent.common.utils.UIUtils
 import com.mdove.dependent.common.utils.setDebounceOnClickListener
@@ -38,23 +39,35 @@ class DetailQuestionAdapter(val listener: OnClickQuestionListener? = null) :
         }
     }) {
 
+    companion object {
+        const val TYPE_ANSWER = 1
+        const val TYPE_SEND = 3
+        const val TYPE_HEAD_QUESTION = 2
+    }
+
     override fun getItemViewType(position: Int): Int {
         return when (getItem(position)) {
             is AnswerDetailBean -> {
-                1
+                TYPE_ANSWER
             }
             is DetailQuestionSendBean -> {
-                3
+                TYPE_SEND
+            }
+            is QuestionDetailErrorBean -> {
+                TYPE_NORMAL_ERROR_TITLE
+            }
+            is DetailQuestionErrorIconBean -> {
+                TYPE_NORMAL_ERROR_ICON
             }
             else -> {
-                2
+                TYPE_HEAD_QUESTION
             }
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
-            1 -> {
+            TYPE_ANSWER -> {
                 AnswerViewHolder(
                     LayoutInflater.from(parent.context).inflate(
                         R.layout.item_detail_question_answer,
@@ -63,10 +76,24 @@ class DetailQuestionAdapter(val listener: OnClickQuestionListener? = null) :
                     )
                 )
             }
-            3 -> {
+            TYPE_NORMAL_ERROR_TITLE -> {
+                parent.createNormalErrorTitleViewHolder(parent.context.getString(R.string.req_detail_question_error))
+            }
+            TYPE_SEND -> {
                 DetailQuestionSendViewHolder(
                     LayoutInflater.from(parent.context).inflate(
                         R.layout.item_detail_question_send_answer, parent,
+                        false
+                    )
+                )
+            }
+            TYPE_NORMAL_ERROR_ICON -> {
+                parent.createNormalErrorIconViewHolder()
+            }
+            TYPE_HEAD_QUESTION -> {
+                DetailQuestionViewHolder(
+                    LayoutInflater.from(parent.context).inflate(
+                        R.layout.item_detail_question_head, parent,
                         false
                     )
                 )

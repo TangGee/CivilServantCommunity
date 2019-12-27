@@ -3,10 +3,13 @@ package com.mdove.civilservantcommunity.plan.viewmodel
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.mdove.civilservantcommunity.base.adapter.NormalErrorIconBean
+import com.mdove.civilservantcommunity.base.adapter.TYPE_NORMAL_ERROR_ICON
 import com.mdove.civilservantcommunity.plan.model.*
 import com.mdove.civilservantcommunity.plan.repository.PlanRepository
 import com.mdove.dependent.common.network.NormalResp
 import com.mdove.dependent.common.networkenhance.valueobj.Resource
+import com.mdove.dependent.common.networkenhance.valueobj.Status
 
 class EditPlanViewModel : ViewModel() {
     private val repository = PlanRepository()
@@ -29,7 +32,7 @@ class EditPlanViewModel : ViewModel() {
                     PlanModuleStatus.NORMAL
                 )
             )
-            it.data?.data?.let { rawList ->
+            it.data?.data?.let { respData ->
                 new.add(
                     PlanModuleBean(
                         "edit_plans",
@@ -39,7 +42,7 @@ class EditPlanViewModel : ViewModel() {
                         PlanModuleStatus.NORMAL
                     )
                 )
-                rawList.forEach {
+                respData.forEach {
                     val firstSinglePlan = it.firstOrNull()?.beanSingle ?: return@forEach
                     new.add(
                         PlanModuleBean(
@@ -57,6 +60,24 @@ class EditPlanViewModel : ViewModel() {
                         )
                     )
                 }
+                new.add(
+                    PlanModuleBean(
+                        "btn_ok",
+                        "btn_ok",
+                        mutableListOf(),
+                        PlanModuleType.BTN_OK,
+                        PlanModuleStatus.NORMAL
+                    )
+                )
+                new.add(
+                    PlanModuleBean(
+                        "btn_time_schedule",
+                        "btn_time_schedule",
+                        mutableListOf(),
+                        PlanModuleType.BTN_TIME_SCHEDULE,
+                        PlanModuleStatus.NORMAL
+                    )
+                )
             } ?: also {
                 new.add(
                     PlanModuleBean(
@@ -68,24 +89,28 @@ class EditPlanViewModel : ViewModel() {
                     )
                 )
             }
-            new.add(
-                PlanModuleBean(
-                    "btn_ok",
-                    "btn_ok",
-                    mutableListOf(),
-                    PlanModuleType.BTN_OK,
-                    PlanModuleStatus.NORMAL
+
+            if (it.status == Status.ERROR) {
+                new.add(
+                    PlanModuleBean(
+                        "error_icon",
+                        "error_icon",
+                        mutableListOf(),
+                        PlanModuleType.ERROR_ICON,
+                        PlanModuleStatus.NORMAL
+                    )
                 )
-            )
-            new.add(
-                PlanModuleBean(
-                    "btn_time_schedule",
-                    "btn_time_schedule",
-                    mutableListOf(),
-                    PlanModuleType.BTN_TIME_SCHEDULE,
-                    PlanModuleStatus.NORMAL
+                new.add(
+                    PlanModuleBean(
+                        "error_title",
+                        "error_title",
+                        mutableListOf(),
+                        PlanModuleType.ERROR_TITLE,
+                        PlanModuleStatus.NORMAL
+                    )
                 )
-            )
+            }
+
             value = Resource(
                 it.status,
                 NormalResp<List<PlanModuleBean>>(

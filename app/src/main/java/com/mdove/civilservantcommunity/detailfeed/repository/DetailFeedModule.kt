@@ -34,14 +34,10 @@ class DetailFeedModule {
             } catch (e: Exception) {
                 NormalResp<DetailFeedResp>(exception = e)
             }
-            if (resp.exception == null) {
+            if (resp.isSuc()) {
                 liveData.postValue(ApiSuccessResponse(resp))
             } else {
-                liveData.postValue(
-                    ApiErrorResponse(
-                        resp.exception ?: RuntimeException("unknown_error")
-                    )
-                )
+                liveData.postValue(ApiErrorResponse(RuntimeException(resp.message)))
             }
         }
         return liveData

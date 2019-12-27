@@ -4,8 +4,12 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
 
+    <color name="color_main_bg">@color/black_ac</color>
+    <color name="color_item_default_bg">@color/white_trans90</color>
+
     <color name="white">#ffffff</color>
     <color name="white_trans90">#E6FFFFFF</color>
+    <color name="white_trans60">#99FFFFFF</color>
     <color name="white_trans30">#4DFFFFFF</color>
     <color name="white_trans40">#66FFFFFF</color>
 

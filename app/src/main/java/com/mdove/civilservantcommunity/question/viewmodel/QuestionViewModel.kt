@@ -39,18 +39,22 @@ class QuestionViewModel : ViewModel() {
     val questionDetailLiveData =
         MediatorLiveData<Resource<NormalResp<List<BaseDetailQuestionBean>>>>().apply {
             addSource(reqLiveData) { res ->
-                value = res.data?.data?.let {
+                value = res.data?.let {
                     Resource<NormalResp<List<BaseDetailQuestionBean>>>(
                         res.status,
                         NormalResp(
                             res.data?.message ?: "",
                             mutableListOf<BaseDetailQuestionBean>().apply {
-                                it.question?.let {
+                                it.data?.question?.let {
                                     add(it)
                                     add(DetailQuestionSendBean())
                                 }
-                                it.answers?.let {
+                                it.data?.answers?.let {
                                     addAll(it)
+                                }
+                                if (res.status == Status.ERROR) {
+                                    add(DetailQuestionErrorIconBean())
+                                    add(QuestionDetailErrorBean())
                                 }
                             },
                             null

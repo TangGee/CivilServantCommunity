@@ -173,6 +173,7 @@ class MainFeedAdapter(
         const val TYPE_FEED_TODAY_PLANS_ENCOURAGE = 20
         const val TYPE_FEED_LOAD_MORE = 21
         const val TYPE_FEED_NO_CONTENT = 22
+        const val TYPE_FEED_BOTTOM_PADDING = 23
 
         const val CLICK_QUICK_BTN_PLAN = 101
         const val CLICK_QUICK_BTN_PUNCH = 102
@@ -230,6 +231,15 @@ class MainFeedAdapter(
                         false
                     )
                 )
+            TYPE_FEED_BOTTOM_PADDING -> {
+                FeedPaddingViewHolder(
+                    LayoutInflater.from(parent.context).inflate(
+                        R.layout.item_main_feed_padding,
+                        parent,
+                        false
+                    )
+                )
+            }
             TYPE_FEED_NETWORK_ERROR ->
                 FeedNetworkErrorTitleViewHolder(
                     LayoutInflater.from(parent.context).inflate(
@@ -311,12 +321,14 @@ class MainFeedAdapter(
                     )
                 )
             }
-            TYPE_FEED_NO_CONTENT->{
-                FeedNoContentViewHolder(LayoutInflater.from(parent.context).inflate(
-                    R.layout.item_main_feed_no_more_content,
-                    parent,
-                    false
-                ))
+            TYPE_FEED_NO_CONTENT -> {
+                FeedNoContentViewHolder(
+                    LayoutInflater.from(parent.context).inflate(
+                        R.layout.item_main_feed_no_more_content,
+                        parent,
+                        false
+                    )
+                )
             }
             else ->
                 NewStyleViewHolder(
@@ -349,6 +361,7 @@ class MainFeedAdapter(
             is FeedEncourageTipsResp -> TYPE_FEED_TODAY_PLANS_ENCOURAGE
             is FeedLoadMoreResp -> TYPE_FEED_LOAD_MORE
             is FeedNoContentResp -> TYPE_FEED_NO_CONTENT
+            is FeedBottomPaddingResp -> TYPE_FEED_BOTTOM_PADDING
             else -> TYPE_FEED_NORMAL_CARD
         }
     }
@@ -556,6 +569,9 @@ class MainFeedAdapter(
     }
 
     inner class FeedTimeLineFeedTodayPlansTitleViewHolder(itemView: View) :
+        RecyclerView.ViewHolder(itemView)
+
+    inner class FeedPaddingViewHolder(itemView: View) :
         RecyclerView.ViewHolder(itemView)
 
     inner class FeedLoadMoreViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

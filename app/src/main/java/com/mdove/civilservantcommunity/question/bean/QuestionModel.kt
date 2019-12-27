@@ -23,6 +23,9 @@ sealed class BaseDetailQuestionBean
 data class DetailQuestionSendBean(val name: String = "回答") : Parcelable, BaseDetailQuestionBean()
 
 @Parcelize
+data class DetailQuestionErrorIconBean(val name: String = "error") : Parcelable, BaseDetailQuestionBean()
+
+@Parcelize
 data class QuestionDetailBean(
     @SerializedName("qid") val qid: String? = "",
     @SerializedName("user_info") val userInfo: UserInfo? = null,
@@ -38,6 +41,11 @@ data class AnswerDetailBean(
     @SerializedName("an") val an: AnswerDetailAnBean? = null,
     @SerializedName("play_comment_onelist") val playCommentOnelist: List<PlayCommentOnelisBean>? = null,
     @SerializedName("play_comment_twolist") val playCommentTwolistplayCommentOnelist: List<PlayCommentTwolisBean>? = null
+) : Parcelable, BaseDetailQuestionBean()
+
+@Parcelize
+data class QuestionDetailErrorBean(
+    val an: String = "error"
 ) : Parcelable, BaseDetailQuestionBean()
 
 @Parcelize

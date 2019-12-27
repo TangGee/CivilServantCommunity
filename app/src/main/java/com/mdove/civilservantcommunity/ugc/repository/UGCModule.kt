@@ -36,14 +36,10 @@ class UGCModule {
             } catch (e: Exception) {
                 NormalResp<String>(exception = e)
             }
-            if (resp.exception == null) {
+            if (resp.isSuc()) {
                 liveData.postValue(ApiSuccessResponse(resp))
             } else {
-                liveData.postValue(
-                    ApiErrorResponse(
-                        resp.exception ?: RuntimeException("unknown_error")
-                    )
-                )
+                liveData.postValue(ApiErrorResponse(RuntimeException(resp.message)))
             }
         }
         return liveData
@@ -64,14 +60,10 @@ class UGCModule {
             } catch (e: Exception) {
                 NormalResp<String>(exception = e)
             }
-            if (resp.exception == null) {
+            if (resp.isSuc()) {
                 liveData.postValue(ApiSuccessResponse(resp))
             } else {
-                liveData.postValue(
-                    ApiErrorResponse(
-                        resp.exception ?: RuntimeException("unknown_error")
-                    )
-                )
+                liveData.postValue(ApiErrorResponse(RuntimeException(resp.message)))
             }
         }
         return liveData
@@ -92,14 +84,10 @@ class UGCModule {
             } catch (e: Exception) {
                 NormalResp<List<UGCTopic>>(exception = e)
             }
-            if (resp.exception == null) {
+            if (resp.isSuc()) {
                 liveData.postValue(ApiSuccessResponse(resp))
             } else {
-                liveData.postValue(
-                    ApiErrorResponse(
-                        resp.exception ?: RuntimeException("unknown_error")
-                    )
-                )
+                liveData.postValue(ApiErrorResponse(RuntimeException(resp.message)))
             }
         }
         return liveData

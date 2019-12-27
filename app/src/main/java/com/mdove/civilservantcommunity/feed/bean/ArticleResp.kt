@@ -56,6 +56,11 @@ data class FeedNoContentResp(
     val name: String = "无更多内容"
 ) : BaseFeedResp()
 
+
+data class FeedBottomPaddingResp(
+    val name: String = "底部padding"
+) : BaseFeedResp()
+
 @Parcelize
 data class FeedTimeLineFeedTodayPlansResp(
     val entityId: Long, // 数据库的id

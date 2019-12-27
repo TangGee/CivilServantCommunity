@@ -6,6 +6,7 @@ import android.graphics.PorterDuff
 import android.util.AttributeSet
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import com.mdove.dependent.common.R
 import kotlinx.android.synthetic.main.view_normal_toolbar.view.*
 
@@ -53,6 +54,14 @@ class NormalToolbar @JvmOverloads constructor(context: Context, attrs: Attribute
 
     fun setToolbarBackgroundIsNull() {
         background = null
+    }
+
+    fun setDefaultToolbarBackgroundColor(){
+        setToolbarBackgroudColor(ContextCompat.getColor(context, R.color.color_toolbar_default))
+    }
+
+    fun setToolbarBackgroudColor(color:Int){
+        setBackgroundColor(color)
     }
 }
 

@@ -9,12 +9,19 @@ import java.io.Serializable
  * Created by MDove on 2019/9/3.
  */
 data class NormalResp<T>(
-        @SerializedName("msg") val message: String = "fail",
-        @SerializedName("data") var data: T? = null,
-        @Transient var exception: Exception? = null,
-        @SerializedName("status") val status: Int? = null
-) : Serializable
+    @SerializedName("msg") val message: String = "fail",
+    @SerializedName("data") var data: T? = null,
+    @Transient var exception: Exception? = null,
+    @SerializedName("status") val status: Int? = null
+) : Serializable {
+
+    fun isSuc(): Boolean {
+        return status == 0
+    }
+}
 
 @Parcelize
-data class NormalErrorResp(@SerializedName("msg") val message: String = "fail",
-                           @SerializedName("status") val status: Int? = null) : Parcelable
+data class NormalErrorResp(
+    @SerializedName("msg") val message: String = "fail",
+    @SerializedName("status") val status: Int? = null
+) : Parcelable

@@ -7,6 +7,10 @@ import android.widget.TextView
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.recyclerview.widget.*
 import com.mdove.civilservantcommunity.R
+import com.mdove.civilservantcommunity.base.adapter.TYPE_NORMAL_ERROR_ICON
+import com.mdove.civilservantcommunity.base.adapter.TYPE_NORMAL_ERROR_TITLE
+import com.mdove.civilservantcommunity.base.adapter.createNormalErrorIconViewHolder
+import com.mdove.civilservantcommunity.base.adapter.createNormalErrorTitleViewHolder
 import com.mdove.civilservantcommunity.plan.model.PlanModuleBean
 import com.mdove.civilservantcommunity.plan.model.PlanModuleStatus
 import com.mdove.civilservantcommunity.plan.model.PlanModuleType
@@ -58,6 +62,8 @@ class EditPlanModuleAdapter(
             getItem(position).moduleType == PlanModuleType.EDIT_PLANS_TIPS -> 4
             getItem(position).moduleType == PlanModuleType.CREATE_PLANS_TIPS -> 5
             getItem(position).moduleType == PlanModuleType.SCORE -> 6
+            getItem(position).moduleType == PlanModuleType.ERROR_TITLE -> TYPE_NORMAL_ERROR_TITLE
+            getItem(position).moduleType == PlanModuleType.ERROR_ICON -> TYPE_NORMAL_ERROR_ICON
             else -> 0
         }
     }
@@ -99,6 +105,12 @@ class EditPlanModuleAdapter(
                     false
                 )
             )
+            TYPE_NORMAL_ERROR_TITLE ->{
+                parent.createNormalErrorTitleViewHolder(parent.context.getString(R.string.req_edit_plan_error))
+            }
+            TYPE_NORMAL_ERROR_ICON->{
+                parent.createNormalErrorIconViewHolder()
+            }
             else -> PlanModuleOkViewHolder(
                 LayoutInflater.from(parent.context).inflate(
                     R.layout.item_plan_module_btn_ok,

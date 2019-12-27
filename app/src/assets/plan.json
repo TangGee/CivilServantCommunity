@@ -7,43 +7,28 @@
         "uid": "0001",
         "module_id": "A003",
         "module_name": "判断推理",
-        "part": "3",
         "list_style": "0",
         "content": "整理错题",
-        "factor": {
-          "factor_time": "30",
-          "factor_other": null,
-          "factor_count_all": null,
-          "factor_count": null
-        }
+        "factor": "用时*30*分钟，完成过去*3*天错题整理",
+        "id": null
       },
       {
         "uid": "0001",
         "module_id": "A003",
         "module_name": "判断推理",
-        "part": "1",
         "list_style": "0",
         "content": "视频学习",
-        "factor": {
-          "factor_time": null,
-          "factor_other": "1节",
-          "factor_count_all": null,
-          "factor_count": null
-        }
+        "factor": "观看*1*节",
+        "id": null
       },
       {
         "uid": "0001",
         "module_id": "A003",
         "module_name": "判断推理",
-        "part": "2",
         "list_style": "0",
         "content": "专项模块训练",
-        "factor": {
-          "factor_time": "30",
-          "factor_other": null,
-          "factor_count_all": null,
-          "factor_count": "30"
-        }
+        "factor": "用时*30*分钟，完成*30*道题",
+        "id": null
       }
     ],
     [
@@ -51,43 +36,28 @@
         "uid": "0001",
         "module_id": "A004",
         "module_name": "数量关系",
-        "part": "1",
         "list_style": "0",
         "content": "观看视频，做笔记",
-        "factor": {
-          "factor_time": null,
-          "factor_other": "1节",
-          "factor_count_all": null,
-          "factor_count": null
-        }
+        "factor": "观看*1*节",
+        "id": null
       },
       {
         "uid": "0001",
         "module_id": "A004",
         "module_name": "数量关系",
-        "part": "2",
         "list_style": "0",
         "content": "对照视频练题型",
-        "factor": {
-          "factor_time": "50",
-          "factor_other": null,
-          "factor_count_all": null,
-          "factor_count": "10"
-        }
+        "factor": "用时*50*分钟，*1*个题型，对应*2*道题",
+        "id": null
       },
       {
         "uid": "0001",
         "module_id": "A004",
         "module_name": "数量关系",
-        "part": "3",
         "list_style": "0",
         "content": "总结题型在回顾",
-        "factor": {
-          "factor_time": "30",
-          "factor_other": null,
-          "factor_count_all": null,
-          "factor_count": null
-        }
+        "factor": "用时*30*分钟",
+        "id": null
       }
     ],
     [
@@ -95,29 +65,19 @@
         "uid": "0001",
         "module_id": "A005",
         "module_name": "常识",
-        "part": "1",
         "list_style": "0",
         "content": "观看视频，做笔记",
-        "factor": {
-          "factor_time": null,
-          "factor_other": "1节",
-          "factor_count_all": null,
-          "factor_count": null
-        }
+        "factor": "观看*1*节",
+        "id": null
       },
       {
         "uid": "0001",
         "module_id": "A005",
         "module_name": "常识",
-        "part": "2",
         "list_style": "0",
         "content": "真题练习",
-        "factor": {
-          "factor_time": "30",
-          "factor_other": null,
-          "factor_count_all": null,
-          "factor_count": "20"
-        }
+        "factor": "用时*30*分钟，完成*20*道题",
+        "id": null
       }
     ],
     [
@@ -125,57 +85,37 @@
         "uid": "0001",
         "module_id": "B000",
         "module_name": "申论",
-        "part": "1",
         "list_style": "0",
         "content": "观看视频，做笔记",
-        "factor": {
-          "factor_time": null,
-          "factor_other": "1节",
-          "factor_count_all": null,
-          "factor_count": null
-        }
+        "factor": "观看*1*节",
+        "id": null
       },
       {
         "uid": "0001",
         "module_id": "B000",
         "module_name": "申论",
-        "part": "2",
         "list_style": "0",
         "content": "申论小题练习",
-        "factor": {
-          "factor_time": "50",
-          "factor_other": null,
-          "factor_count_all": null,
-          "factor_count": null
-        }
+        "factor": "用时*50*分钟，完成*2*道题",
+        "id": null
       },
       {
         "uid": "0001",
         "module_id": "B000",
         "module_name": "申论",
-        "part": "3",
         "list_style": "0",
         "content": "作文练习",
-        "factor": {
-          "factor_time": "80",
-          "factor_other": null,
-          "factor_count_all": null,
-          "factor_count": null
-        }
+        "factor": "用时*80*分钟",
+        "id": null
       },
       {
         "uid": "0001",
         "module_id": "B000",
         "module_name": "申论",
-        "part": "4",
         "list_style": "0",
         "content": "复习总结",
-        "factor": {
-          "factor_time": "30",
-          "factor_other": null,
-          "factor_count_all": null,
-          "factor_count": null
-        }
+        "factor": "用时*30*分钟",
+        "id": null
       }
     ],
     [
@@ -183,15 +123,10 @@
         "uid": "0001",
         "module_id": "A000",
         "module_name": "行测",
-        "part": "1",
         "list_style": "0",
         "content": "套题练习",
-        "factor": {
-          "factor_time": null,
-          "factor_other": "1套",
-          "factor_count_all": null,
-          "factor_count": null
-        }
+        "factor": "用时*120*分钟，完成*1*套题",
+        "id": null
       }
     ],
     [
@@ -199,57 +134,37 @@
         "uid": "0001",
         "module_id": "A002",
         "module_name": "言语理解",
-        "part": "1",
         "list_style": "0",
         "content": "观看视频",
-        "factor": {
-          "factor_time": null,
-          "factor_other": "1节",
-          "factor_count_all": null,
-          "factor_count": null
-        }
+        "factor": "观看*1*节",
+        "id": null
       },
       {
         "uid": "0001",
         "module_id": "A002",
         "module_name": "言语理解",
-        "part": "2",
         "list_style": "0",
-        "content": "专项模块联系",
-        "factor": {
-          "factor_time": "50",
-          "factor_other": null,
-          "factor_count_all": null,
-          "factor_count": "30"
-        }
+        "content": "专项模块练习",
+        "factor": "用时*50*分钟，完成*30*道题",
+        "id": null
       },
       {
         "uid": "0001",
         "module_id": "A002",
         "module_name": "言语理解",
-        "part": "3",
         "list_style": "0",
         "content": "复习错题",
-        "factor": {
-          "factor_time": "30",
-          "factor_other": null,
-          "factor_count_all": null,
-          "factor_count": null
-        }
+        "factor": "用时*50*分钟，完成过去*1*天题型整理",
+        "id": null
       },
       {
         "uid": "0001",
         "module_id": "A002",
         "module_name": "言语理解",
-        "part": "3",
         "list_style": "0",
         "content": "理解词语，背诵成语",
-        "factor": {
-          "factor_time": "30",
-          "factor_other": null,
-          "factor_count_all": null,
-          "factor_count": null
-        }
+        "factor": "用时*30*分钟",
+        "id": null
       }
     ]
   ]
