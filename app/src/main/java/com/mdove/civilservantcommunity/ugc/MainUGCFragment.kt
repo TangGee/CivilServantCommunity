@@ -61,13 +61,6 @@ class MainUGCFragment : BaseFragment() {
             adapter.submitList(it)
         })
 
-        layout_identity.setOnItemClickListener(object :
-            MultiLineChooseLayout.onItemClickListener {
-            override fun onItemClick(position: Int, text: String) {
-                viewModel.onSelectType(text)
-            }
-        })
-
         viewModel.getTopics()
 
         view_toolbar.setListener(object :OnToolbarListener {
@@ -114,9 +107,8 @@ class MainUGCFragment : BaseFragment() {
         view_toolbar.setTitle("求助大神")
         view_toolbar.setRightBtnTitle("发送")
         view_toolbar.setToolbarBackgroundIsNull()
-        view_toolbar.setColorForAll(Color.BLACK)
+        view_toolbar.setColorForAll(Color.WHITE)
 
-        layout_identity.setList(viewModel.typeTitles)
         rlv_topic.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         rlv_topic.addItemDecoration(PaddingDecoration(12, PaddingType.LEFT))

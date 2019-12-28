@@ -23,7 +23,6 @@ class DetailQuestionActivity : AbsSlideCloseActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        setStatusBarTextColorIsBlack(true)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_question)
         if (savedInstanceState == null) {

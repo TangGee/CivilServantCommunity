@@ -3,4 +3,5 @@
     <integer name="window_anim_duration">250</integer>
 
     <dimen name="main_feed_item_margin">12dp</dimen>
+    <dimen name="default_margin">12dp</dimen>
 </resources>

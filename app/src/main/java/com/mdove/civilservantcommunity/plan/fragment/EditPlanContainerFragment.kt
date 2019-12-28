@@ -43,7 +43,7 @@ class EditPlanContainerFragment : BaseFragment() {
         tab.setViewPager(vp, titles.toArrayList())
         view_toolbar.setTitle("我的规划")
         view_toolbar.setToolbarBackgroundIsNull()
-        view_toolbar.setColorForAll(Color.BLACK)
+        view_toolbar.setColorForAll(Color.WHITE)
     }
 
     inner class EditPlanVpAdapter(fragmentManager: FragmentManager) :

@@ -4,15 +4,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.mdove.civilservantcommunity.R
-import com.mdove.civilservantcommunity.base.adapter.TYPE_NORMAL_ERROR_ICON
-import com.mdove.civilservantcommunity.base.adapter.TYPE_NORMAL_ERROR_TITLE
-import com.mdove.civilservantcommunity.base.adapter.createNormalErrorIconViewHolder
-import com.mdove.civilservantcommunity.base.adapter.createNormalErrorTitleViewHolder
+import com.mdove.civilservantcommunity.base.adapter.*
 import com.mdove.civilservantcommunity.question.bean.*
 import com.mdove.dependent.common.utils.TimeUtils
 import com.mdove.dependent.common.utils.UIUtils
@@ -41,7 +39,6 @@ class DetailQuestionAdapter(val listener: OnClickQuestionListener? = null) :
 
     companion object {
         const val TYPE_ANSWER = 1
-        const val TYPE_SEND = 3
         const val TYPE_HEAD_QUESTION = 2
     }
 
@@ -50,14 +47,14 @@ class DetailQuestionAdapter(val listener: OnClickQuestionListener? = null) :
             is AnswerDetailBean -> {
                 TYPE_ANSWER
             }
-            is DetailQuestionSendBean -> {
-                TYPE_SEND
-            }
             is QuestionDetailErrorBean -> {
                 TYPE_NORMAL_ERROR_TITLE
             }
             is DetailQuestionErrorIconBean -> {
                 TYPE_NORMAL_ERROR_ICON
+            }
+            is DetailQuestionAnswerTitleBean -> {
+                TYPE_NORMAL_TITLE
             }
             else -> {
                 TYPE_HEAD_QUESTION
@@ -76,16 +73,17 @@ class DetailQuestionAdapter(val listener: OnClickQuestionListener? = null) :
                     )
                 )
             }
-            TYPE_NORMAL_ERROR_TITLE -> {
-                parent.createNormalErrorTitleViewHolder(parent.context.getString(R.string.req_detail_question_error))
-            }
-            TYPE_SEND -> {
-                DetailQuestionSendViewHolder(
+            TYPE_NORMAL_TITLE -> {
+                DetailQuestionAnswerViewHolder(
                     LayoutInflater.from(parent.context).inflate(
-                        R.layout.item_detail_question_send_answer, parent,
+                        R.layout.item_detail_question_answer_title,
+                        parent,
                         false
                     )
                 )
+            }
+            TYPE_NORMAL_ERROR_TITLE -> {
+                parent.createNormalErrorTitleViewHolder(parent.context.getString(R.string.req_normal_error))
             }
             TYPE_NORMAL_ERROR_ICON -> {
                 parent.createNormalErrorIconViewHolder()
@@ -114,19 +112,14 @@ class DetailQuestionAdapter(val listener: OnClickQuestionListener? = null) :
         (holder as? DetailQuestionViewHolder)?.bind(getItem(position) as QuestionDetailBean)
     }
 
-    inner class DetailQuestionSendViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        init {
-            itemView.setDebounceOnClickListener {
-                listener?.onClickSendAnswer()
-            }
-        }
-    }
+    inner class DetailQuestionAnswerViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
     inner class DetailQuestionViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val tvQuestionUser = itemView.findViewById<TextView>(R.id.tv_question_user)
         private val tvQuestionTitle = itemView.findViewById<TextView>(R.id.tv_question_title)
         private val tvQuestionContent = itemView.findViewById<TextView>(R.id.tv_question_content)
         private val tvQuestionTime = itemView.findViewById<TextView>(R.id.tv_question_time)
+        private val btnSend = itemView.findViewById<ConstraintLayout>(R.id.btn_layout)
 
         fun bind(bean: QuestionDetailBean) {
             val userName = "来自：${bean.userInfo?.username ?: "匿名用户"}"
@@ -143,6 +136,9 @@ class DetailQuestionAdapter(val listener: OnClickQuestionListener? = null) :
             tvQuestionTitle.text = bean.title ?: "无标题"
             tvQuestionContent.text = bean.content ?: "无内容"
             tvQuestionTime.text = TimeUtils.getDateChinese(bean.makeTime)
+            btnSend.setDebounceOnClickListener {
+                listener?.onClickSendAnswer()
+            }
         }
     }
 

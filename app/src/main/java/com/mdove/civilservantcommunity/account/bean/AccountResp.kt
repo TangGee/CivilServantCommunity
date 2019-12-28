@@ -31,21 +31,10 @@ data class UserInfoParams(
     val uid: String,
     val userName: String,
     val phone: String,
-    val feedArticleList: List<BaseMePageDetailInfo>? = null,
     val userType: String
 ) : Parcelable
 
 fun MePageDataResp.toUserInfoParams(): UserInfoParams {
-    val data = mutableListOf<BaseMePageDetailInfo>()
-    answerList?.let {
-        data.addAll(it)
-    }
-    articleList?.let {
-        data.addAll(it)
-    }
-    questionList?.let {
-        data.addAll(it)
-    }
-    return UserInfoParams(this.uid, this.userName, this.phone, data, this.userType)
+    return UserInfoParams(this.uid, this.userName, this.phone, this.userType)
 }
 

@@ -4,7 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:allRadius = "8dp"
-    android:layout_margin="12dp"
+    android:layout_marginTop="@dimen/default_margin"
+    android:layout_marginLeft="@dimen/default_margin"
+    android:layout_marginRight="@dimen/default_margin"
     android:background="@color/white">
 
     <androidx.appcompat.widget.AppCompatImageView

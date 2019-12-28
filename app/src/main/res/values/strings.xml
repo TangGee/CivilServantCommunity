@@ -7,7 +7,9 @@
     <string name="string_no_content">文章状态异常，暂时无法显示</string>
     <string name="string_no_name">匿名用户</string>
 
-    <string name="req_detail_question_error">嘿，看起来数据请求失败了...\n如果你的网络没有问题。那么八成是我们的服务器挂了。\n那么问题来了，为啥会挂呢？...\n嗯...我也不知道，因为如果我知道它就不会挂了~\n不过放心我们在修...在修...在修...</string>
+    <string name="req_normal_error">嘿，看起来数据请求失败了...\n如果你的网络没有问题。那么八成是我们的服务器挂了。\n那么问题来了，为啥会挂呢？...\n嗯...我也不知道，因为如果我知道它就不会挂了~\n不过放心我们在修...在修...在修...</string>
 
     <string name="req_edit_plan_error">呦？没有拿到服务器的"吊炸天"推荐的计划？\n我觉得很有可能是我们的服务器挂了。为什么这么可能呢？\n还不是因为我们没钱买好的服务器...\n容我们修复一下这个问题...\n\n不过！服务器挂了，不妨碍你 制定 自己的 "吊炸天" 的学习计划！</string>
+
+    <string name="string_ugc_no_content_add_article">你没分享过任何内容，是否来分享一波？</string>
 </resources>

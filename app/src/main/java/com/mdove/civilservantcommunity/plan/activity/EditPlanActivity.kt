@@ -24,7 +24,6 @@ class EditPlanActivity : AbsSlideCloseActivity() {
     private lateinit var containerViewModel: EditPlanContainerViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        setStatusBarTextColorIsBlack(true)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_plan)
         if (savedInstanceState == null) {

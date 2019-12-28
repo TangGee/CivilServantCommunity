@@ -33,8 +33,8 @@ class PaddingDecoration(padding: Int, private val type: PaddingType = PaddingTyp
                 PaddingType.TOP -> {
                     outRect.top = mPadding
                 }
-                PaddingType.RIGHT -> {
-                    outRect.right = mPadding
+                PaddingType.LEFT -> {
+                    outRect.left = mPadding
                 }
                 else -> {
                 }
@@ -43,8 +43,8 @@ class PaddingDecoration(padding: Int, private val type: PaddingType = PaddingTyp
 
         if (itemPosition == (parent.adapter?.itemCount ?: 0) - 1) {
             when (type) {
-                PaddingType.LEFT -> {
-                    outRect.left = mPadding
+                PaddingType.RIGHT -> {
+                    outRect.right = mPadding
                 }
                 PaddingType.BOTTOM -> {
                     outRect.bottom = mPadding

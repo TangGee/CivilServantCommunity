@@ -47,8 +47,8 @@ class QuestionViewModel : ViewModel() {
                             mutableListOf<BaseDetailQuestionBean>().apply {
                                 it.data?.question?.let {
                                     add(it)
-                                    add(DetailQuestionSendBean())
                                 }
+                                add(DetailQuestionAnswerTitleBean())
                                 it.data?.answers?.let {
                                     addAll(it)
                                 }

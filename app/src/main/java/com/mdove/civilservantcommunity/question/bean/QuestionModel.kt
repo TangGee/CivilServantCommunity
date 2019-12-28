@@ -19,11 +19,8 @@ data class QuestionDetailResp(
 
 sealed class BaseDetailQuestionBean
 
-@Parcelize
-data class DetailQuestionSendBean(val name: String = "回答") : Parcelable, BaseDetailQuestionBean()
-
-@Parcelize
-data class DetailQuestionErrorIconBean(val name: String = "error") : Parcelable, BaseDetailQuestionBean()
+data class DetailQuestionErrorIconBean(val name: String = "error") :BaseDetailQuestionBean()
+data class DetailQuestionAnswerTitleBean(val name: String = "error") :BaseDetailQuestionBean()
 
 @Parcelize
 data class QuestionDetailBean(

@@ -107,8 +107,8 @@ class DetailQuestionFragment : BaseFragment() {
             }
         })
 
-        view_toolbar.setDefaultToolbarBackgroundColor()
+        view_toolbar.setToolbarBackgroundIsNull()
         view_toolbar.setTitle("提问")
-        view_toolbar.setColorForAll(Color.BLACK)
+        view_toolbar.setColorForAll(Color.WHITE)
     }
 }

@@ -9,10 +9,8 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.mdove.civilservantcommunity.R
-import com.mdove.civilservantcommunity.account.bean.BaseMePageDetailInfo
-import com.mdove.civilservantcommunity.account.bean.MePageAnswerInfoMePage
-import com.mdove.civilservantcommunity.account.bean.MePageArticleInfoMePage
-import com.mdove.civilservantcommunity.account.bean.MePageQuestionInfoMePage
+import com.mdove.civilservantcommunity.account.bean.*
+import com.mdove.civilservantcommunity.base.adapter.*
 import com.mdove.dependent.common.utils.TimeUtils
 import com.mdove.dependent.common.utils.UIUtils
 import com.mdove.dependent.common.utils.setDebounceOnClickListener
@@ -57,6 +55,20 @@ class MePageAdapter(val listener: OnMePageClickListener? = null) :
                     false
                 )
             )
+            TYPE_NORMAL_ADD_ARTICLE_TITLE -> {
+                parent.createNormalAddArticleViewHolder(parent.context.getString(R.string.string_ugc_no_content_add_article),
+                    object : ViewHolderNormalClickListener {
+                        override fun onClick() {
+                            listener?.onClickSendArticle()
+                        }
+                    })
+            }
+            TYPE_NORMAL_ERROR_ICON -> {
+                parent.createNormalErrorIconViewHolder()
+            }
+            TYPE_NORMAL_ERROR_TITLE -> {
+                parent.createNormalErrorTitleViewHolder(parent.context.getString(R.string.req_normal_error))
+            }
             else -> FeedMeViewHolder(
                 LayoutInflater.from(parent.context).inflate(
                     R.layout.item_feed_me_page_normal,
@@ -72,7 +84,10 @@ class MePageAdapter(val listener: OnMePageClickListener? = null) :
             is MePageQuestionInfoMePage -> TYPE_QUESTION
             is MePageAnswerInfoMePage -> TYPE_QUESTION_ANSWER
             is MePageArticleInfoMePage -> TYPE_NORMAL
-            else -> TYPE_NORMAL
+            is MePageArticleErrorIconInfo -> TYPE_NORMAL_ERROR_ICON
+            is MePageArticleErrorTitleInfo -> TYPE_NORMAL_ERROR_TITLE
+            is MePageArticleAddArticleInfo -> TYPE_NORMAL_ADD_ARTICLE_TITLE
+            else -> -1
         }
     }
 
@@ -161,4 +176,5 @@ interface OnMePageClickListener {
     fun onClickArticle(article: MePageArticleInfoMePage)
     fun onClickQuestion(article: MePageQuestionInfoMePage)
     fun onClickAnswer(article: MePageAnswerInfoMePage)
+    fun onClickSendArticle()
 }

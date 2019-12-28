@@ -37,3 +37,7 @@ data class MePageAnswerInfoMePage(
 ) : Parcelable, BaseMePageDetailInfo()
 
 sealed class BaseMePageDetailInfo :Serializable
+
+data class MePageArticleErrorIconInfo(val name: String = "") : BaseMePageDetailInfo()
+data class MePageArticleErrorTitleInfo(val name: String = "") : BaseMePageDetailInfo()
+data class MePageArticleAddArticleInfo(val name: String = "") : BaseMePageDetailInfo()

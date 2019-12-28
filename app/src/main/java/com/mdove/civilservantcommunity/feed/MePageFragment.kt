@@ -1,5 +1,6 @@
 package com.mdove.civilservantcommunity.feed
 
+import android.graphics.Color
 import android.graphics.Paint
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -57,8 +58,16 @@ class MePageFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         btn_update.paint.flags = Paint.UNDERLINE_TEXT_FLAG
+        view_toolbar.setToolbarBackgroundIsNull()
+        view_toolbar.setColorForAll(Color.WHITE)
         view_toolbar.setTitle("我的主页")
         mAdapter = MePageAdapter(object : OnMePageClickListener {
+            override fun onClickSendArticle() {
+                context?.let {
+                    MainUGCActivity.gotoMainUGC(it)
+                }
+            }
+
             override fun onClickArticle(article: MePageArticleInfoMePage) {
                 if (context != null && article.aid != null) {
                     DetailFeedActivity.gotoFeedDetail(context!!, DetailFeedParams(article.aid))
@@ -76,9 +85,9 @@ class MePageFragment : BaseFragment() {
         viewModel.data.observe(this, Observer { res ->
             when (res.status) {
                 Status.SUCCESS -> {
-                    res.data?.data?.let {
-                        srf.isRefreshing = false
-                        viewModel.paramsLiveData.value = it.toUserInfoParams()
+                    srf.isRefreshing = false
+                    res.data?.let {
+                        mAdapter.submitList(it)
                     }
                 }
                 Status.LOADING -> {
@@ -86,6 +95,9 @@ class MePageFragment : BaseFragment() {
                 }
                 Status.ERROR -> {
                     srf.isRefreshing = false
+                    res.data?.let {
+                        mAdapter.submitList(it)
+                    }
                 }
             }
         })
@@ -126,12 +138,6 @@ class MePageFragment : BaseFragment() {
             viewModel.reqMePage(it.uid)
         }
 
-        layout_empty_add.setOnClickListener {
-            context?.let {
-                MainUGCActivity.gotoMainUGC(it)
-            }
-        }
-
         layout_edit.setOnClickListener {
             context?.let {
                 MainUGCActivity.gotoMainUGC(it)
@@ -143,13 +149,5 @@ class MePageFragment : BaseFragment() {
         AppConfig.setUserInfo(UserInfo(params.uid, params.userName))
         tv_name.text = params.userName
         tv_type.text = IdentitysHelper.getIdentity(params.userType)
-        if (params.feedArticleList != null) {
-            layout_empty.visibility = View.GONE
-            layout_edit.visibility = View.VISIBLE
-            mAdapter.submitList(params.feedArticleList)
-        } else {
-            layout_edit.visibility = View.GONE
-            layout_empty.visibility = View.VISIBLE
-        }
     }
 }
