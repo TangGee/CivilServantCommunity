@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.mdove.civilservantcommunity.base.adapter.NormalErrorIconBean
 import com.mdove.civilservantcommunity.base.adapter.TYPE_NORMAL_ERROR_ICON
+import com.mdove.civilservantcommunity.config.AppConfig
 import com.mdove.civilservantcommunity.plan.model.*
 import com.mdove.civilservantcommunity.plan.repository.PlanRepository
 import com.mdove.dependent.common.network.NormalResp
@@ -12,12 +13,18 @@ import com.mdove.dependent.common.networkenhance.valueobj.Resource
 import com.mdove.dependent.common.networkenhance.valueobj.Status
 
 class EditPlanViewModel : ViewModel() {
+    companion object {
+        const val CONST_MODULE_ID = "edit_plan_custom"
+        const val CONST_MODULE_NAME = "自定义"
+    }
+
     private val repository = PlanRepository()
 
     val deleteSinglePlanLiveData = MutableLiveData<Pair<SinglePlanBean, Boolean>>()
     val customSinglePlanLiveData = MutableLiveData<SinglePlanBean>()
     val deletePlanModuleLiveData = MutableLiveData<Pair<PlanModuleBean, Boolean>>()
     val editSinglePlanLiveData = MutableLiveData<Pair<SinglePlanBean, String>>()
+    val customPlans = MutableLiveData<String>()
 
     val data = MediatorLiveData<Resource<NormalResp<List<PlanModuleBean>>>>().apply {
         addSource(repository.getPlans()) {
@@ -91,6 +98,15 @@ class EditPlanViewModel : ViewModel() {
             }
 
             if (it.status == Status.ERROR) {
+                new.add(
+                    PlanModuleBean(
+                        "btn_edit_custom",
+                        "btn_edit_custom",
+                        mutableListOf(),
+                        PlanModuleType.BTN_EDIT_CUSTOM,
+                        PlanModuleStatus.NORMAL
+                    )
+                )
                 new.add(
                     PlanModuleBean(
                         "error_icon",
@@ -208,6 +224,82 @@ class EditPlanViewModel : ViewModel() {
                     }),
                     exception = res.exception
                 )
+            }
+        }
+
+        // 增加一个自定义分类的自定义计划
+        addSource(customPlans) { custom ->
+            value = value?.let {
+                Resource(it.status, data = it.data?.copy(data = it.data?.data?.let { data ->
+                    val realData = mutableListOf<PlanModuleBean>()
+                    data.find { bean ->
+                        bean.moduleId == CONST_MODULE_ID
+                    }?.let { findBean ->
+                        val userInfo = AppConfig.getUserInfo()
+                        data.forEach {
+                            if (it.moduleId == findBean.moduleId) {
+                                realData.add(it.copy(beanSingles = it.beanSingles.toMutableList().apply {
+                                    add(
+                                        SinglePlanBeanWrapper(
+                                            SinglePlanBean(
+                                                userInfo?.uid,
+                                                CONST_MODULE_ID,
+                                                CONST_MODULE_NAME,
+                                                content = custom
+                                            ),
+                                            SinglePlanType.CUSTOM_PLAN
+                                        )
+                                    )
+                                }))
+                            } else {
+                                realData.add(it)
+                            }
+                        }
+
+                    } ?: let {
+                        val userInfo = AppConfig.getUserInfo()
+                        realData.addAll(data.filterNot {
+                            it.moduleType == PlanModuleType.ERROR_TITLE || it.moduleType == PlanModuleType.ERROR_ICON
+                        }.toMutableList().apply {
+                            add(
+                                PlanModuleBean(
+                                    CONST_MODULE_ID,
+                                    CONST_MODULE_NAME,
+                                    mutableListOf(
+                                        SinglePlanBeanWrapper(
+                                            SinglePlanBean(
+                                                userInfo?.uid,
+                                                CONST_MODULE_ID,
+                                                CONST_MODULE_NAME,
+                                                content = custom
+                                            ),
+                                            SinglePlanType.CUSTOM_PLAN
+                                        )
+                                    )
+                                )
+                            )
+                        })
+                        realData.add(
+                            PlanModuleBean(
+                                "btn_ok",
+                                "btn_ok",
+                                mutableListOf(),
+                                PlanModuleType.BTN_OK,
+                                PlanModuleStatus.NORMAL
+                            )
+                        )
+                        realData.add(
+                            PlanModuleBean(
+                                "btn_time_schedule",
+                                "btn_time_schedule",
+                                mutableListOf(),
+                                PlanModuleType.BTN_TIME_SCHEDULE,
+                                PlanModuleStatus.NORMAL
+                            )
+                        )
+                    }
+                    realData
+                }), exception = it.exception)
             }
         }
     }

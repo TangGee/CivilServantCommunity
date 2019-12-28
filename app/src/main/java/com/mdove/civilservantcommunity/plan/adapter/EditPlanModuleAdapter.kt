@@ -3,6 +3,7 @@ package com.mdove.civilservantcommunity.plan.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.recyclerview.widget.*
@@ -62,6 +63,7 @@ class EditPlanModuleAdapter(
             getItem(position).moduleType == PlanModuleType.EDIT_PLANS_TIPS -> 4
             getItem(position).moduleType == PlanModuleType.CREATE_PLANS_TIPS -> 5
             getItem(position).moduleType == PlanModuleType.SCORE -> 6
+            getItem(position).moduleType == PlanModuleType.BTN_EDIT_CUSTOM -> 7
             getItem(position).moduleType == PlanModuleType.ERROR_TITLE -> TYPE_NORMAL_ERROR_TITLE
             getItem(position).moduleType == PlanModuleType.ERROR_ICON -> TYPE_NORMAL_ERROR_ICON
             else -> 0
@@ -101,6 +103,13 @@ class EditPlanModuleAdapter(
             6 -> ScoreViewHolder(
                 LayoutInflater.from(parent.context).inflate(
                     R.layout.item_edit_plan_score,
+                    parent,
+                    false
+                )
+            )
+            7 -> EditCustomViewHolder(
+                LayoutInflater.from(parent.context).inflate(
+                    R.layout.item_edit_plan_bt_custom,
                     parent,
                     false
                 )
@@ -163,6 +172,16 @@ class EditPlanModuleAdapter(
     inner class ScoreViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
     inner class CreatePlansTipsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
     inner class EditPlansTipsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+    inner class EditCustomViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
+        private val etPlans = itemView.findViewById<EditText>(R.id.et_plans)
+        private val btnSend = itemView.findViewById<AppCompatImageView>(R.id.btn_ugc)
+        init {
+            btnSend.setOnClickListener {
+                listener?.onClickSendCustomPlan(etPlans.text.toString().trim())
+                etPlans.setText("")
+            }
+        }
+    }
 
     inner class PlanModuleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val rlv = itemView.findViewById<RecyclerView>(R.id.rlv)
@@ -203,4 +222,5 @@ interface OnPlanModuleClickListener {
     fun onDeletePlanModuleClick(data: PlanModuleBean, delete: Boolean)
     fun onClickCreatePlans()
     fun onClickTimeSchedule()
+    fun onClickSendCustomPlan(customPlan: String)
 }

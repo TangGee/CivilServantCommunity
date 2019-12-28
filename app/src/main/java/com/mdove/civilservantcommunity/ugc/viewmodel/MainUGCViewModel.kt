@@ -30,7 +30,9 @@ class MainUGCViewModel : ViewModel() {
         UGCRlvTopicBean("求上岸经验", "A001", false)
     )
 
-    val clickTopicLiveData = MutableLiveData<UGCRlvTopicBean>()
+    val clickTopicLiveData = MutableLiveData<UGCRlvTopicBean>().apply {
+        value = defaultTopics[0]
+    }
 
     val topics = MediatorLiveData<List<UGCRlvTopicBean>>().apply {
         addSource(clickTopicLiveData) { click ->

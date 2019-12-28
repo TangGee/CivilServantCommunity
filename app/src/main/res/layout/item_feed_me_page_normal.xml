@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.mdove.dependent.common.view.roundcorner.RoundCornerConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="12dp"
-    android:background="@color/white">
+    android:layout_marginLeft="@dimen/default_margin"
+    android:layout_marginTop="@dimen/default_margin"
+    android:layout_marginRight="@dimen/default_margin"
+    android:background="@color/white_trans90"
+    app:allRadius="8dp">
 
     <TextView
         android:id="@+id/tv_content"
@@ -14,15 +17,15 @@
         android:ellipsize="end"
         android:gravity="left"
         android:maxLines="2"
-        app:layout_constraintBottom_toBottomOf="parent"
         android:text="公务员公务员公务员公务员公务员公务员公务员公务员公务员"
         android:textColor="@color/grey_700"
         android:textSize="12sp"
         app:layout_constrainedHeight="true"
         app:layout_constrainedWidth="true"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@+id/btn_go"
-        app:layout_constraintTop_toBottomOf="@+id/iv_stub"/>
+        app:layout_constraintTop_toBottomOf="@+id/iv_stub" />
 
     <TextView
         android:id="@+id/tv_time"
@@ -55,21 +58,22 @@
     <com.mdove.dependent.common.view.roundcorner.RoundCornerFrameLayout
         android:id="@+id/iv_stub"
         android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="12dp"
+        android:background="#00A8FF"
         app:allRadius="8dp"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/icon_tips"
-        android:layout_marginStart="12dp"
-        android:background="#00A8FF"
-        android:layout_marginTop="12dp"
-        android:layout_height="50dp">
+        app:layout_constraintTop_toBottomOf="@+id/icon_tips">
+
         <TextView
             android:id="@+id/tv_stub"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
             android:text="学"
             android:textColor="@color/white"
-            android:textSize="22sp"
-            android:gravity="center"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:textSize="22sp" />
     </com.mdove.dependent.common.view.roundcorner.RoundCornerFrameLayout>
 
     <TextView
@@ -85,8 +89,8 @@
         android:textSize="16sp"
         app:layout_constrainedHeight="true"
         app:layout_constrainedWidth="true"
-        app:layout_constraintLeft_toRightOf="@+id/iv_stub"
         app:layout_constraintBottom_toBottomOf="@+id/iv_stub"
+        app:layout_constraintLeft_toRightOf="@+id/iv_stub"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="@+id/iv_stub" />
 
@@ -94,35 +98,24 @@
         android:id="@+id/icon_tips"
         android:layout_width="20dp"
         android:layout_height="20dp"
+        android:layout_marginStart="12dp"
         android:layout_marginTop="12dp"
         android:background="@drawable/bg_feed_tips_share"
-        app:srcCompat="@drawable/vector_me_page_feed"
         android:padding="3dp"
-        android:layout_marginStart="12dp"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/vector_me_page_feed" />
 
     <TextView
         android:id="@+id/btn_go"
         android:layout_width="wrap_content"
-        app:layout_constraintRight_toRightOf="parent"
-        android:text="查看详情"
-        android:textSize="14sp"
+        android:layout_height="wrap_content"
         android:layout_marginRight="12dp"
+        android:text="查看详情"
         android:textColor="@color/black"
-        app:layout_constraintTop_toTopOf="@+id/tv_content"
+        android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="@+id/tv_content"
-        android:layout_height="wrap_content"/>
-
-    <View
-        android:id="@+id/line"
-        android:layout_width="match_parent"
-        android:layout_height="10dp"
-        android:layout_marginTop="@dimen/margin_item_question_answer_layout"
-        app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_go"
-        android:background="@color/grey_200"/>
+        app:layout_constraintTop_toTopOf="@+id/tv_content" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</com.mdove.dependent.common.view.roundcorner.RoundCornerConstraintLayout>

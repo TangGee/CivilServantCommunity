@@ -58,6 +58,7 @@ enum class PlanModuleType {
     NORMAL,
     BTN_TIME_SCHEDULE,
     EDIT_PLANS_TIPS,
+    BTN_EDIT_CUSTOM,
     CREATE_PLANS_TIPS,
     ERROR_ICON,
     ERROR_TITLE,

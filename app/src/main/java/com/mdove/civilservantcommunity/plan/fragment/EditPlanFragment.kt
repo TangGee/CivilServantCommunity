@@ -38,6 +38,14 @@ import kotlinx.coroutines.withContext
 class EditPlanFragment : BaseFragment() {
     private lateinit var mViewModelEdit: EditPlanViewModel
     private val adapter = EditPlanModuleAdapter(object : OnPlanModuleClickListener {
+        override fun onClickSendCustomPlan(customPlan: String) {
+            if (customPlan.isNotBlank()) {
+                mViewModelEdit.customPlans.value = customPlan
+            } else {
+                ToastUtil.toast("计划不能为空啊~")
+            }
+        }
+
         override fun onClickTimeSchedule() {
             context?.let {
                 TimeScheduleActivity.goto(
@@ -129,7 +137,7 @@ class EditPlanFragment : BaseFragment() {
                 Status.LOADING -> {
                     rlv.updateEmptyUI()
                 }
-                Status.ERROR->{
+                Status.ERROR -> {
                     it.data?.data?.let {
                         adapter.submitList(it)
                         rlv.updateEmptyUI()
