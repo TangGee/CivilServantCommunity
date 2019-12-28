@@ -23,7 +23,7 @@ class MainFeedViewModel : ViewModel() {
     private val loadType = MutableLiveData<LoadType>()
     private val repository = MainFeedRepository()
 
-    private val feedData: LiveData<Resource<NormalResp<List<MainFeedResp>>>> =
+    private val feedData: LiveData<Resource<NormalRespWrapper<List<MainFeedResp>>>> =
         Transformations.switchMap(loadType) {
             repository.reqFeed(6, it == LoadType.NORMAL || it == LoadType.REFRESH)
         }
@@ -40,7 +40,7 @@ class MainFeedViewModel : ViewModel() {
 
     val mData: LiveData<Resource<List<BaseFeedResp>>> =
         MediatorLiveData<Resource<List<BaseFeedResp>>>().apply {
-            addSource(feedData) {
+            addSource(feedData) {res->
                 val oldData = value?.data?.filter {
                     it is FeedArticleFeedResp || it is FeedQuestionFeedResp
                 }?.takeIf {
@@ -81,21 +81,23 @@ class MainFeedViewModel : ViewModel() {
                     }
                     temp.add(FeedTimeLineFeedTitleResp())
                     when {
-                        it.status == Status.ERROR -> {
+                        res.status == Status.ERROR -> {
                             oldData?.let {
                                 temp.addAll(it)
                             }
                             temp.add(FeedNetworkErrorTitleResp())
                         }
-                        it.status == Status.SUCCESS -> {
-                            it.data?.data?.mapNotNull { article ->
+                        res.status == Status.SUCCESS -> {
+                            res.data?.data?.data?.mapNotNull { article ->
                                 article.toMainFeedResp()
                             }?.takeIf {
                                 it.isNotEmpty()
                             }?.let { newData ->
                                 oldData?.forEach {
                                     it.hideEndLine = false
-                                    temp.add(it)
+                                    if (res.data?.isLoadMore == true) {
+                                        temp.add(it)
+                                    }
                                 }
                                 (newData.last()).hideEndLine = true
                                 temp.addAll(newData)
@@ -110,9 +112,9 @@ class MainFeedViewModel : ViewModel() {
                     }
                     temp.add(FeedBottomPaddingResp())
                     value = Resource(
-                        if (it.status == Status.ERROR) Status.SUCCESS else it.status,
+                        if (res.status == Status.ERROR) Status.SUCCESS else res.status,
                         temp,
-                        it.exception
+                        res.exception
                     )
                 }
             }

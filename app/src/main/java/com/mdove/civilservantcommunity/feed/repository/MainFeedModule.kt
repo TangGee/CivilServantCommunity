@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.mdove.civilservantcommunity.feed.bean.FeedReqParams
 import com.mdove.civilservantcommunity.feed.bean.MainFeedResp
+import com.mdove.civilservantcommunity.feed.bean.NormalRespWrapper
 import com.mdove.dependent.apiservice.AppDependsProvider
 import com.mdove.dependent.common.network.NormalResp
 import com.mdove.dependent.common.networkenhance.api.ApiErrorResponse
@@ -19,8 +20,8 @@ import kotlinx.coroutines.launch
  * Created by MDove on 2019-09-06.
  */
 class MainFeedModule {
-    fun reqFeed(feedParams: FeedReqParams): LiveData<ApiResponse<NormalResp<List<MainFeedResp>>>> {
-        val liveData = MutableLiveData<ApiResponse<NormalResp<List<MainFeedResp>>>>()
+    fun reqFeed(feedParams: FeedReqParams): LiveData<ApiResponse<NormalRespWrapper<List<MainFeedResp>>>> {
+        val liveData = MutableLiveData<ApiResponse<NormalRespWrapper<List<MainFeedResp>>>>()
 
         val network = AppDependsProvider.networkService
         val builder = Uri.parse("${network.host}/play/select_main_feed").buildUpon()
@@ -37,7 +38,7 @@ class MainFeedModule {
                 NormalResp<List<MainFeedResp>>(exception = e)
             }
             if (resp.isSuc()) {
-                liveData.postValue(ApiSuccessResponse(resp))
+                liveData.postValue(ApiSuccessResponse(NormalRespWrapper(resp, feedParams.isLoadMore)))
             } else {
                 liveData.postValue(ApiErrorResponse(RuntimeException(resp.message)))
             }
