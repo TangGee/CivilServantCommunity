@@ -607,10 +607,6 @@ class MainFeedAdapter(
                     .setDebounceOnClickListener {
                         listener.onClick(CLICK_QUICK_BTN_PLAN, null)
                     }
-                itemView.findViewById<ConstraintLayout>(R.id.layout_btn_punch)
-                    .setDebounceOnClickListener {
-                        listener.onClick(CLICK_QUICK_BTN_PUNCH, null)
-                    }
                 itemView.findViewById<ConstraintLayout>(R.id.layout_btn_ugc)
                     .setDebounceOnClickListener {
                         listener.onClick(CLICK_QUICK_BTN_UGC, null)
