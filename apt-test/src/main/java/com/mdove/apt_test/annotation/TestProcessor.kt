@@ -9,6 +9,7 @@ import javax.lang.model.util.Elements
 import javax.annotation.processing.ProcessingEnvironment
 import javax.lang.model.element.VariableElement
 import javax.lang.model.util.Types
+import javax.tools.Diagnostic
 
 /**
  * Created by MDove on 2019-11-30.
@@ -23,11 +24,14 @@ class TestProcessor :AbstractProcessor(){
     override fun init(processingEnv: ProcessingEnvironment) {
         super.init(processingEnv)
         mMessager = processingEnv.messager
+        mMessager?.printMessage(Diagnostic.Kind.ERROR,"日志开始---------------");
         mElementUtils = processingEnv.elementUtils
         mTypesUtils = processingEnv.typeUtils
     }
 
     override fun process(set: MutableSet<out TypeElement>, roundEnvironment: RoundEnvironment): Boolean {
+        mMessager?.printMessage(Diagnostic.Kind.ERROR,"日志开始---------------");
+
         //得到所有的注解
         val elements = roundEnvironment.getElementsAnnotatedWith(TestAnnotation::class.java)
         for (element in elements) {

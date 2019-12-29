@@ -67,5 +67,4 @@
         app:layout_constraintRight_toLeftOf="@+id/tv_week"
         app:layout_constraintTop_toTopOf="@+id/tv_week" />
 
-
 </androidx.constraintlayout.widget.ConstraintLayout>

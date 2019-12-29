@@ -83,9 +83,6 @@ class MainFeedFragment : BaseFragment() {
                 MainFeedAdapter.CLICK_QUICK_BTN_TIME_SCHEDULE -> {
                     clickTimeSchedule()
                 }
-                MainFeedAdapter.TYPE_FEED_PLAN -> {
-                    clickPlan()
-                }
                 MainFeedAdapter.TYPE_FEED_TIME_LINE_FEED_TODAY_PLAN_BTN_APPLY_OLD -> {
                     applyOldPlans()
                 }

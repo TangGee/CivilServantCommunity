@@ -16,7 +16,7 @@ data class NormalResp<T>(
 ) : Serializable {
 
     fun isSuc(): Boolean {
-        return status == 0
+        return status == 0 || data != null
     }
 }
 

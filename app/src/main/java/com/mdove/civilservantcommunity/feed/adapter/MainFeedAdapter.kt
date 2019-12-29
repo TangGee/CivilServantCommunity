@@ -155,7 +155,6 @@ class MainFeedAdapter(
         const val TYPE_TOP_ONE = 1
         const val TYPE_FEED_NORMAL_CARD = 3
         const val TYPE_FEED_PUNCH = 0
-        const val TYPE_FEED_PLAN = 5
         const val TYPE_FEED_UGC = 4
         const val TYPE_FEED_TODAY_PLAN = 6
         const val TYPE_FEED_QUICK_BTNS = 7
@@ -304,14 +303,6 @@ class MainFeedAdapter(
                         false
                     )
                 )
-            TYPE_FEED_PLAN ->
-                FeedPlanViewHolder(
-                    LayoutInflater.from(parent.context).inflate(
-                        R.layout.item_feed_day_plan,
-                        parent,
-                        false
-                    )
-                )
             TYPE_FEED_TODAY_PLANS_ENCOURAGE -> {
                 FeedTodayPlanEncourageViewHolder(
                     LayoutInflater.from(parent.context).inflate(
@@ -345,7 +336,6 @@ class MainFeedAdapter(
         return when (getItem(position)) {
             is FeedPunchResp -> TYPE_FEED_PUNCH
             is FeedUGCResp -> TYPE_FEED_UGC
-            is FeedPlanResp -> TYPE_FEED_PLAN
             is FeedTodayPlanResp -> TYPE_FEED_TODAY_PLAN
             is FeedQuickBtnsResp -> TYPE_FEED_QUICK_BTNS
             is FeedDateResp -> TYPE_FEED_DATE
@@ -628,15 +618,6 @@ class MainFeedAdapter(
     }
 
     inner class FeedTodayPlanEncourageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
-    inner class FeedPlanViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        init {
-            listener?.let { listener ->
-                itemView.setDebounceOnClickListener {
-                    listener.onClick(TYPE_FEED_PLAN, null)
-                }
-            }
-        }
-    }
 
     inner class FeedQuestionViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val tvAnswer = itemView.findViewById<TextView>(R.id.tv_answer)
