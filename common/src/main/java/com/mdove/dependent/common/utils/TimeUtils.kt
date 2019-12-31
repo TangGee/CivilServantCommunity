@@ -255,14 +255,17 @@ object TimeUtils {
         return format.format(time ?: System.currentTimeMillis())
     }
 
-    fun getDateChinese(time: String): String {
-        val _time = try{
+    fun getDateChinese(time: String?): String {
+        if (time == null) {
+            return "时间保密"
+        }
+        val _time = try {
             java.lang.Long.valueOf(time)
-        }catch (e:Exception){
+        } catch (e: Exception) {
             null
         }
         val format = SimpleDateFormat("yyyy年MM月dd日 HH:mm")
-        return _time?.let{
+        return _time?.let {
             format.format(it)
         } ?: "时间保密"
     }

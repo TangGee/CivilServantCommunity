@@ -625,7 +625,7 @@ class MainFeedAdapter(
 
         fun bind(question: FeedQuestionFeedResp) {
             itemView.findViewById<TextView>(R.id.tv_title).text = question.question.title
-            itemView.findViewById<TextView>(R.id.tv_name).text = question.question.makeTime
+            itemView.findViewById<TextView>(R.id.tv_name).text = TimeUtils.getDateChinese(question.question.makeTime)
             itemView.findViewById<TextView>(R.id.tv_content).text = question.question.content
             itemView.findViewById<TextView>(R.id.btn_quick).setDebounceOnClickListener {
                 questionListener?.onClick(TYPE_FEED_QUESTION_CARD_CLICK_QUICK_SEND, question)
