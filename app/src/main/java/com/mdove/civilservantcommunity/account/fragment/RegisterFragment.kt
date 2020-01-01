@@ -72,7 +72,7 @@ class RegisterFragment : BaseFragment(), ITransitionProvider {
                 }
                 Status.ERROR -> {
                     dismissLoading()
-                    ToastUtil.toast(it.data?.message ?: "", Toast.LENGTH_SHORT)
+                    ToastUtil.toast(it.exception?.message ?: "", Toast.LENGTH_SHORT)
                 }
             }
         })

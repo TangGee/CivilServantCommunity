@@ -10,6 +10,7 @@ import androidx.fragment.app.FragmentPagerAdapter
 import com.mdove.apt_annotation.TestAnnotation
 import com.mdove.civilservantcommunity.R
 import com.mdove.civilservantcommunity.account.AccountActivity
+import com.mdove.civilservantcommunity.account.gotoAccountActivity
 import com.mdove.civilservantcommunity.base.BaseActivity
 import com.mdove.civilservantcommunity.config.AppConfig
 import com.mdove.civilservantcommunity.roles.SelectRolesActivity
@@ -58,54 +59,5 @@ class MainFeedActivity : BaseActivity() {
                 ToastUtil.toast("你选择了：${it.title}")
             }
         }
-//        AppConfig.hasSelectRoles().takeIf {
-//            it
-//        }?.let {
-//            launch {
-//                gotoSelectRolesActivity(context!!).params?.let {
-//                    ToastUtil.toast("你选择了：${it.title}")
-//                }
-//            }
-//        }
-    }
-
-    private fun initLogin() {
-        AppConfig.getUserInfo() ?: also {
-            gotoLogin()
-        }
-    }
-
-    private fun gotoLogin() {
-        AccountActivity.gotoAccount(this)
-        finish()
-    }
-
-    private fun initTabLayout() {
-//        val titles = ArrayList<String>()
-//        titles.add("热门")
-//        titles.add("我的")
-//        stl.setViewPager(vp, titles)
-    }
-
-    private fun initViewPager() {
-//        vp.adapter = ViewPagerAdapter(supportFragmentManager)
-    }
-
-    inner class ViewPagerAdapter(val fm: FragmentManager) : FragmentPagerAdapter(fm) {
-        override fun getItem(position: Int): Fragment {
-            val tag = if (position == 0) TAG_FEED_FRAGMNET else TAG_ME_FRAGMNET
-            return fm.findFragmentByTag(tag) ?: let {
-                if (position == 0) {
-                    MainFeedFragment()
-                } else {
-                    MePageFragment()
-                }
-            }
-        }
-
-        override fun getCount(): Int {
-            return 2
-        }
-
     }
 }

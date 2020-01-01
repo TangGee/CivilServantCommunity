@@ -9,6 +9,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mdove.civilservantcommunity.R
+import com.mdove.civilservantcommunity.account.gotoAccountActivity
 import com.mdove.civilservantcommunity.base.fragment.BaseFragment
 import com.mdove.civilservantcommunity.base.launcher.ActivityLauncher
 import com.mdove.civilservantcommunity.config.AppConfig
@@ -70,6 +71,9 @@ class MainFeedFragment : BaseFragment() {
                 }
                 MainFeedAdapter.CLICK_QUICK_BTN_PLAN -> {
                     clickPlan()
+                }
+                MainFeedAdapter.CLICK_MAIN_FEED_LOGIN -> {
+                    clickMainFeedLogin()
                 }
                 MainFeedAdapter.TYPE_FEED_TIME_LINE_FEED_TODAY_PLAN_BTN_TIPS -> {
                     clickPlan()
@@ -161,8 +165,16 @@ class MainFeedFragment : BaseFragment() {
     }
 
     private fun clickMePage() {
-        context?.let {
-            MePageActivity.gotoMePage(it)
+        context?.let { context ->
+            AppConfig.getUserInfo()?.let {
+                MePageActivity.gotoMePage(context)
+            } ?: also {
+                launch {
+                    (activity as? ActivityLauncher)?.gotoAccountActivity(context)?.params?.let {
+                        feedViewModel.appConfigLiveData.value = it
+                    }
+                }
+            }
         }
     }
 
@@ -200,6 +212,20 @@ class MainFeedFragment : BaseFragment() {
         }
     }
 
+    private fun clickMainFeedLogin() {
+        AppConfig.getUserInfo()?.let {
+            clickMePage()
+        } ?: also {
+            launch {
+                (activity as? ActivityLauncher)?.let {
+                    it.gotoAccountActivity(context!!).params?.let {
+                        feedViewModel.appConfigLiveData.value = it
+                    }
+                }
+            }
+        }
+    }
+
     private fun clickPlan() {
         (activity as? ActivityLauncher)?.let {
             launch(FastMain) {
@@ -219,6 +245,11 @@ class MainFeedFragment : BaseFragment() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        feedViewModel.appConfigLiveData.value = AppConfig.getUserInfo()
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -230,7 +261,7 @@ class MainFeedFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         rlv.adapter = adapter
-        rlv.addItemDecoration(PaddingDecoration(8,PaddingType.BOTTOM))
+        rlv.addItemDecoration(PaddingDecoration(8, PaddingType.BOTTOM))
         rlv.layoutManager = LinearLayoutManager(context)
         feedViewModel.mData.observe(this, Observer {
             when (it.status) {

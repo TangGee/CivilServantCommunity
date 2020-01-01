@@ -1,12 +1,13 @@
 package com.mdove.civilservantcommunity.feed.viewmodel
 
 import androidx.lifecycle.*
+import com.mdove.civilservantcommunity.base.bean.UserInfo
+import com.mdove.civilservantcommunity.config.AppConfig
 import com.mdove.civilservantcommunity.feed.bean.*
 import com.mdove.civilservantcommunity.feed.repository.MainFeedRepository
 import com.mdove.civilservantcommunity.plan.dao.TodayPlansEntity
 import com.mdove.civilservantcommunity.plan.model.*
 import com.mdove.civilservantcommunity.room.MainDb
-import com.mdove.dependent.common.network.NormalResp
 import com.mdove.dependent.common.networkenhance.valueobj.Resource
 import com.mdove.dependent.common.networkenhance.valueobj.Status
 import com.mdove.dependent.common.threadpool.FastMain
@@ -35,12 +36,24 @@ class MainFeedViewModel : ViewModel() {
     val checkTodayPlanLiveData = MutableLiveData<FeedTodayPlansCheckParams>()
     val timeScheduleToFeedLiveData = MutableLiveData<TimeScheduleParams>()
     val editNewPlanToFeedLiveData = MutableLiveData<FeedTimeLineFeedTodayPlansResp>()
+    val appConfigLiveData = MutableLiveData<UserInfo?>()
     // 一键应用昨天未完成的任务
     val applyOldPlansLiveData = MutableLiveData<String>()
 
     val mData: LiveData<Resource<List<BaseFeedResp>>> =
         MediatorLiveData<Resource<List<BaseFeedResp>>>().apply {
-            addSource(feedData) {res->
+            addSource(appConfigLiveData) { userInfo ->
+                value?.let {
+                    value = Resource(it.status, value?.data?.map {
+                        if (it is FeedDateResp) {
+                            it.copy(name = userInfo?.username)
+                        } else {
+                            it
+                        }
+                    }, it.exception)
+                }
+            }
+            addSource(feedData) { res ->
                 val oldData = value?.data?.filter {
                     it is FeedArticleFeedResp || it is FeedQuestionFeedResp
                 }?.takeIf {
@@ -48,7 +61,7 @@ class MainFeedViewModel : ViewModel() {
                 }
                 val temp = mutableListOf<BaseFeedResp>()
                 CoroutineScope(FastMain).launch {
-                    temp.add(FeedDateResp(System.currentTimeMillis()))
+                    temp.add(FeedDateResp(System.currentTimeMillis(), AppConfig.getUserInfo()?.username))
                     temp.add(FeedDevTitleResp())
                     temp.add(FeedQuickEditNewPlanResp())
                     temp.add(FeedQuickBtnsResp())
@@ -292,7 +305,7 @@ class MainFeedViewModel : ViewModel() {
         temp: MutableList<BaseFeedResp>
     ) {
         oldData?.forEachIndexed { index, resp ->
-            if (index == oldData.size-1) {
+            if (index == oldData.size - 1) {
                 resp.hideEndLine = true
                 temp.add(resp)
                 temp.add(FeedNoContentResp())

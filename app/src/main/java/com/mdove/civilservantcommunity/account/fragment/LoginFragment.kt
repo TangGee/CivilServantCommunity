@@ -73,7 +73,7 @@ class LoginFragment : BaseFragment(), ITransitionProvider {
                 }
                 Status.ERROR -> {
                     dismissLoading()
-                    ToastUtil.toast(it.data?.message ?: "登录失败 ", Toast.LENGTH_SHORT)
+                    ToastUtil.toast(it.exception?.message ?: "登录失败 ", Toast.LENGTH_SHORT)
                 }
             }
         })

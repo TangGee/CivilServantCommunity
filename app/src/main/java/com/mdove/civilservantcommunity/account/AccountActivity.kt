@@ -9,8 +9,11 @@ import com.mdove.civilservantcommunity.base.BaseActivity
 import androidx.transition.Fade
 import androidx.transition.TransitionInflater
 import androidx.transition.TransitionSet
+import com.mdove.civilservantcommunity.account.AccountActivity.Companion.INTENT_PARAMS
+import com.mdove.civilservantcommunity.account.bean.AccountResult
 import com.mdove.civilservantcommunity.account.fragment.LoginFragment
 import com.mdove.civilservantcommunity.account.fragment.RegisterFragment
+import com.mdove.civilservantcommunity.base.launcher.ActivityLauncher
 
 /**
  * Created by MDove on 2019-09-02.
@@ -22,6 +25,7 @@ class AccountActivity : BaseActivity(), IAccountHandle {
         const val TAG_LOGIN_FRAGMENT = "tag_login_fragment"
         const val FADE_DEFAULT_TIME = 300L
         const val MOVE_DEFAULT_TIME = 300L
+        const val INTENT_PARAMS = "intent_params_account"
 
         fun gotoAccount(context: Context){
             val intent = Intent(context, AccountActivity::class.java)
@@ -103,6 +107,33 @@ class AccountActivity : BaseActivity(), IAccountHandle {
             }
             replace(R.id.content, loginFragment, TAG_LOGIN_FRAGMENT)
             commitAllowingStateLoss()
+        }
+    }
+}
+
+suspend fun ActivityLauncher.gotoAccountActivity(
+    context: Context
+): AccountResult {
+    val intent = Intent(context, AccountActivity::class.java)
+    return startActivityAsync(intent).await().run {
+        return if (resultCode == Activity.RESULT_OK) {
+            if (data != null) {
+                AccountResult(
+                    this.data.getParcelableExtra(
+                        INTENT_PARAMS
+                    ), com.mdove.civilservantcommunity.account.bean.Status.SUC
+                )
+            } else {
+                AccountResult(
+                    null,
+                    com.mdove.civilservantcommunity.account.bean.Status.CANCEL
+                )
+            }
+        } else {
+            AccountResult(
+                null,
+                com.mdove.civilservantcommunity.account.bean.Status.CANCEL
+            )
         }
     }
 }

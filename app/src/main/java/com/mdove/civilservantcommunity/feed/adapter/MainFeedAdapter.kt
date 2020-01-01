@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.flexbox.FlexboxLayout
 import com.mdove.civilservantcommunity.R
+import com.mdove.civilservantcommunity.config.AppConfig
 import com.mdove.civilservantcommunity.feed.bean.*
 import com.mdove.civilservantcommunity.plan.dao.TodayPlansEntity
 import com.mdove.civilservantcommunity.plan.model.SinglePlanStatus
@@ -75,7 +76,7 @@ class MainFeedAdapter(
                 return true
             }
             if ((oldItem is FeedDateResp) && (newItem is FeedDateResp)) {
-                return true
+                return oldItem.name == newItem.name
             }
             if ((oldItem is FeedTodayPlanResp) && (newItem is FeedTodayPlanResp)) {
                 return true
@@ -115,7 +116,7 @@ class MainFeedAdapter(
             } else if ((oldItem is FeedNetworkErrorTitleResp) && (newItem is FeedNetworkErrorTitleResp)) {
                 return true
             } else if ((oldItem is FeedDateResp) && (newItem is FeedDateResp)) {
-                return (oldItem as? FeedDateResp)?.isSameDay == (newItem as? FeedDateResp)?.isSameDay
+                return oldItem.isSameDay == newItem.isSameDay && newItem.name == oldItem.name
             } else if ((oldItem is FeedNoContentResp) && (newItem is FeedNoContentResp)) {
                 return true
             } else if ((oldItem is FeedArticleFeedResp) && (newItem is FeedArticleFeedResp)) {
@@ -180,6 +181,7 @@ class MainFeedAdapter(
         const val CLICK_QUICK_BTN_ME = 104
         const val CLICK_QUICK_BTN_TIME_SCHEDULE = 106
         const val CLICK_QUICK_BTN_HISTORY_PLANS = 107
+        const val CLICK_MAIN_FEED_LOGIN = 108
 
         val PAYLOAD_PUNCH = Any()
         val PAYLOAD_TODAY_PLANS_STATUS = Any()
@@ -464,8 +466,15 @@ class MainFeedAdapter(
         private val tvDay = itemView.findViewById<TextView>(R.id.tv_day)
         private val tvMonth = itemView.findViewById<TextView>(R.id.tv_month)
         private val tvWeek = itemView.findViewById<TextView>(R.id.tv_week)
+        private val btnLogin = itemView.findViewById<TextView>(R.id.btn_login)
 
         fun bind() {
+            btnLogin.setOnClickListener {
+                listener?.onClick(CLICK_MAIN_FEED_LOGIN, null)
+            }
+            AppConfig.getUserInfo()?.let {
+                btnLogin.text = it.username
+            }
             val time = System.currentTimeMillis()
             tvMonth.text = "${TimeUtils.getMonth(time)}月"
             tvDay.text = "${TimeUtils.getDay(time)}日"

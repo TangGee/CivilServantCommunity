@@ -77,7 +77,7 @@ class MainUGCFragment : BaseFragment() {
                             }
                             Status.ERROR -> {
                                 dismissLoading()
-                                ToastUtil.toast("请求失败:${it.data?.message ?: ""}")
+                                ToastUtil.toast("请求失败:${it.exception?.message ?: ""}")
                             }
                             Status.LOADING -> {
                                 showLoading()

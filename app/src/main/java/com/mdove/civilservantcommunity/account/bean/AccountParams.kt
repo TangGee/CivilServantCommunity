@@ -2,7 +2,7 @@ package com.mdove.civilservantcommunity.account.bean
 
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
-import com.mdove.civilservantcommunity.account.UpdateInfoResult
+import com.mdove.civilservantcommunity.base.bean.UserInfo
 import kotlinx.android.parcel.Parcelize
 
 /**
@@ -28,3 +28,12 @@ data class UpdateUserInfoParams(
     @SerializedName("user_name") val userName: String? = null,
     @SerializedName("password") val password: String? = null
 ) : Parcelable
+
+@Parcelize
+data class AccountResult(val params: UserInfo?, val status: Status) : Parcelable
+
+enum class Status {
+    CANCEL,
+    ERROR,
+    SUC
+}

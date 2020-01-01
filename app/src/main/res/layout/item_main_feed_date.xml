@@ -6,6 +6,7 @@
     android:layout_height="120dp">
 
     <TextView
+        android:id="@+id/tips"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="今天也要元气满满的呀~~~"
@@ -66,5 +67,20 @@
         app:layout_constraintLeft_toRightOf="@+id/tv_day"
         app:layout_constraintRight_toLeftOf="@+id/tv_week"
         app:layout_constraintTop_toTopOf="@+id/tv_week" />
+
+    <TextView
+        android:id="@+id/btn_login"
+        android:background="@drawable/bg_round_grey_400"
+        android:text="未登录"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
+        android:paddingRight="8dp"
+        android:paddingLeft="8dp"
+        android:textColor="@color/black_ac"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginRight="24dp"
+        app:layout_constraintBottom_toBottomOf="@+id/tips"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
