@@ -29,17 +29,19 @@ class EditPlanViewModel : ViewModel() {
     val data = MediatorLiveData<Resource<NormalResp<List<PlanModuleBean>>>>().apply {
         addSource(repository.getPlans()) {
             val new = mutableListOf<PlanModuleBean>()
-            // 首个ViewHolder占位
-            new.add(
-                PlanModuleBean(
-                    "score",
-                    "score",
-                    mutableListOf(),
-                    PlanModuleType.SCORE,
-                    PlanModuleStatus.NORMAL
+            it.data?.data?.firstOrNull()?.firstOrNull()?.takeIf {
+                it.typeSingle == SinglePlanType.SYS_PLAN
+            }?.let {
+                // 首个ViewHolder占位
+                new.add(
+                    PlanModuleBean(
+                        "score",
+                        "score",
+                        mutableListOf(),
+                        PlanModuleType.SCORE,
+                        PlanModuleStatus.NORMAL
+                    )
                 )
-            )
-            it.data?.data?.let { respData ->
                 new.add(
                     PlanModuleBean(
                         "edit_plans",
@@ -49,6 +51,8 @@ class EditPlanViewModel : ViewModel() {
                         PlanModuleStatus.NORMAL
                     )
                 )
+            }
+            it.data?.data?.let { respData ->
                 respData.forEach {
                     val firstSinglePlan = it.firstOrNull()?.beanSingle ?: return@forEach
                     new.add(

@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import com.mdove.civilservantcommunity.MyApplication
 import com.mdove.civilservantcommunity.config.IAppConfig.Companion.KEY_LOGIN_USER_INFO
 import com.mdove.civilservantcommunity.base.bean.UserInfo
+import com.mdove.civilservantcommunity.config.IAppConfig.Companion.KEY_SELECT_ROLES
 import com.mdove.civilservantcommunity.config.IAppConfig.Companion.KEY_TIME_SCHEDULE_GUIDE
 import com.mdove.dependent.common.utils.fromJson
 import com.mdove.dependent.common.utils.toJson
@@ -47,5 +48,14 @@ object AppConfig : IAppConfig {
         } catch (e: Exception) {
             null
         }
+    }
+
+    fun setSelectRoles(hasSelect: Boolean) {
+        initSharedPreferences().edit().putBoolean(KEY_SELECT_ROLES, hasSelect)
+            .apply()
+    }
+
+    fun hasSelectRoles(): Boolean {
+        return initSharedPreferences().getBoolean(KEY_SELECT_ROLES, false)
     }
 }

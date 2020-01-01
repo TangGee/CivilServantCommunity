@@ -8,5 +8,6 @@ interface IAppConfig {
     companion object {
         val KEY_LOGIN_USER_INFO = "key_user_info"
         val KEY_TIME_SCHEDULE_GUIDE = "key_time_schedule_guide"
+        val KEY_SELECT_ROLES = "key_select_roles"
     }
 }

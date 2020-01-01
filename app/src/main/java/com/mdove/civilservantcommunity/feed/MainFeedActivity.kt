@@ -12,6 +12,10 @@ import com.mdove.civilservantcommunity.R
 import com.mdove.civilservantcommunity.account.AccountActivity
 import com.mdove.civilservantcommunity.base.BaseActivity
 import com.mdove.civilservantcommunity.config.AppConfig
+import com.mdove.civilservantcommunity.roles.SelectRolesActivity
+import com.mdove.civilservantcommunity.roles.gotoSelectRolesActivity
+import com.mdove.dependent.common.toast.ToastUtil
+import kotlinx.coroutines.launch
 
 class MainFeedActivity : BaseActivity() {
     companion object {
@@ -31,7 +35,7 @@ class MainFeedActivity : BaseActivity() {
     @TestAnnotation(123)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        initLogin()
+        initSelectRoles()
         setContentView(R.layout.activity_feed_main)
 //        initViewPager()
 //        initTabLayout()
@@ -46,6 +50,23 @@ class MainFeedActivity : BaseActivity() {
                 .add(R.id.container, MainFeedFragment(), TAG_FEED_FRAGMNET)
                 .commit()
         }
+    }
+
+    private fun initSelectRoles() {
+        launch {
+            gotoSelectRolesActivity(context!!).params?.let {
+                ToastUtil.toast("你选择了：${it.title}")
+            }
+        }
+//        AppConfig.hasSelectRoles().takeIf {
+//            it
+//        }?.let {
+//            launch {
+//                gotoSelectRolesActivity(context!!).params?.let {
+//                    ToastUtil.toast("你选择了：${it.title}")
+//                }
+//            }
+//        }
     }
 
     private fun initLogin() {
