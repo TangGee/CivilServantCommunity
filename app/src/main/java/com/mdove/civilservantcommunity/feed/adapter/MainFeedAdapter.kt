@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatCheckBox
 import androidx.appcompat.widget.AppCompatImageView
@@ -37,7 +38,8 @@ class MainFeedAdapter(
     val listener: OnMainFeedClickListener? = null,
     val normalListener: OnNormalFeedListener? = null,
     val questionListener: OnMainFeedQuickClickListener? = null,
-    val checkListener: OnMainFeedTodayPlanCheckListener? = null
+    val checkListener: OnMainFeedTodayPlanCheckListener? = null,
+    val clickListener: OnMainFeedHideClickListener? = null
 ) :
     ListAdapter<BaseFeedResp, RecyclerView.ViewHolder>(object :
         DiffUtil.ItemCallback<BaseFeedResp>() {
@@ -156,7 +158,6 @@ class MainFeedAdapter(
         const val TYPE_TOP_ONE = 1
         const val TYPE_FEED_NORMAL_CARD = 3
         const val TYPE_FEED_PUNCH = 0
-        const val TYPE_FEED_UGC = 4
         const val TYPE_FEED_TODAY_PLAN = 6
         const val TYPE_FEED_QUICK_BTNS = 7
         const val TYPE_FEED_DATE = 8
@@ -265,14 +266,6 @@ class MainFeedAdapter(
                         false
                     )
                 )
-            TYPE_FEED_UGC ->
-                FeedUGCViewHolder(
-                    LayoutInflater.from(parent.context).inflate(
-                        R.layout.item_feed_ugc,
-                        parent,
-                        false
-                    )
-                )
             TYPE_FEED_LOAD_MORE ->
                 FeedLoadMoreViewHolder(
                     LayoutInflater.from(parent.context).inflate(
@@ -337,7 +330,6 @@ class MainFeedAdapter(
     override fun getItemViewType(position: Int): Int {
         return when (getItem(position)) {
             is FeedPunchResp -> TYPE_FEED_PUNCH
-            is FeedUGCResp -> TYPE_FEED_UGC
             is FeedTodayPlanResp -> TYPE_FEED_TODAY_PLAN
             is FeedQuickBtnsResp -> TYPE_FEED_QUICK_BTNS
             is FeedDateResp -> TYPE_FEED_DATE
@@ -432,16 +424,6 @@ class MainFeedAdapter(
         }
     }
 
-    inner class FeedUGCViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        init {
-            listener?.let { listener ->
-                itemView.setDebounceOnClickListener {
-                    listener.onClick(TYPE_FEED_UGC, null)
-                }
-            }
-        }
-    }
-
     inner class FeedTodayPlanBtnTipsHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         init {
             listener?.let { listener ->
@@ -467,8 +449,12 @@ class MainFeedAdapter(
         private val tvMonth = itemView.findViewById<TextView>(R.id.tv_month)
         private val tvWeek = itemView.findViewById<TextView>(R.id.tv_week)
         private val btnLogin = itemView.findViewById<TextView>(R.id.btn_login)
+        private val btnSetting = itemView.findViewById<AppCompatImageView>(R.id.btn_settings)
 
         fun bind() {
+            btnSetting.setOnClickListener {
+                normalListener?.onClickSetting()
+            }
             btnLogin.setOnClickListener {
                 listener?.onClick(CLICK_MAIN_FEED_LOGIN, null)
             }
@@ -580,7 +566,14 @@ class MainFeedAdapter(
     }
 
     inner class FeedTimeLineFeedTitleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
-    inner class FeedDevTitleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+    inner class FeedDevTitleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        init {
+            itemView.findViewById<LinearLayout>(R.id.btn_hide).setOnClickListener {
+                clickListener?.onClick(TYPE_FEED_DEV)
+            }
+        }
+    }
+
     inner class FeedNetworkErrorTitleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         init {
             itemView.findViewById<TimeLineView>(R.id.time_line).hideBottomLine()
@@ -622,6 +615,9 @@ class MainFeedAdapter(
                     .setDebounceOnClickListener {
                         listener.onClick(CLICK_QUICK_BTN_TIME_SCHEDULE, null)
                     }
+            }
+            itemView.findViewById<LinearLayout>(R.id.btn_hide).setOnClickListener {
+                clickListener?.onClick(TYPE_FEED_QUICK_BTNS)
             }
         }
     }
@@ -744,6 +740,7 @@ interface OnNormalFeedListener {
     fun onSendNewPlanClick(content: String)
     fun loadedMore()
     fun onClickGoUGC()
+    fun onClickSetting()
 }
 
 interface OnMainFeedClickListener {
@@ -756,4 +753,8 @@ interface OnMainFeedQuickClickListener {
 
 interface OnMainFeedTodayPlanCheckListener {
     fun onCheck(resp: FeedTimeLineFeedTodayPlansResp, isCheck: Boolean)
+}
+
+interface OnMainFeedHideClickListener {
+    fun onClick(type: Int)
 }

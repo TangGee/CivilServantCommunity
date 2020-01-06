@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import com.mdove.civilservantcommunity.MyApplication
 import com.mdove.civilservantcommunity.config.IAppConfig.Companion.KEY_LOGIN_USER_INFO
 import com.mdove.civilservantcommunity.base.bean.UserInfo
+import com.mdove.civilservantcommunity.config.IAppConfig.Companion.KEY_MAIN_FEED_HIDE_BTNS
 import com.mdove.civilservantcommunity.config.IAppConfig.Companion.KEY_SELECT_ROLES
 import com.mdove.civilservantcommunity.config.IAppConfig.Companion.KEY_TIME_SCHEDULE_GUIDE
 import com.mdove.dependent.common.utils.fromJson
@@ -48,6 +49,15 @@ object AppConfig : IAppConfig {
         } catch (e: Exception) {
             null
         }
+    }
+
+    fun setMainFeedHideBtns(config: String) {
+        initSharedPreferences().edit().putString(KEY_MAIN_FEED_HIDE_BTNS, config)
+            .apply()
+    }
+
+    fun getMainFeedHideBtns(): String {
+        return initSharedPreferences().getString(KEY_MAIN_FEED_HIDE_BTNS, "")!!
     }
 
     fun setSelectRoles(hasSelect: Boolean) {

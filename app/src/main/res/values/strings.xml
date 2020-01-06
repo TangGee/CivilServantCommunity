@@ -12,4 +12,5 @@
     <string name="req_edit_plan_error">呦？没有拿到服务器的"吊炸天"推荐的计划？\n我觉得很有可能是我们的服务器挂了。为什么这么可能呢？\n还不是因为我们没钱买好的服务器...\n容我们修复一下这个问题...\n\n不过！服务器挂了，不妨碍你 制定 自己的 "吊炸天" 的学习计划！</string>
 
     <string name="string_ugc_no_content_add_article">你没分享过任何内容，是否来分享一波？</string>
+    <string name="string_setting_hide">隐藏设置</string>
 </resources>

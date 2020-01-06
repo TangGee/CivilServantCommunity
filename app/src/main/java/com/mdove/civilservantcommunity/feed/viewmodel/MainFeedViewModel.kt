@@ -3,11 +3,13 @@ package com.mdove.civilservantcommunity.feed.viewmodel
 import androidx.lifecycle.*
 import com.mdove.civilservantcommunity.base.bean.UserInfo
 import com.mdove.civilservantcommunity.config.AppConfig
+import com.mdove.civilservantcommunity.feed.adapter.MainFeedAdapter
 import com.mdove.civilservantcommunity.feed.bean.*
 import com.mdove.civilservantcommunity.feed.repository.MainFeedRepository
 import com.mdove.civilservantcommunity.plan.dao.TodayPlansEntity
 import com.mdove.civilservantcommunity.plan.model.*
 import com.mdove.civilservantcommunity.room.MainDb
+import com.mdove.civilservantcommunity.setting.utils.HideRecorder
 import com.mdove.dependent.common.networkenhance.valueobj.Resource
 import com.mdove.dependent.common.networkenhance.valueobj.Status
 import com.mdove.dependent.common.threadpool.FastMain
@@ -39,9 +41,19 @@ class MainFeedViewModel : ViewModel() {
     val appConfigLiveData = MutableLiveData<UserInfo?>()
     // 一键应用昨天未完成的任务
     val applyOldPlansLiveData = MutableLiveData<String>()
+    val hideLiveData = MutableLiveData<Int>()
 
     val mData: LiveData<Resource<List<BaseFeedResp>>> =
         MediatorLiveData<Resource<List<BaseFeedResp>>>().apply {
+            // 隐藏某个可以隐藏的卡片
+            addSource(hideLiveData) { hideType ->
+                value?.let {
+                    value = Resource(it.status, value?.data?.filter {
+                        it.type != hideType
+                    }, it.exception)
+                }
+            }
+
             addSource(appConfigLiveData) { userInfo ->
                 value?.let {
                     value = Resource(it.status, value?.data?.map {
@@ -62,10 +74,19 @@ class MainFeedViewModel : ViewModel() {
                 val temp = mutableListOf<BaseFeedResp>()
                 CoroutineScope(FastMain).launch {
                     temp.add(FeedDateResp(System.currentTimeMillis(), AppConfig.getUserInfo()?.username))
-                    temp.add(FeedDevTitleResp())
-                    temp.add(FeedQuickEditNewPlanResp())
-                    temp.add(FeedQuickBtnsResp())
                     withContext(MDoveBackgroundPool) {
+                        val hideTypes = HideRecorder.getHideRecordTypes()
+                        hideTypes?.find {
+                            it == MainFeedAdapter.TYPE_FEED_DEV
+                        } ?: also {
+                            temp.add(FeedDevTitleResp())
+                        }
+                        temp.add(FeedQuickEditNewPlanResp())
+                        hideTypes?.find {
+                            it == MainFeedAdapter.TYPE_FEED_QUICK_BTNS
+                        } ?: also {
+                            temp.add(FeedQuickBtnsResp())
+                        }
                         temp.add(FeedTimeLineFeedTodayPlansTitleResp())
                         val showApply =
                             MainDb.db.todayPlansDao().getTodayPlansRecord(TimeUtils.getDateFromSQLYesterday()) != null
@@ -315,7 +336,6 @@ class MainFeedViewModel : ViewModel() {
             }
         }
     }
-
 
     fun reqFeed(type: LoadType = LoadType.NORMAL) {
         loadType.value = type

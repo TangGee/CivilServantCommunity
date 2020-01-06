@@ -20,6 +20,8 @@ import com.mdove.civilservantcommunity.feed.bean.FeedArticleFeedResp
 import com.mdove.civilservantcommunity.feed.bean.FeedQuestionFeedResp
 import com.mdove.civilservantcommunity.feed.bean.FeedTimeLineFeedTodayPlansResp
 import com.mdove.civilservantcommunity.feed.bean.FeedTodayPlansCheckParams
+import com.mdove.civilservantcommunity.setting.utils.HideRecorder
+import com.mdove.civilservantcommunity.setting.utils.IHideRecorderObserver
 import com.mdove.civilservantcommunity.feed.viewmodel.LoadType
 import com.mdove.civilservantcommunity.feed.viewmodel.MainFeedViewModel
 import com.mdove.civilservantcommunity.plan.activity.HistoryPlansActivity
@@ -34,6 +36,7 @@ import com.mdove.civilservantcommunity.question.DetailQuestionActivity
 import com.mdove.civilservantcommunity.question.bean.QuestionReqParams
 import com.mdove.civilservantcommunity.question.viewmodel.QuestionViewModel
 import com.mdove.civilservantcommunity.room.MainDb
+import com.mdove.civilservantcommunity.setting.SettingActivity
 import com.mdove.civilservantcommunity.ugc.MainUGCActivity
 import com.mdove.dependent.common.networkenhance.valueobj.Status
 import com.mdove.dependent.common.recyclerview.PaddingDecoration
@@ -50,7 +53,7 @@ import kotlinx.coroutines.withContext
 /**
  * Created by MDove on 2019-09-06.
  */
-class MainFeedFragment : BaseFragment() {
+class MainFeedFragment : BaseFragment(), IHideRecorderObserver {
     private lateinit var feedViewModel: MainFeedViewModel
     private lateinit var punchViewModel: PunchViewModel
     private lateinit var mQuestionViewModel: QuestionViewModel
@@ -59,9 +62,6 @@ class MainFeedFragment : BaseFragment() {
             when (type) {
                 MainFeedAdapter.TYPE_FEED_PUNCH -> {
                     clickPunch()
-                }
-                MainFeedAdapter.TYPE_FEED_UGC -> {
-                    clickUGC()
                 }
                 MainFeedAdapter.CLICK_QUICK_BTN_UGC -> {
                     clickUGC()
@@ -100,6 +100,12 @@ class MainFeedFragment : BaseFragment() {
             }
         }
     }, object : OnNormalFeedListener {
+        override fun onClickSetting() {
+            activity?.let {
+                SettingActivity.goto(it)
+            }
+        }
+
         override fun onClickGoUGC() {
             clickUGC()
         }
@@ -158,6 +164,10 @@ class MainFeedFragment : BaseFragment() {
                     FeedTodayPlansCheckParams(resp, isCheck)
             }
         }
+    }, object : OnMainFeedHideClickListener {
+        override fun onClick(type: Int) {
+            HideRecorder.addHideRecord(type)
+        }
     })
 
     private fun applyOldPlans() {
@@ -175,6 +185,12 @@ class MainFeedFragment : BaseFragment() {
                     }
                 }
             }
+        }
+    }
+
+    override fun onChange(hides: List<Int>?, hide: Int?) {
+        hide?.let {
+            feedViewModel.hideLiveData.value = it
         }
     }
 
@@ -248,6 +264,12 @@ class MainFeedFragment : BaseFragment() {
     override fun onResume() {
         super.onResume()
         feedViewModel.appConfigLiveData.value = AppConfig.getUserInfo()
+        HideRecorder.registerObserver(this)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        HideRecorder.unregisterObserver(this)
     }
 
     override fun onCreateView(

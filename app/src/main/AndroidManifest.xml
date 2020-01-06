@@ -72,6 +72,18 @@
             android:theme="@style/TransparentTheme" />
 
         <activity
+            android:name=".setting.SettingActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/TransparentTheme" />
+
+        <activity
+            android:name=".setting.hide.HideRecordActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/TransparentTheme" />
+
+        <activity
             android:name=".plan.activity.TimeScheduleActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
