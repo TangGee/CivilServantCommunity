@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.mdove.civilservantcommunity.feed.MainFeedActivity
@@ -19,6 +20,7 @@ import com.mdove.civilservantcommunity.account.viewmodel.AccountViewModel
 import com.mdove.civilservantcommunity.view.MultiLineChooseLayout
 import com.mdove.dependent.common.networkenhance.valueobj.Status
 import com.mdove.dependent.common.toast.ToastUtil
+import com.mdove.dependent.common.utils.UIUtils
 import com.mdove.dependent.common.utils.dismissLoading
 import com.mdove.dependent.common.utils.showLoading
 import kotlinx.android.synthetic.main.fragment_register.*
@@ -100,6 +102,24 @@ class RegisterFragment : BaseFragment(), ITransitionProvider {
         tv_back.setOnClickListener {
             (activity as? IAccountHandle)?.let{
                 it.onBackLogin()
+            }
+        }
+    }
+
+    override fun onKeyBoardHide(height: Int) {
+        tv_ok?.apply {
+            (this.layoutParams as? ConstraintLayout.LayoutParams)?.let {
+                it.bottomMargin = UIUtils.dip2Px(context, 36).toInt()
+                this.layoutParams = it
+            }
+        }
+    }
+
+    override fun onKeyBoardShow(height: Int) {
+        tv_ok?.apply {
+            (this.layoutParams as? ConstraintLayout.LayoutParams)?.let {
+                it.bottomMargin = height + UIUtils.dip2Px(context, 12).toInt()
+                this.layoutParams = it
             }
         }
     }

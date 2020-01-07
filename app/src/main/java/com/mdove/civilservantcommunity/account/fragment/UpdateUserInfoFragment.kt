@@ -2,11 +2,14 @@ package com.mdove.civilservantcommunity.account.fragment
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.marginBottom
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.mdove.civilservantcommunity.R
@@ -18,6 +21,7 @@ import com.mdove.civilservantcommunity.base.fragment.BaseFragment
 import com.mdove.civilservantcommunity.view.MultiLineChooseLayout
 import com.mdove.dependent.common.networkenhance.valueobj.Status
 import com.mdove.dependent.common.toast.ToastUtil
+import com.mdove.dependent.common.utils.UIUtils
 import com.mdove.dependent.common.utils.dismissLoading
 import com.mdove.dependent.common.utils.showLoading
 import kotlinx.android.synthetic.main.fragment_update_user_info.*
@@ -29,7 +33,7 @@ class UpdateUserInfoFragment : BaseFragment() {
     private lateinit var viewModel: AccountViewModel
 
     companion object {
-        val PARAMS_FRAGMENT = "user_info_params_fragment"
+        const val PARAMS_FRAGMENT = "user_info_params_fragment"
         fun newInstance(params: UserInfoParams): UpdateUserInfoFragment {
             return UpdateUserInfoFragment().apply {
                 arguments = Bundle().apply {
@@ -105,11 +109,31 @@ class UpdateUserInfoFragment : BaseFragment() {
         })
     }
 
+    override fun onKeyBoardHide(height: Int) {
+        btn_ok?.apply {
+            (this.layoutParams as? ConstraintLayout.LayoutParams)?.let {
+                it.bottomMargin = UIUtils.dip2Px(context, 24).toInt()
+                this.layoutParams = it
+            }
+        }
+    }
+
+    override fun onKeyBoardShow(height: Int) {
+        btn_ok?.apply {
+            (this.layoutParams as? ConstraintLayout.LayoutParams)?.let {
+                it.bottomMargin = height + UIUtils.dip2Px(context, 12).toInt()
+                this.layoutParams = it
+            }
+        }
+    }
+
     private fun updateUI(params: UserInfoParams) {
         viewModel.userInfoParamsFromMePage = params
         layout_identity.setList(viewModel.identitys)
         et_user_name.hint = params.userName
         layout_identity.setIndexItemSelected(IdentitysHelper.identityKeys.indexOf(params.userType))
         view_toolbar.setTitle("更改信息")
+        view_toolbar.setToolbarBackgroundIsNull()
+        view_toolbar.setColorForAll(Color.WHITE)
     }
 }

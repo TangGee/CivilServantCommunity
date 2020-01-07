@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.mdove.civilservantcommunity.feed.MainFeedActivity
@@ -19,9 +20,11 @@ import com.mdove.civilservantcommunity.account.bean.LoginInfoParams
 import com.mdove.civilservantcommunity.account.viewmodel.AccountViewModel
 import com.mdove.dependent.common.networkenhance.valueobj.Status
 import com.mdove.dependent.common.toast.ToastUtil
+import com.mdove.dependent.common.utils.UIUtils
 import com.mdove.dependent.common.utils.dismissLoading
 import com.mdove.dependent.common.utils.showLoading
 import kotlinx.android.synthetic.main.fragment_login.*
+import kotlinx.android.synthetic.main.fragment_update_user_info.*
 
 /**
  * Created by MDove on 2019-09-07.
@@ -88,6 +91,24 @@ class LoginFragment : BaseFragment(), ITransitionProvider {
                     if (TextUtils.isEmpty(phone)) "账号不可为空~" else "密码不可为空~",
                     Toast.LENGTH_SHORT
                 )
+            }
+        }
+    }
+
+    override fun onKeyBoardHide(height: Int) {
+        tv_ok?.apply {
+            (this.layoutParams as? ConstraintLayout.LayoutParams)?.let {
+                it.bottomMargin = UIUtils.dip2Px(context, 36).toInt()
+                this.layoutParams = it
+            }
+        }
+    }
+
+    override fun onKeyBoardShow(height: Int) {
+        tv_ok?.apply {
+            (this.layoutParams as? ConstraintLayout.LayoutParams)?.let {
+                it.bottomMargin = height - UIUtils.dip2Px(context, 6).toInt()
+                this.layoutParams = it
             }
         }
     }

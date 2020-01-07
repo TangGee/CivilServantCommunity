@@ -3,6 +3,7 @@ package com.mdove.civilservantcommunity.base.fragment
 import android.view.View
 import androidx.fragment.app.Fragment
 import com.mdove.dependent.common.threadpool.FastMainScope
+import com.mdove.dependent.common.utils.SoftKeyBoardListener
 import kotlinx.coroutines.CoroutineScope
 import java.util.*
 import kotlin.coroutines.CoroutineContext
@@ -13,6 +14,7 @@ import kotlin.coroutines.CoroutineContext
 open class BaseFragment : Fragment(), CoroutineScope, View.OnAttachStateChangeListener {
 
     private val mListenerList = ArrayList<OnFragmentVisibilityChangedListener>()
+    private var softKeyBoardListener: SoftKeyBoardListener? = null
     /**
      * 是否可见（Activity处于前台、Tab被选中、Fragment被添加、Fragment没有隐藏、Fragment.View已经Attach）
      */
@@ -24,6 +26,7 @@ open class BaseFragment : Fragment(), CoroutineScope, View.OnAttachStateChangeLi
     override fun onResume() {
         super.onResume()
         onActiveChanged(true)
+        initSoftKeyBoardListener()
     }
 
     override fun onPause() {
@@ -60,6 +63,32 @@ open class BaseFragment : Fragment(), CoroutineScope, View.OnAttachStateChangeLi
         checkVisibility(true, "onViewAttachedToWindow")
     }
 
+    private fun initSoftKeyBoardListener() {
+        if (softKeyBoardListener == null) {
+            activity?.let {
+                softKeyBoardListener = SoftKeyBoardListener(it).apply {
+                    onSoftKeyBoardChangeListener = object : SoftKeyBoardListener.OnSoftKeyBoardChangeListener {
+                        override fun keyBoardShow(height: Int) {
+                            onKeyBoardShow(height)
+                        }
+
+                        override fun keyBoardHide(height: Int) {
+                            onKeyBoardHide(height)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    open fun onKeyBoardShow(height: Int) {
+
+    }
+
+    open fun onKeyBoardHide(height: Int) {
+
+    }
+
     /**
      * ParentActivity可见性改变
      */
@@ -78,7 +107,7 @@ open class BaseFragment : Fragment(), CoroutineScope, View.OnAttachStateChangeLi
         } else {
             val superVisible = super.isVisible()
             val hintVisible = userVisibleHint
-            val visible =superVisible && hintVisible
+            val visible = superVisible && hintVisible
             if (visible != mVisible) {
                 mVisible = visible
                 onVisibilityChanged(mVisible, where)
