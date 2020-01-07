@@ -6,6 +6,8 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatImageView
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.mdove.civilservantcommunity.R
 import com.mdove.civilservantcommunity.base.adapter.TYPE_NORMAL_TITLE
@@ -18,10 +20,19 @@ import com.mdove.civilservantcommunity.setting.hide.model.TYPE_HIDE_RECORD_NO_CO
 /**
  * Created by MDove on 2020-01-06.
  */
-class HideRecordAdapter(val list: List<HideRecordBean>, val listener: OnShowClickListener) :
-    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class HideRecordAdapter(val listener: OnShowClickListener) :
+    ListAdapter<HideRecordBean, RecyclerView.ViewHolder>(object :
+        DiffUtil.ItemCallback<HideRecordBean>() {
+        override fun areItemsTheSame(oldItem: HideRecordBean, newItem: HideRecordBean): Boolean {
+            return oldItem.type == newItem.type
+        }
+
+        override fun areContentsTheSame(oldItem: HideRecordBean, newItem: HideRecordBean): Boolean {
+            return oldItem.type == newItem.type
+        }
+    }){
     override fun getItemViewType(position: Int): Int {
-        val bean = list[position]
+        val bean = getItem(position)
         return when {
             bean.type == TYPE_FEED_DEV -> TYPE_FEED_DEV
             bean.type == TYPE_FEED_QUICK_BTNS -> TYPE_FEED_QUICK_BTNS
@@ -51,10 +62,6 @@ class HideRecordAdapter(val list: List<HideRecordBean>, val listener: OnShowClic
                 )
             else-> parent.createNormalTitleViewHolder("没有任何隐藏的功能！")
         }
-    }
-
-    override fun getItemCount(): Int {
-        return list.size
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {

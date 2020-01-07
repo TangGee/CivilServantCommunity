@@ -20,6 +20,7 @@ import com.mdove.civilservantcommunity.feed.bean.FeedArticleFeedResp
 import com.mdove.civilservantcommunity.feed.bean.FeedQuestionFeedResp
 import com.mdove.civilservantcommunity.feed.bean.FeedTimeLineFeedTodayPlansResp
 import com.mdove.civilservantcommunity.feed.bean.FeedTodayPlansCheckParams
+import com.mdove.civilservantcommunity.feed.viewmodel.HideRecordParams
 import com.mdove.civilservantcommunity.setting.utils.HideRecorder
 import com.mdove.civilservantcommunity.setting.utils.IHideRecorderObserver
 import com.mdove.civilservantcommunity.feed.viewmodel.LoadType
@@ -188,9 +189,9 @@ class MainFeedFragment : BaseFragment(), IHideRecorderObserver {
         }
     }
 
-    override fun onChange(hides: List<Int>?, hide: Int?) {
+    override fun onChange(hides: List<Int>?, hide: Int?, isHide: Boolean) {
         hide?.let {
-            feedViewModel.hideLiveData.value = it
+            feedViewModel.hideLiveData.value = HideRecordParams(hide, isHide)
         }
     }
 

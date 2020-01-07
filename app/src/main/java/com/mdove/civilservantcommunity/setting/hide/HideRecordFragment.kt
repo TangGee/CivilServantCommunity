@@ -21,6 +21,12 @@ import kotlinx.android.synthetic.main.fragment_settings.*
  */
 class HideRecordFragment : BaseFragment() {
     private lateinit var viewModel: HideRecordViewModel
+    private val mAdapter = HideRecordAdapter(object : OnShowClickListener {
+        override fun onClick(type: Int) {
+            viewModel.showTypeLiveData.value = type
+            HideRecorder.removeHideRecord(type)
+        }
+    })
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,12 +44,9 @@ class HideRecordFragment : BaseFragment() {
         view_toolbar.setColorForAll(Color.WHITE)
 
         rlv.layoutManager = LinearLayoutManager(context)
+        rlv.adapter = mAdapter
         viewModel.observerData().observe(this, Observer {
-            rlv.adapter = HideRecordAdapter(it, object : OnShowClickListener {
-                override fun onClick(type: Int) {
-                    HideRecorder.removeHideRecord(type)
-                }
-            })
+            mAdapter.submitList(it)
         })
     }
 }

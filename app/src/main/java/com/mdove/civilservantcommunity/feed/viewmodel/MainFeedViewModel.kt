@@ -4,6 +4,8 @@ import androidx.lifecycle.*
 import com.mdove.civilservantcommunity.base.bean.UserInfo
 import com.mdove.civilservantcommunity.config.AppConfig
 import com.mdove.civilservantcommunity.feed.adapter.MainFeedAdapter
+import com.mdove.civilservantcommunity.feed.adapter.MainFeedAdapter.Companion.TYPE_FEED_QUICK_BTNS
+import com.mdove.civilservantcommunity.feed.adapter.MainFeedAdapter.Companion.TYPE_FEED_TIME_LINE_FEED_TODAY_PLAN_TITLE
 import com.mdove.civilservantcommunity.feed.bean.*
 import com.mdove.civilservantcommunity.feed.repository.MainFeedRepository
 import com.mdove.civilservantcommunity.plan.dao.TodayPlansEntity
@@ -23,6 +25,15 @@ import kotlinx.coroutines.withContext
  * Created by MDove on 2019-09-06.
  */
 class MainFeedViewModel : ViewModel() {
+    companion object {
+        val NORMAL_CARD_TYPES = mutableListOf(
+            MainFeedAdapter.TYPE_FEED_DEV,
+            MainFeedAdapter.TYPE_FEED_DATE,
+            TYPE_FEED_QUICK_BTNS,
+            TYPE_FEED_TIME_LINE_FEED_TODAY_PLAN_TITLE
+        )
+    }
+
     private val loadType = MutableLiveData<LoadType>()
     private val repository = MainFeedRepository()
 
@@ -41,16 +52,27 @@ class MainFeedViewModel : ViewModel() {
     val appConfigLiveData = MutableLiveData<UserInfo?>()
     // 一键应用昨天未完成的任务
     val applyOldPlansLiveData = MutableLiveData<String>()
-    val hideLiveData = MutableLiveData<Int>()
+    val hideLiveData = MutableLiveData<HideRecordParams>()
 
     val mData: LiveData<Resource<List<BaseFeedResp>>> =
         MediatorLiveData<Resource<List<BaseFeedResp>>>().apply {
             // 隐藏某个可以隐藏的卡片
-            addSource(hideLiveData) { hideType ->
+            addSource(hideLiveData) { params ->
                 value?.let {
-                    value = Resource(it.status, value?.data?.filter {
-                        it.type != hideType
-                    }, it.exception)
+                    val realData = if (params.isHide) {
+                        value?.data?.filter {
+                            it.type != params.type
+                        }
+                    } else {
+                        it.data?.let { originData ->
+                            originData.filter {
+                                !NORMAL_CARD_TYPES.contains(it.type)
+                            }.toMutableList().apply {
+                                addAll(0, generateNormalCard())
+                            }
+                        }
+                    }
+                    value = Resource(it.status, realData, it.exception)
                 }
             }
 
@@ -73,21 +95,8 @@ class MainFeedViewModel : ViewModel() {
                 }
                 val temp = mutableListOf<BaseFeedResp>()
                 CoroutineScope(FastMain).launch {
-                    temp.add(FeedDateResp(System.currentTimeMillis(), AppConfig.getUserInfo()?.username))
                     withContext(MDoveBackgroundPool) {
-                        val hideTypes = HideRecorder.getHideRecordTypes()
-                        hideTypes?.find {
-                            it == MainFeedAdapter.TYPE_FEED_DEV
-                        } ?: also {
-                            temp.add(FeedDevTitleResp())
-                        }
-                        temp.add(FeedQuickEditNewPlanResp())
-                        hideTypes?.find {
-                            it == MainFeedAdapter.TYPE_FEED_QUICK_BTNS
-                        } ?: also {
-                            temp.add(FeedQuickBtnsResp())
-                        }
-                        temp.add(FeedTimeLineFeedTodayPlansTitleResp())
+                        temp.addAll(generateNormalCard())
                         val showApply =
                             MainDb.db.todayPlansDao().getTodayPlansRecord(TimeUtils.getDateFromSQLYesterday()) != null
                         MainDb.db.todayPlansDao().getTodayPlansRecord(TimeUtils.getDateFromSQL())?.let { entity ->
@@ -352,8 +361,29 @@ class MainFeedViewModel : ViewModel() {
             }
         } ?: mutableListOf())
     }
+
+    // 创建通用卡片。（所有通用卡片的type放在一个集合中，用于filter）
+    private fun generateNormalCard(): List<BaseFeedResp> {
+        return mutableListOf<BaseFeedResp>().apply {
+            add(FeedDateResp(System.currentTimeMillis(), AppConfig.getUserInfo()?.username))
+            val hideTypes = HideRecorder.getHideRecordTypes()
+            hideTypes?.find {
+                it == MainFeedAdapter.TYPE_FEED_DEV
+            } ?: also {
+                add(FeedDevTitleResp())
+            }
+            add(FeedQuickEditNewPlanResp())
+            hideTypes?.find {
+                it == MainFeedAdapter.TYPE_FEED_QUICK_BTNS
+            } ?: also {
+                add(FeedQuickBtnsResp())
+            }
+            add(FeedTimeLineFeedTodayPlansTitleResp())
+        }
+    }
 }
 
+data class HideRecordParams(val type: Int, val isHide: Boolean)
 enum class LoadType {
     NORMAL,
     REFRESH,

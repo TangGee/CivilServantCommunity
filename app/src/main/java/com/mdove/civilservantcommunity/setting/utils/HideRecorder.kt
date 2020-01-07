@@ -27,10 +27,10 @@ object HideRecorder {
             AppConfig.setMainFeedHideBtns(it)
             // 通知观察者
             getHideRecordTypes(it)?.let { types ->
-                notifyObserver(types, type)
+                notifyObserver(types, type, true)
             }
         } ?: also {
-            notifyObserver(null, null)
+            notifyObserver(null, null, true)
         }
     }
 
@@ -60,14 +60,14 @@ object HideRecorder {
                     it.toString()
                 }
                 AppConfig.setMainFeedHideBtns(config)
-                notifyObserver(it, type)
+                notifyObserver(it, type, false)
             }
         }
     }
 
-    private fun notifyObserver(hides: List<Int>?, hide: Int?) {
+    private fun notifyObserver(hides: List<Int>?, hide: Int?, isHide: Boolean) {
         observers.forEach {
-            it.onChange(hides, hide)
+            it.onChange(hides, hide, isHide)
         }
     }
 
@@ -89,5 +89,5 @@ object HideRecorder {
 }
 
 interface IHideRecorderObserver {
-    fun onChange(hides: List<Int>?, hide: Int?)
+    fun onChange(hides: List<Int>?, hide: Int?, isHide: Boolean)
 }
